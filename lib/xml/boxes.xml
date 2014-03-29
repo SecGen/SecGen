@@ -1,0 +1,10 @@
+<systems>
+	<system id="system2" os="linux" basebox="puppettest" url="" >
+		<vulnerabilities>
+			<vulnerability privilege="user" access="remote" type="ftpbackdoor" cve=""></vulnerability>
+		</vulnerabilities>
+		<networks>
+			<network name="homeonly" ></network>
+		</networks>
+	</system>
+</systems>

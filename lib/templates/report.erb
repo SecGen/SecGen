@@ -1,0 +1,33 @@
+This document has been automated for build 
+<%if systems.count == 1%>
+There was only 1 system generated for this project. 
+<%else %>
+There were <%systems.count%> systems generated for this project.
+<%end%>
+
+     The module files for puppet can be found here: "<%=ROOT_DIR%>/mount/puppet/modules"
+     The manifest files for puppet can be found here: "<%=ROOT_DIR%>/mount/puppet/manifests"
+
+<% systems.each do |s| %>
+
+<%=s.id%> uses <%=s.basebox%> a distro of <%=s.os%> which can be downloaded from <%=s.url%>
+
+     <% s.vulns.each do |v| %>
+Here is a summary of the vulnerability  <%=v.type%>:
+     Type: <%=v.type%>
+     Details:  <%= v.details %>
+     privilege: <%= v.privilege %>
+     access: <%= v.access %>
+     <%if not v.cve == ""%>
+     cve: <%= v.cve %>
+     <% end %>
+     <% v.puppets.each do |p| %>
+     Puppet "<%=p%>.pp" has been used to create these vulnerabiliies
+     <% end %>
+     <% v.ports.each do |port| %>
+     Web server runs on port <%=port%>
+     <% end %>
+     <% end %>
+    
+<% end %> 
+
