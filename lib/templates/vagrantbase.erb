@@ -53,7 +53,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     kali.vm.box_url = "http://ftp.sliim-projects.eu/boxes/kali-linux-1.0.4-amd64.box"
 
     kali.vm.network :public_network
-    kali.vm.network :private_network, ip: "172.16.0.4"
+    kali.vm.network :private_network, ip: "172.16.0.30"
 
     kali.vm.provider "virtualbox" do |v|
       v.gui = true
