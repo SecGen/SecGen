@@ -11,7 +11,11 @@ There were <%systems.count%> systems generated for this project.
 <% systems.each do |s| %>
 
 <%=s.id%> uses <%=s.basebox%> a distro of <%=s.os%> which can be downloaded from <%=s.url%>
-
+     <% s.networks.each do |n| %>
+    <%grab_system_number = s.id.gsub(/[^0-9]/i, "") %>
+    <% n.range[9..9] = grab_system_number %>   
+     ip address for <%=s.id%> = <%=n.range%>0
+    <% end %> 
      <% s.vulns.each do |v| %>
 Here is a summary of the vulnerability  <%=v.type%>:
      Type: <%=v.type%>
