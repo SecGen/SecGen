@@ -1,11 +1,13 @@
 require_relative 'system.rb'
 
 class SystemReader
-
+	# initializes systems xml from BOXES_XML const
 	def initialize(systems_xml)
 		@systems_xml = systems_xml
 	end
 
+	# uses nokogiri to extract all system information from boxes.xml will add it to the system class after
+	# checking if the vulnerabilities / networks exist from system.rb
 	def systems
 		systems = []
 		doc = Nokogiri::XML(File.read(@systems_xml))
