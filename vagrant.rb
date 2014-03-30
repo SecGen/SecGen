@@ -1,3 +1,5 @@
+require_relative 'filecreator.rb'
+
 class VagrantController
 
 	def vagrant_up(build_number)

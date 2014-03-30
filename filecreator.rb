@@ -19,8 +19,13 @@ class FileCreator
 		count = Dir["#{PROJECTS_DIR}/*"].length
 		build_number = count.next
 
+
 		p "the system is now creating the Project#{build_number}"
 		Dir::mkdir("#{PROJECTS_DIR}/Project#{build_number}") unless File.exists?("#{PROJECTS_DIR}/#{build_number}") 
+		
+		# initialises box before creation
+		command = "cd #{PROJECTS_DIR}/Project#{build_number}/; vagrant init"
+		%x[#{command}] 
 
 		controller = ERBController.new
 		controller.systems = system
@@ -35,7 +40,6 @@ class FileCreator
 
 		return build_number
 	end
-
 end 
 
 
