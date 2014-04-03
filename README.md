@@ -1,4 +1,3 @@
-
 Security-Simulator 
 ==
 This code is licensed under the GPL 3.0 license.
@@ -22,7 +21,7 @@ Ruby: https://www.ruby-lang.org/en/
 
 Nokogiri: http://nokogiri.org/tutorials/installing_nokogiri.html
 
-Puppet is not required on your local machine, the boxes that you use will need to have puppet installed on them the main box used has been from puppetlabs: http://puppet-vagrant-boxes.puppetlabs.com/centos-59-x64-vbox4210.box
+Puppet is not required on your local machine, the boxes that you use will need to have puppet installed on them the main box used has been from puppetlabs: http://puppet-vagrant-boxes.puppetlabs.com/debian-607-x64-vbox4210.box
 
 Testing
 --
