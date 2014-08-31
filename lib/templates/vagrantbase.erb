@@ -4,6 +4,7 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <% systems.each do |s| %>
 
@@ -29,8 +30,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
      <%=p%>.manifest_file = "<%=p%>.pp"
    <% end %>
+  end
    <% end %>
-   end
+
    config.vm.provision "puppet" do |cleanup|
      cleanup.module_path = "<%=ROOT_DIR%>/mount/puppet/modules"
      cleanup.manifests_path = "<%=ROOT_DIR%>/mount/puppet/manifests"
@@ -44,21 +46,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      config.vm.provision :shell, :inline => "history -c && history -w"
      config.vm.provision :shell, :inline => "umount /mount/"
 <% end %> 
- config.vm.define "kali" do | kali |
-
-    kali.ssh.private_key_path = "<%=ROOT_DIR%>/mount/ssh-keys/kali-1.0"
-    kali.ssh.username = "root"
-
-    kali.vm.box = "kali-1.0.4-amd64"
-    kali.vm.box_url = "http://ftp.sliim-projects.eu/boxes/kali-linux-1.0.4-amd64.box"
-
-    kali.vm.network :public_network
-    kali.vm.network :private_network, ip: "172.16.0.10"
-
-    kali.vm.provider "virtualbox" do |v|
-      v.gui = true
-      v.customize ["modifyvm", :id, "--memory", 1024]
-      v.customize ["modifyvm", :id, "--macaddress3", "0800276cf835"]
-    end
-  end
+ 
 end

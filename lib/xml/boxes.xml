@@ -1,7 +1,7 @@
 <systems>
-	<system id="system2" os="linux" basebox="puppettest" url="" >
+	<system id="system2" os="linux" basebox="puppetdebian" url="" >
 		<vulnerabilities>
-			<vulnerability privilege="user" access="remote" type="ftpbackdoor" cve=""></vulnerability>
+			<vulnerability privilege="user" access="remote" type="distcc" cve=""></vulnerability>
 		</vulnerabilities>
 		<networks>
 			<network name="homeonly" ></network>

@@ -22,16 +22,17 @@ class FileCreator
 
 		p "the system is now creating the Project#{build_number}"
 		Dir::mkdir("#{PROJECTS_DIR}/Project#{build_number}") unless File.exists?("#{PROJECTS_DIR}/#{build_number}") 
-		
+
 		# initialises box before creation
+		p 'initialises vagrant project file'
 		command = "cd #{PROJECTS_DIR}/Project#{build_number}/; vagrant init"
 		%x[#{command}] 
 
 		controller = ERBController.new
 		controller.systems = system
 		vagrant_template = ERB.new(File.read(VAGRANT_TEMPLATE_FILE))
-		p "#{PROJECTS_DIR}/Project#{build_number}/VagrantFile file has been created"
-		File.open("#{PROJECTS_DIR}/Project#{build_number}/VagrantFile", 'w') { |file| file.write(vagrant_template.result(controller.get_binding)) }
+		p "#{PROJECTS_DIR}/Project#{build_number}/Vagrantfile file has been created"
+		File.open("#{PROJECTS_DIR}/Project#{build_number}/Vagrantfile", 'w') { |file| file.write(vagrant_template.result(controller.get_binding)) }
 		
 
 		report_template = ERB.new(File.read(REPORT_TEMPLATE_FILE))

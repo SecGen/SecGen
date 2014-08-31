@@ -9,10 +9,8 @@ BASE_XML = "#{ROOT_DIR}/lib/xml/bases.xml"
 MOUNT_DIR = "#{ROOT_DIR}/mount/"
 
 class System
-    # can access from outside of class
-    attr_accessor :id, :os, :url,:basebox, :networks, :vulns
+     attr_accessor :id, :os, :url,:basebox, :networks, :vulns
 
-	#initalizes system variables
     def initialize(id, os, basebox, url, vulns=[], networks=[])
         @id = id
         @os = os
@@ -24,7 +22,7 @@ class System
 
     def is_valid_base
         valid_base = Conf.bases
-
+        #if bases match, add the url to system so it can be used for vagrant file
         valid_base.each do |b|
             if @basebox == b.vagrantbase
                 @url = b.url
@@ -84,7 +82,7 @@ class NetworkManager
                      end
                 end
                 if not has_found
-                    p "Network was not found please check the xml boxes.xml"
+                    STDERR.puts "Network was not found please check the xml boxes.xml"
                     exit
                 end
             end
@@ -151,7 +149,7 @@ class VulnerabilityManager
             new_vulns[random.id] = random
         else
             has_found = false
-            # shuffle randomly selects first match of ftp or nfs and then abandon
+            # shuffle randomly selects first match of type and then abandon by break
             legal_vulns.shuffle.each do |valid|
              if vuln.type == valid.type
                 vuln.puppets = valid.puppets unless not vuln.puppets.empty?
@@ -174,8 +172,6 @@ class VulnerabilityManager
         end
         return new_vulns.values
     end
-
-    #loop through vulns, fill in missing details if not enough info, choose one at random fill in vulns..
 end
 
 class Conf
@@ -203,6 +199,8 @@ class Conf
     end
 
     def self._get_list(xmlfile, xpath, cls)
+        # this will search nokogiri by first reading the XML file, searching through the //root/child node
+        # and the append to the specific 'cls' class
         itemlist = []
 
         doc = Nokogiri::XML(File.read(xmlfile))
@@ -210,17 +208,16 @@ class Conf
             # new class e.g networks
         	obj = cls.new
             # checks to see if there are children puppet and add string to obj.puppets
-            # move this to vulnerabilities class
             if defined? obj.puppets
                 item.xpath("puppets/puppet").each { |c| obj.puppets << c.text.strip if not c.text.strip.empty? }
                 item.xpath("ports/port").each { |c| obj.ports << c.text.strip if not c.text.strip.empty? }
             end
-            # too specific move to vuln class end
+
             item.each do |attr, value|
 
                 obj.send "#{attr}=", value
             end
-            # vulnerability item
+
             itemlist << obj
         end
         return itemlist

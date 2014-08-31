@@ -27,6 +27,7 @@ class TestXMLIsEqual < Test::Unit::TestCase
 		assert_equal(@systems[0].id, "system1")
 		assert_equal(@systems[1].id, "system2")
 		assert_equal(@systems[2].id, "system3")
+		# assert_equal(@systems[3].id, "system3")
 	end
 
 
