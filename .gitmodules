@@ -1,0 +1,21 @@
+[submodule "mount/puppet/modules/apache"]
+	path = mount/puppet/modules/apache
+	url = https://github.com/puppetlabs/puppetlabs-apache
+[submodule "mount/puppet/modules/archive"]
+	path = mount/puppet/modules/archive
+	url = https://github.com/mthibaut/puppet-archive
+[submodule "mount/puppet/modules/concat"]
+	path = mount/puppet/modules/concat
+	url = https://github.com/puppetlabs/puppetlabs-concat
+[submodule "mount/puppet/modules/mysql"]
+	path = mount/puppet/modules/mysql
+	url = https://github.com/puppetlabs/puppetlabs-mysql
+[submodule "mount/puppet/modules/samba"]
+	path = mount/puppet/modules/samba
+	url = https://github.com/thias/puppet-samba/
+[submodule "mount/puppet/modules/stdlib"]
+	path = mount/puppet/modules/stdlib
+	url = https://github.com/puppetlabs/puppetlabs-stdlib
+[submodule "mount/puppet/modules/vsftpd"]
+	path = mount/puppet/modules/vsftpd
+	url = https://github.com/stankevich/puppet-vsftpd
