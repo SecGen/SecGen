@@ -22,7 +22,7 @@ Ruby: https://www.ruby-lang.org/en/
 
 Nokogiri: http://nokogiri.org/tutorials/installing_nokogiri.html
 
-Puppet is not required on your local machine, the boxes that you use will need to have puppet installed on them the main box used has been from puppetlabs: http://puppet-vagrant-boxes.puppetlabs.com/centos-59-x64-vbox4210.box
+Puppet is not required on your local machine, the boxes that you use will need to have puppet installed on them the main box used has been from puppetlabs: http://puppet-vagrant-boxes.puppetlabs.com/debian-607-x64-vbox4210.box
 
 Testing
 --
@@ -32,7 +32,7 @@ While creatng this application I used the following:
 	Vagrant 1.5.0
 	nokogiri (1.6.1)
 	ruby 2.0.0p195 (2013-05-14 revision 40734) [x86_64-darwin12.5.0]
-	basebox = puppettest - http://puppet-vagrant-boxes.puppetlabs.com/centos-59-x64-vbox4210.box
+	basebox = puppetdebian - http://puppet-vagrant-boxes.puppetlabs.com/debian-607-x64-vbox4210.box
 	VirtualBox 4.3.0
 
 It should work on most linux distros but if there are any problems contact me.
