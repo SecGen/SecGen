@@ -1,0 +1,5 @@
+- name: puppettest 
+  os: linux
+  distro: debian
+  url: http://puppet-vagrant-boxes.puppetlabs.com/debian-607-x64-vbox4210.box
+  vagrantbase: puppettest
