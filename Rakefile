@@ -1,11 +1,16 @@
-$LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
-
 require 'rubygems'
+require 'bundler/setup'
+require 'yaml'
+
+$LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
+# require 'secgen'
+
+task :default => :spec
 
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec) do |t|
-  t.pattern = 'spec/*_spec.rb'
-  t.rspec_opts = ["--color"]
+  t.verbose = false
+  t.rspec_opts = ['--require spec_helper', '--color', "--format=documentation"]
 end
 
 desc "Open an irb session preloaded with this library"
