@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+STDOUT.sync = true
+
+$:.unshift File.expand_path("#{__dir__}/../lib")
+
+require 'secgen'
+require 'mercenary'
+
+Mercenary.program(:secgen) do |p|
+  p.version Secgen::VERSION
+  p.description "..."
+  p.syntax "secgen <subcommand> [options]"
+
+  Secgen::Commands.subclasses.each { |c| c.register_command(p) }
+end
