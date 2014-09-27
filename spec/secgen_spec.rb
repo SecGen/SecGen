@@ -1,4 +1,6 @@
-describe "Secgen" do
+require 'secgen'
+
+describe Secgen do
 
   describe ".configure" do
     context "when no block supplied" do
