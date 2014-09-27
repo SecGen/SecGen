@@ -11,5 +11,5 @@ Mercenary.program(:secgen) do |p|
   p.description "..."
   p.syntax "secgen <subcommand> [options]"
 
-  Secgen::Commands.subclasses.each { |c| c.register_command(p) }
+  Secgen::Command.subclasses.each { |c| c.register_command(p) }
 end
