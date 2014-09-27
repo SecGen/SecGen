@@ -1,7 +1,12 @@
 source "https://rubygems.org"
 
-gem "rspec"
-gem "rake"
-gem "rdoc"
+group :development do
+  gem "rake"
+  gem "rdoc"
+  gem "rspec"
+  gem "rspec-its"
+  gem "factory_girl"
+end
+
 gem "mercenary", "0.3.3"
-gem "factory_girl"
+gem "liquid"
