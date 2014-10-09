@@ -29,3 +29,10 @@ task :release => :build do
   sh "gem push secgen-#{Secgen::VERSION}"
   sh "rm secgen-#{Secgen::VERSION}"
 end
+
+task :tags do
+  sh 'ctags -e -R -f TAGS --exclude=.git --languages=ruby lib spec/support'
+  Gem.loaded_specs.values.map do |g|
+    sh "ctags -e -a -f TAGS -R --languages=ruby #{g.full_gem_path}"
+  end
+end
