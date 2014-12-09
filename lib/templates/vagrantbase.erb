@@ -43,7 +43,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
      config.vm.provision :shell, :inline => "history -c && history -w"
      config.vm.provision :shell, :inline => "umount /mount/"
+     end
 <% end %> 
+
  config.vm.define "kali" do | kali |
 
     kali.ssh.private_key_path = "<%=ROOT_DIR%>/mount/ssh-keys/kali-1.0"
