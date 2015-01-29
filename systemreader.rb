@@ -18,6 +18,7 @@ class SystemReader
 			url = system["url"]
 			vulns = []
 			networks = []
+			services = []
 
 			system.css('vulnerabilities vulnerability').each do |v|
 				vulnerability = Vulnerability.new
@@ -28,22 +29,36 @@ class SystemReader
 				vulns << vulnerability
 			end
 
+			system.css('services service').each do |v|
+				service = Service.new
+				service.name = v['name']
+				service.details = v['details']
+				service.type = v['type']
+				services << service
+			end
+			
 			system.css('networks network').each do |n|
 				network = Network.new
 				network.name = n['name']
 				networks << network
 			end
-		    # vulns / networks are passed through to their manager and the program will create valid vulnerabilities / networks
-		    # depending on what the user has specified these two will return valid vulns to be used in vagrant file creation.
-		    new_vulns = VulnerabilityManager.process(vulns, Conf.vulnerabilities)
-		    new_networks = NetworkManager.process(networks, Conf.networks)
+			
+			puts "Processing system: " + id
+			# vulns / networks are passed through to their manager and the program will create valid vulnerabilities / networks
+			# depending on what the user has specified these two will return valid vulns to be used in vagrant file creation.
+			new_vulns = VulnerabilityManager.process(vulns, Conf.vulnerabilities)
+			#puts new_vulns.inspect
+			
+			new_networks = NetworkManager.process(networks, Conf.networks)
+			# pass in the already selected set of vulnerabilities, and additional secure services to find
+			new_services = ServiceManager.process(services, Conf.services, new_vulns)
 
-		    s = System.new(id, os, basebox, url, new_vulns, new_networks)
-		    if s.is_valid_base == false
-			   BaseManager.generate_base(s,Conf.bases)
-		    end
+			s = System.new(id, os, basebox, url, new_vulns, new_networks, new_services)
+			if s.is_valid_base == false
+				BaseManager.generate_base(s,Conf.bases)
+			end
 
-		    systems << s
+			systems << s
 		end
 		return systems
 	end

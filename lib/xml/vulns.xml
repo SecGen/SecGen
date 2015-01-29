@@ -10,7 +10,7 @@
 		</puppets>
 	</vulnerability>
 	<vulnerability
-		type="commandinjection"
+		type="www"
 		cve=""
 		privilege="user"
 		access="remote"
@@ -33,7 +33,7 @@
 		</puppets>
 	</vulnerability>
 	<vulnerability
-		type="samba"
+		type="smb"
 		cve=""
 		privilege="user"
 		access="remote"
@@ -43,10 +43,10 @@
 		</puppets>
 	</vulnerability>
 	<vulnerability
-		type="writeableshadow"
+		type="local-config"
 		cve=""
-		privilege="user"
-		access="remote"
+		privilege="root"
+		access="local"
 		details="This puppet module edits the chmod of the shadow file to 777.">
 		<puppets>
 			<puppet>writeableshadow</puppet>
@@ -62,8 +62,8 @@
 			<puppet>distcc</puppet>
 		</puppets>
 	</vulnerability>
-		<vulnerability
-		type="ftpbackdoor"
+	<vulnerability
+		type="ftp"
 		cve=""
 		privilege="user"
 		access="remote"
@@ -73,7 +73,7 @@
 		</puppets>
 	</vulnerability>
 	<vulnerability
-		type="sqlinjection"
+		type="www"
 		cve=""
 		privilege="user"
 		access="remote"
