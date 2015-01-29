@@ -5,21 +5,23 @@ ROOT_DIR = File.dirname(__FILE__)
 BOXES_XML = "#{ROOT_DIR}/lib/xml/boxes.xml"
 NETWORKS_XML = "#{ROOT_DIR}/lib/xml/networks.xml"
 VULN_XML = "#{ROOT_DIR}/lib/xml/vulns.xml"
+SERVICES_XML = "#{ROOT_DIR}/lib/xml/services.xml"
 BASE_XML = "#{ROOT_DIR}/lib/xml/bases.xml"
 MOUNT_DIR = "#{ROOT_DIR}/mount/"
 
 class System
     # can access from outside of class
-    attr_accessor :id, :os, :url,:basebox, :networks, :vulns
+    attr_accessor :id, :os, :url,:basebox, :networks, :vulns, :services
 
-	#initalizes system variables
-    def initialize(id, os, basebox, url, vulns=[], networks=[])
+    #initalizes system variables
+    def initialize(id, os, basebox, url, vulns=[], networks=[], services=[])
         @id = id
         @os = os
         @url = url
         @basebox = basebox
         @vulns = vulns
         @networks = networks
+        @services = services
     end
 
     def is_valid_base
@@ -58,6 +60,78 @@ class Network
     def hash
         @type.hash
     end
+end
+
+class Service
+    attr_accessor :name, :type, :details, :puppets
+
+    def initialize(name="", type="", details="", puppets=[])
+        @name = name
+        @type = type
+        @details = details
+        @puppets = puppets
+    end
+
+    def eql? other
+        other.kind_of?(self.class) && @type == other.type
+    end
+
+    def hash
+        @type.hash
+    end
+    
+    def id
+        return @type
+    end
+
+end
+
+class ServiceManager
+	# secure services are randomly selected from the definitions in services.xml (secure_services)
+	# based on the attributes optionally specified in boxes.xml (want_services)
+	# However, if the service type has already had a vulnerability assigned (selected_vulns), it is ignored here
+	def self.process(want_services, secure_services, selected_vulns=[])
+		return_services = {}
+		legal_services = secure_services.clone
+		wanted_services = want_services.clone
+		
+		# remove all services that have already been selected as vulns (from both the wanted and secure lists)
+		selected_vulns.each do |a_vuln|
+			legal_services.delete_if{|x| x.type == a_vuln.type}
+			wanted_services.delete_if{|x| x.type == a_vuln.type}
+		end
+		
+		wanted_services.each do |service_query|
+
+			# select based on selected type...
+
+			# copy services array
+			search_list = legal_services.clone
+			# shuffle order of available secure services
+			search_list.shuffle!
+			# remove all the services that don't match the current selection (type, etc)
+			if service_query.type.length > 0
+				puts "Searching for service matching type: " + service_query.type
+				search_list.delete_if{|x| x.type != service_query.type}
+			end
+
+			if search_list.length == 0
+				STDERR.puts "Matching service was not found please check the xml boxes.xml"
+				STDERR.puts "(note: you can only have one of each type of service per system)"
+				exit
+			else
+				# use from the top of the top of the randomised list
+				return_services[service_query.id] = search_list[0]
+				if search_list[0].type.length > 0
+					puts "Selected secure service : " + search_list[0].type
+				end
+				
+				# enforce only one of any service type (remove from available)
+				legal_services.delete_if{|x| x.type == service_query.type}
+			end
+		end
+		return return_services.values
+	end
 end
 
 class NetworkManager
@@ -136,46 +210,50 @@ class Vulnerability
 end
 
 class VulnerabilityManager
-    # the user will either specify a blank vulnerability or will check it against vulns.xml and will append 
-    # specific information to system if the system information is empty
-    def self.process(vulns,valid_vulns)
-        new_vulns = {}
+	# vulnerabilities are randomly selected from the definitions in vulns.xml (all_vulns)
+	# based on the attributes optionally specified in boxes.xml (want_vulns)
+	def self.process(want_vulns, all_vulns)
+		return_vulns = {}
 
-        
-        legal_vulns = valid_vulns & vulns
-        vulns.each do |vuln|
+		legal_vulns = all_vulns.clone
+		want_vulns.each do |vulnerability_query|
+			# select based on selected type, access, cve...
 
-        if vuln.type == ""
-            random = valid_vulns.sample
-            # valid vulnerability into a new hash map of vulnerabilities 
-            new_vulns[random.id] = random
-        else
-            has_found = false
-            # shuffle randomly selects first match of ftp or nfs and then abandon
-            legal_vulns.shuffle.each do |valid|
-             if vuln.type == valid.type
-                vuln.puppets = valid.puppets unless not vuln.puppets.empty?
-                vuln.ports = valid.ports unless not vuln.ports.empty?
-                vuln.cve = valid.cve unless not vuln.cve.empty?
-                vuln.privilege = valid.privilege unless not vuln.privilege.empty?
-                vuln.access = valid.access unless not vuln.access.empty?
-                vuln.details = valid.details
-                # valid vulnerability into a new hash map of vulnerabilities 
-                new_vulns[vuln.id] = vuln
-                has_found = true
-                break
-             end
-        end
-            if not has_found
-                STDERR.puts "vulnerability was not found please check the xml boxes.xml"
-                exit
-            end
-        end
-        end
-        return new_vulns.values
-    end
+			# copy vulns array
+			search_list = legal_vulns.clone
+			# shuffle order of available vulnerabilities
+			search_list.shuffle!
+			# remove all the vulns that don't match the current selection (type, etc)
+			if vulnerability_query.type.length > 0
+				puts "Searching for vulnerability matching type: " + vulnerability_query.type
+				search_list.delete_if{|x| x.type != vulnerability_query.type}
+			end
+			if vulnerability_query.access.length > 0
+				puts "Searching for vulnerability matching access: " + vulnerability_query.access
+				search_list.delete_if{|x| x.access != vulnerability_query.access}
+			end
+			if vulnerability_query.cve.length > 0
+				puts "Searching for vulnerability matching CVE: " + vulnerability_query.cve
+				search_list.delete_if{|x| x.cve != vulnerability_query.cve}
+			end
 
-    #loop through vulns, fill in missing details if not enough info, choose one at random fill in vulns..
+			if search_list.length == 0
+				STDERR.puts "Matching vulnerability was not found please check the xml boxes.xml"
+				STDERR.puts "(note: you can only have one of each type of vulnerability per system)"
+				exit
+			else
+				# use from the top of the top of the randomised list
+				return_vulns[vulnerability_query.id] = search_list[0]
+				if search_list[0].type.length > 0
+					puts "Selected vulnerability : " + search_list[0].type
+				end
+
+				# enforce only one of any vulnerability type (remove from available)
+				legal_vulns.delete_if{|x| x.type == vulnerability_query.type}
+			end
+		end
+		return return_vulns.values
+	end
 end
 
 class Conf
@@ -202,15 +280,22 @@ class Conf
         return @@vulnerabilities = self._get_list(VULN_XML, "//vulnerabilities/vulnerability", Vulnerability)
     end
 
+    def self.services
+        if defined? @@services
+            return @@services
+        end
+        return @@services = self._get_list(SERVICES_XML, "//services/service", Service)
+    end
+
     def self._get_list(xmlfile, xpath, cls)
         itemlist = []
 
         doc = Nokogiri::XML(File.read(xmlfile))
         doc.xpath(xpath).each do |item|
             # new class e.g networks
-        	obj = cls.new
+            obj = cls.new
             # checks to see if there are children puppet and add string to obj.puppets
-            # move this to vulnerabilities class
+            # move this to vulnerabilities/services classes?
             if defined? obj.puppets
                 item.xpath("puppets/puppet").each { |c| obj.puppets << c.text.strip if not c.text.strip.empty? }
                 item.xpath("ports/port").each { |c| obj.ports << c.text.strip if not c.text.strip.empty? }

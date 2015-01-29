@@ -5,43 +5,52 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  <% systems.each do |s| %>
-
+<% systems.each do |s| %>
     config.vm.define "<%=s.id%>" do |<%=s.id%>|
       <%=s.id%>.vm.box = "<%=s.basebox%>"
       <%=s.id%>.vm.box_url = "<%=s.url%>"
-      <% s.networks.each do |n| %>
-        <%grab_system_number = s.id.gsub(/[^0-9]/i, "") %>
-        <% n.range[9..9] = grab_system_number %>  
-        <%=s.id%>.vm.network :public_network        
-        <%=s.id%>.vm.network :private_network, :ip => "<%=n.range%>0"
-      <% end %>
+<% s.networks.each do |n| %>
+<%grab_system_number = s.id.gsub(/[^0-9]/i, "") %>
+<% n.range[9..9] = grab_system_number %>  
+      <%=s.id%>.vm.network :public_network        
+      <%=s.id%>.vm.network :private_network, :ip => "<%=n.range%>0"
+<% end %>
       <%=s.id%>.vm.synced_folder "<%=MOUNT_DIR%>", "/mount"
     end
 
     config.vm.provision :shell, :inline => "apt-get update --fix-missing"
 
-    <%s.vulns.each do |v|%>
-      <%v.puppets.each do |p|%>
-        config.vm.provision "puppet" do |<%=p%>|
-          <%=p%>.module_path = "<%=ROOT_DIR%>/mount/puppet/modules"
-          <%=p%>.manifests_path = "<%=ROOT_DIR%>/mount/puppet/manifests"
+    # Add secure services
+<%s.services.each do |v|%>
+<%v.puppets.each do |p|%>
+    config.vm.provision "puppet" do |<%=p%>|
+      <%=p%>.module_path = "<%=ROOT_DIR%>/mount/puppet/modules"
+      <%=p%>.manifests_path = "<%=ROOT_DIR%>/mount/puppet/manifests"
+      <%=p%>.manifest_file = "<%=p%>.pp"
+    end
+<% end %>
+<% end %>
 
-          <%=p%>.manifest_file = "<%=p%>.pp"
-        end
-      <% end %>
-    <% end %>
+    # Add vulnerabilities
+<%s.vulns.each do |v|%>
+<%v.puppets.each do |p|%>
+    config.vm.provision "puppet" do |<%=p%>|
+      <%=p%>.module_path = "<%=ROOT_DIR%>/mount/puppet/modules"
+      <%=p%>.manifests_path = "<%=ROOT_DIR%>/mount/puppet/manifests"
+      <%=p%>.manifest_file = "<%=p%>.pp"
+    end
+<% end %>
+<% end %>
 
+    # clean up script which clears history from the VMs and clobs files together
     config.vm.provision "puppet" do |cleanup|
       cleanup.module_path = "<%=ROOT_DIR%>/mount/puppet/modules"
       cleanup.manifests_path = "<%=ROOT_DIR%>/mount/puppet/manifests"
-
       cleanup.manifest_file = "cleanup.pp"
     end
 
-    # clean up script which clears history and clobs files together
-
     config.vm.provision :shell, :inline => "history -c && history -w"
     config.vm.provision :shell, :inline => "umount /mount/"
-  <% end %>
+
+<% end %>
 end

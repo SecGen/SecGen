@@ -15,67 +15,74 @@ require_relative 'filecreator.rb'
 require_relative 'systemreader.rb'
 require_relative 'vagrant.rb'
 
+# coloured logo
+puts "\e[34m"
 File.open('lib/commandui/logo/logo.txt', 'r') do |f1|
-  while line = f1.gets
-    puts line
-  end
+	while line = f1.gets
+		puts line
+	end
 end
-
+puts "\e[0m"
 
 def usage
-  puts 'Usage:
+	puts 'Usage:
+   ' + $0 + ' [options]
 
-   run - creates virtual machines e.g run 10
-
-   kill - destoys current session
-
-   ssh - creates a ssh session for specifiec box e.g ssh box1
-
-   All options options are:
-   --help -h: show
-   --run -r: run
+   OPTIONS:
+   --run, -r: builds vagrant config and then builds the VMs
+   --build-config, -c: builds vagrant config, but does not build VMs
+   --build-vms, -v: builds VMs from previously generated vagrant config
+   --help, -h: shows this usage information
 '
-  exit
+	exit
+end
+
+def build_config
+	puts 'Reading configuration file for virtual machines you want to create'
+
+	# uses nokogoiri to grab all the system information from boxes.xml
+	systems = SystemReader.new(BOXES_XML).systems
+	  
+	puts 'Creating vagrant file'
+	# create's vagrant file / report a starts the vagrant installation'
+	create_files = FileCreator.new(systems)
+	build_number = create_files.generate(systems)
+end
+
+def build_vms
+	vagrant = VagrantController.new
+	vagrant.vagrant_up(build_number)
 end
 
 def run
-	puts 'reading configuration file on how many virtual machines you want to create'
-
-	puts 'creating vagrant file'
-  # uses nokogoiri to grab all the system information from boxes.xml
-  systems = SystemReader.new(BOXES_XML).systems
-
-   # create's vagrant file / report a starts the vagrant installation'
-  create_files = FileCreator.new(systems)
-  build_number = create_files.generate(systems)
-
-  vagrant = VagrantController.new
-  vagrant.vagrant_up(build_number)
+	build_config()
+	build_vms()
 end
 
-def config
+if ARGV.length < 1
+	puts 'Please enter a command option.'
+	puts
 	usage
 end
 
 opts = GetoptLong.new(
-  [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
-  [ '--run', '-r', GetoptLong::NO_ARGUMENT ],
-  [ '--config', '-c', GetoptLong::NO_ARGUMENT ]
+	[ '--help', '-h', GetoptLong::NO_ARGUMENT ],
+	[ '--run', '-r', GetoptLong::NO_ARGUMENT ],
+	[ '--build-config', '-c', GetoptLong::NO_ARGUMENT ],
+	[ '--build-vms', '-v', GetoptLong::NO_ARGUMENT ]  
 )
 
 opts.each do |opt, arg|
-  case opt
-    when '--help'
-      usage
-    when '--run'
-    	run
-    when '--config'
-    	#do a box count increment to next one
-    	#create template config file!
-    	config
-  end
+	case opt
+		when '--help'
+			usage
+		when '--run'
+			run
+		when '--build-config'
+			build_config()
+		when '--build-vms'
+			build_vms()
+	end
 end
-
-
 
 
