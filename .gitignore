@@ -1,2 +1,4 @@
-**/.DS_Store
+vendor/
+.bundle/
+.DS_Store
 Gemfile.lock
