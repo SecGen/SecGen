@@ -1,23 +1,27 @@
 describe "Template" do
-
   describe ".from_file" do
     context "when fed nothing" do
       it "raises an exception"
     end
 
-    context "when fed an argument" do
-      it "should take a file path"
-      it "should take a File object"
+    context "when file doesn't exist" do
+      it "should throw an exception"
+    end
+
+    context "when file does exist" do
+      it "should accept a file path"
+      it "should accept a File object"
+      it "should throw an exception on an unreadable file"
     end
   end
 
   describe "#new" do
-    context "when fed nothing" do
-      it "raises an exception"
-    end
+    it "should accept no parameters"
+    it "should accept a template string"
 
-    context "when fed a string" do
-      it "should take a string"
+    context "when given a file path" do
+      it "should raise an exception if file doesn't exist"
+      it "should raise an exception if file isn't readable"
     end
   end
 
@@ -49,5 +53,19 @@ describe "Template" do
       template.dump.should eq "Something is rotten in the state of {% where %}"
     end
   end
+end
 
+describe "TemplateManager" do
+  describe "#register_glob" do
+    it "should store the glob"
+  end
+
+  describe "#process" do
+    it "should throw an exception if glob root doesn't exist"
+
+    context "when given a valid glob" do
+      it "should make a Template for every template file"
+      it "should return an empty list if no files match"
+    end
+  end
 end
