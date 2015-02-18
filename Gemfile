@@ -1,12 +1,20 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
+
+gem 'mercenary', '0.3.4'
+gem 'liquid'
 
 group :development do
-  gem "rake"
-  gem "rdoc"
-  gem "rspec"
-  gem "rspec-its"
-  gem "factory_girl"
-end
+  gem 'pry'
+  gem 'pry-doc'
+  gem 'pry-byebug'
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
 
-gem "mercenary", "0.3.3"
-gem "liquid"
+  gem 'rake'
+  gem 'rspec'
+  gem 'rspec-its'
+  gem 'factory_girl'
+
+  gem 'ripper-tags'
+  gem 'gem-ripper-tags'
+end
