@@ -13,7 +13,6 @@ group :development do
   gem 'rake'
   gem 'rspec'
   gem 'rspec-its'
-  gem 'factory_girl'
 
   gem 'ripper-tags'
   gem 'gem-ripper-tags'
