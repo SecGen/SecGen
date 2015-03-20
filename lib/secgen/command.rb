@@ -1,9 +1,9 @@
 module Secgen
-
-  # A trick Jekyll uses to keep track of all the classes that
-  # inherit Command so that the binary can easily import and
-  # register them all with Mercenary.
   class Command
+
+    # A trick Jekyll uses to keep track of all the classes that
+    # inherit Command so that the binary can easily import and
+    # register them all with Mercenary.
     class << self
       def subclasses
         @subclasses ||= []
@@ -18,5 +18,4 @@ module Secgen
       end
     end
   end
-
 end

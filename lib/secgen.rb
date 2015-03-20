@@ -1,13 +1,11 @@
-$:.unshift __dir__
-
-require 'rubygems'
 require 'bundler/setup'
 
+$:.unshift __dir__
+
 require 'mercenary'
-# require 'liquid'
 
 module Secgen
-  VERSION="0.0.2"
+  VERSION = '0.0.2'
 
   autoload :ResourceManager, 'secgen/resource_manager'
   autoload :Template,        'secgen/template'
@@ -24,7 +22,7 @@ module Secgen
   # @return [ Config ] The configuration object.
   #
   # @since 0.0.1
-  def configure
+  def self.configure
     block_given? ? yield(Config) : Config
   end
 end
