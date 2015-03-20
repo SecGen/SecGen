@@ -1,71 +1,109 @@
+$:.unshift File.expand_path('../lib', __FILE__)
+
 describe "Template" do
   describe ".from_file" do
+    subject { Secgen::Template.from_file(filepath) }
+
     context "when fed nothing" do
-      it "raises an exception"
+      let(:filepath) { nil }
+      it { is_expected.to raise_error }
     end
 
     context "when file doesn't exist" do
-      it "should throw an exception"
+      let(:filepath) { "non/existant/path" }
+      it { is_expected.to raise_error(Secgen::TemplateError) }
     end
 
-    context "when file does exist" do
-      it "should accept a file path"
-      it "should accept a File object"
-      it "should throw an exception on an unreadable file"
+    context "when file exists" do
+      let(:filepath) { "files/template.tpl" }
+      it { is_expected.not_to raise_error(Secgen::TemplateError) }
+    end
+
+    context "when file is unreadable" do
+      let(:filepath) { "files/unreadable_template.tpl" }
+      it { is_expected.to raise_error(Secgen::TemplateError) }
     end
   end
 
   describe "#new" do
-    it "should accept no parameters"
-    it "should accept a template string"
+    subject { Secgen::Template.new(template) }
 
-    context "when given a file path" do
-      it "should raise an exception if file doesn't exist"
-      it "should raise an exception if file isn't readable"
+    context "given no parameters" do
+      it { is_expected.not_to raise_error }
+      its(:render) { is_expected.to be_empty }
+      its(:dump)   { is_expected.to be_empty }
+    end
+
+    context "given a template string" do
+      let(:template) { "Hello {% world %}" }
+      it { is_expected.not_to raise_error }
+      its(:render) { is_expected.to eq "Hello " }
+      its(:dump)   { is_expected.to eq "Hello {% world %}" }
     end
   end
 
   describe "#dump" do
     subject { Secgen::Template.new("Hello {% world %}") }
 
-    it "should eq 'Hello {% world %}'"
-    it "should still eq 'Hello {% world %}' (no side-effects)"
+    its(:dump) { is_expected.to eq "Hello {% world %}" }
+    its(:dump) { is_expected.to eq "Hello {% world %}" } # no side-effects
   end
 
   describe "#render" do
-    let(:template) do
-      Secgen::Template.new("Something is rotten in the state of {% where %}")
-    end
+    subject { Secgen::Template.new(template) }
 
-    it "removes markup" do
-      pending
-      template.render.should eq "Something is rotten in the state of "
-    end
+    let(:template) { "Something is rotten in the state of {% where %}" }
 
-    it "injects the supplied arguments into the template" do
-      pending
+    it "replaces variables in template" do
       template.set(:where => "Denmark")
-      template.render.should eq "Something is rotten in the state of Denmark"
-    end
-
-    it "should not have any side effects" do
-      pending
-      template.dump.should eq "Something is rotten in the state of {% where %}"
+      expect(subject.render).to eq "Something is rotten in the state of Denmark"
     end
   end
 end
 
 describe "TemplateManager" do
-  describe "#register_glob" do
-    it "should store the glob"
+  subject do
+    manager = Secgen::TemplateManager.new
+    manager.register_glob(file_glob)
+    manager
   end
 
-  describe "#process" do
-    it "should throw an exception if glob root doesn't exist"
+  describe "#new" do
+    context "when glob is invalid" do
+      let(:file_glob) { "does/not/exist/*.tpl" }
+      it { is_expected.to raise_error }
+    end
+  end
 
-    context "when given a valid glob" do
-      it "should make a Template for every template file"
-      it "should return an empty list if no files match"
+  describe "#list" do
+    its(:list)  { is_expected.to be_empty }
+
+    context "when it has matches" do
+      let(:file_glob) { "spec/files/*.tpl" }
+
+      its(:list)  { is_expected.not_to be_empty }
+      its(:list)  { is_expected.to all be_a Secgen::Template }
+      its(:list)  { is_expected.to all exist } # Requires Template::exists?
+    end
+
+    context "when it has no matches" do
+      let(:file_glob) { "spec/files/nothing-matches-this-*.tpl" }
+      its(:list)  { is_expected.to be_empty }
+    end
+  end
+
+  describe "#files" do
+    its(:files) { is_expected.to be_empty }
+
+    context "when it has matches" do
+      let(:file_glob) { "spec/files/*.tpl" }
+      its(:files) { is_expected.not_to be_empty }
+      its(:files) { is_expected.to all be_a String }
+    end
+
+    context "when it has no matches" do
+      let(:file_glob) { "spec/files/nothing-matches-this-*.tpl" }
+      its(:files) { is_expected.to be_empty }
     end
   end
 end
