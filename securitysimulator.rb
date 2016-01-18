@@ -47,16 +47,17 @@ def build_config
 	# create's vagrant file / report a starts the vagrant installation'
 	create_files = FileCreator.new(systems)
 	build_number = create_files.generate(systems)
+	return build_number
 end
 
-def build_vms
+def build_vms(build_number)
 	vagrant = VagrantController.new
 	vagrant.vagrant_up(build_number)
 end
 
 def run
-	build_config()
-	build_vms()
+	build_number = build_config()
+	build_vms(build_number)
 end
 
 if ARGV.length < 1
