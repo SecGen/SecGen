@@ -1,4 +1,4 @@
-Security Scernario Generator (SecGen)
+Security Scenario Generator (SecGen)
 ==
 This code is licensed under the GPL 3.0 license.
 
