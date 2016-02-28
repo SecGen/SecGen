@@ -15,14 +15,8 @@ require_relative 'filecreator.rb'
 require_relative 'systemreader.rb'
 require_relative 'vagrant.rb'
 
-# coloured logo
-puts "\e[34m"
-File.open('lib/commandui/logo/logo.txt', 'r') do |f1|
-	while line = f1.gets
-		puts line
-	end
-end
-puts "\e[0m"
+puts 'SecGen - Creates virtualised security scenarios'
+puts 'Licensed GPLv3 2014-16'
 
 def usage
 	puts 'Usage:
