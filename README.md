@@ -1,11 +1,11 @@
-Security-Simulator 
+Security Scenario Generator (SecGen)
 ==
 This code is licensed under the GPL 3.0 license.
 
 Summary
 --
 
-Security Simulator is a ruby application developed by Lewis Ardern for his Final Year Project that uses virtualization software to automatically create vulnerable virtual machines so students can learn security penetration testing techniques. 
+SecGen is a ruby application developed by Lewis Ardern for his Final Year Project that uses virtualization software to automatically create vulnerable virtual machines so students can learn security penetration testing techniques. 
 
 Boxes like Metasploitable2 are always the same, this project uses Vagrant, Puppet, and Ruby to create vulnerable virtual machines quickly that can be used for learning or CTF events. 
 
@@ -120,7 +120,7 @@ After each system is installed, the systems will clean up after itself.
 
 Contributing
 --
-If you like the idea of Security Simulator, you are more than welcome to contribute to the project.
+If you like the idea of SecGen, you are more than welcome to contribute to the project.
 
 Contact
 --
