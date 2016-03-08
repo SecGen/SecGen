@@ -1,19 +1,9 @@
-# Security Simulator
-#
-# $Id$
-#
-# $Revision$
-#
-# This program allows you to use a large amount of virtual machines and install vulnerable software to create a learning environment.
-#
-# By: Lewis Ardern (Leeds Metropolitan University)
-
 require 'getoptlong'
 require 'fileutils'
-require_relative 'system.rb'
-require_relative 'filecreator.rb'
-require_relative 'systemreader.rb'
-require_relative 'vagrant.rb'
+require_relative 'lib/constants'
+require_relative 'lib/filecreator.rb'
+require_relative 'lib/systemreader.rb'
+require_relative 'lib/vagrant.rb'
 
 puts 'SecGen - Creates virtualised security scenarios'
 puts 'Licensed GPLv3 2014-16'
@@ -34,8 +24,8 @@ end
 def build_config
 	puts 'Reading configuration file for virtual machines you want to create'
 
-	# uses nokogoiri to grab all the system information from boxes.xml
-	systems = SystemReader.new(BOXES_XML).systems
+	# uses nokogoiri to grab all the system information from scenario.xml
+	systems = SystemReader.new(SCENARIO_XML).systems
 	  
 	puts 'Creating vagrant file'
 	# create's vagrant file / report a starts the vagrant installation'

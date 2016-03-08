@@ -1,5 +1,5 @@
 require 'erb'
-require_relative 'system.rb'
+require_relative 'constants'
 
 
 VAGRANT_TEMPLATE_FILE = "#{ROOT_DIR}/lib/templates/vagrantbase.erb"
@@ -36,9 +36,9 @@ class FileCreator
 		File.open("#{PROJECTS_DIR}/Project#{build_number}/Vagrantfile", 'w') { |file| file.write(vagrant_template.result(controller.get_binding)) }
 		
 
-		report_template = ERB.new(File.read(REPORT_TEMPLATE_FILE), 0, '<>')
-		puts "#{PROJECTS_DIR}/Project#{build_number}/Report file has been created"
-		File.open("#{PROJECTS_DIR}/Project#{build_number}/Report", 'w'){ |file| file.write(report_template.result(controller.get_binding)) }
+		#report_template = ERB.new(File.read(REPORT_TEMPLATE_FILE), 0, '<>')
+		#puts "#{PROJECTS_DIR}/Project#{build_number}/Report file has been created"
+		#File.open("#{PROJECTS_DIR}/Project#{build_number}/Report", 'w'){ |file| file.write(report_template.result(controller.get_binding)) }
 
 		return build_number
 	end

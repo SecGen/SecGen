@@ -1,13 +1,6 @@
 require 'nokogiri'
-# assign constants
-ROOT_DIR = File.dirname(__FILE__)
+require_relative 'constants'
 
-BOXES_XML = "#{ROOT_DIR}/lib/xml/boxes.xml"
-NETWORKS_XML = "#{ROOT_DIR}/lib/xml/networks.xml"
-VULN_XML = "#{ROOT_DIR}/lib/xml/vulns.xml"
-SERVICES_XML = "#{ROOT_DIR}/lib/xml/services.xml"
-BASE_XML = "#{ROOT_DIR}/lib/xml/bases.xml"
-MOUNT_DIR = "#{ROOT_DIR}/mount/"
 
 class System
     # can access from outside of class
@@ -53,7 +46,7 @@ class Network
     end
 
     def eql? other
-        # checks if name matches networks.xml from boxes.xml
+        # checks if name matches networks.xml from scenario.xml
         other.kind_of?(self.class) && @name == other.name
     end
 
@@ -88,7 +81,7 @@ end
 
 class ServiceManager
 	# secure services are randomly selected from the definitions in services.xml (secure_services)
-	# based on the attributes optionally specified in boxes.xml (want_services)
+	# based on the attributes optionally specified in scenario.xml (want_services)
 	# However, if the service type has already had a vulnerability assigned (selected_vulns), it is ignored here
 	def self.process(want_services, secure_services, selected_vulns=[])
 		return_services = {}
@@ -116,7 +109,7 @@ class ServiceManager
 			end
 
 			if search_list.length == 0
-				STDERR.puts "Matching service was not found please check the xml boxes.xml"
+				STDERR.puts "Matching service was not found please check the xml scenario.xml"
 				STDERR.puts "(note: you can only have one of each type of service per system)"
 				exit
 			else
@@ -135,13 +128,13 @@ class ServiceManager
 end
 
 class NetworkManager
-    # the user will either specify a blank network type or a knownnetwork type
+    # the user will either specify a blank misc type or a knownnetwork type
     def self.process(networks,valid_network)
         new_networks = {}
         # intersection of valid networks / user defined networks
         legal_networks = valid_network & networks
         networks.each do |network|
-            # checks to see string is blank if so valid network into a new hash map of vulnerabilities 
+            # checks to see string is blank if so valid misc into a new hash map of vulnerabilities
             if network.name == ""
                 random = valid_network.sample
                  new_networks[random.id] = random
@@ -151,14 +144,14 @@ class NetworkManager
                 legal_networks.shuffle.each do |valid|
                      if network.name == valid.name
                         network.range = valid.range unless not network.range.empty?
-                        # valid network into a new hash map of networks 
+                        # valid misc into a new hash map of networks
                         new_networks[network.id] = network
                         has_found = true
                         break
                      end
                 end
                 if not has_found
-                    p "Network was not found please check the xml boxes.xml"
+                    p "Network was not found please check the xml scenario.xml"
                     exit
                 end
             end
@@ -181,83 +174,8 @@ class BaseManager
     end
 end
 
-class Vulnerability
-    attr_accessor :type, :privilege, :access ,:puppets, :details, :ports, :cve
-
-    def eql? other
-        # checks if type matches vulns.xml from boxes.xml
-        other.kind_of?(self.class) && @type == other.type
-    end
-
-    def hash
-        @type.hash
-    end
-
-    def initialize(type="", privilege="", access="", puppets=[], details="", ports=[], cve="")
-        @type = type
-        @privilege = privilege
-        @access = access
-        @puppets = puppets
-        @details = details
-        @ports = ports
-        @cve = cve
-    end
-
-    def id
-        return @type + @privilege + @access
-    end
-
-end
-
-class VulnerabilityManager
-	# vulnerabilities are randomly selected from the definitions in vulns.xml (all_vulns)
-	# based on the attributes optionally specified in boxes.xml (want_vulns)
-	def self.process(want_vulns, all_vulns)
-		return_vulns = {}
-
-		legal_vulns = all_vulns.clone
-		want_vulns.each do |vulnerability_query|
-			# select based on selected type, access, cve...
-
-			# copy vulns array
-			search_list = legal_vulns.clone
-			# shuffle order of available vulnerabilities
-			search_list.shuffle!
-			# remove all the vulns that don't match the current selection (type, etc)
-			if vulnerability_query.type.length > 0
-				puts "Searching for vulnerability matching type: " + vulnerability_query.type
-				search_list.delete_if{|x| x.type != vulnerability_query.type}
-			end
-			if vulnerability_query.access.length > 0
-				puts "Searching for vulnerability matching access: " + vulnerability_query.access
-				search_list.delete_if{|x| x.access != vulnerability_query.access}
-			end
-			if vulnerability_query.cve.length > 0
-				puts "Searching for vulnerability matching CVE: " + vulnerability_query.cve
-				search_list.delete_if{|x| x.cve != vulnerability_query.cve}
-			end
-
-			if search_list.length == 0
-				STDERR.puts "Matching vulnerability was not found please check the xml boxes.xml"
-				STDERR.puts "(note: you can only have one of each type of vulnerability per system)"
-				exit
-			else
-				# use from the top of the top of the randomised list
-				return_vulns[vulnerability_query.id] = search_list[0]
-				if search_list[0].type.length > 0
-					puts "Selected vulnerability : " + search_list[0].type
-				end
-
-				# enforce only one of any vulnerability type (remove from available)
-				legal_vulns.delete_if{|x| x.type == vulnerability_query.type}
-			end
-		end
-		return return_vulns.values
-	end
-end
-
 class Conf
-    # this class uses nokogiri to grab all of the information from network.xml, bases.xml, and vulns.xml
+    # this class uses nokogiri to grab all of the information from misc.xml, bases.xml, and vulns.xml
     # then adds them to their specific class to do checking for legal in Manager.process
     def self.networks
         if defined? @@networks

@@ -1,12 +1,14 @@
 require_relative 'system.rb'
-
+require_relative 'objects/vulnerability'
+require_relative 'helpers/vulnerability_processor'
 class SystemReader
 	# initializes systems xml from BOXES_XML const
 	def initialize(systems_xml)
 		@systems_xml = systems_xml
+		@vulnerability_processor = VulnerabilityProcessor.new
 	end
 
-	# uses nokogiri to extract all system information from boxes.xml will add it to the system class after
+	# uses nokogiri to extract all system information from scenario.xml will add it to the system class after
 	# checking if the vulnerabilities / networks exist from system.rb
 	def systems
 		systems = []
@@ -46,7 +48,7 @@ class SystemReader
 			puts "Processing system: " + id
 			# vulns / networks are passed through to their manager and the program will create valid vulnerabilities / networks
 			# depending on what the user has specified these two will return valid vulns to be used in vagrant file creation.
-			new_vulns = VulnerabilityManager.process(vulns, Conf.vulnerabilities)
+			new_vulns = @vulnerability_processor.process(vulns)
 			#puts new_vulns.inspect
 			
 			new_networks = NetworkManager.process(networks, Conf.networks)
