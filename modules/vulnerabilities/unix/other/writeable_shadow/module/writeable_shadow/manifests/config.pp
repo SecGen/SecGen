@@ -1,4 +1,4 @@
-class writableshadow::config {
+class writeable_shadow::config {
 
   file { '/etc/shadow':
     ensure  => present,

@@ -6,8 +6,6 @@ require_relative 'lib/systemreader.rb'
 require_relative 'lib/vagrant.rb'
 require_relative 'lib/helpers/bootstrap'
 
-puts 'SecGen - Creates virtualised security scenarios'
-puts 'Licensed GPLv3 2014-16'
 
 def usage
   puts 'Usage:
