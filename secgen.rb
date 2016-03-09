@@ -43,6 +43,12 @@ def run
   build_vms(build_number)
 end
 
+# end of method declarations
+# start of program execution
+
+puts 'SecGen - Creates virtualised security scenarios'
+puts 'Licensed GPLv3 2014-16'
+
 if ARGV.length < 1
 	puts 'Please enter a command option.'
 	puts
