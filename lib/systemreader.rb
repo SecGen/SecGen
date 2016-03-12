@@ -8,6 +8,7 @@ require_relative 'objects/network'
 require_relative 'objects/service'
 require_relative 'objects/system'
 require_relative 'objects/vulnerability'
+require 'nokogiri'
 
 class SystemReader
 	# initializes systems xml from BOXES_XML const
@@ -64,7 +65,7 @@ class SystemReader
 
 			s = System.new(id, os, basebox, url, new_vulns, new_networks, new_services)
 			if s.is_valid_base == false
-				BaseManager.generate_base(s,Conf.bases)
+				BaseManager.generate_base(s,Configuration.bases)
 			end
 
 			systems << s
