@@ -8,6 +8,8 @@ class Configuration
     @systems = init_systems()
   end
 
+  # Return all systems
+  # @return systems
   def get_systems
     if @systems.empty?
       init_systems()
@@ -15,10 +17,13 @@ class Configuration
     return @systems
   end
 
+  # Initialise configuration of all systems
   def init_systems()
     @systems = @systemreader.parse_systems
   end
 
+  # Returns the existing networks if defined, else returns network from the file networks.xml
+  # @return networks
   def self.networks
     if defined? @@networks
       return @@networks
@@ -26,6 +31,8 @@ class Configuration
     return @@networks = _get_list(NETWORKS_XML, "//networks/network", Network)
   end
 
+  # Returns the existing bases if defined, else returns bases the from the file base.xml
+  # @return bases
   def self.bases
     if defined? @@bases
       return @@bases
@@ -33,6 +40,8 @@ class Configuration
     return @@bases = _get_list(BASE_XML, "//bases/base", Basebox)
   end
 
+  # Returns the existing vulnerabilities if defined, else returns vulnerabilities the from the file vuln.xml
+  # @return vulnerabilities
   def self.vulnerabilities
     if defined? @@vulnerabilities
       return @@vulnerabilities
@@ -40,6 +49,8 @@ class Configuration
     return @@vulnerabilities = _get_list(VULN_XML, "//vulnerabilities/vulnerability", Vulnerability)
   end
 
+  # Returns the existing services if defined, else returns services the from the file services.xml
+  # @return services
     def self.services
     if defined? @@services
       return @@services
@@ -47,6 +58,10 @@ class Configuration
     return @@services = _get_list(SCENARIO_XML, "/systems/system/services/service", Service)
   end
 
+  # ???
+  # @param [File] xmlfile
+  # @param [String] xpath
+  # @param [] cls
   def self._get_list(xmlfile, xpath, cls)
     itemlist = []
 

@@ -1,4 +1,7 @@
 class BaseManager
+  # Generates a basebox system from a sample of the bases.xml file
+  # @param system,bases
+  # @return basebox system
   def self.generate_base(system,bases)
     # takes a sample from bases.xml and then assigns it to system
     box = bases.sample

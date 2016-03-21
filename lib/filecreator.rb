@@ -6,10 +6,16 @@ require 'fileutils'
 class FileCreator
 # Creates project directory, uses .erb files to create a report and the vagrant file that will be used
 # to create the virtual machines
+
+  # Initialises configuration variable
+  # @param config
+  # @return configuration
 	def initialize(config)
 		@configuration = config
 	end
-	
+
+  # Generate all relevent files for the project
+  # @return [Int] build number of the newly generated project
 	def generate()
 		systems = @configuration.get_systems
 		Dir::mkdir("#{PROJECTS_DIR}") unless File.exists?("#{PROJECTS_DIR}")
