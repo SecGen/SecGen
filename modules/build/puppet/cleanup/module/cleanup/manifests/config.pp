@@ -15,10 +15,10 @@ class cleanup::config {
 # disables eth1 which runs the public network for each vulnerable machine 
 #  vagrant runs over 10.0 for eth0 .. eth1 for public .. and eth2 for private.
 
-    exec { "ifconfig":
-	  command => "ifconfig eth1 down",
-	  path => "/sbin/",
-  }
+#    exec { "ifconfig":
+#	  command => "ifconfig eth1 down",
+#	  path => "/sbin/",
+#  }
 # changes default vagrant password, would kind of be pointless if they could just ssh to vagrant/vagrant :P
 # this never worked.
 # user {

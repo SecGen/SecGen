@@ -22,7 +22,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 
     # Add secure services
+    <% systems.services.each do |service| %>
 
+        <% service_name = service.name.gsub!('-', '_').gsub!('.', '_') %>
+
+        config.vm.provision "puppet" do | <%=service_name%> |
+
+        <%=service_name%>.module_path = "<%="#{ROOT_DIR}/mount/puppet/module/#{service_name}"%>"
+        <%=service_name%>.manifests_path = "<%="#{ROOT_DIR}/mount/puppet/manifest"%>"
+        <%=service_name%>.manifest_file = "init.pp"
+        end
+
+    <% end %>
 
     # Add vulnerabilities
 
