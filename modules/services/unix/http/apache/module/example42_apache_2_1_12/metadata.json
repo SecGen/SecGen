@@ -1,0 +1,56 @@
+{
+  "name": "example42-apache",
+  "version": "2.1.12",
+  "author": "Alessandro Franceschi, Martin Alfke",
+  "summary": "Puppet module for apache",
+  "license": "Apache-2.0",
+  "source": "https://github.com/example42/puppet-apache",
+  "project_page": "https://github.com/example42/puppet-apache",
+  "issues_url": "https://github.com/example42/puppet-apache/issues",
+  "dependencies": [
+    {"name":"puppetlabs/stdlib","version_requirement":">= 3.2.0 < 5.0.0"},
+    {"name":"example42/puppi","version_requirement":">= 2.0.0"},
+    {"name":"example42/monitor","version_requirement":">= 2.0.0"},
+    {"name":"example42/iptables","version_requirement":">= 2.0.0"},
+    {"name":"example42/firewall","version_requirement":">= 2.0.0"},
+    {"name":"puppetlabs/concat","version_requirement":">= 1.0.0"}
+  ],
+  "checksums": {
+  },
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Centos",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "14.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": ">= 3.0.0 < 5.0.0"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": ">= 3.0.0 < 5.0.0"
+    }
+  ]
+}
