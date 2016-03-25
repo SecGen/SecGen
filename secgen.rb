@@ -60,13 +60,15 @@ if ARGV.length < 1
 	usage
 end
 
+# Get command line arguments
 opts = GetoptLong.new(
 	[ '--help', '-h', GetoptLong::NO_ARGUMENT ],
 	[ '--run', '-r', GetoptLong::NO_ARGUMENT ],
 	[ '--build-config', '-c', GetoptLong::NO_ARGUMENT ],
-	[ '--build-vms', '-v', GetoptLong::NO_ARGUMENT ]  
+	[ '--build-vms', '-v', GetoptLong::REQUIRED_ARGUMENT ]
 )
 
+# Direct via command line arguments
 opts.each do |opt, arg|
 	case opt
 		when '--help'
@@ -78,7 +80,7 @@ opts.each do |opt, arg|
 		when '--build-config'
 			build_config()
 		when '--build-vms'
-			build_vms()
+			build_vms(arg)
 	end
 end
 
