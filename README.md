@@ -61,7 +61,7 @@ Boxes
 --
 by default the 'system machines' are specified to boxes.xml you will need to modify this file to create a new system e.g. 
 
-each system must be incremented by system3, system4, etc to work. Each vulnerability must match a type from vulns.xml or be blank or you will be returned an error. 
+each system must be incremented by system3, system4, etc to work.
 
 Networking
 --
@@ -90,8 +90,6 @@ Currently the only tested base is puppettest, however any debian system should w
 
 Vulnerabilities
 --
-Vulnerabilities are specified in vulns.xml, these are the 'useable' vulnerabilities currently, so when specifing vulnerabilities in boxes.xml you must use from this list or leave the name blank. current automated vulnerabilities are:
-	
 	ftp
 	commandinjection
     nfs
