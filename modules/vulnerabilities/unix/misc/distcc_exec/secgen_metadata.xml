@@ -5,7 +5,11 @@
         access="remote"
         details="distcc can be exploited by exploit/unix/misc/distcc_exec"
         platform="unix"
-        name="distcc_exec">
+        name="distcc_exec"
+        msf_module="modules/exploits/unix/misc/distcc_exec.rb"
+        difficulty="medium"
+        cvss_score="9.3"
+        vector_string="AV:N/AC:M/Au:N/C:C/I:C/A:C">
   <puppets>
     <puppet>distcc_exec</puppet>
   </puppets>
