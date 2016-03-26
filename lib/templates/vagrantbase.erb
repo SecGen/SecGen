@@ -17,7 +17,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     <% end %>
     <%= systems.id %>.vm.synced_folder "<%= MOUNT_DIR %>", "/mount"
     end
-    config.vm.provision :shell, :inline => "sed -i 's/squeeze/wheezy/g' /etc/apt/sources.list"
+    config.vm.provision :shell, :inline => "apt-get --yes --force-yes install ruby "
+    config.vm.provision :shell, :inline => "gem uninstall puppet"
+    config.vm.provision :shell, :inline => "gem install puppet -v '3.5.1'"
+
     config.vm.provision :shell, :inline => "apt-get update --fix-missing"
 
 
@@ -49,6 +52,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
             end
 
     <% end %>
+
+    config.vm.provision "puppet" do |wordpress|
+    wordpress.module_path = "<%="#{ROOT_DIR}/mount/puppet/module"%>"
+    wordpress.manifests_path = "<%="#{ROOT_DIR}/mount/puppet/manifest"%>"
+    wordpress.manifest_file = "wordpress.pp"
+    end
 
     # clean up script which clears history from the VMs and clobs files together
     config.vm.provision "puppet" do |cleanup|

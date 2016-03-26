@@ -1,0 +1,16 @@
+{
+  "name": "hunner-wordpress",
+  "version": "1.0.0",
+  "author": "Hunter Haugen",
+  "summary": "Puppet module to set up an instance of wordpress",
+  "license": "Apache2",
+  "source": "https://github.com/hunner/puppet-wordpress",
+  "project_page": "https://github.com/hunner/puppet-wordpress",
+  "issues_url": "https://github.com/hunner/puppet-wordpress/issues",
+  "description": "Installs wordpress and required mysql db/user.",
+  "dependencies": [
+    {"name":"puppetlabs/concat","version_requirement":">= 1.0.0"},
+    {"name":"puppetlabs/mysql","version_requirement":">= 2.1.0"},
+    {"name":"puppetlabs/stdlib","version_requirement":">= 2.3.1"}
+  ]
+}
