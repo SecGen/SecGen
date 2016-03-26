@@ -6,7 +6,7 @@
 		</vulnerabilities>
 		<!-- secure services will be provided, if matching insecure ones have not been selected -->
 		<services>
-			<service type="http" name="example42-apache-2.1.12"></service>
+			<service type="http" name="apache"></service>
 		</services>-->
 		<networks>
 			<network name="homeonly"></network>

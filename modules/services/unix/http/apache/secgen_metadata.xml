@@ -1,5 +1,0 @@
-<service
-    name="example42_apache_2_1_12"
-	type="http"
-	description="A secure Apache install">
-</service>
