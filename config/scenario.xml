@@ -5,8 +5,7 @@
 		</vulnerabilities>
 		<!-- secure services will be provided, if matching insecure ones have not been selected -->
 		<services>
-			<service type="http" name="apache"></service>
-			<service type="mysql" name="mysql"></service>
+			<service type="lamp" name="lamp"></service>
 		</services>-->
 		<networks>
 			<network name="homeonly"></network>

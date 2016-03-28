@@ -20,8 +20,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision :shell, :inline => "apt-get --yes --force-yes install ruby "
     config.vm.provision :shell, :inline => "gem uninstall puppet"
     config.vm.provision :shell, :inline => "gem install puppet -v '3.5.1'"
-
     config.vm.provision :shell, :inline => "apt-get update --fix-missing"
+
 
 
     # Add secure services
