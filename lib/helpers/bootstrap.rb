@@ -35,68 +35,64 @@ class Bootstrap
 
   def move_vulnerability_puppet_files
     puts 'Moving vulnerability manifests'
-    Dir.glob("#{ROOT_DIR}/modules/vulnerabilities/**/**/**/*.pp").each do |puppet_file|
+    Dir.glob("#{ROOT_DIR}/modules/vulnerabilities/*/*/*/*.pp").each do |puppet_file|
       puts "Moving #{puppet_file} to mount/puppet/manifest/"
       FileUtils.copy(puppet_file, "#{ROOT_DIR}/mount/puppet/manifest/")
     end
 
     puts 'Moving vulnerability modules'
-    Dir.glob("#{ROOT_DIR}/modules/vulnerabilities/**/**/**/module/**").each do |puppet_module_directory|
-      root_directory_length = ROOT_DIR.split('/').count
-      module_name = puppet_module_directory.split('/')[root_directory_length + 4]
-      module_path = "#{ROOT_DIR}/mount/puppet/module/#{module_name}"
-
-      if(Dir.exists?(module_path))
-        puts "Moving #{puppet_module_directory} to #{module_path}"
-        FileUtils.cp_r(puppet_module_directory, module_path)
-      else
-        Dir.mkdir("#{ROOT_DIR}/mount/puppet/module/#{module_name}")
-        puts "Moving #{puppet_module_directory} to #{module_path}"
-        FileUtils.cp_r(puppet_module_directory, module_path)
-      end
-
-      puts 'Moving vulnerability templates'
-
+    Dir.glob("#{ROOT_DIR}/modules/vulnerabilities/*/*/*/*/").each do |puppet_module_directory|
+      module_path = "#{ROOT_DIR}/mount/puppet/module/"
+      puts "Moving #{puppet_module_directory} to #{module_path}"
+      FileUtils.cp_r(puppet_module_directory, module_path)
     end
   end
 
   def move_secure_service_puppet_files
-    puts 'Moving secure service puppet files'
-    Dir.glob("#{ROOT_DIR}/modules/services/**/**/puppet/module/*.pp").each do |puppet_file|
-      puts "Moving #{puppet_file} to mount/puppet/module"
-      FileUtils.copy(puppet_file, "#{ROOT_DIR}/mount/puppet/module")
+    puts 'Moving Service manifests'
+    Dir.glob("#{ROOT_DIR}/modules/services/*/*/*/*.pp").each do |puppet_file|
+      puts "Moving #{puppet_file} to mount/puppet/manifest/"
+      FileUtils.copy(puppet_file, "#{ROOT_DIR}/mount/puppet/manifest/")
     end
-    Dir.glob("#{ROOT_DIR}/modules/services/**/**/puppet/manifest/*.pp").each do |puppet_file|
-      puts "Moving #{puppet_file} to mount/puppet/manifest."
-      FileUtils.copy(puppet_file, "#{ROOT_DIR}/mount/puppet/manifest")
+
+    puts 'Moving Service modules'
+    Dir.glob("#{ROOT_DIR}/modules/services/*/*/*/module/**").each do |puppet_module_directory|
+
+      module_path = "#{ROOT_DIR}/mount/puppet/module/"
+      puts "Moving #{puppet_module_directory} to #{module_path}"
+      FileUtils.cp_r(puppet_module_directory, module_path)
+
+
+      puts 'Moving vulnerability templates'
     end
   end
 
   def move_build_puppet_files
 
-    puts 'Moving build puppet module files'
-    Dir.glob("#{ROOT_DIR}/modules/build/puppet/**/module/*.pp").each do |puppet_file|
-      root_directory_length = ROOT_DIR.split('/').count
-      module_name = puppet_file.split('/')[root_directory_length + 3]
-      module_path = "#{ROOT_DIR}/mount/puppet/module/#{module_name}"
-      if(Dir.exists?(module_path))
-        Dir.mkdir("#{module_path}/manifests")
-        puts "Moving #{puppet_file} to #{module_path}"
-        FileUtils.copy(puppet_file, "#{module_path}/manifests")
-      else
-        Dir.mkdir("#{ROOT_DIR}/mount/puppet/module/#{module_name}")
-        Dir.mkdir("#{ROOT_DIR}/mount/puppet/module/#{module_name}/manifests")
-        puts "Moving #{puppet_file} to #{module_path}"
-        FileUtils.copy(puppet_file, "#{module_path}/manifests")
-      end
-    end
-    Dir.glob("#{ROOT_DIR}/modules/build/puppet/**/manifest/*.pp").each do |puppet_file|
-      puts "Moving #{puppet_file} to mount/puppet/manifest."
-      FileUtils.copy(puppet_file, "#{ROOT_DIR}/mount/puppet/manifest")
-    end
-  end
+    puts 'Moving Dependency modules'
+    Dir.glob("#{ROOT_DIR}/modules/dependencies/**").each do |puppet_module_directory|
 
-  def move_files
+        module_path = "#{ROOT_DIR}/mount/puppet/module/"
+        puts "Moving #{puppet_module_directory} to #{module_path}"
+        FileUtils.cp_r(puppet_module_directory, module_path)
+      end
+
+    puts 'Moving build manifests'
+
+    Dir.glob("#{ROOT_DIR}/modules/build/*/*/*.pp").each do |puppet_file|
+      puts "Moving #{puppet_file} to mount/puppet/manifest/"
+      FileUtils.copy(puppet_file, "#{ROOT_DIR}/mount/puppet/manifest/")
+    end
+
+    puts 'Moving build modules'
+
+    Dir.glob("#{ROOT_DIR}/modules/build/*/*/module/**").each do |puppet_module_directory|
+
+      module_path = "#{ROOT_DIR}/mount/puppet/module/"
+      puts "Moving #{puppet_module_directory} to #{module_path}"
+      FileUtils.cp_r(puppet_module_directory, module_path)
+    end
+
 
   end
 

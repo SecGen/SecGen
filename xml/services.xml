@@ -1,9 +1,1 @@
-<services>
-	<service
-		type="ftp"
-		details="Secure FTP">
-		<puppets>
-			<puppet>secureftp</puppet>
-		</puppets>
-	</service>
-</services>
+

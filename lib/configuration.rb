@@ -44,7 +44,7 @@ class Configuration
     if defined? @@services
       return @@services
     end
-    return @@services = _get_list(SERVICES_XML, "//services/service", Service)
+    return @@services = _get_list(SCENARIO_XML, "/systems/system/services/service", Service)
   end
 
   def self._get_list(xmlfile, xpath, cls)
