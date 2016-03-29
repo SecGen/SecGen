@@ -76,3 +76,5 @@ Contributing
 --
 If you like the idea of SecGen, you are more than welcome to contribute to the project, please see the wiki for guidance on how to contribute
 
+The SecGen team have prepared a VM located at: https://drive.google.com/open?id=0B6fyxD2qGmUIaXpDZElKczdQYW8 to make 
+contributing for SecGen easier, it includes Ruby, git and RubyMine pre-installed, however, some tweaking may be required.
