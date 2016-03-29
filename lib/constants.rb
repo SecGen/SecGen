@@ -2,7 +2,6 @@
 ROOT_DIR = File.expand_path('../../../SecGen',__FILE__)
 SCENARIO_XML = "#{ROOT_DIR}/config/scenario.xml"
 NETWORKS_XML = "#{ROOT_DIR}/xml/networks.xml"
-VULN_XML = "#{ROOT_DIR}/xml/vulns.xml"
 SERVICES_XML = "#{ROOT_DIR}/xml/services.xml"
 BASE_XML = "#{ROOT_DIR}/xml/bases.xml"
 MOUNT_DIR = "#{ROOT_DIR}/mount/"

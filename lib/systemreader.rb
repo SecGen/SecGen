@@ -32,10 +32,14 @@ class SystemReader
 
 			system.css('vulnerabilities vulnerability').each do |v|
 				vulnerability = Vulnerability.new
-				vulnerability.privilege = v['privilege']
-				vulnerability.cve = v['cve']
-				vulnerability.access = v['access']
-				vulnerability.type = v['type']
+				# assign the value if the value is not nil (i.e. it's been specified in scenario.xml)
+				vulnerability.type = v['type'] if v['type']
+				vulnerability.privilege = v['privilege'] if v['privilege']
+				vulnerability.cve = v['cve'] if v['cve']
+				vulnerability.access = v['access'] if v['access']
+				vulnerability.difficulty = v['difficulty'] if v['difficulty']
+				vulnerability.cvss_rating = v['cvss_rating'] if v['cvss_rating']
+				vulnerability.vector_string = v['vector_string'] if v['vector_string']
 				vulns << vulnerability
 			end
 
