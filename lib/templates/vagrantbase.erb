@@ -53,12 +53,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     <% end %>
 
-    config.vm.provision "puppet" do |wordpress|
-    wordpress.module_path = "<%="#{ROOT_DIR}/mount/puppet/module"%>"
-    wordpress.manifests_path = "<%="#{ROOT_DIR}/mount/puppet/manifest"%>"
-    wordpress.manifest_file = "wordpress.pp"
-    end
-
     # clean up script which clears history from the VMs and clobs files together
     config.vm.provision "puppet" do |cleanup|
     cleanup.module_path = "<%="#{ROOT_DIR}/mount/puppet/module"%>"
