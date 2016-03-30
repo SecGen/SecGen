@@ -20,8 +20,6 @@ class FileCreator
 
 		puts "The system is now creating the Project#{build_number}"
 		Dir::mkdir("#{PROJECTS_DIR}/Project#{build_number}") unless File.exists?("#{PROJECTS_DIR}/#{build_number}")
-		puts 'Copying manifests to the projects manifest directory'
-		FileUtils.cp_r("#{ROOT_DIR}/mount/puppet/manifest/","#{PROJECTS_DIR}/Project#{build_number}/manifests")
 
 		# initialises box before creation
 		command = "cd #{PROJECTS_DIR}/Project#{build_number}/; vagrant init"
