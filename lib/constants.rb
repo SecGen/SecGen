@@ -8,7 +8,7 @@ MOUNT_DIR = "#{ROOT_DIR}/mount/"
 BUILD_DIR = "#{ROOT_DIR}/modules/build/"
 MOUNT_PUPPET_DIR = "#{ROOT_DIR}/mount/puppet"
 PROJECTS_DIR = "#{ROOT_DIR}/projects"
-
+ENVIRONMENTS_PATH = "#{ROOT_DIR}/modules/environments"
 #PATH CONSTANTS
 MODULES_PATH = "#{ROOT_DIR}/modules/"
 VULNERABILITIES_PATH = "#{ROOT_DIR}/modules/vulnerabilities/"
