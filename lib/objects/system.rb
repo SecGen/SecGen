@@ -1,9 +1,9 @@
 class System
   # can access from outside of class
-  attr_accessor :id, :os, :url,:basebox, :networks, :vulns, :services
+  attr_accessor :id, :os, :url,:basebox, :networks, :vulns, :services, :sites
 
   #initalizes system variables
-  def initialize(id, os, basebox, url, vulns=[], networks=[], services=[])
+  def initialize(id, os, basebox, url, vulns=[], networks=[], services=[], sites=[])
     @id = id
     @os = os
     @url = url
@@ -11,6 +11,7 @@ class System
     @vulns = vulns
     @networks = networks
     @services = services
+    @sites = sites
   end
 
   def is_valid_base

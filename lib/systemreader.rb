@@ -6,6 +6,7 @@ require_relative 'helpers/vulnerability_processor'
 require_relative 'objects/base_box'
 require_relative 'objects/network'
 require_relative 'objects/service'
+require_relative 'objects/site'
 require_relative 'objects/system'
 require_relative 'objects/vulnerability'
 require 'nokogiri'
@@ -29,7 +30,14 @@ class SystemReader
 			vulns = []
 			networks = []
 			services = []
+			sites = []
 
+			system.css('sites site').each do |site|
+				site_obj = Site.new
+				site_obj.name = site['name']
+				site_obj.type = site['type']
+				sites << site_obj
+			end
 			system.css('vulnerabilities vulnerability').each do |v|
 				vulnerability = Vulnerability.new
 				# assign the value if the value is not nil (i.e. it's been specified in scenario.xml)
@@ -42,6 +50,8 @@ class SystemReader
 				vulnerability.vector_string = v['vector_string'] if v['vector_string']
 				vulns << vulnerability
 			end
+
+
 
 			system.css('services service').each do |v|
 				service = Service.new
@@ -67,7 +77,7 @@ class SystemReader
 			# pass in the already selected set of vulnerabilities, and additional secure services to find
 			new_services = ServiceManager.process(services, Configuration.services, new_vulns)
 
-			s = System.new(id, os, basebox, url, new_vulns, new_networks, new_services)
+			s = System.new(id, os, basebox, url, new_vulns, new_networks, new_services, sites)
 			if s.is_valid_base == false
 				BaseManager.generate_base(s,Configuration.bases)
 			end

@@ -16,6 +16,3 @@ DEPENDENCIES
   nokogiri
   rake
   xml-simple
-
-BUNDLED WITH
-   1.10.4
