@@ -17,11 +17,35 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     <% end %>
     <%= systems.id %>.vm.synced_folder "<%= MOUNT_DIR %>", "/mount"
     end
-    config.vm.provision :shell, :inline => "sed -i 's/squeeze/wheezy/g' /etc/apt/sources.list"
-    config.vm.provision :shell, :inline => "apt-get update --fix-missing"
-
 
     # Add secure services
+    <% systems.services.each do |service| %>
+
+        <% service_name = service.name%>
+
+        config.vm.provision "puppet" do | <%=service_name%> |
+        <%=service_name%>.module_path = "<%="#{ROOT_DIR}/mount/puppet/module"%>"
+        <%=service_name%>.environment_path = "<%="#{ENVIRONMENTS_PATH}"%>"
+        <%=service_name%>.environment = "production"
+        <%=service_name%>.manifests_path = "<%="#{ROOT_DIR}/mount/puppet/manifest"%>"
+
+        <%=service_name%>.manifest_file = "<%=service_name%>.pp"
+        end
+
+    <% end %>
+
+    #Add sites
+    <% systems.sites.each do |site| %>
+        config.vm.provision "puppet" do | wordpress |
+        wordpress.module_path = "<%="#{ROOT_DIR}/mount/puppet/module"%>"
+        wordpress.environment_path = "<%="#{ENVIRONMENTS_PATH}"%>"
+        wordpress.environment = "production"
+        wordpress.manifests_path = "<%="#{ROOT_DIR}/mount/puppet/manifest"%>"
+        wordpress.manifest_file = "wordpress.pp"
+        end
+
+    <% end %>
+
 
 
     # Add vulnerabilities
@@ -31,8 +55,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
             <% vulnerability_name = vulnerability.name %>
             config.vm.provision "puppet" do | <%=vulnerability_name%> |
-
-            <%=vulnerability_name%>.module_path = "<%="#{ROOT_DIR}/mount/puppet/module/#{vulnerability_name}"%>"
+            <%=vulnerability_name%>.module_path = "<%="#{ROOT_DIR}/mount/puppet/module"%>"
+            <%=vulnerability_name%>.environment_path = "<%="#{ENVIRONMENTS_PATH}"%>"
+            <%=vulnerability_name%>.environment = "production"
             <%=vulnerability_name%>.manifests_path = "<%="#{ROOT_DIR}/mount/puppet/manifest"%>"
             <%=vulnerability_name%>.manifest_file = "<%=vulnerability_name%>.pp"
             end
@@ -41,8 +66,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # clean up script which clears history from the VMs and clobs files together
     config.vm.provision "puppet" do |cleanup|
-    cleanup.module_path = "<%="#{ROOT_DIR}/modules/build/puppet/cleanup/module"%>"
-    cleanup.manifests_path = "<%="#{ROOT_DIR}/modules/build/puppet/cleanup"%>"
+    cleanup.module_path = "<%="#{ROOT_DIR}/mount/puppet/module"%>"
+    cleanup.environment_path = "<%="#{ENVIRONMENTS_PATH}"%>"
+    cleanup.environment = "production"
+    cleanup.manifests_path = "<%="#{ROOT_DIR}/mount/puppet/manifest"%>"
     cleanup.manifest_file = "cleanup.pp"
     end
 

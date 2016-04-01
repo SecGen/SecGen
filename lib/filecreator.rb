@@ -2,7 +2,7 @@ require 'erb'
 require_relative 'erb_controller'
 require_relative 'constants'
 require_relative 'configuration'
-
+require 'fileutils'
 class FileCreator
 # Creates project directory, uses .erb files to create a report and the vagrant file that will be used
 # to create the virtual machines
@@ -20,9 +20,7 @@ class FileCreator
 
 		puts "The system is now creating the Project#{build_number}"
 		Dir::mkdir("#{PROJECTS_DIR}/Project#{build_number}") unless File.exists?("#{PROJECTS_DIR}/#{build_number}")
-		puts 'Creating the projects mount directory'
-		Dir::mkdir("#{PROJECTS_DIR}/Project#{build_number}/mount") unless File.exists?("#{PROJECTS_DIR}/Project#{build_number}/mount")
-		
+
 		# initialises box before creation
 		command = "cd #{PROJECTS_DIR}/Project#{build_number}/; vagrant init"
 		%x[#{command}] 

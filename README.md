@@ -38,90 +38,43 @@ It should work on most linux distros but if there are any problems contact me.
 
 Usage
 --
-ruby securitysimulator.rb -r  
 
-This will create you a new project in /projects/Project and will create a Vagrant File / Report for you to view and see what has been installed, this will also give you a feel for how Vagrant spins up virtual machines. 
+```bash
+ruby secgen.rb <ARGS> 
+```
+
+SecGen accepts arguments to change the way that it behaves, the currently implemented arguments are:
+
+```
+   --run, -r: builds vagrant config and then builds the VMs
+   --build-config, -c: builds vagrant config, but does not build VMs
+   --build-vms, -v: builds VMs from previously generated vagrant config
+   --help, -h: shows this usage information
+```
+
 
 Puppet
 --
 
-mount/puppet/module 
-contains all currently useable puppet module some self-created some taken from https://forge.puppetlabs.com/
+The puppet modules that are currently included can be found under the 'modules' directory.
 
-mount/puppet/manifests
-contains all the includes and modifications that are used to create vulnerabilities e.g 
-
-include nfslewis::config 
-
-which includes all of the class information of nfslewis and config.pp 
+Please see the wiki for guides on contributing modules to SecGen
 
 to learn more about puppet and understand the code check out http://puppetlabs.com/
 
-Boxes
---
-by default the 'system machines' are specified to boxes.xml you will need to modify this file to create a new system e.g. 
-
-each system must be incremented by system3, system4, etc to work. Each vulnerability must match a type from vulns.xml or be blank or you will be returned an error. 
-
-Networking
---
-by default the networking is specified in networks.xml you will need to modify the range to you want. Each network is set to a range e.g:
-
-
-You can modify this to whatever range you desire and vagrant will build it.
-
-An example of how the program sets up the ip range for each system:
-
-System1
-
-    homeonly1 = 172.16.0.10 
-	homeonly2 = 172.17.0.10 
-
-System2 
-
-	homeonly1 = 172.16.0.20 
-	homeonly2 = 172.17.0.20  
-
-The reason why is in lib/templates/vagrantbase.erb  it appends the system number along with a 0 at the end to remove the issue of system1 being on the .1 network.
-
 Bases
 --
-Currently the only tested base is puppettest, however any debian system should work if it has puppet installed, you can add new bases to bases.xml by following the current structure. 
+by default the 'system machines' are specified to bases.xml you will need to modify this file to create a new system e.g. 
 
-Vulnerabilities
---
-Vulnerabilities are specified in vulns.xml, these are the 'useable' vulnerabilities currently, so when specifing vulnerabilities in boxes.xml you must use from this list or leave the name blank. current automated vulnerabilities are:
-	
-	ftp
-	commandinjection
-    nfs
-    samba
-    writeableshadow
-    distcc
-    ftpbackdoor
-    sqlinjection
-
-Kali
---
-A Kali image is built with every project, this is very slow and can be tedious, if you already have your own hack lab then you can remove this from vagrantbase.erb, but you will need to modify your IP address so it is on the network range, or modify networks.xml.
+each system must be incremented by system3, system4, etc to work.
 
 Mount
 --
-the mount file contains all of the puppet information, ssh keys for the default kali image, along with files to be transfered during the installation phase, this is mounted to each machine but removed once the installation has completed.
-
-Cleanup
---
-After each system is installed, the systems will clean up after itself.
-
-	Removes internet access to each host
-	unmounting the /mount/
-	clober files to all look like they were installed in 2006  
-	change vagrant password 
+When initialized, SecGen will bootstrap itself and move all currently implemented puppet modules into the 'mount' directory.
 
 Contributing
 --
-If you like the idea of SecGen, you are more than welcome to contribute to the project.
+If you like the idea of SecGen, you are more than welcome to contribute to the project, please see the wiki for guidance on how to contribute
 
-Contact
---
-If you need to reach me my email is: lewisardern [at] live.co.uk
+The SecGen team have prepared a VM located at: https://drive.google.com/open?id=0B6fyxD2qGmUIaXpDZElKczdQYW8 to make 
+contributing for SecGen easier, it includes Ruby, git and RubyMine pre-installed, however, some tweaking may be required.
