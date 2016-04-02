@@ -23,3 +23,6 @@ AVAILABLE_CVE_NUMBERS = []
 PATH_TO_CLEANUP = "#{ROOT_DIR}/modules/build/puppet/"
 VAGRANT_TEMPLATE_FILE = "#{ROOT_DIR}/lib/templates/vagrantbase.erb"
 REPORT_TEMPLATE_FILE = "#{ROOT_DIR}/lib/templates/report.erb"
+
+# #VERSION_CONSTANTS
+# VERSION =
