@@ -34,8 +34,18 @@ class Xml_report_generator
   # @return service_array [Array] array of all service hashes
   def get_services_hash(s)
     service_array = Array.new
+    service_hash = Hash.new
     s.services.each do |v|
-      service_hash = {'type' => [v.type], 'name' => [v.name], 'details' => [v.details]}
+      # service_hash = {
+      #     'type' => [v.type],
+      #     'name' => [v.name],
+      #     'details' => [v.details]
+      # }
+
+      service_hash['type'] = [v.type] unless v.type.empty?
+      service_hash['name'] = [v.name] unless v.name.empty?
+      service_hash['details'] = [v.details] unless v.details.empty?
+
       v.puppets.each do |p|
         service_hash['puppet_file'] = ["#{p}.pp"]
       end
@@ -50,14 +60,58 @@ class Xml_report_generator
   # @return vulns_array [Array] array of all vulnerability hashes
   def get_vulnerabilities_hash(s)
     vulns_array = Array.new
+    vulns_hash = Hash.new
+
     s.vulns.each do |v|
-      vulns_hash = {'type' => [v.type], 'details' => [v.details], 'privilege' => [v.privilege], 'access' => [v.access], 'cve' => [v.cve]}
+      # vulns_hash = {
+      #     'type' => [v.type],
+      #     'details' => [v.details],
+      #     'privilege' => [v.privilege],
+      #     'access' => [v.access],
+      #     'cve' => [v.cve],
+      #     'difficulty' => [v.difficulty],
+      #     'cvss_rating' => [v.cvss_rating],
+      #     'cvss_score' => [v.cvss_score],
+      #     'vector_string' => [v.vector_string]
+      # }
+
+      vulns_hash['type'] = [v.type] unless v.type.empty?
+      vulns_hash['details'] = [v.details] unless v.details.empty?
+      vulns_hash['privilege'] = [v.privilege] unless v.privilege.empty?
+      vulns_hash['access'] = [v.access] unless v.access.empty?
+      vulns_hash['cve'] = [v.cve] unless v.cve.empty?
+      vulns_hash['difficulty'] = [v.difficulty] unless v.difficulty.empty?
+      vulns_hash['cvss_rating'] = [v.cvss_rating] unless v.cvss_rating.empty?
+      vulns_hash['cvss_score'] = [v.cvss_score] unless v.cvss_score.empty?
+      vulns_hash['vector_string'] = [v.vector_string] unless v.vector_string.empty?
+
       v.puppets.each do |p|
         vulns_hash['puppet_file'] = ["#{p['puppet'][0]}.pp"]
       end
       vulns_array << vulns_hash
     end
     return vulns_array
+  end
+
+  # Generates hashes as an array for all sites to be placed on the specific system
+  # @param system [Array] current system being generated
+  # @return sites_array [Array] array of all vulnerability hashes
+  def get_sites_hash(s)
+    sites_array = Array.new
+    sites_hash = Hash.new
+
+    s.sites.each do |v|
+      # sites_hash = {
+      #     'name' => [v.name],
+      #     'type' => [v.type]
+      # }
+
+      sites_hash['name'] = [v.name] unless (v.name.nil? || v.name.empty?)
+      sites_hash['type'] = [v.type] unless v.type.empty?
+
+      sites_array << sites_hash
+    end
+    return sites_array
   end
 
   # Creates a hash in the specific format for the XmlSimple library
@@ -69,7 +123,8 @@ class Xml_report_generator
           'id' => system.id, 'basebox' => system.basebox, 'os' => system.os, 'url' => system.url,
           'networks' => get_networks_hash(system),
           'services' => get_services_hash(system),
-          'vulnerabilities' => get_vulnerabilities_hash(system)
+          'vulnerabilities' => get_vulnerabilities_hash(system),
+          'sites' => get_sites_hash(system)
       }
     end
     return hash
