@@ -12,6 +12,7 @@ class Xml_report_generator
   ### Start of private methods ###
   private
 
+  ##
   # Generates hashes as an array for all network interfaces showing the system's ip
   # @param system [Array] current system being generated
   # @return networks_array [Array] array of all network hashes
@@ -29,6 +30,7 @@ class Xml_report_generator
     return networks_array
   end
 
+  ##
   # Generates hashes as an array for all services to be installed on the specific system
   # @param system [Array] current system being generated
   # @return service_array [Array] array of all service hashes
