@@ -4,14 +4,13 @@ class ERBController
   attr_accessor :systems
 
   # Initialise systems array
-  # @return [Array] empty array for systems
+  # @return [Array] Empty array for systems
   def initialize
     @systems = []
   end
 
   # Returns binding of mapped .erb files
-  # @return binding
-  # ????????
+  # @return binding ?????
   def get_binding
     return binding
   end

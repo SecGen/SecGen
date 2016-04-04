@@ -6,7 +6,7 @@ require_relative 'lib/systemreader.rb'
 require_relative 'lib/vagrant.rb'
 require_relative 'lib/helpers/bootstrap'
 
-# Display secgen usage help
+# Displays secgen usage data
 def usage
   puts 'Usage:
    ' + $0 + ' [options]
@@ -21,7 +21,7 @@ def usage
 end
 
 # Builds the vagrant configuration file
-# @return build_number
+# @return build_number [Integer] Current system's build number
 def build_config
   puts 'Reading configuration file for virtual machines you want to create'
 
@@ -36,7 +36,7 @@ def build_config
 end
 
 # Builds the vm via the vagrant file corresponding to build number
-# @param build_number
+# @param build_number [Integer] Desired system's build number
 def build_vms(build_number)
   vagrant = VagrantController.new
   vagrant.vagrant_up(build_number)

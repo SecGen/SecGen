@@ -22,12 +22,13 @@
 # rdoc.document %w[--include=DIRECTORIES lib/*.rb]
 
 require 'rdoc'
+require_relative '../../lib/constants.rb'
 
 options = RDoc::Options.new
-options.title = "SecGen" ##{SecGen::VERSION}
+options.title = "SecGen #{VERSION_NUMBER} Documentation"
 options.op_dir = 'doc'
 options.main_page = 'README.rdoc'
-options.files = %w[lib]
+options.files = %w[../../lib]
 options.setup_generator 'darkfish'
 
 RDoc::RDoc.new.document options

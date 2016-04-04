@@ -10,14 +10,13 @@ class FileCreator
 # to create the virtual machines
 
   # Initialises configuration variable
-  # @param config
-  # @return configuration
+  # @param config [Object]
 	def initialize(config)
 		@configuration = config
 	end
 
-  # Generate all relevent files for the project
-  # @return [Int] build number of the newly generated project
+  # Generate all relevant files for the project
+  # @return [Int] Build number of the newly generated project
 	def generate()
 		systems = @configuration.get_systems
 		Dir::mkdir("#{PROJECTS_DIR}") unless File.exists?("#{PROJECTS_DIR}")

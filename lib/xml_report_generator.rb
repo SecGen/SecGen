@@ -1,9 +1,11 @@
 require 'xmlsimple'
+
+# Convert systems objects into xml
 class Xml_report_generator
 
   # Initialize the class with the systems array and the current build number
-  # @param systems [Array]
-  # @param build_number [Int]
+  # @param systems [Array] Array of all systems objects
+  # @param build_number [Int] Current build number of system
   def initialize(systems, build_number)
     @systems = systems
     @build_number = build_number
@@ -14,8 +16,8 @@ class Xml_report_generator
 
   ##
   # Generates hashes as an array for all network interfaces showing the system's ip
-  # @param system [Array] current system being generated
-  # @return networks_array [Array] array of all network hashes
+  # @param system [Array] Current system being generated
+  # @return [Array] Array of all network hashes
   def get_networks_hash(s)
     networks_array = Array.new
     networks_hash = Hash.new
@@ -32,8 +34,8 @@ class Xml_report_generator
 
   ##
   # Generates hashes as an array for all services to be installed on the specific system
-  # @param system [Array] current system being generated
-  # @return service_array [Array] array of all service hashes
+  # @param system [Array] Current system being generated
+  # @return [Array] Array of all service hashes
   def get_services_hash(s)
     service_array = Array.new
     service_hash = Hash.new
@@ -43,6 +45,11 @@ class Xml_report_generator
       #     'name' => [v.name],
       #     'details' => [v.details]
       # }
+
+      ###################################
+      ########## v.each do |e| ##########
+      ##### service_hash[e] = [v.e] #####
+      ###################################
 
       service_hash['type'] = [v.type] unless v.type.empty?
       service_hash['name'] = [v.name] unless v.name.empty?
@@ -58,8 +65,8 @@ class Xml_report_generator
   end
 
   # Generates hashes as an array for all vulnerabilities to be placed on the specific system
-  # @param system [Array] current system being generated
-  # @return vulns_array [Array] array of all vulnerability hashes
+  # @param system [Array] Current system being generated
+  # @return [Array] Array of all vulnerability hashes
   def get_vulnerabilities_hash(s)
     vulns_array = Array.new
     vulns_hash = Hash.new
@@ -96,8 +103,8 @@ class Xml_report_generator
   end
 
   # Generates hashes as an array for all sites to be placed on the specific system
-  # @param system [Array] current system being generated
-  # @return sites_array [Array] array of all vulnerability hashes
+  # @param system [Array] Current system being generated
+  # @return [Array] Array of all vulnerability hashes
   def get_sites_hash(s)
     sites_array = Array.new
     sites_hash = Hash.new
@@ -117,7 +124,7 @@ class Xml_report_generator
   end
 
   # Creates a hash in the specific format for the XmlSimple library
-  # @return hash [Hash] compatible with XmlSimple
+  # @return [Hash] Hash compatible with XmlSimple
   def create_xml_hash
     hash = Hash.new
     @systems.each do |system|
@@ -135,7 +142,7 @@ class Xml_report_generator
   ### Start of public methods ###
   public
 
-  # Write the system information to an xml file
+  # Write the xml to an xml file
   def write_xml_report
     XmlSimple.xml_out(create_xml_hash,{:rootname => 'system',:OutputFile => "#{PROJECTS_DIR}/Project#{@build_number}/Report.xml"})
   end
