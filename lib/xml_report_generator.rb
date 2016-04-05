@@ -1,7 +1,7 @@
 require 'xmlsimple'
 
 # Convert systems objects into xml
-class Xml_report_generator
+class XMLReportGenerator
 
   # Initialize the class with the systems array and the current build number
   # @param systems [Array] Array of all systems objects
@@ -23,9 +23,10 @@ class Xml_report_generator
     networks_hash = Hash.new
 
     s.networks.each do |n|
-      grab_system_number = s.id.gsub(/[^0-9]/i, "")
-      n.range[9..9] = grab_system_number << '0'
-      networks_hash['network'] = [n.range]
+      # grab_system_number = s.id.gsub(/[^0-9]/i, "")
+      # n.range[9..9] = grab_system_number
+
+      networks_hash['network'] = [n.range << '0']
 
       networks_array << networks_hash
     end
@@ -49,7 +50,18 @@ class Xml_report_generator
       ###################################
       ########## v.each do |e| ##########
       ##### service_hash[e] = [v.e] #####
+      ############### end ###############
       ###################################
+
+
+      # v.instance_variables.each do |e|
+      #   temp_e = e.to_s.delete '@'
+      #   # e.delete! '@'
+      #   # e = e.to_s.delete '@'
+      #   puts temp_e
+      #   service_hash[temp_e] = [v.temp_e]
+      #   # puts service_hash[e]
+      # end
 
       service_hash['type'] = [v.type] unless v.type.empty?
       service_hash['name'] = [v.name] unless v.name.empty?
