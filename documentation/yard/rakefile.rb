@@ -18,8 +18,8 @@ task :yard do
 
     t.options = [
         "--title=SecGen #{VERSION_NUMBER} Documentation",
-        "--output-dir #{DOCUMENTATION_PATH}",
-        "--readme=#{ROOT_DIR}/README.md"
+        "--readme=#{ROOT_DIR}/README.md",
+        "--output-dir #{DOCUMENTATION_PATH}"
     ] # optional
     t.stats_options = ['--list-undoc']         # optional
   end
