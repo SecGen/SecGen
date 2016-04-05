@@ -1,4 +1,4 @@
-## FILE_CONSTANTS
+## FILE_CONSTANTS ##
 
 # Root directory of SecGen file structure
 ROOT_DIR = File.expand_path('../../../SecGen',__FILE__)
@@ -31,7 +31,7 @@ PROJECTS_DIR = "#{ROOT_DIR}/projects"
 ENVIRONMENTS_PATH = "#{ROOT_DIR}/modules/environments"
 
 
-## PATH_CONSTANTS
+## PATH_CONSTANTS ##
 
 # Path to modules directory
 MODULES_PATH = "#{ROOT_DIR}/modules/"
@@ -39,20 +39,23 @@ MODULES_PATH = "#{ROOT_DIR}/modules/"
 # Path to vulnerabilities directory
 VULNERABILITIES_PATH = "#{ROOT_DIR}/modules/vulnerabilities/"
 
+# Path to documentation (Make sure documentation directory is already deleted with rake yard_clean before changing this)
+DOCUMENTATION_PATH = "#{ROOT_DIR}/documentation/yard/doc"
 
-## ERROR_CONSTANTS
+
+## ERROR_CONSTANTS ##
 
 # Vulnerability not found in scenario.xml file error
 VULN_NOT_FOUND = "Matching vulnerability was not found please check the xml scenario.xml"
 
 
-## RUNTIME_CONSTANTS
+## RUNTIME_CONSTANTS ##
 
 # CVE numbers available
 AVAILABLE_CVE_NUMBERS = []
 
 
-## VAGRANT_FILE_CONSTANTS
+## VAGRANT_FILE_CONSTANTS ##
 
 # Path to cleanup directory
 PATH_TO_CLEANUP = "#{ROOT_DIR}/modules/build/puppet/"
@@ -64,7 +67,7 @@ VAGRANT_TEMPLATE_FILE = "#{ROOT_DIR}/lib/templates/vagrantbase.erb"
 REPORT_TEMPLATE_FILE = "#{ROOT_DIR}/lib/templates/report.erb"
 
 
-## VERSION_CONSTANTS
+## VERSION_CONSTANTS ##
 
 # Version number of SecGen
 # e.g. [release state (0 = alpha, 3 = final release)].[Major bug fix].[Minor bug fix].[Cosmetic or other features]

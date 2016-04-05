@@ -6,11 +6,9 @@ task :yard do
   require_relative '../../lib/constants.rb'
 
   YARD::Rake::YardocTask.new do |t|
-    t.files   = ['../../README.md', '../../lib']   # optional
-    t.options = ["--title=SecGen #{VERSION_NUMBER} Documentation", '--extra', '--opts'] # optional
-    # Files to include, Ruby files before the -, Other files after the dash
-    t.files   = ["#{ROOT_DIR}/lib",
-                 "#{ROOT_DIR}/tests",
+    # Files to include in yard documentation. Ruby files before the -, Other files after the dash
+    t.files   = ["#{ROOT_DIR}/lib/**/*.rb",
+                 "#{ROOT_DIR}/tests/**/*.rb",
                  '-',
                  "#{ROOT_DIR}/config/scenario.xml",
                  "#{ROOT_DIR}/xml/bases.xml",
@@ -20,18 +18,19 @@ task :yard do
 
     t.options = [
         "--title=SecGen #{VERSION_NUMBER} Documentation",
-        "--output-dir #{DOCUMENTATION_PATH}","--readme=#{ROOT_DIR}/README.md"
+        "--output-dir #{DOCUMENTATION_PATH}",
+        "--readme=#{ROOT_DIR}/README.md"
     ] # optional
     t.stats_options = ['--list-undoc']         # optional
   end
 end
 
 task :yard_clean do
-  # NEED TO FIND A BETTER WAY TO CLEAN FILES AS VULNERABILITIES IN 'rm_rf'
-  rm_rf('doc')
   require_relative '../../lib/constants.rb'
 
   # NEED TO FIND A BETTER WAY TO CLEAN FILES AS VULNERABILITIES IN 'rm_rf'
+
+  # Remove the documentation directory and all files in it
   rm_rf(DOCUMENTATION_PATH)
 end
 
