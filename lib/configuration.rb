@@ -61,7 +61,7 @@ class Configuration
   # Reads xml file and returns relevent items
   # @param  xmlfile [File] Name of XML file to read
   # @param  xpath [String] Path to puppet files
-  # @param  class [Class] Class to be imported in
+  # @param  cls [Class] Class to be imported in
   # @return [Array] List containing all item from given xml file
   def self._get_list(xmlfile, xpath, cls)
     itemlist = []

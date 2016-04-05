@@ -16,7 +16,7 @@ class XMLReportGenerator
 
   ##
   # Generates hashes as an array for all network interfaces showing the system's ip
-  # @param system [Array] Current system being generated
+  # @param s [Array] Current system being generated
   # @return [Array] Array of all network hashes
   def get_networks_hash(s)
     networks_array = Array.new
@@ -35,33 +35,12 @@ class XMLReportGenerator
 
   ##
   # Generates hashes as an array for all services to be installed on the specific system
-  # @param system [Array] Current system being generated
+  # @param s [Array] Current system being generated
   # @return [Array] Array of all service hashes
   def get_services_hash(s)
     service_array = Array.new
     service_hash = Hash.new
     s.services.each do |v|
-      # service_hash = {
-      #     'type' => [v.type],
-      #     'name' => [v.name],
-      #     'details' => [v.details]
-      # }
-
-      ###################################
-      ########## v.each do |e| ##########
-      ##### service_hash[e] = [v.e] #####
-      ############### end ###############
-      ###################################
-
-
-      # v.instance_variables.each do |e|
-      #   temp_e = e.to_s.delete '@'
-      #   # e.delete! '@'
-      #   # e = e.to_s.delete '@'
-      #   puts temp_e
-      #   service_hash[temp_e] = [v.temp_e]
-      #   # puts service_hash[e]
-      # end
 
       service_hash['type'] = [v.type] unless v.type.empty?
       service_hash['name'] = [v.name] unless v.name.empty?
@@ -77,24 +56,13 @@ class XMLReportGenerator
   end
 
   # Generates hashes as an array for all vulnerabilities to be placed on the specific system
-  # @param system [Array] Current system being generated
+  # @param s [Array] Current system being generated
   # @return [Array] Array of all vulnerability hashes
   def get_vulnerabilities_hash(s)
     vulns_array = Array.new
     vulns_hash = Hash.new
 
     s.vulns.each do |v|
-      # vulns_hash = {
-      #     'type' => [v.type],
-      #     'details' => [v.details],
-      #     'privilege' => [v.privilege],
-      #     'access' => [v.access],
-      #     'cve' => [v.cve],
-      #     'difficulty' => [v.difficulty],
-      #     'cvss_rating' => [v.cvss_rating],
-      #     'cvss_score' => [v.cvss_score],
-      #     'vector_string' => [v.vector_string]
-      # }
 
       vulns_hash['type'] = [v.type] unless v.type.empty?
       vulns_hash['details'] = [v.details] unless v.details.empty?
@@ -115,17 +83,13 @@ class XMLReportGenerator
   end
 
   # Generates hashes as an array for all sites to be placed on the specific system
-  # @param system [Array] Current system being generated
+  # @param s [Array] Current system being generated
   # @return [Array] Array of all vulnerability hashes
   def get_sites_hash(s)
     sites_array = Array.new
     sites_hash = Hash.new
 
     s.sites.each do |v|
-      # sites_hash = {
-      #     'name' => [v.name],
-      #     'type' => [v.type]
-      # }
 
       sites_hash['name'] = [v.name] unless (v.name.nil? || v.name.empty?)
       sites_hash['type'] = [v.type] unless v.type.empty?
@@ -160,7 +124,7 @@ class XMLReportGenerator
   end
 
   # Return the xml as a string
-  # @return Xml [String]
+  # @return [String]
   def return_xml
     return XmlSimple.xml_out(create_xml_hash,{:rootname => 'system'})
   end

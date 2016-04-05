@@ -33,5 +33,3 @@ task :yard_clean do
   # Remove the documentation directory and all files in it
   rm_rf(DOCUMENTATION_PATH)
 end
-
-# YARD::Templates::Engine.generate
