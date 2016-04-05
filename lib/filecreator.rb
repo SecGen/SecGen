@@ -49,7 +49,7 @@ class FileCreator
 		File.open("#{PROJECTS_DIR}/Project#{build_number}/Report", 'w'){ |file| file.write(report_template.result(controller.get_binding)) }
 
     # Create the Report.xml file
-    xml_report_generator = Xml_report_generator.new(systems, build_number)
+    xml_report_generator = XMLReportGenerator.new(systems, build_number)
     xml_report_generator.write_xml_report
     puts "#{PROJECTS_DIR}/Project#{build_number}/Report.xml file has been created"
 
