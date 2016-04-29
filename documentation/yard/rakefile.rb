@@ -8,12 +8,9 @@ task :yard do
   YARD::Rake::YardocTask.new do |t|
     # Files to include in yard documentation. Ruby files before the -, Other files after the dash
     t.files   = ["#{ROOT_DIR}/lib/**/*.rb",
-                 "#{ROOT_DIR}/tests/**/*.rb",
-                 '-',
-                 "#{ROOT_DIR}/config/scenario.xml",
-                 "#{ROOT_DIR}/xml/bases.xml",
-                 "#{ROOT_DIR}/xml/networks.xml",
-                 "#{ROOT_DIR}/xml/services.xml"
+                 "#{ROOT_DIR}/tests/**/*.rb"
+                 # '-',
+                 # "#{ROOT_DIR}
                 ]   # optional
 
     t.options = [
