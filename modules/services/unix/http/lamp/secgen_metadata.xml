@@ -3,22 +3,35 @@
 <service xmlns="http://www.github/cliffe/SecGen/service"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
-  <name>Apache HTTP Server</name>
+  <name>LAMP Stack: Apache HTTP Server, MySQL, and PHP</name>
   <author>TODO</author>
   <module_license>Apache v2</module_license>
-  <description>An instalation of Apache</description>
+  <description>A LAMP stack</description>
 
   <type>httpd</type>
+  <type>database</type>
+
   <platform>linux</platform>
 
   <!--optional details-->
   <reference>https://httpd.apache.org/</reference>
-  <software_name>apache</software_name>
-  <software_license>Apache v2</software_license>
 
-  <!--Cannot co-exist with other apache installations-->
+  <software_name>apache</software_name>
+  <software_name>mysql</software_name>
+  <software_name>apache</software_name>
+  <software_name>php</software_name>
+  <software_license>Apache v2</software_license>
+  <software_license>PHP</software_license>
+
+  <!--Cannot co-exist with other installations-->
   <conflict>
     <software_name>apache</software_name>
+  </conflict>
+  <conflict>
+    <software_name>mysql</software_name>
+  </conflict>
+  <conflict>
+    <software_name>php</software_name>
   </conflict>
 
 </service>

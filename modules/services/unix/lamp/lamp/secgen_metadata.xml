@@ -1,5 +1,0 @@
-<service
-                  type="lamp"
-                  name="lamp"
-                  description="LAMP Stack"
-          </service>

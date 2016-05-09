@@ -15,7 +15,7 @@ class TestXMLIsEqual < Test::Unit::TestCase
 	    os = system["os"]
 	    base = system["basebox"]
 	    vulns = system.css('vulnerabilities vulnerability').collect do |v|
-	    	Vulnerability.new(v[:type],v[:privilege],v[:access],v[:puppet],v[:details])
+	    	Module.new(v[:type], v[:privilege], v[:access], v[:puppet], v[:details])
 	      end
 	    networks = system.css('networks misc').collect { |n| n['name'] }
 
@@ -31,8 +31,8 @@ class TestXMLIsEqual < Test::Unit::TestCase
 
 
 	def test_intersection
-		list1 = [Vulnerability.new("nfs","root", "remote","", ""), Vulnerability.new("ftp","root", "remote","", "")]
-		list2 = [Vulnerability.new("nfs","root", "remote","", ""), Vulnerability.new("samba","root", "remote","", ""), ]
+		list1 = [Module.new("nfs", "root", "remote", "", ""), Module.new("ftp", "root", "remote", "", "")]
+		list2 = [Module.new("nfs", "root", "remote", "", ""), Module.new("samba", "root", "remote", "", ""), ]
 		p ilist = list1 & list2
 
 	end
@@ -40,14 +40,14 @@ class TestXMLIsEqual < Test::Unit::TestCase
 	def test_system_vulnerabilities
 		dummy_list = []
 
-	  	empty_type = Vulnerability.new("","root", "remote","", "")
+	  	empty_type = Module.new("", "root", "remote", "", "")
 
-        valid_type = Vulnerability.new("ftp","root", "remote","", "")
+        valid_type = Module.new("ftp", "root", "remote", "", "")
 
-        invalid_type = Vulnerability.new("THISISFAKE","root", "remote","", "")
+        invalid_type = Module.new("THISISFAKE", "root", "remote", "", "")
 
-	    valid_type = Vulnerability.new("nfs","root", "remote","", "")
-	    valid_type1 = Vulnerability.new("nfs","root", "remote","", "")
+	    valid_type = Module.new("nfs", "root", "remote", "", "")
+	    valid_type1 = Module.new("nfs", "root", "remote", "", "")
 
 	    
 	    if empty_type.type == ""

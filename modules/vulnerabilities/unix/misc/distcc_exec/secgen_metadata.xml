@@ -1,21 +1,38 @@
-<vulnerability
-        type="misc"
-        cve="CVE-2004-2687"
-        privilege="user"
-        access="remote"
-        details="distcc can be exploited by exploit/unix/misc/distcc_exec"
-        platform="unix"
-        name="distcc_exec"
-        msf_module="modules/exploits/unix/misc/distcc_exec.rb"
-        difficulty="medium"
-        cvss_score="9.3"
-        vector_string="AV:N/AC:M/Au:N/C:C/I:C/A:C">
-  <puppets>
-    <puppet>distcc_exec</puppet>
-  </puppets>
-  <files>
-    <file>distcc.erb</file>
-  </files>
-  <scripts>
-  </scripts>
+<?xml version="1.0"?>
+
+<vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+  <name>DistCC Daemon Command Execution</name>
+  <author>Lewis Ardern</author>
+  <module_license>MIT</module_license>
+  <description>Distcc has a documented security weakness that enables remote code execution.</description>
+
+  <type>distcc</type>
+  <privilege>user</privilege>
+  <access>remote</access>
+  <platform>unix</platform>
+
+  <!--optional vulnerability details-->
+  <difficulty>medium</difficulty>
+  <cve>CVE-2004-2687</cve>
+  <cvss_base_score>9.3</cvss_base_score>
+  <cvss_vector>AV:N/AC:M/Au:N/C:C/I:C/A:C</cvss_vector>
+  <reference>https://www.rapid7.com/db/modules/exploit/unix/misc/distcc_exec</reference>
+  <reference>OSVDB-13378</reference>
+  <software_name>distcc</software_name>
+  <software_license>GPLv2</software_license>
+
+  <!--optional breadcrumb (info that is leaked and required to exploit)-->
+  <!--<breadcrumb></breadcrumb>-->
+
+  <!--optional hints-->
+  <msf_module>exploit/unix/misc/distcc_exec</msf_module>
+  <hint>On a non-standard port</hint>
+  <solution>Distcc is vulnerable, and on a high port number.</solution>
+
+  <!--Cannot co-exist with other installations-->
+  <conflict>
+    <software_name>distcc</software_name>
+  </conflict>
 </vulnerability>

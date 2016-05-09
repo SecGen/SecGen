@@ -1,5 +1,0 @@
-<service
-                  type="http"
-                  name="apache"
-                  description="A secure Apache service"
-          </service>
