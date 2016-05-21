@@ -31,8 +31,8 @@ class System
     valid_base = Configuration.bases
 
     valid_base.each do |b|
-      if @attributes[:basebox] == b.attributes[:vagrantbase]
-        @attributes[:url] = b.attributes[:url]
+      if @attributes[:basebox] == b.attributes['vagrantbase']
+        @attributes[:url] = b.attributes['url']
         return true
       end
     end
