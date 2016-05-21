@@ -5,6 +5,5 @@
 	<base name="precise" os="linux" distro="unknown"  url="http://files.vagrantup.com/precise32.box" vagrantbase="precise32" ></base>
 	<base name="debian-puppet-64" os="linux" distro="debian"  url="http://atlas.hashicorp.com/puppetlabs/boxes/debian-7.8-64-puppet/versions/1.0.4/providers/virtualbox.box" vagrantbase="debian-puppet-64" ></base>
 	<base name="debian-puppet-32" os="linux" distro="debian"  url="http://atlas.hashicorp.com/puppetlabs/boxes/debian-7.8-32-puppet/versions/1.0.4/providers/virtualbox.box" vagrantbase="debian-puppet-64" ></base>
-
 </bases>
 
