@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 #production gems go here
 gem 'nokogiri'
-gem 'vagrant'
 gem 'puppet'
 gem 'librarian-puppet'
 
