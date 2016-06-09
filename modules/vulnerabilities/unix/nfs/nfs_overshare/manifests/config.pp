@@ -1,4 +1,4 @@
-class mountable_nfs::config {
+class nfs_overshare::config {
 
   package { ['nfs-kernel-server', 'nfs-common', 'portmap']:
       ensure => installed
@@ -11,7 +11,7 @@ class mountable_nfs::config {
     owner   => 'root',
     group   => 'root',
     mode    => '0777',
-    content  => template('mountable_nfs/exports.erb')
+    content  => template('nfs_overshare/exports.erb')
   }
 
   exec { "exportfs":

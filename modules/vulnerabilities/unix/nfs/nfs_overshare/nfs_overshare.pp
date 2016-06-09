@@ -1,1 +1,1 @@
-include mountable_nfs::config
+include nfs_overshare::config
