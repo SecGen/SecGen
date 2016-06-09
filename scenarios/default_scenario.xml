@@ -19,15 +19,4 @@
 		<network type="private_network" range="dhcp"></network>
 	</system>
 
-	<!-- an example remote web server, with a remotely exploitable root vulnerability -->
-	<!-- This never worked.-->
-	<!--<system id="webserver" os="linux" basebox="puppettest" url="" >
-		<vulnerabilities>
-			<vulnerability privilege="root" access="remote" type="www" cve=""></vulnerability>
-		</vulnerabilities>
-		<networks>
-			<misc name="homeonly"></misc>
-		</networks>
-	</system> -->
-
 </scenario>
