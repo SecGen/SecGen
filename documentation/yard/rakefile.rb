@@ -3,7 +3,7 @@ task :default => ["yard"]
 desc "Generate_yard_documentation"
 task :yard do
   require 'yard'
-  require_relative '../../lib/constants.rb'
+  require_relative '../../lib/helpers/constants.rb'
 
   YARD::Rake::YardocTask.new do |t|
     # Files to include in yard documentation. Ruby files before the -, Other files after the dash
@@ -23,7 +23,7 @@ task :yard do
 end
 
 task :yard_clean do
-  require_relative '../../lib/constants.rb'
+  require_relative '../../lib/helpers/constants.rb'
 
   # NEED TO FIND A BETTER WAY TO CLEAN FILES AS VULNERABILITIES IN 'rm_rf'
 
