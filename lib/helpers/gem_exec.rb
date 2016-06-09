@@ -16,7 +16,7 @@ class GemExec
       gem_path = Gem.bin_path(gem_name, gem_name, version)
     rescue Exception => e
       # test if the program is already installed via package management
-      gem_path = `which #{gem_name}`
+      gem_path = `which #{gem_name}`.chomp
       unless File.file? gem_path
         Print.err "Executable for #{gem_name} not found: #{e.message}"
         # vagrant can be executed via the gem path, but not installed this way
