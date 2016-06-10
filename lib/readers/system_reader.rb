@@ -51,9 +51,10 @@ class SystemReader
 
       # for each module selection
       system_node.xpath('vulnerability | service | network | base').each do |module_node|
-        module_selector = Module.new("#{module_node.name}_selecter")
+        # create a selector module, which is a regular module instance used as a placeholder for matching requirements
+        module_selector = Module.new(module_node.name)
         module_node.xpath('@*').each do |attr|
-          module_selector.attributes["#{attr.name}"] = attr.text unless attr.text.nil? || attr.text == ''
+          module_selector.attributes["#{attr.name}"] = [attr.text] unless attr.text.nil? || attr.text == ''
         end
         Print.verbose " #{module_node.name}, selecting based on:"
         module_selector.attributes.each do |attr|

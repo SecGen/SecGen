@@ -20,5 +20,15 @@
   <conflict>
     <software_name>apache</software_name>
   </conflict>
+  <requires>
+    <type>update</type>
+  </requires>
+  <!-- for testing purposes -->
+  <!--<requires>-->
+    <!--<type>THIS DOES NOT EXIST</type>-->
+  <!--</requires>-->
+  <!--<requires>-->
+    <!--<type>ftp</type>-->
+  <!--</requires>-->
 
 </service>

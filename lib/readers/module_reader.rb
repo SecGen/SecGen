@@ -107,7 +107,15 @@ class ModuleReader
           (conflict[node.name] ||= []).push(node.content)
         }
         new_module.conflicts.push(conflict)
+      end
 
+      # for each dependency in the module
+      doc.xpath("/#{module_type}/requires").each do |requires_doc|
+        require = {}
+        requires_doc.elements.each {|node|
+          (require[node.name] ||= []).push(node.content)
+        }
+        new_module.requires.push(require)
       end
 
       modules.push(new_module)
