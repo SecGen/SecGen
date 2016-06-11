@@ -100,6 +100,18 @@ class ModuleReader
 
       end
 
+      # TODO: function to abstract repeated logic here
+      # for each input to the module
+      doc.xpath("/#{module_type}/input").each do |input_doc|
+        input = {}
+        input_doc.elements.each {|node|
+          (input[node.name] ||= []).push(node.content)
+        }
+        new_module.inputs.push(input)
+      end
+
+      Print.err new_module.inputs.inspect
+
       # for each conflict in the module
       doc.xpath("/#{module_type}/conflict").each do |conflict_doc|
         conflict = {}
@@ -107,7 +119,6 @@ class ModuleReader
           (conflict[node.name] ||= []).push(node.content)
         }
         new_module.conflicts.push(conflict)
-
       end
 
       modules.push(new_module)

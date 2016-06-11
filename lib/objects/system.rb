@@ -87,9 +87,14 @@ class System
       end
       # use from the top of the randomised list
       selected = search_list[0]
-      selected_modules.push selected
 
       Print.std "Selected module: #{selected.attributes['name'][0]} (#{selected.module_path})"
+
+      to_add = selected.clone
+      to_add.select_inputs
+      # resolve randomness of inputs
+      selected_modules.push to_add
+
     end
     selected_modules
   end

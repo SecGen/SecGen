@@ -26,10 +26,33 @@
   <!--optional breadcrumb (info that is leaked and required to exploit)-->
   <!--<breadcrumb></breadcrumb>-->
 
+  <breadcrumb>This is a secret</breadcrumb>
+
   <!--optional hints-->
   <!--<msf_module></msf_module>-->
   <hint>An access control misconfiguration</hint>
   <solution>Edit the shadow file to set a password for root</solution>
+
+  <input>
+    <name>files</name>
+    <randomisation_type>one_from_list</randomisation_type>
+    <value>/etc/shadow</value>
+    <value>/etc/gshadow</value>
+  </input>
+
+  <input>
+    <name>flag</name>
+    <randomisation_type>flag_value</randomisation_type>
+    <encoding>base64</encoding>
+  </input>
+
+  <input>
+    <name>leaked</name>
+    <randomisation_type>none</randomisation_type>
+    <value>This will be leaked</value>
+    <encoding>base64</encoding>
+    <encoding>MD5</encoding>
+  </input>
 
   <conflict>
     <name>Writeable Shadow File</name>
@@ -38,5 +61,6 @@
   <conflict>
     <type>ftp</type>
   </conflict>
+
 
 </vulnerability>
