@@ -36,6 +36,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       <%=module_name%>.environment = "production"
       <%=module_name%>.manifests_path = "<%="#{ROOT_DIR}/#{selected_module.module_path}/"%>"
       <%=module_name%>.manifest_file = "<%="#{selected_module.module_path_end}.pp"%>"
+
+      <%=module_name%>.facter = {
+<%  selected_module.inputs.each do |input| -%>
+        "<%="#{module_name}_#{input["name"][0]}"%>" => "<%=input["value"][0]%>",
+<%   end -%>
+      }
     end
 <%   end -%>
 <% end -%>

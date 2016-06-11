@@ -47,6 +47,14 @@
   </xs:complexType>
 
   <xs:complexType name="VulnerabilityType">
+    <xs:sequence>
+      <xs:element name="input" type='xs:string' minOccurs="1" maxOccurs="unbounded">
+          <!--TODO<xs:attribute name="name" type="xs:string"/>-->
+
+      </xs:element>
+    </xs:sequence>
+
+
     <xs:attribute name="module_path" type="xs:string"/>
 
     <xs:attribute name="name" type="xs:string"/>
