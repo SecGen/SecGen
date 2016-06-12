@@ -15,7 +15,6 @@
 		<service type="httpd"></service>
 		<service/>
 
-		<network/>
 		<network type="private_network" range="dhcp"></network>
 	</system>
 
