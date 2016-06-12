@@ -39,8 +39,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       <%=module_name%>.facter = {
 <%  selected_module.inputs.each do |input| -%>
-        "<%="#{module_name}_#{input["name"][0]}"%>" => "<%=input["value"][0]%>",
+        "<%="#{module_name}_#{input["name"][0]}"%>" => <%=input["value"].inspect%>,
 <%   end -%>
+
       }
     end
 <%   end -%>
