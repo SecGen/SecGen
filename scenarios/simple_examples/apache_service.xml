@@ -8,9 +8,9 @@
 		<system_name>apache_server</system_name>
 		<base platform="linux"/>
 
-		<service module_path="modules/services/unix/http/apache"></service>
+		<service module_path="modules/services/unix/http/apache"/>
 
-		<network type="private_network" range="dhcp"></network>
+		<network type="private_network" range="dhcp"/>
 	</system>
 
 </scenario>

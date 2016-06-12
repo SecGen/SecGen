@@ -8,19 +8,19 @@
 		<system_name>apache_server_with_mysql</system_name>
 		<base platform="linux"/>
 
-		<service module_path="modules/services/unix/database/mysql"></service>
-		<service module_path="modules/services/unix/http/apache"></service>
+		<service module_path="modules/services/unix/database/mysql"/>
+		<service module_path="modules/services/unix/http/apache"/>
 
-		<network type="private_network" range="dhcp"></network>
+		<network type="private_network" range="dhcp"/>
 	</system>
 
 	<system>
 		<system_name>apache_server</system_name>
 		<base platform="linux"/>
 
-		<service module_path="modules/services/unix/http/apache"></service>
+		<service module_path="modules/services/unix/http/apache"/>
 
-		<network type="private_network" range="dhcp"></network>
+		<network type="private_network" range="dhcp"/>
 	</system>
 
 </scenario>

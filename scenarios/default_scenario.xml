@@ -9,13 +9,13 @@
 		<system_name>storage_server</system_name>
 		<base platform="linux"/>
 
-		<vulnerability privilege="user" access="remote" type="" cve="" />
-		<vulnerability privilege="root" access="local" type="" cve="" />
+		<vulnerability privilege="user" access="remote" />
+		<vulnerability privilege="root" access="local" />
 
-		<service type="httpd"></service>
+		<service type="httpd"/>
 		<service/>
 
-		<network type="private_network" range="dhcp"></network>
+		<network type="private_network" range="dhcp"/>
 	</system>
 
 </scenario>
