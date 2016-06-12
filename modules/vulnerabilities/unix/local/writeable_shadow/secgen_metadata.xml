@@ -54,6 +54,7 @@
     <encoding>MD5</encoding>
   </input>
 
+  <!--conflict example, cannot co-exist with another instance of self, or with an FTP server (as an example)-->
   <conflict>
     <name>Writeable Shadow File</name>
     <author>Lewis Ardern</author>
