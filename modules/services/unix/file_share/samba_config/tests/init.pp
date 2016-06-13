@@ -1,0 +1,3 @@
+# Smoketest.
+
+class {'samba::server': }

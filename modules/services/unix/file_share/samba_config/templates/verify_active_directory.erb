@@ -1,0 +1,108 @@
+#!/bin/bash
+
+PROG=$(basename $0)
+export EXPIRATION=90
+
+# kinit and klist path depend on krb5 release
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/kerberos/bin
+
+EXPECT=$(which expect)
+if ! [ -x "$EXPECT" ]; then
+  echo "ERROR: cannot run expect" >&2
+  exit 1
+fi
+
+#TODO
+#if ! check_kdc_time; then
+#  {
+#  echo "===================================="
+#  echo "WARNING: time offset seems too large"
+#  echo "===================================="
+#  } >&2
+#fi
+
+password='<%= scope.lookupvar('samba::server::ads::winbind_pass') -%>'
+
+# short hostname from facter
+my_hostname="<%= hostname -%>"
+
+winbind_acct="<%= scope.lookupvar('samba::server::ads::winbind_acct') -%>"
+
+default_realm=$(grep -i '^[[:space:]]*realm.*=' /etc/samba/smb.conf | sed 's/ //g' | sed 's/realm=//g')
+
+# if we're still here, let's try the testjoin
+do_testjoin() {
+  echo "Running net ads testjoin with EXPIRATION=$EXPIRATION" >&2
+  _cmd="net ads testjoin -P"
+  if [[ -n "$1" ]]; then
+     _cmd="${_cmd} $@"
+  fi
+  output=$(${_cmd} 2>&1)
+  grep -q 'Join is OK' <<< $output
+  _rc=$?
+  if [ ${_rc} -ne 0 ]; then
+    logger -st $PROG "Error: net ads testjoin -P failed: $output"
+  fi
+  return ${_rc}
+}
+do_testjoin
+if [ $? -ne 0 ]; then
+  # get verbose failure info
+  do_testjoin -d3
+fi
+
+
+# if we're still here, we need to:
+# - get a TGT that enables us to query the attribute 'useraccountcontrol'
+# - confirm that AD trusts us for GSSAPI delegation
+
+export KRB5CCNAME=$(umask 0077; mktemp -q winbind_cache.XXXXXXXX)
+
+get_tgt() {
+  (
+  $EXPECT -c "spawn -noecho kinit -c $KRB5CCNAME ${winbind_acct}@${default_realm};
+	expect :;
+	send {${password}};
+	send \n;
+	expect eof"
+  ) &> /dev/null
+  klist -c $KRB5CCNAME &> /dev/null
+  return $?
+}
+
+# try this several times.
+max_attempts=5
+# assume non-zero for has_tgt
+has_tgt=1
+for attempt in $(seq 1 $max_attempts); do
+  # If we just joined the domain, it takes a small amount of time
+  # for AD to sort things out amongst the DC's, and it
+  # depends in part on DNS performance.
+  if get_tgt; then
+    has_tgt=0
+    break
+  fi
+  echo "." >&2
+  sleep 3
+done
+
+success=true
+
+if [ $has_tgt -ne 0 ]; then
+  logger -st $PROG "ERROR: failed to get TGT from AD"
+  success=false
+else
+  if [ $(wbinfo -u|wc -l) != 0 ]; then
+    success=true
+  else
+    echo "ERROR: return user list from AD is empty" >&2
+    success=false
+  fi
+
+  # get rid of cred cache
+  kdestroy -c $KRB5CCNAME &> /dev/null
+fi
+
+[[ $success == "false" ]] && exit 1
+
+exit 0

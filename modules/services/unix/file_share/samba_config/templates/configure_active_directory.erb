@@ -1,0 +1,149 @@
+#!/bin/bash
+
+# This script can cause a host to join or leave
+# the Windows Active Directory domain
+
+# variables
+#
+# specify a timeout for domain operations
+seconds=300
+#
+# post_join_delay seems to be necessary after joing domain
+post_join_delay=30
+#
+
+PROG=$(basename $0)
+
+function usage () {
+  cat >&2 <<- EOF
+	Usage: $PROG -[hjl]
+	-h          help
+	-j          join the domain
+	-l          leave the domain
+	Return code indicates success (0) or failure.
+	EOF
+}
+
+# kinit and klist path depend on krb5 release
+export PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin:/usr/kerberos/bin
+
+NET=$(which net)
+if ! [ -x "$NET" ]; then
+  echo "ERROR: net command is missing or not executable." >&2
+  exit 1
+fi
+
+EXPECT=$(which expect)
+if ! [ -x "$EXPECT" ]; then
+  echo "ERROR: cannot run expect" >&2
+  exit 1
+fi
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 2
+fi
+
+while getopts "hjlq" option
+do
+  case $option in
+    h ) usage; exit 0;;
+    j ) action="join";;
+    l ) action="leave";;
+    * ) usage; exit 2;;
+  esac
+done
+
+password='<%= scope.lookupvar('samba::server::ads::winbind_pass') -%>'
+
+# short hostname from facter
+my_hostname="<%= hostname -%>"
+
+# what account do we use for net ads commands?
+winbind_acct="<%= scope.lookupvar('samba::server::ads::winbind_acct') -%>"
+
+# which realm will we be joining?
+my_realm="<%= scope.lookupvar('samba::server::ads::realm') -%>"
+
+# where should we create computer accounts?
+target_ou="<%= scope.lookupvar('samba::server::ads::target_ou') -%>"
+
+echo "Please do not kill me; I may be slow" >&2
+
+#TODO, need write time check check_kdc_time
+#if ! /bin/check_kdc_time; then
+#  echo "ERROR: time offset too large to manipulate domain" >&2
+#  exit 1
+#else
+#  echo "INFO: time offset seems ok" >&2
+#fi
+
+if [ "$action" = "leave" ]; then
+  logger -st $PROG "Leaving AD domain"
+  $NET ads $action -U "${winbind_acct}%${password}" | grep Deleted && success=true || success=false
+  kdestroy
+  rm -f /etc/krb5.keytab
+  if [ $success = "true" ]; then
+    logger -st $PROG "Left AD domain"
+  else
+    logger -st $PROG "Failed to leave AD domain"
+  fi
+fi
+
+ad_settle() {
+  (
+  echo -n "Waiting $post_join_delay seconds"
+  for x in $(seq 1 $post_join_delay); do
+    echo -n "."
+    sleep 1
+  done
+  echo
+  ) >&2
+}
+
+# ldapmodify _does_ use the env var for sasl bind
+export KRB5CCNAME=$(umask 0077; mktemp -q winbind_cache.XXXXXXXX)
+
+if [ "$action" = "join" ]; then
+    if [ "${target_ou}" != "" ]; then
+    	ou_parameter="createcomputer=\"${target_ou}\""
+    else
+        ou_parameter=""
+    fi
+
+    logger -st $PROG "Joining AD domain" >&2
+    $NET ads $action -U "${winbind_acct}%${password}" ${ou_parameter} \
+	| grep Joined && success=true || success=false
+
+if [ $success = "false" ]; then
+  echo ERROR: failed to join domain >&2
+  exit 2
+fi
+
+max_attempts=5
+for attempt in $(seq 1 $max_attempts); do
+    echo "$attempt of $max_attempts:"
+    ad_settle
+    echo "Getting TGT for ${winbind_acct}@${my_realm}" >&2
+    $EXPECT -c "spawn -noecho kinit -c $KRB5CCNAME ${winbind_acct}@${my_realm};
+        expect :;
+        send {${password}};
+        send \n;
+        expect eof"
+    klist -c $KRB5CCNAME &> /dev/null && break
+done
+
+if [ $(wbinfo -u|wc -l) != 0 ]; then
+	success=true
+else
+	echo "ERROR: return user list from AD is empty" >&2
+	success=false
+fi
+
+# get rid of cred cache
+kdestroy -c $KRB5CCNAME &> /dev/null
+rm -f $KRB5CCNAME &> /dev/null || :
+
+fi
+
+[ "$success" = "true" ] && exit 0 || exit 1

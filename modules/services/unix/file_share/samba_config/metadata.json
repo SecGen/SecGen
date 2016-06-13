@@ -1,0 +1,37 @@
+{
+  "name": "ajjahn-samba",
+  "version": "0.4.0",
+  "author": "Adam Jahn",
+  "summary": "Module for provisioning Samba",
+  "license": "Apache-2.0",
+  "source": "https://github.com/ajjahn/puppet-samba",
+  "project_page": "https://github.com/ajjahn/puppet-samba",
+  "issues_url": "https://github.com/ajjahn/puppet-samba/issues",
+  "description": "Module for provisioning Samba",
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "6.0",
+        "7.0"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "12.04",
+        "14.04"
+      ]
+    },
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "7.0",
+        "8.0"
+      ]
+    }
+  ],
+  "dependencies": [
+  
+  ]
+}
