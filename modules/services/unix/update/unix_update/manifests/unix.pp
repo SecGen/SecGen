@@ -25,10 +25,5 @@ class unix_update::unix{
         command => "pkg update"
       }
     }
-    # 'MacOS': {
-    #   exec { 'update':
-    #     command => ""
-    #   }
-    # }
   }
 }

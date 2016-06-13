@@ -9,10 +9,10 @@
   <description>An update module for windows</description>
 
   <type>update</type>
-  <platform>linux</platform>
+  <platform>windows</platform>
 
   <!--optional details-->
-  <reference></reference>
+  <reference>https://github.com/voxpupuli/puppet-windows_autoupdate</reference>
   <software_name>windows_update</software_name>
   <software_license>MIT</software_license>
 

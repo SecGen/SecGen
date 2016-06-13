@@ -12,7 +12,6 @@
   <platform>linux</platform>
 
   <!--optional details-->
-  <reference></reference>
   <software_name>unix_update</software_name>
   <software_license>Apache v2</software_license>
 
