@@ -1,5 +1,10 @@
+exec { 'update':
+  command => "/usr/bin/apt-get update"
+}
+
 class { 'samba':
-  puppi    => true,
+  require => Exec['update'],
+  puppi => true,
   # monitor      => true,
   # monitor_tool => [ 'nagios' , 'monit' , 'munin' ],
   firewall      => true,
@@ -7,3 +12,4 @@ class { 'samba':
   firewall_src  => '10.42.0.0/24',
   firewall_dst  => $ipaddress_eth0,
 }
+

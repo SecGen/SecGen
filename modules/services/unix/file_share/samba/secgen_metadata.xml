@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
   <name>Samba file share Server</name>
-  <author>TODO</author>
+  <author>example42</author>
   <module_license>Apache v2</module_license>
   <description>An installation of Samba</description>
 
@@ -12,7 +12,7 @@
   <platform>linux</platform>
 
   <!--optional details-->
-  <reference>https://httpd.apache.org/</reference>
+  <reference>https://forge.puppet.com/example42/samba</reference>
   <software_name>samba</software_name>
   <software_license>Apache v2</software_license>
 
