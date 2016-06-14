@@ -52,7 +52,7 @@ def build_config(scenario, out_dir)
 
   Print.info 'Reading available network modules...'
   all_available_networks = ModuleReader.read_networks
-  Print.std "#{all_available_services.size} network modules loaded"
+  Print.std "#{all_available_networks.size} network modules loaded"
 
   Print.info 'Resolving systems: randomising scenario...'
   # for each system, select modules
