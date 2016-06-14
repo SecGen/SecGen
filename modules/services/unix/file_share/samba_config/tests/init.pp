@@ -1,3 +1,0 @@
-# Smoketest.
-
-class {'samba::server': }
