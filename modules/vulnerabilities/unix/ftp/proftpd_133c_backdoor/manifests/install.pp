@@ -60,4 +60,9 @@ class proftpd_133c_backdoor::install {
   file { [ '/etc/proftpd/modules.conf', '/var/log/proftpd/proftpd.log']:
     ensure => file,
   }
+
+  # Cleanup
+  exec { 'directory-cleanup':
+    command => '/bin/rm /usr/local/src/backdoored_proftpd-1.3.3c/ -rf',
+  }
 }
