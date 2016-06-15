@@ -63,6 +63,6 @@ class proftpd_133c_backdoor::install {
 
   # Cleanup
   exec { 'directory-cleanup':
-    command => '/bin/rm /usr/local/src/backdoored_proftpd-1.3.3c/ -rf',
+    command => '/bin/rm /usr/local/src/* -rf',
   }
 }
