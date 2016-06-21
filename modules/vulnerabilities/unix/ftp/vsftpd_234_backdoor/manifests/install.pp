@@ -1,69 +1,65 @@
-  #copies and unpacks vsftpd_234_backdoor saves it to usr/local/sbin and executes it for startup
 class vsftpd_234_backdoor::install {
 
-  # file { '/tmp/vsftpd-2.3.4':
-  #   path         => '/tmp/vsftpd-2.3.4',
-  #   ensure       => directory,
-  #   source       => 'puppet:///modules/vsftpd_234_backdoor',
-  #   recurse      => true,
-  #
-  # }
-  file { '/tmp/src':
+  # Install dependencies
+  package { ['libssl-dev' ,'libpam0g-dev']:
+    ensure => installed,
+  }
+
+  # Required directories
+  file { ['/usr/share/empty','/var/ftp','/usr/local/man/man5/', '/usr/local/man/man8/']:
     ensure => directory,
-    path => '/tmp/src',
-    source => 'puppet:///modules/vsftpd_234_backdoor',
-    recurse => 'true',
-    mode => '777'
+    owner  => root,
+    mode   => '0755'
   }
 
+  # Require tarball
+  file { '/usr/local/src/vsftpd-2.3.4.tar.gz':
+    ensure => file,
+    source => 'puppet:///modules/vsftpd_234_backdoor/vsftpd-2.3.4.tar.gz',
+  }
+
+  # Unpack tar
   exec { 'unzip-vsftpd':
-    command     => 'tar -xzf /tmp/src/vsftpd-2.3.4.tar.gz',
-    path => '/bin',
-    cwd => '/tmp',
-    # creates     => "/home/vagrant/vsftpd-2.3.4/vsftpd",
-    # notify   => Exec['make-vsftpd']
+    require     => Package['libssl-dev' ,'libpam0g-dev'],
+    command     => '/bin/tar -xzf /usr/local/src/vsftpd-2.3.4.tar.gz',
+    cwd         => '/usr/local/src',
+    creates     => '/usr/local/src/vsftpd-2.3.4/',
   }
 
-  # TODO: FIXME this is broken
-  # exec { 'make-vsftpd':
-  #   command     => '/usr/bin/make',
-  #   cwd         => "/tmp/src/vsftpd-2.3.4",
-  #   creates     => "/tmp/src/vsftpd-2.3.4/vsftpd",
-  #   notify   => Exec['copy-vsftpd'],
-  #   require     => Exec["unzip-vsftpd"],
-  # }
-  #
-  # exec { 'copy-vsftpd':
-  #   command     => '/usr/bin/make install',
-  #   cwd         => "/tmp/src/vsftpd-2.3.4",
-  #   # creates     => "/usr/local/sbin/vsftpd",
-  #   notify   => User['ftp'],
-  #   require     => Exec["make-vsftpd"],
-  # }
-  #
-  # # exec { 'copy-vsftpd':
-  # #   command     => '/tmp/src/copyvsftpd.sh',
-  # #   cwd         => "/tmp/src/",
-  # #   creates     => "/usr/local/sbin/vsftpd",
-  # #   notify   => User['ftp'],
-  # #   require     => Exec["make-vsftpd"],
-  # # }
-  #
-  # user { 'ftp':
-  #   ensure     => present,
-  #   uid        => '507',
-  #   gid        => 'root',
-  #   shell      => '/bin/zsh',
-  #   home       => '/var/ftp',
-  #   notify   => Exec['start-vsftpd'],
-  #   require     => Exec["copy-vsftpd"],
-  #   managehome => true
-  # }
-  #
-  # exec { 'start-vsftpd':
-  #   command     => '/tmp/vsftpd-2.3.4/startvsftpd.sh',
-  #   require     => User["ftp"],
-  # }
+  # Use module Makefile
+  file { ['/usr/local/src/vsftpd-2.3.4/Makefile']:
+    require  => Exec['unzip-vsftpd'],
+    ensure   => file,
+    content  => file('vsftpd_234_backdoor/Makefile'),
+  }
+
+  # Make
+  exec { 'make-vsftpd':
+    require     => File['/etc/vsftpd.conf', '/usr/local/man/man5/vsftpd.conf.5', '/usr/local/man/man8/vsftpd.8'],
+    command     => '/usr/bin/make',
+    cwd         => '/usr/local/src/vsftpd-2.3.4'
+  }
+
+  # Make install
+  exec { 'make-install-vsftpd':
+    require     => Exec['make-vsftpd'],
+    command     => '/usr/bin/make install',
+    cwd         => '/usr/local/src/vsftpd-2.3.4'
+  }
+
+  file { ['/usr/local/sbin/vsftpd']:
+    require => Exec['make-install-vsftpd'],
+    ensure  => file,
+    source  => '/usr/local/src/vsftpd-2.3.4/vsftpd',
+  }
+
+  # init.d file
+  file { ['/etc/init.d/vsftpd']:
+    require => Exec['make-install-vsftpd'],
+    ensure  => file,
+    source  => 'puppet:///modules/vsftpd_234_backdoor/vsftpd_init.d',
+    mode   => '0755',
+  }
 }
 
 
