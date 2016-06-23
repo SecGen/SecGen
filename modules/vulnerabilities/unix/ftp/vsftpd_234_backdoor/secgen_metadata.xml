@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+  <name>VSFTPD v2.3.4 Backdoor Command Execution</name>
+  <author>Lewis Ardern</author>
+  <author>Z. Cliffe Schreuders</author>
+  <module_license>MIT</module_license>
+  <description>A backdoor was introduced into the vsftpd-2.3.4.tar.gz archive between
+    June 30th 2011 and July 1st 2011. AKA the smiley face backdoor.</description>
+
+  <type>ftp</type>
+  <privilege>user</privilege>
+  <access>remote</access>
+  <platform>linux</platform>
+
+  <!--optional vulnerability details-->
+  <difficulty>low</difficulty>
+  <!--<cve></cve>-->
+  <cvss_base_score>10</cvss_base_score>
+  <cvss_vector>AV:N/AC:L/Au:N/C:C/I:C/A:C</cvss_vector>
+  <reference>https://www.rapid7.com/db/modules/exploit/unix/ftp/vsftpd_234_backdoor</reference>
+  <reference>http://scarybeastsecurity.blogspot.co.uk/2011/07/alert-vsftpd-download-backdoored.html</reference>
+  <software_name>vsftpd</software_name>
+  <software_license>GPLv2</software_license>
+
+  <!--optional breadcrumb (info that is leaked and required to exploit)-->
+  <!--<breadcrumb></breadcrumb>-->
+
+  <!--optional hints-->
+  <!--<msf_module></msf_module>-->
+  <hint>A backdoor in a service</hint>
+  <solution>Remotely exploitable backdoor in the FTP service</solution>
+
+  <!--Cannot co-exist with other installations-->
+  <conflict>
+    <software_name>vsftpd</software_name>
+  </conflict>
+</vulnerability>

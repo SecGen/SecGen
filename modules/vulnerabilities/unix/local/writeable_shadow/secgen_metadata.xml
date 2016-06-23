@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+  <name>Writeable Shadow File</name>
+  <author>Lewis Ardern</author>
+  <module_license>MIT</module_license>
+  <description>Changes permissions on shadow file to 777, open to account tampering to local users.
+    This is not a common misconfiguration, and not particularly subtle.</description>
+
+  <type>access_controls</type>
+  <privilege>root</privilege>
+  <access>local</access>
+  <platform>linux</platform>
+
+  <!--optional vulnerability details-->
+  <difficulty>medium</difficulty>
+  <!--<cve></cve>-->
+  <cvss_base_score>6.6</cvss_base_score>
+  <cvss_vector>AV:L/AC:M/Au:S/C:C/I:C/A:C</cvss_vector>
+  <reference></reference>
+  <software_name>nfsd</software_name>
+  <software_license>GPLv2</software_license>
+
+  <!--optional breadcrumb (info that is leaked and required to exploit)-->
+  <!--<breadcrumb></breadcrumb>-->
+
+  <!--optional hints-->
+  <!--<msf_module></msf_module>-->
+  <hint>An access control misconfiguration</hint>
+  <solution>Edit the shadow file to set a password for root</solution>
+
+  <conflict>
+    <name>Writeable Shadow File</name>
+    <author>Lewis Ardern</author>
+  </conflict>
+  <conflict>
+    <type>ftp</type>
+  </conflict>
+
+</vulnerability>

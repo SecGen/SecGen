@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+  <name>NFS write access to FS</name>
+  <author>Lewis Ardern</author>
+  <module_license>MIT</module_license>
+  <description>NFS misconfigured to be mountable from anyone that can interact with it.</description>
+
+  <type>nfs</type>
+  <privilege>user</privilege>
+  <access>remote</access>
+  <platform>linux</platform>
+
+  <!--optional vulnerability details-->
+  <difficulty>low</difficulty>
+  <!--<cve></cve>-->
+  <cvss_base_score>6.6</cvss_base_score>
+  <cvss_vector>AV:L/AC:M/Au:S/C:C/I:C/A:C</cvss_vector>
+  <reference>http://nfs.sourceforge.net/#section_c</reference>
+  <software_name>nfsd</software_name>
+  <software_license>GPLv2</software_license>
+
+  <!--optional breadcrumb (info that is leaked and required to exploit)-->
+  <!--<breadcrumb></breadcrumb>-->
+
+  <!--optional hints-->
+  <!--<msf_module></msf_module>-->
+  <hint>A filesharing misconfiguration</hint>
+  <solution>NFS can be mounted to access files</solution>
+
+</vulnerability>
