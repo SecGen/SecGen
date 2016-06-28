@@ -6,7 +6,7 @@
   <name>Apache HTTP Server</name>
   <author>TODO</author>
   <module_license>Apache v2</module_license>
-  <description>An instalation of Apache</description>
+  <description>An installation of Apache</description>
 
   <type>httpd</type>
   <platform>linux</platform>
