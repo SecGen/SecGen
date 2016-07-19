@@ -9,8 +9,10 @@
     <system_name>firewall_configuration_example</system_name>
     <base platform="linux"/>
 
-    <!--<service module_path="modules/services/unix/update/unix_update"></service>-->
-    <!--<service module_path="modules/services/unix/firewall/iptables_config"></service>-->
+    <!--TODO: Dependency-->
+    <service module_path="modules/services/unix/update/unix_update"></service>
+    <!--TODO: /Dependency-->
+
     <service module_path="modules/services/unix/firewall/firewall"></service>
 
     <network type="private_network" range="dhcp"></network>
