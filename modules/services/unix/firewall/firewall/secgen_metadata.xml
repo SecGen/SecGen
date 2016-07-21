@@ -25,9 +25,6 @@
   <software_license>Apache v2</software_license>
 
   <!--Cannot co-exist with other iptables installations-->
-  <conflict>
-    <software_name></software_name>
-  </conflict>
 
 </service>
 

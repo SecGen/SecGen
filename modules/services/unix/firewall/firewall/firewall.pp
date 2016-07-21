@@ -1,11 +1,4 @@
 ######################################################
-##### Update - REMOVED WHEN DEPENDENCY CODE DONE #####
-######################################################
-exec { 'update':
-  command => '/usr/bin/apt-get update',
-}
-
-######################################################
 ##### Purge all existing firewall rules (if any) #####
 ######################################################
 resources { 'firewall':
