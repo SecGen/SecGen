@@ -17,7 +17,6 @@
   <software_name>vsftpd</software_name>
   <software_license>Apache v2</software_license>
 
-  <!--Cannot co-exist with other apache installations-->
   <conflict>
     <software_name>vsftpd</software_name>
   </conflict>
