@@ -1,0 +1,3 @@
+class { 'java':
+  distribution => 'jre',
+}
