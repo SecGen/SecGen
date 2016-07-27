@@ -51,7 +51,6 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="module_path" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-              <!--required SecGen module details-->
               <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
               <xs:element name="author" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
               <xs:element name="module_license" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -68,6 +67,29 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <!-- must co-exist with a system matching ALL of the optionally specified values (can be repeated for OR)-->
+        <!-- if a scenario does not include one already, the first match (randomly) found will be added-->
+        <xs:element name="requires" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="module_path" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="name" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="author" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="module_license" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="type" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+
+              <xs:element name="platform" type="platformOptions" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="distro" type="platformOptions" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="url" type="platformOptions" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="vagrantbase" type="platformOptions" minOccurs="0" maxOccurs="unbounded"/>
+
+              <xs:element name="reference" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+              <xs:element name="software_license" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
       </xs:sequence>
     </xs:complexType>
   </xs:element>
