@@ -23,12 +23,4 @@
   <requires>
     <type>update</type>
   </requires>
-  <!-- for testing purposes -->
-  <!--<requires>-->
-    <!--<type>THIS DOES NOT EXIST</type>-->
-  <!--</requires>-->
-  <!--<requires>-->
-    <!--<type>ftp</type>-->
-  <!--</requires>-->
-
 </service>

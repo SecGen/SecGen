@@ -28,14 +28,4 @@
     <author>Lewis Ardern</author>
   </conflict>
 
-  <!-- for testing purposes, likely to trigger an unresolveable conflict with the default scenario (sometimes) -->
-  <!--<conflict>-->
-    <!--<type>ftp</type>-->
-  <!--</conflict>-->
-  <!-- for testing purposes -->
-  <!--<requires>-->
-    <!--<type>httpd</type>-->
-    <!--<software_name>apache</software_name>-->
-  <!--</requires>-->
-
 </vulnerability>

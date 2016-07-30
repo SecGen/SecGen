@@ -9,8 +9,6 @@
 		<system_name>storage_server</system_name>
 		<base platform="linux"/>
 
-		<!--<service type="httpd"/>-->
-
 		<vulnerability privilege="user" access="remote" />
 		<vulnerability privilege="root" access="local" />
 
