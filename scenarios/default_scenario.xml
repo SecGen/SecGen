@@ -12,7 +12,6 @@
 		<vulnerability privilege="user" access="remote" />
 		<vulnerability privilege="root" access="local" />
 
-		<service type="httpd"/>
 		<service/>
 
 		<network type="private_network" range="dhcp"/>

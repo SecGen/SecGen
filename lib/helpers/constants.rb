@@ -1,4 +1,4 @@
-## FILE_CONSTANTS ##
+## FILE CONSTANTS ##
 
 # Root directory of SecGen file structure
 ROOT_DIR = File.expand_path('../../../',__FILE__)
@@ -20,7 +20,7 @@ PROJECTS_DIR = "#{ROOT_DIR}/projects"
 ENVIRONMENTS_PATH = "#{ROOT_DIR}/modules/build/environments"
 
 
-## PATH_CONSTANTS ##
+## PATH CONSTANTS ##
 
 # Path to modules directories
 MODULES_PATH = "#{ROOT_DIR}/modules/"
@@ -33,7 +33,7 @@ BASES_PATH = "#{MODULES_PATH}bases/"
 DOCUMENTATION_PATH = "#{ROOT_DIR}/documentation/yard/doc"
 
 
-## VAGRANT_FILE_CONSTANTS ##
+## VAGRANT FILE CONSTANTS ##
 
 # Path to cleanup directory
 PATH_TO_CLEANUP = "#{ROOT_DIR}/modules/build/puppet/"
@@ -43,7 +43,10 @@ VAGRANT_TEMPLATE_FILE = "#{ROOT_DIR}/lib/templates/Vagrantfile.erb"
 
 PUPPET_TEMPLATE_FILE = "#{ROOT_DIR}/lib/templates/Puppetfile.erb"
 
-## VERSION_CONSTANTS ##
+## INTEGER CONSTANTS ##
+RETRIES_LIMIT = 10
+
+## VERSION CONSTANTS ##
 
 # Version number of SecGen
 # e.g. [release state (0 = alpha, 3 = final release)].[Major bug fix].[Minor bug fix].[Cosmetic or other features]

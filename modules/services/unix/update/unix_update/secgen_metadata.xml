@@ -3,7 +3,7 @@
 <service xmlns="http://www.github/cliffe/SecGen/service"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
-  <name>Unix_update_service</name>
+  <name>Unix update repository</name>
   <author>Jason Keighley</author>
   <module_license>Apache v2</module_license>
   <description>An update module for unix</description>
@@ -11,13 +11,9 @@
   <type>update</type>
   <platform>linux</platform>
 
-  <!--optional details-->
-  <software_name>unix_update</software_name>
-  <software_license>Apache v2</software_license>
-
-  <!--Cannot co-exist with other apache installations-->
+  <!--Cannot co-exist with Windows-->
   <conflict>
-    <software_name>windows_update</software_name>
+    <module_path>modules/[^/]*/windows/.*</module_path>
   </conflict>
 
 </service>

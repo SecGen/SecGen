@@ -20,5 +20,7 @@
   <conflict>
     <software_name>apache</software_name>
   </conflict>
-
+  <requires>
+    <type>update</type>
+  </requires>
 </service>
