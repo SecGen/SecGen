@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<service xmlns="http://www.github/cliffe/SecGen/service"
+<utility xmlns="http://www.github/cliffe/SecGen/utility"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
+         xsi:schemaLocation="http://www.github/cliffe/SecGen/utility">
   <name>Windows Automatic Update Control Service</name>
   <author>Liam Bennett</author>
   <module_license>MIT</module_license>
@@ -21,4 +21,4 @@
     <module_path>modules/[^/]*/(unix|linux)/.*</module_path>
   </conflict>
 
-</service>
+</utility>
