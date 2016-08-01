@@ -21,4 +21,7 @@
     <software_name>java</software_name>
   </conflict>
 
+  <requires>
+    <type>update</type>
+  </requires>
 </service>

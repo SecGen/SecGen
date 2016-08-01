@@ -26,6 +26,10 @@
 
   <!--Cannot co-exist with other iptables installations-->
 
+  <requires>
+    <type>update</type>
+  </requires>
+
 </service>
 
 <!-- DEPENDS ON BOTH unix-update AND IPtables BEING PRESENT ON THE SYSTEM -->

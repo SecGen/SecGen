@@ -21,6 +21,10 @@
     <software_name>samba</software_name>
   </conflict>
 
+  <requires>
+    <type>update</type>
+  </requires>
+
 </service>
 
 <!-- REQUIRES unix_update MODULE TO BE CALLED FIRST -->
