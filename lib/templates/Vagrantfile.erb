@@ -28,7 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%     else -%>
     <%= system.name %>.vm.network :<%= selected_module.attributes['type'][0] %>, ip: "<%= selected_module.attributes['range'][0] %>"
 <%     end -%>
-<%   when 'vulnerability', 'service' -%>
+<%   when 'vulnerability', 'service', 'utility' -%>
 <%     module_name = selected_module.module_path_name -%>
     <%= system.name %>.vm.provision "puppet" do | <%=module_name%> |
       <%=module_name%>.module_path = "<%="puppet/#{system.name}/modules"%>"
