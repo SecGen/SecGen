@@ -50,13 +50,17 @@ def build_config(scenario, out_dir)
   all_available_services = ModuleReader.read_services
   Print.std "#{all_available_services.size} service modules loaded"
 
+  Print.info 'Reading available utility modules...'
+  all_available_utilities = ModuleReader.read_utilities
+  Print.std "#{all_available_utilities.size} utility modules loaded"
+
   Print.info 'Reading available network modules...'
   all_available_networks = ModuleReader.read_networks
   Print.std "#{all_available_networks.size} network modules loaded"
 
   Print.info 'Resolving systems: randomising scenario...'
   # for each system, select modules
-  all_available_modules = all_available_bases + all_available_vulnerabilties + all_available_services + all_available_networks
+  all_available_modules = all_available_bases + all_available_vulnerabilties + all_available_services + all_available_utilities + all_available_networks
   # update systems with module selections
   systems.map! {|system|
     system.module_selections = system.resolve_module_selection(all_available_modules)

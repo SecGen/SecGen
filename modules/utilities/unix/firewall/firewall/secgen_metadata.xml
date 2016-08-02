@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<service xmlns="http://www.github/cliffe/SecGen/service"
+<utility xmlns="http://www.github/cliffe/SecGen/utility"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
+         xsi:schemaLocation="http://www.github/cliffe/SecGen/utility">
   <name>Iptables firewall config</name>
   <author>Jason Keighley</author>
   <author>Puppet Labs, Inc.</author>
@@ -30,6 +30,4 @@
     <type>update</type>
   </requires>
 
-</service>
-
-<!-- DEPENDS ON BOTH unix-update AND IPtables BEING PRESENT ON THE SYSTEM -->
+</utility>

@@ -3,7 +3,7 @@ require_relative '../helpers/constants.rb'
 class Module
   #Vulnerability attributes hash
   attr_accessor :module_path # vulnerabilities/unix/ftp/vsftp_234_backdoor
-  attr_accessor :module_type # vulnerability|service
+  attr_accessor :module_type # vulnerability|service|utility
   attr_accessor :attributes  # attributes are hashes that contain arrays of values
   # Each attribute is stored in a hash containing an array of values (because elements such as author can repeat).
   # Module *selectors*, store filters in the attributes hash.
