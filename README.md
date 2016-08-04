@@ -289,9 +289,9 @@ If multiple \<conflict> elements are specified, it only takes any one conflict t
 When creating modules, __conflicts should be avoided wherever possible__, as they can significantly reduce the randomisation options for complex scenarios, and can cause complications in the resolution of scenarios (which is currently solved via bruteforce).
 
 #### requires (optional)
-A module can include \<requires> tags to require other modules that satisfy a set of conditions are also added to the scenario. When selecting a module, each of these dependencies is resolved by checking if a module already satisfies the condition, in which case nothing happens, or a module that satisfies all the conditions is randomly selected and added to the scenario. This is recursive so a module can require modules that require modules. 
+A module can include \<requires> tags to require other modules that satisfy a set of conditions are also added to the scenario. When selecting a module, each of these dependencies is resolved by checking if a module has already been selected that satisfies the condition, in which case nothing happens, otherwise a module that satisfies all the conditions is randomly selected and added to the scenario. This is recursive so a module can require modules that require modules. 
 
-When conflicts occur (say for example, a previously selected module conflicts with all the valid options for resolving a dependency) the scenario is regenerated. This bruteforce approach is fairly effective, but <conflict> tags should be avoided wherever possible because they add complexity and reduce randomisation possibilities.
+When conflicts occur (say for example, a previously selected module conflicts with all the valid options for resolving a dependency) the scenario is regenerated. This bruteforce approach is fairly effective, but \<conflict> tags should be avoided wherever possible because they add complexity and reduce randomisation possibilities.
 
 A module can have multiple \<requires>, each of which will ensure a single module fulfills all of the conditions, which are regexp matches against attributes.
 
