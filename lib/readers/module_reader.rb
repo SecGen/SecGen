@@ -25,6 +25,11 @@ class ModuleReader
     return read_modules('utility', UTILITIES_PATH, UTILITY_SCHEMA_FILE, true)
   end
 
+  # reads in all utilities
+  def self.read_generators
+    return read_modules('generator', GENERATORS_PATH, GENERATOR_SCHEMA_FILE, true)
+  end
+
   # reads in all networks
   def self.read_networks
     return read_modules('network', NETWORKS_PATH, NETWORK_SCHEMA_FILE, false)

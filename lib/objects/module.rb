@@ -11,7 +11,8 @@ class Module
   # Module *selectors*, store filters in the attributes hash.
   # XML validity ensures valid and complete information.
 
-  attr_accessor :inputs
+  attr_accessor :write_outputs_to
+  attr_accessor :unique_id
 
   attr_accessor :conflicts
   attr_accessor :requires
@@ -21,7 +22,6 @@ class Module
   # @param [Object] module_type: such as 'vulnerability', 'base', 'service', 'network'
   def initialize(module_type)
     self.module_type = module_type
-    self.inputs = []
     self.conflicts = []
     self.requires = []
     self.attributes = {}

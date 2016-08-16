@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'digest'
 
 require_relative '../objects/system'
 require_relative '../objects/module'
@@ -50,17 +51,35 @@ class SystemReader
       end
 
       # for each module selection
-      system_node.xpath('vulnerability | service | utility | network | base').each do |module_node|
+      system_node.xpath('//vulnerability | //service | //utility | //network | //base | //generator').each do |module_node|
         # create a selector module, which is a regular module instance used as a placeholder for matching requirements
         module_selector = Module.new(module_node.name)
+
+        # create a unique id for tracking variables between modules
+        module_selector.unique_id = module_node.path.gsub(/[^a-zA-Z0-9]/, '')
+        # check if we need to be sending the module output to another module
+        module_node.xpath('parent::input').each do |input|
+          # Parent is input -- needs to send write value somewhere
+          input.xpath('..').each do |input_parent|
+            # Print.verbose "  -- Sends output to " + input_parent.path.gsub(/[^a-zA-Z0-9]/, '')
+
+            #TODO propagate unique ids and writes to to selected modules
+
+            module_selector.write_outputs_to = input_parent.path.gsub(/[^a-zA-Z0-9]/, '') + '_' + input.xpath('@into').to_s
+          end
+        end
+
         module_node.xpath('@*').each do |attr|
           module_selector.attributes["#{attr.name}"] = [attr.text] unless attr.text.nil? || attr.text == ''
         end
-        Print.verbose " #{module_node.name}, selecting based on:"
+        Print.verbose " #{module_node.name} (#{module_selector.unique_id}), selecting based on:"
         module_selector.attributes.each do |attr|
           if attr[0] && attr[1] && attr[0].to_s != "module_type"
             Print.verbose "  - #{attr[0].to_s} ~= #{attr[1].to_s}"
           end
+        end
+        if module_selector.write_outputs_to
+          Print.verbose "  -- writes to: " + module_selector.write_outputs_to
         end
 
         module_selectors << module_selector
