@@ -10,7 +10,6 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <% @systems.each do |system| %>
   config.vm.define "<%= system.name %>" do |<%= system.name %>|
-    # REMOVE: < %= system.name %>.vm.synced_folder "< %= MOUNT_DIR %>", "/mount"
     config.vm.provider :virtualbox do |vb|
       vb.gui = true
     end
@@ -28,21 +27,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%     else -%>
     <%= system.name %>.vm.network :<%= selected_module.attributes['type'][0] %>, ip: "<%= selected_module.attributes['range'][0] %>"
 <%     end -%>
-<%   when 'vulnerability', 'service', 'utility' -%>
+<%   when 'vulnerability', 'service', 'utility', 'encoder', 'generator' -%>
 <%     module_name = selected_module.module_path_name -%>
     <%= system.name %>.vm.provision "puppet" do | <%=module_name%> |
+      <%=module_name%>.facter = {
+        "write_to" => "<%=selected_module.write_outputs_to%>",
+<%     if selected_module.write_outputs_to -%>
+        "<%=selected_module.write_outputs_to%>" => "<%=selected_module.output%>",
+<%     end -%>
+<%     if selected_module.attributes['read_fact'] != nil
+         selected_module.attributes['read_fact'].each do |fact| -%>
+        "<%=fact%>_location" => "<%=selected_module.unique_id + "_" + fact%>",
+<%       end
+       end -%>
+      }
       <%=module_name%>.module_path = "<%="puppet/#{system.name}/modules"%>"
       <%=module_name%>.environment_path = "<%="#{ENVIRONMENTS_PATH}"%>"
       <%=module_name%>.environment = "production"
       <%=module_name%>.manifests_path = "<%="#{ROOT_DIR}/#{selected_module.module_path}/"%>"
       <%=module_name%>.manifest_file = "<%="#{selected_module.module_path_end}.pp"%>"
-
-      <%=module_name%>.facter = {
-<%  selected_module.inputs.each do |input| -%>
-        "<%="#{module_name}_#{input["name"][0]}"%>" => <%=input["value"].inspect%>,
-<%   end -%>
-
-      }
     end
 <%   end -%>
 <% end -%>

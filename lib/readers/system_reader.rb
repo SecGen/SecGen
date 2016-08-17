@@ -51,7 +51,7 @@ class SystemReader
       end
 
       # for each module selection
-      system_node.xpath('//vulnerability | //service | //utility | //network | //base | //generator').each do |module_node|
+      system_node.xpath('//vulnerability | //service | //utility | //network | //base | //encoder | //generator').each do |module_node|
         # create a selector module, which is a regular module instance used as a placeholder for matching requirements
         module_selector = Module.new(module_node.name)
 
@@ -61,10 +61,7 @@ class SystemReader
         module_node.xpath('parent::input').each do |input|
           # Parent is input -- needs to send write value somewhere
           input.xpath('..').each do |input_parent|
-            # Print.verbose "  -- Sends output to " + input_parent.path.gsub(/[^a-zA-Z0-9]/, '')
-
-            #TODO propagate unique ids and writes to to selected modules
-
+            module_selector.write_to_module_with_id = input_parent.path.gsub(/[^a-zA-Z0-9]/, '')
             module_selector.write_outputs_to = input_parent.path.gsub(/[^a-zA-Z0-9]/, '') + '_' + input.xpath('@into').to_s
           end
         end
@@ -78,11 +75,25 @@ class SystemReader
             Print.verbose "  - #{attr[0].to_s} ~= #{attr[1].to_s}"
           end
         end
-        if module_selector.write_outputs_to
+
+        # insert into module list
+        # if this module feeds another...
+        if module_selector.write_outputs_to != nil
           Print.verbose "  -- writes to: " + module_selector.write_outputs_to
+          # insert into module list before the module we are writing to
+          insert_pos = -1 # end of list
+          for i in 0..module_selectors.size-1
+            if module_selector.write_to_module_with_id == module_selectors[i].unique_id
+              # found position of earlier module this one feeds into, so put this one first
+              insert_pos = i
+            end
+          end
+          module_selectors.insert(insert_pos, module_selector)
+        else
+          # otherwise just append module to end of list
+          module_selectors << module_selector
         end
 
-        module_selectors << module_selector
       end
       systems << System.new(system_name, system_attributes, module_selectors)
     end

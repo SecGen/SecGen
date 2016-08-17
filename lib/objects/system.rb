@@ -30,7 +30,7 @@ class System
 
       # for each module specified in the scenario
       module_selectors.each do |module_filter|
-        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_modules, selected_modules)
+        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_modules, selected_modules, module_filter.write_outputs_to, module_filter.unique_id)
       end
       selected_modules
 
@@ -62,7 +62,7 @@ class System
   # returns a list containing a module (plus dependencies recursively) of the module type with the required attributes
   # modules are selected from the list of available modules and will be checked against previously selected modules for conflicts
   # raises an exception when unable to resolve and the retry limit has not been reached
-  def select_modules(module_type, required_attributes, available_modules, previously_selected_modules)
+  def select_modules(module_type, required_attributes, available_modules, previously_selected_modules, write_outputs_to, unique_id)
     # select based on selected type, access, cve...
 
     search_list = available_modules.clone
@@ -92,7 +92,18 @@ class System
       Print.err 'Could not find a matching module. Please check the scenario specification'
     else
       # use from the top of the randomised list
-      selected = search_list[0]
+      selected = search_list[0].clone
+
+      # propagate module relationships
+      selected.write_outputs_to = write_outputs_to
+      selected.unique_id = unique_id
+
+      # pre-calculate any secgen_local/local.rb outputs
+      if selected.local_calc_file
+        Print.verbose "Module includes local calculation of output. Processing..."
+        selected.output = `#{selected.local_calc_file}`.chomp
+        Print.verbose "Output: #{selected.output}"
+      end
 
       # add any modules that the selected module requires
       dependencies = select_required_modules(selected, available_modules, previously_selected_modules + [selected])
@@ -148,7 +159,7 @@ class System
         Print.verbose "Dependency satisfied by previously selected module: #{existing.printable_name}"
       else
         Print.verbose 'Adding required modules...'
-        modules_to_add += select_modules('any', required, available_modules, modules_to_add + selected_modules)
+        modules_to_add += select_modules('any', required, available_modules, modules_to_add + selected_modules, '', '')
       end
     end
     modules_to_add
