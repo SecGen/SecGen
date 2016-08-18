@@ -1,1 +1,1 @@
-require unrealirc_3281_backdoor
+include unrealirc_3281_backdoor
