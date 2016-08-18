@@ -31,7 +31,7 @@ end
 
 # Builds the vagrant configuration file based on a scenario file
 # @return build_number [Integer] Current project's build number
-def build_config(scenario, out_dir)
+def build_config(scenario, out_dir, gui_output)
   Print.info 'Reading configuration file for virtual machines you want to create...'
   # read the scenario file describing the systems, which contain vulnerabilities, services, etc
   # this returns an array/hashes structure
@@ -69,7 +69,7 @@ def build_config(scenario, out_dir)
 
   Print.info "Creating project: #{out_dir}..."
   # create's vagrant file / report a starts the vagrant installation'
-  creator = ProjectFilesCreator.new(systems, out_dir, scenario)
+  creator = ProjectFilesCreator.new(systems, out_dir, scenario, gui_output)
   creator.write_files
 
   Print.info 'Project files created.'
@@ -84,8 +84,8 @@ def build_vms(project_dir)
 end
 
 # Runs methods to run and configure a new vm from the configuration file
-def run(scenario, project_dir)
-  build_config(scenario, project_dir)
+def run(scenario, project_dir, gui_output)
+  build_config(scenario, project_dir, gui_output)
   build_vms(project_dir)
 end
 
@@ -105,11 +105,13 @@ Print.std '~'*47
 opts = GetoptLong.new(
   [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
   [ '--project', '-p', GetoptLong::REQUIRED_ARGUMENT ],
-  [ '--scenario', '-s', GetoptLong::REQUIRED_ARGUMENT ]
+  [ '--scenario', '-s', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--gui-output', '-g', GetoptLong::NO_ARGUMENT]
 )
 
 scenario = SCENARIO_XML
 project_dir = nil
+gui_output = false
 
 # process option arguments
 opts.each do |opt, arg|
@@ -120,6 +122,9 @@ opts.each do |opt, arg|
       scenario = arg;
     when '--project'
       project_dir = arg;
+    when '--gui-output'
+      Print.info "Gui output set (virtual machines will be spawned)"
+      gui_output = true;
     else
       Print.err "Argument not valid: #{arg}"
       usage
@@ -138,10 +143,10 @@ end
 case ARGV[0]
   when 'run', 'r'
     project_dir = default_project_dir unless project_dir
-    run(scenario, project_dir)
+    run(scenario, project_dir, gui_output)
   when 'build-project', 'p'
     project_dir = default_project_dir unless project_dir
-    build_config(scenario, project_dir)
+    build_config(scenario, project_dir, gui_output)
   when 'build-vms', 'v'
     if project_dir
       build_vms(project_dir)

@@ -12,7 +12,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "<%= system.name %>" do |<%= system.name %>|
     # REMOVE: < %= system.name %>.vm.synced_folder "< %= MOUNT_DIR %>", "/mount"
     config.vm.provider :virtualbox do |vb|
-      vb.gui = true
+     <%=
+      if @gui_output == true
+       "vb.gui = true"
+      else
+       "vb.gui = false"
+       "vb.customize ['modifyvm', :id, '--pae', 'on']"
+       "vb.customize ['modifyvm', :id, '--hwvirtex', 'off']"
+       "vb.customize ['modifyvm', :id, '--vtxvpid', 'off']"
+      end
+     %>
     end
     # SecGen modules
 <% system.module_selections.each do |selected_module| -%>
