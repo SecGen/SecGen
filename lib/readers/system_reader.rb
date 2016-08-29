@@ -59,10 +59,12 @@ class SystemReader
         module_selector.unique_id = module_node.path.gsub(/[^a-zA-Z0-9]/, '')
         # check if we need to be sending the module output to another module
         module_node.xpath('parent::input').each do |input|
-          # Parent is input -- needs to send write value somewhere
+          Print.err 'parent::input'
+          # Parent is input -- track that we need to send write value somewhere
           input.xpath('..').each do |input_parent|
+            module_selector.write_output_variable = input.xpath('@into').to_s
             module_selector.write_to_module_with_id = input_parent.path.gsub(/[^a-zA-Z0-9]/, '')
-            module_selector.write_outputs_to = input_parent.path.gsub(/[^a-zA-Z0-9]/, '') + '_' + input.xpath('@into').to_s
+            Print.err "module_selector.write_output_variable #{module_selector.write_output_variable} - module_selector.write_to_module_with_id #{module_selector.write_to_module_with_id}"
           end
         end
 
@@ -77,9 +79,9 @@ class SystemReader
         end
 
         # insert into module list
-        # if this module feeds another...
-        if module_selector.write_outputs_to != nil
-          Print.verbose "  -- writes to: " + module_selector.write_outputs_to
+        # if this module feeds output to another, ensure list order makes sense for processing...
+        if module_selector.write_output_variable != nil
+          Print.verbose "  -- writes to: #{module_selector.write_to_module_with_id} - #{module_selector.write_output_variable}"
           # insert into module list before the module we are writing to
           insert_pos = -1 # end of list
           for i in 0..module_selectors.size-1

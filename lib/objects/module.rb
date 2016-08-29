@@ -11,10 +11,12 @@ class Module
   # Module *selectors*, store filters in the attributes hash.
   # XML validity ensures valid and complete information.
 
-  attr_accessor :write_to_module_with_id
-  attr_accessor :write_outputs_to
-  attr_accessor :output
-  attr_accessor :unique_id
+  attr_accessor :write_to_module_with_id # the module instance that this module writes to
+  attr_accessor :write_output_variable # the variable/fact written to
+  attr_accessor :output # the result of local processing
+  attr_accessor :unique_id # the unique id for this module *instance*
+  attr_accessor :received_inputs # any locally calculated inputs fed into this module instance
+  # (if not calculated at VM run time using puppet)
 
   attr_accessor :conflicts
   attr_accessor :requires
@@ -29,6 +31,9 @@ class Module
     self.requires = []
     self.attributes = {}
     self.output = "dynamic"
+    self.write_to_module_with_id = write_output_variable = ''
+    self.received_inputs = {}
+
     # self.attributes['module_type'] = module_type # add as an attribute for filtering
   end
 
@@ -66,12 +71,14 @@ class Module
     module_path_name.gsub!('/','_')
   end
 
-  # pre-calculate any secgen_local/local.rb outputs
-  def local_processing
-    if self.local_calc_file
-      self.output = `#{self.local_calc_file}`.chomp
-    end
-  end
+  # # pre-calculate any secgen_local/local.rb outputs
+  # def local_processing
+  #   if self.local_calc_file
+  #     self.output = `#{self.local_calc_file}`.chomp
+  #   else
+  #     self.output = 'dynamic'
+  #   end
+  # end
 
   # @return [Object] a list of attributes that can be used to re-select the same modules
   def attributes_for_scenario_output
