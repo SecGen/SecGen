@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+  <name>BASE64 Encoder</name>
+  <author>Z. Cliffe Schreuders</author>
+  <module_license>MIT</module_license>
+  <description>Converts to BASE64 encoding.</description>
+
+  <type>string_encoder</type>
+  <platform>linux</platform>
+  <platform>windows</platform>
+
+  <!--optional encoder details-->
+  <!--<difficulty>low</difficulty>-->
+  
+<!--   <reference>...</reference> -->
+<!--  <software_name></software_name>
+  <software_license>GPL</software_license>-->
+
+  <!--optional hints-->
+  <!--TODO <hint>A simple transform</hint>-->
+  <!--<solution>Run rot13 on the cyphertext</solution>-->
+  
+  
+<!--  <read_fact_required>strings_to_encode</read_fact>
+  <read_fact_optional>rot13_options</read_fact>-->
+ 
+  <!--<read_fact valid_match=".*" default_value="You found a message">-->
+  <read_fact>strings_to_encode</read_fact>
+  <!--valid_match="retain_caps|lower|upper" default_value="retain_caps"-->
+  <read_fact>base64_options</read_fact>
+
+  <write_fact>encoded_strings</write_fact>
+  
+  <!-- ensure a module has prepared input -->
+<!--  <require>
+    <write_fact>strings_to_encode</write_fact>
+  </require>-->
+  
+
+  <!--Cannot co-exist with other installations-->
+<!--  <conflict>
+    <software_name>proftpd</software_name>
+  </conflict>-->
+</encoder>

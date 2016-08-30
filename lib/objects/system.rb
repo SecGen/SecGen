@@ -99,7 +99,6 @@ class System
       selected.write_output_variable = write_outputs_to
       selected.write_to_module_with_id = write_to_module_with_id
       selected.unique_id = unique_id
-Print.verbose 'TEST'
       # pre-calculate any secgen_local/local.rb outputs
       if selected.local_calc_file
         Print.verbose 'Module includes local calculation of output. Processing...'

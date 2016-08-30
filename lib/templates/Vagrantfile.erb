@@ -30,23 +30,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%   when 'vulnerability', 'service', 'utility', 'encoder', 'generator' -%>
 <%     module_name = selected_module.module_path_name -%>
     <%= system.name %>.vm.provision "puppet" do | <%=module_name%> |
+<%     # if there are facter variables to define
+       if selected_module.write_to_module_with_id != '' && selected_module.attributes['read_fact'] != nil -%>
       <%=module_name%>.facter = {
-        "write_to" => "<%=selected_module.write_outputs_to%>",
-<%     if selected_module.write_outputs_to -%>
-        "<%=selected_module.write_outputs_to%>" => "<%=selected_module.output%>",
-<%     end -%>
-<%     if selected_module.attributes['read_fact'] != nil
-         selected_module.attributes['read_fact'].each do |fact| -%>
+<%       if selected_module.write_to_module_with_id != '' -%>
+        "write_to" => "<%=selected_module.write_to_module_with_id%>_<%=selected_module.write_output_variable%>",
+        "<%=selected_module.write_to_module_with_id%>_<%=selected_module.write_output_variable%>" => "<%=selected_module.output%>",
+<%       end -%>
+<%       if selected_module.attributes['read_fact'] != nil
+           selected_module.attributes['read_fact'].each do |fact| -%>
         "<%=fact%>_location" => "<%=selected_module.unique_id + "_" + fact%>",
-<%       end
-       end -%>
+<%         end
+         end  -%>
       }
+<%     end -%>
       <%=module_name%>.module_path = "<%="puppet/#{system.name}/modules"%>"
       <%=module_name%>.environment_path = "<%="#{ENVIRONMENTS_PATH}"%>"
       <%=module_name%>.environment = "production"
       <%=module_name%>.manifests_path = "<%="#{ROOT_DIR}/#{selected_module.module_path}/"%>"
       <%=module_name%>.manifest_file = "<%="#{selected_module.module_path_end}.pp"%>"
-
     end
 <%   end -%>
 <% end -%>
