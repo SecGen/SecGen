@@ -120,23 +120,34 @@ options = {}
 # process option arguments
 opts.each do |opt, arg|
   case opt
+    # Main options
     when '--help'
       usage
     when '--scenario'
       scenario = arg;
     when '--project'
       project_dir = arg;
+
+    # Additional options
     when '--gui-output'
       Print.info "Gui output set (virtual machines will be spawned)"
+      options[:gui_output] = true
 
-      options[:gui_output] = true;
     when '--memory-per-vm'
-      Print.info "Memory per vm set to #{arg}"
-      options[:memory_per_vm] = arg
+      if options.has_key? :total_memory
+        Print.info 'Total memory option specified before memory per vm option, defaulting to total memory value'
+      else
+        Print.info "Memory per vm set to #{arg}"
+        options[:memory_per_vm] = arg
+      end
 
     when '--total-memory'
-      Print.info "Total memory to be used set to #{arg}"
-      options[:total_memory] = arg
+      if options.has_key? :memory_per_vm
+        Print.info 'Memory per vm option specified before total memory option, defaulting to memory per vm value'
+      else
+        Print.info "Total memory to be used set to #{arg}"
+        options[:total_memory] = arg
+      end
 
     when '--max-cpu-cores'
       Print.info "Number of cpus to be used set to #{arg}"
