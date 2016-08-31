@@ -14,7 +14,7 @@ Puppet::Type.newtype(:mysql_datadir) do
     newvalues(/^\//)
   end
 
-  newparam(:user) do
+  newparam(:system) do
     desc 'The user for the directory default mysql (name, not uid).'
   end
 

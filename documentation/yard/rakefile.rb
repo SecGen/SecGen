@@ -1,4 +1,4 @@
-task :default => ["yard"]
+task :puppet_library => ["yard"]
 
 desc "Generate_yard_documentation"
 task :yard do

@@ -15,7 +15,7 @@ Puppet::Type.type(:mysql_datadir).provide(:mysql, :parent => Puppet::Provider::M
     name                     = @resource[:name]
     insecure                 = @resource.value(:insecure) || true
     defaults_extra_file      = @resource.value(:defaults_extra_file)
-    user                     = @resource.value(:user) || "mysql"
+    user                     = @resource.value(:system) || "mysql"
     basedir                  = @resource.value(:basedir) || "/usr"
     datadir                  = @resource.value(:datadir) || @resource[:name]
 

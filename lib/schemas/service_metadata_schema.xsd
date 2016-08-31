@@ -9,6 +9,7 @@
       <xs:enumeration value="linux"/>
       <xs:enumeration value="unix"/>
       <xs:enumeration value="windows"/>
+      <xs:enumeration value="libraries"/>
     </xs:restriction>
   </xs:simpleType>
 
