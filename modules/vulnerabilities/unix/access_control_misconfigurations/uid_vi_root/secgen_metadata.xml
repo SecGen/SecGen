@@ -9,7 +9,7 @@
   <description>Mis-configure files to enable root privileges</description>
 
   <type>access_control_misconfigurations</type>
-  <privilege>user</privilege>
+  <privilege>root</privilege>
   <access>local</access>
   <platform>unix</platform>
 
