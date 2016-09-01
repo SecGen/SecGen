@@ -31,7 +31,7 @@ end
 
 # Builds the vagrant configuration file based on a scenario file
 # @return build_number [Integer] Current project's build number
-def build_config(scenario, out_dir, gui_output)
+def build_config(scenario, out_dir, options)
   Print.info 'Reading configuration file for virtual machines you want to create...'
   # read the scenario file describing the systems, which contain vulnerabilities, services, etc
   # this returns an array/hashes structure
@@ -69,7 +69,7 @@ def build_config(scenario, out_dir, gui_output)
 
   Print.info "Creating project: #{out_dir}..."
   # create's vagrant file / report a starts the vagrant installation'
-  creator = ProjectFilesCreator.new(systems, out_dir, scenario, gui_output)
+  creator = ProjectFilesCreator.new(systems, out_dir, scenario, options)
   creator.write_files
 
   Print.info 'Project files created.'
@@ -84,8 +84,8 @@ def build_vms(project_dir)
 end
 
 # Runs methods to run and configure a new vm from the configuration file
-def run(scenario, project_dir, gui_output)
-  build_config(scenario, project_dir, gui_output)
+def run(scenario, project_dir, options)
+  build_config(scenario, project_dir, options)
   build_vms(project_dir)
 end
 
@@ -106,25 +106,57 @@ opts = GetoptLong.new(
   [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
   [ '--project', '-p', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--scenario', '-s', GetoptLong::REQUIRED_ARGUMENT ],
-  [ '--gui-output', '-g', GetoptLong::NO_ARGUMENT]
+  [ '--gui-output', '-g', GetoptLong::NO_ARGUMENT],
+  [ '--memory-per-vm', GetoptLong::REQUIRED_ARGUMENT],
+  [ '--total-memory', GetoptLong::REQUIRED_ARGUMENT],
+  [ '--max-cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
+  [ '--max-cpu-usage', GetoptLong::REQUIRED_ARGUMENT],
 )
 
 scenario = SCENARIO_XML
 project_dir = nil
-gui_output = false
+options = {}
 
 # process option arguments
 opts.each do |opt, arg|
   case opt
+    # Main options
     when '--help'
       usage
     when '--scenario'
       scenario = arg;
     when '--project'
       project_dir = arg;
+
+    # Additional options
     when '--gui-output'
       Print.info "Gui output set (virtual machines will be spawned)"
-      gui_output = true;
+      options[:gui_output] = true
+
+    when '--memory-per-vm'
+      if options.has_key? :total_memory
+        Print.info 'Total memory option specified before memory per vm option, defaulting to total memory value'
+      else
+        Print.info "Memory per vm set to #{arg}"
+        options[:memory_per_vm] = arg
+      end
+
+    when '--total-memory'
+      if options.has_key? :memory_per_vm
+        Print.info 'Memory per vm option specified before total memory option, defaulting to memory per vm value'
+      else
+        Print.info "Total memory to be used set to #{arg}"
+        options[:total_memory] = arg
+      end
+
+    when '--max-cpu-cores'
+      Print.info "Number of cpus to be used set to #{arg}"
+      options[:max_cpu_cores] = arg
+
+    when '--max-cpu-usage'
+      Print.info "Max CPU usage set to #{arg}"
+      options[:max_cpu_usage] = arg
+
     else
       Print.err "Argument not valid: #{arg}"
       usage
@@ -143,10 +175,10 @@ end
 case ARGV[0]
   when 'run', 'r'
     project_dir = default_project_dir unless project_dir
-    run(scenario, project_dir, gui_output)
+    run(scenario, project_dir, options)
   when 'build-project', 'p'
     project_dir = default_project_dir unless project_dir
-    build_config(scenario, project_dir, gui_output)
+    build_config(scenario, project_dir, options)
   when 'build-vms', 'v'
     if project_dir
       build_vms(project_dir)
