@@ -4,7 +4,7 @@ Puppet::Type.newtype(:mysql_grant) do
   ensurable
 
   autorequire(:file) { '/root/.my.cnf' }
-  autorequire(:mysql_user) { self[:system] }
+  autorequire(:mysql_user) { self[:user] }
 
   def initialize(*args)
     super
@@ -32,8 +32,8 @@ Puppet::Type.newtype(:mysql_grant) do
   validate do
     fail('privileges parameter is required.') if self[:ensure] == :present and self[:privileges].nil?
     fail('table parameter is required.') if self[:ensure] == :present and self[:table].nil?
-    fail('user parameter is required.') if self[:ensure] == :present and self[:system].nil?
-    fail('name must match user and table parameters') if self[:name] != "#{self[:system]}/#{self[:table]}"
+    fail('user parameter is required.') if self[:ensure] == :present and self[:user].nil?
+    fail('name must match user and table parameters') if self[:name] != "#{self[:user]}/#{self[:table]}"
   end
 
   newparam(:name, :namevar => true) do
@@ -58,7 +58,7 @@ Puppet::Type.newtype(:mysql_grant) do
     newvalues(/.*\..*/,/@/)
   end
 
-  newproperty(:system) do
+  newproperty(:user) do
     desc 'User to operate on.'
     validate do |value|
       # http://dev.mysql.com/doc/refman/5.5/en/identifiers.html

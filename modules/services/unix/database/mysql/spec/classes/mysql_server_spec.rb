@@ -140,7 +140,7 @@ describe 'mysql::server' do
 
       context 'mysql::server::providers' do
         describe 'with users' do
-          let(:params) {{:system => {
+          let(:params) {{:users => {
             'foo@localhost' => {
               'max_connections_per_hour' => '1',
               'max_queries_per_hour'     => '2',
@@ -181,13 +181,13 @@ describe 'mysql::server' do
             },
           }}}
           it { is_expected.to contain_mysql_grant('foo@localhost/somedb.*').with(
-            :system       => 'foo@localhost',
+            :user       => 'foo@localhost',
             :table      => 'somedb.*',
             :privileges => ["SELECT", "UPDATE"],
             :options    => ["GRANT"]
           )}
           it { is_expected.to contain_mysql_grant('foo2@localhost/*.*').with(
-            :system       => 'foo2@localhost',
+            :user       => 'foo2@localhost',
             :table      => '*.*',
             :privileges => ["SELECT"],
             :options    => nil

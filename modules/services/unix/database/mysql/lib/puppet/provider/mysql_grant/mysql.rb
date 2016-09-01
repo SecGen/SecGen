@@ -55,7 +55,7 @@ Puppet::Type.type(:mysql_grant).provide(:mysql, :parent => Puppet::Provider::Mys
               :ensure     => :present,
               :privileges => stripped_privileges.sort,
               :table      => table,
-              :system       => "#{user}@#{host}",
+              :user       => "#{user}@#{host}",
               :options    => options
           )
         end
@@ -85,11 +85,11 @@ Puppet::Type.type(:mysql_grant).provide(:mysql, :parent => Puppet::Provider::Mys
   end
 
   def create
-    grant(@resource[:system], @resource[:table], @resource[:privileges], @resource[:options])
+    grant(@resource[:user], @resource[:table], @resource[:privileges], @resource[:options])
 
     @property_hash[:ensure]     = :present
     @property_hash[:table]      = @resource[:table]
-    @property_hash[:system]       = @resource[:system]
+    @property_hash[:user]       = @resource[:user]
     @property_hash[:options]    = @resource[:options] if @resource[:options]
     @property_hash[:privileges] = @resource[:privileges]
 
@@ -116,8 +116,8 @@ Puppet::Type.type(:mysql_grant).provide(:mysql, :parent => Puppet::Provider::Mys
   def destroy
     # if the user was dropped, it'll have been removed from the user hash
     # as the grants are alraedy removed by the DROP statement
-    if self.class.users.include? @property_hash[:system]
-      revoke(@property_hash[:system], @property_hash[:table])
+    if self.class.users.include? @property_hash[:user]
+      revoke(@property_hash[:user], @property_hash[:table])
     end
     @property_hash.clear
 
@@ -152,18 +152,18 @@ Puppet::Type.type(:mysql_grant).provide(:mysql, :parent => Puppet::Provider::Mys
   def privileges=(privileges)
     diff = diff_privileges(@property_hash[:privileges], privileges)
     if not diff[:revoke].empty?
-      revoke(@property_hash[:system], @property_hash[:table], diff[:revoke])
+      revoke(@property_hash[:user], @property_hash[:table], diff[:revoke])
     end
     if not diff[:grant].empty?
-      grant(@property_hash[:system], @property_hash[:table], diff[:grant], @property_hash[:options])
+      grant(@property_hash[:user], @property_hash[:table], diff[:grant], @property_hash[:options])
     end
     @property_hash[:privileges] = privileges
     self.privileges
   end
 
   def options=(options)
-    revoke(@property_hash[:system], @property_hash[:table])
-    grant(@property_hash[:system], @property_hash[:table], @property_hash[:privileges], options)
+    revoke(@property_hash[:user], @property_hash[:table])
+    grant(@property_hash[:user], @property_hash[:table], @property_hash[:privileges], options)
     @property_hash[:options] = options
 
     self.options
