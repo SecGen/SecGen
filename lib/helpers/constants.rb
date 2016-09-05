@@ -39,6 +39,9 @@ DOCUMENTATION_PATH = "#{ROOT_DIR}/documentation/yard/doc"
 
 ## VAGRANT FILE CONSTANTS ##
 
+#
+ARRAY_STRINGIFY_SEPARATOR = '_~:~_'
+
 # Path to cleanup directory
 PATH_TO_CLEANUP = "#{ROOT_DIR}/modules/build/puppet/"
 

@@ -31,32 +31,63 @@ class XMLReportGenerator
           xml.system {
             xml.system_name system.name
             system.module_selections.each { |selected_module|
-              case selected_module.module_type
-                when 'vulnerability'
-                  xml.vulnerability(selected_module.attributes_for_scenario_output)
-                when 'base'
-                  xml.base(selected_module.attributes_for_scenario_output)
-                when 'service'
-                  xml.service(selected_module.attributes_for_scenario_output)
-                when 'utility'
-                  xml.utility(selected_module.attributes_for_scenario_output)
-                when 'encoder'
-                  xml.encoder(selected_module.attributes_for_scenario_output)
-                when 'generator'
-                  xml.generator(selected_module.attributes_for_scenario_output)
-                when 'network'
-                  xml.network(selected_module.attributes_for_scenario_output)
-                else
-                  puts "Unexpected module type: #{selected_module.attributes_for_scenario_output}"
-                  exit
-              end
+              module_element(selected_module, xml)
             }
           }
         }
-
       }
     end
     builder.to_xml
 
+  end
+
+  def module_element(selected_module, xml)
+    # don't include modules that write to others
+    # (we just output the end result in terms of literal values)
+    if selected_module.write_to_module_with_id != ''
+      xml.comment "Used to calculate values: #{selected_module.module_path}"
+      xml.comment "  (inputs: #{selected_module.received_inputs.inspect}, outputs: #{selected_module.output.inspect})"
+      return
+    end
+    case selected_module.module_type
+      # FIXME: repetition of logic :-(
+      when 'vulnerability'
+        xml.vulnerability(selected_module.attributes_for_scenario_output) {
+          selected_module.received_inputs.each do |key,value|
+            xml.input({"into" => key}) {
+              xml.value value
+            }
+          end
+        }
+      when 'base'
+        xml.base(selected_module.attributes_for_scenario_output) {
+          selected_module.received_inputs.each do |key,value|
+            xml.input({"into" => key}) {
+              xml.value value
+            }
+          end
+        }
+      when 'service'
+        xml.service(selected_module.attributes_for_scenario_output) {
+          selected_module.received_inputs.each do |key,value|
+            xml.input({"into" => key}) {
+              xml.value value
+            }
+          end
+        }
+      when 'utility'
+        xml.utility(selected_module.attributes_for_scenario_output) {
+          selected_module.received_inputs.each do |key,value|
+            xml.input({"into" => key}) {
+              xml.value value
+            }
+          end
+        }
+      when 'network'
+        xml.network(selected_module.attributes_for_scenario_output)
+      else
+        puts "Unexpected module type: #{selected_module.attributes_for_scenario_output}"
+        exit
+    end
   end
 end

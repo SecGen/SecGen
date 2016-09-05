@@ -16,7 +16,6 @@ class Module
   attr_accessor :output # the result of local processing
   attr_accessor :unique_id # the unique id for this module *instance*
   attr_accessor :received_inputs # any locally calculated inputs fed into this module instance
-  # (if not calculated at VM run time using puppet)
 
   attr_accessor :conflicts
   attr_accessor :requires
@@ -30,7 +29,7 @@ class Module
     self.conflicts = []
     self.requires = []
     self.attributes = {}
-    self.output = "dynamic"
+    self.output = []
     self.write_to_module_with_id = write_output_variable = ''
     self.received_inputs = {}
 
@@ -51,11 +50,19 @@ class Module
 
   # @return [Object] a string for Vagrant/Ruby file comments
   def to_s_comment
+    out = input = ''
+    if received_inputs != {}
+      input = "\n    #   received_inputs: #{self.received_inputs}"
+    end
+    if write_to_module_with_id != ''
+      out = "\n    #   writes out ('#{self.output}') to #{self.write_to_module_with_id} -> #{self.write_output_variable}"
+    end
+
     (<<-END)
     # #{module_type}: #{module_path}
     #   attributes: #{attributes.inspect}
     #   conflicts: #{conflicts.inspect}
-    #   requires: #{requires.inspect}
+    #   requires: #{requires.inspect}#{input}#{out}
     END
   end
 
@@ -71,15 +78,6 @@ class Module
     module_path_name.gsub!('/','_')
   end
 
-  # # pre-calculate any secgen_local/local.rb outputs
-  # def local_processing
-  #   if self.local_calc_file
-  #     self.output = `#{self.local_calc_file}`.chomp
-  #   else
-  #     self.output = 'dynamic'
-  #   end
-  # end
-
   # @return [Object] a list of attributes that can be used to re-select the same modules
   def attributes_for_scenario_output
     attr_flattened = {}
@@ -93,62 +91,6 @@ class Module
 
     attr_flattened
   end
-
-  # # resolve randomisation of inputs
-  # def select_inputs
-  #   inputs.each do |input|
-  #   #   TODO TODO
-  #     Print.verbose "Input #{input["name"][0]}"
-  #     Print.verbose "Rand type: #{input["randomisation_type"][0]}"
-  #     case input["randomisation_type"][0]
-  #       when "one_from_list"
-  #         if input["value"].size == 0
-  #           Print.err "Randomisation not possible for #{module_path} (one_from_list with no values)"
-  #           exit
-  #         end
-  #         one_value = [input["value"].shuffle![0]]
-  #         input["value"] = one_value
-  #       when "flag_value"
-  #         # if no value suppied, generate one
-  #         unless input["value"]
-  #           input["value"] = ["THE_FLAG_IS:#{SecureRandom.hex}"]
-  #         else
-  #           input["value"] = ["THE_FLAG_IS:#{input["value"][0]}"]
-  #         end
-  #       when "none"
-  #         # nothing...
-  #
-  #     end
-  #
-  #     # if an encoding is specified
-  #     if input["encoding"]
-  #       if input["encoding"].size > 1
-  #         input["encoding"] = [input["encoding"].shuffle![0]]
-  #       else
-  #         enc = input["encoding"][0]
-  #       end
-  #       #
-  #       # TODO?? case enc
-  #       #   when "base64_encode"
-  #       #     require "base64"
-  #       #     unless input["value"]
-  #       #       input["value"] = [Base64.encode64(SecureRandom.hex)]
-  #       #     else
-  #       #       input["value"] = [Base64.encode64(input["value"][0])]
-  #       #     end
-  #       #   when "MD5_calc_hash"
-  #       #     unless input["value"]
-  #       #       input["value"] = [Digest::MD5.hexdigest(SecureRandom.hex)]
-  #       #     else
-  #       #       input["value"] = [Digest::MD5.hexdigest(input["value"][0])]
-  #       #     end
-  #       # end
-  #     end
-  #
-  #   end
-  #
-  #   Print.err inputs.inspect
-  # end
 
   # A one directional test for conflicts
   # Returns whether this module specifies it conflicts with the other_module.

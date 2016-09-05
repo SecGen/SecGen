@@ -20,6 +20,7 @@
         <xs:element name='network' type='NetworkType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='generator' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='encoder' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='value' type='xs:string' minOccurs='0' maxOccurs='unbounded' />
       </xs:choice>
     </xs:sequence>
     <xs:attribute name='into' type='xs:string'/>
