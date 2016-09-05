@@ -25,6 +25,16 @@ class ModuleReader
     return read_modules('utility', UTILITIES_PATH, UTILITY_SCHEMA_FILE, true)
   end
 
+  # reads in all utilities
+  def self.read_generators
+    return read_modules('generator', GENERATORS_PATH, GENERATOR_SCHEMA_FILE, true)
+  end
+
+  # reads in all utilities
+  def self.read_encoders
+    return read_modules('encoder', ENCODERS_PATH, ENCODER_SCHEMA_FILE, true)
+  end
+
   # reads in all networks
   def self.read_networks
     return read_modules('network', NETWORKS_PATH, NETWORK_SCHEMA_FILE, false)
@@ -81,6 +91,12 @@ class ModuleReader
 
       new_module.puppet_file = "#{ROOT_DIR}/#{module_path}/#{module_filename}.pp"
       new_module.puppet_other_path = "#{ROOT_DIR}/#{module_path}/manifests"
+
+      # save executable path of any pre-calculation for outputs
+      local = "#{module_path}#{MODULE_LOCAL_CALC_PATH}"
+      if File.file?(local)
+        new_module.local_calc_file = local
+      end
 
       # check that the expected puppet files exist
       if require_puppet

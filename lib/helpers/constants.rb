@@ -1,4 +1,4 @@
-## FILE CONSTANTS ##
+## FILE / PATH CONSTANTS ##
 
 # Root directory of SecGen file structure
 ROOT_DIR = File.expand_path('../../../',__FILE__)
@@ -11,6 +11,8 @@ SCENARIO_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/scenario_schema.xsd"
 VULNERABILITY_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/vulnerability_metadata_schema.xsd"
 SERVICE_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/service_metadata_schema.xsd"
 UTILITY_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/utility_metadata_schema.xsd"
+GENERATOR_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/generator_metadata_schema.xsd"
+ENCODER_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/encoder_metadata_schema.xsd"
 NETWORK_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/network_metadata_schema.xsd"
 BASE_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/base_metadata_schema.xsd"
 
@@ -20,16 +22,16 @@ PROJECTS_DIR = "#{ROOT_DIR}/projects"
 # Path to environments directory
 ENVIRONMENTS_PATH = "#{ROOT_DIR}/modules/build/environments"
 
-
-## PATH CONSTANTS ##
-
 # Path to modules directories
 MODULES_PATH = "#{ROOT_DIR}/modules/"
 VULNERABILITIES_PATH = "#{MODULES_PATH}vulnerabilities/"
 SERVICES_PATH = "#{MODULES_PATH}services/"
 UTILITIES_PATH = "#{MODULES_PATH}utilities/"
+GENERATORS_PATH = "#{MODULES_PATH}generators/"
+ENCODERS_PATH = "#{MODULES_PATH}encoders/"
 NETWORKS_PATH = "#{MODULES_PATH}networks/"
 BASES_PATH = "#{MODULES_PATH}bases/"
+MODULE_LOCAL_CALC_PATH = '/secgen_local/local.rb'
 
 # Path to documentation (Make sure documentation directory is already deleted with rake yard_clean before changing this)
 DOCUMENTATION_PATH = "#{ROOT_DIR}/documentation/yard/doc"

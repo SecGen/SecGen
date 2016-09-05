@@ -40,6 +40,10 @@ class XMLReportGenerator
                   xml.service(selected_module.attributes_for_scenario_output)
                 when 'utility'
                   xml.utility(selected_module.attributes_for_scenario_output)
+                when 'encoder'
+                  xml.encoder(selected_module.attributes_for_scenario_output)
+                when 'generator'
+                  xml.generator(selected_module.attributes_for_scenario_output)
                 when 'network'
                   xml.network(selected_module.attributes_for_scenario_output)
                 else
