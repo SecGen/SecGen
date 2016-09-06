@@ -9,8 +9,8 @@
   <description>Installs GNU bash version 4.1 which contains the bashbug / shellshock vulnerability.</description>
 
   <type>bash</type>
-  <privilege>root</privilege>
-  <access>remote</access>
+  <privilege>none</privilege>
+  <access>local</access>
   <platform>unix</platform>
 
   <!--optional vulnerability details-->
