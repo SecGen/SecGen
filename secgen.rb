@@ -187,6 +187,12 @@ case ARGV[0]
       usage
       exit
     end
+  when 'list-scenarios'
+    Print.info "Full paths to scenario files are displayed below"
+    Dir["#{ROOT_DIR}/scenarios/**/*"].select{ |file| !File.directory? file}.each_with_index do |scenario_name, scenario_number|
+      Print.std "#{scenario_number}) #{scenario_name}"
+      end
+    exit
   else
     Print.err "Command not valid: #{ARGV[0]}"
     usage
