@@ -25,6 +25,7 @@ def usage
    build-project, p: builds project (vagrant and puppet config), but does not build VMs
    build-vms [/project/dir], v [project #]: builds VMs from a previously generated project
               (use in combination with --project [dir])
+   list-scenarios: lists all scenarios that can be used with the --scenario option
 "
   exit
 end
@@ -91,6 +92,13 @@ end
 
 def default_project_dir
   "#{PROJECTS_DIR}/SecGen#{Time.new.strftime("%Y%m%d_%H%M")}"
+end
+
+def list_scenarios
+  Print.info "Full paths to scenario files are displayed below"
+  Dir["#{ROOT_DIR}/scenarios/**/*"].select{ |file| !File.directory? file}.each_with_index do |scenario_name, scenario_number|
+    Print.std "#{scenario_number}) #{scenario_name}"
+  end
 end
 
 # end of method declarations
@@ -187,6 +195,9 @@ case ARGV[0]
       usage
       exit
     end
+  when 'list-scenarios'
+    list_scenarios
+    exit
   else
     Print.err "Command not valid: #{ARGV[0]}"
     usage
