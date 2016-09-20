@@ -5,7 +5,7 @@
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
   <system>
-    <system_name>smbclinet_utility</system_name>
+    <system_name>smbclient_utility</system_name>
     <base platform="linux"/>
 
     <utility module_path="modules/utilities/unix/smb/smbclient"></utility>
