@@ -1,3 +1,5 @@
+require 'json'
+
 class System
 
   attr_accessor :name
@@ -30,7 +32,7 @@ class System
 
       # for each module specified in the scenario
       module_selectors.each do |module_filter|
-        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_modules, selected_modules, module_filter.unique_id, module_filter.write_output_variable, module_filter.write_to_module_with_id)
+        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_modules, selected_modules, module_filter.unique_id, module_filter.write_output_variable, module_filter.write_to_module_with_id, module_filter.received_inputs)
       end
       selected_modules
 
@@ -62,7 +64,7 @@ class System
   # returns a list containing a module (plus dependencies recursively) of the module type with the required attributes
   # modules are selected from the list of available modules and will be checked against previously selected modules for conflicts
   # raises an exception when unable to resolve and the retry limit has not been reached
-  def select_modules(module_type, required_attributes, available_modules, previously_selected_modules, unique_id, write_outputs_to, write_to_module_with_id)
+  def select_modules(module_type, required_attributes, available_modules, previously_selected_modules, unique_id, write_outputs_to, write_to_module_with_id, received_inputs)
     # select based on selected type, access, cve...
 
     search_list = available_modules.clone
@@ -99,31 +101,31 @@ class System
       selected.write_output_variable = write_outputs_to
       selected.write_to_module_with_id = write_to_module_with_id
       selected.unique_id = unique_id
+      # propagate any literal values passed in via the scenario
+      selected.received_inputs = received_inputs
+
+      # feed through the input from any previous module's output
+      previously_selected_modules.each do |previous_module|
+        if previous_module.write_to_module_with_id == unique_id && previous_module.write_output_variable
+          (selected.received_inputs[previous_module.write_output_variable] ||=[]).push(*previous_module.output)
+        end
+      end
+
       # pre-calculate any secgen_local/local.rb outputs
       if selected.local_calc_file
         Print.verbose 'Module includes local calculation of output. Processing...'
-
-        # feed through the input from any previous module's output
-        # TODO TODO -- out of this if statement?
-        previously_selected_modules.each do |previous_module|
-          Print.err "#{previous_module.write_to_module_with_id} vs #{unique_id}"
-          if previous_module.write_to_module_with_id == unique_id
-            Print.err "FOUND!!!!!!!!"
-            Print.err "receiving #{previous_module.write_output_variable} - #{previous_module.output}"
-            selected.received_inputs[previous_module.write_output_variable] = previous_module.output
+        # build arguments
+        args_string = ''
+        selected.received_inputs.each do |input_key, input_values|
+          puts input_values.inspect
+          input_values.each do |input_element|
+            args_string += "'--#{input_key}=#{input_element}' "
           end
         end
 
-        # build arguments
-        args_string = ''
-        selected.received_inputs.each do |input_key, input_value|
-          args_string += "'--#{input_key}=#{input_value}'"
-        end
-
-        Print.err( "#{selected.local_calc_file} #{args_string}" )
-        selected.output = `#{selected.local_calc_file} #{args_string}`.chomp
+        Print.debug "#{selected.local_calc_file} #{args_string}"
+        selected.output = JSON.parse(`ruby #{selected.local_calc_file} #{args_string}`.chomp)
         Print.verbose "Output: #{selected.output}"
-
       end
 
       # add any modules that the selected module requires
@@ -135,7 +137,6 @@ class System
     Print.std "Module added: #{selected.printable_name}"
 
     selected_modules
-
   end
 
   def check_conflicts_with_list(module_for_possible_exclusion, selected_modules)
@@ -180,7 +181,7 @@ class System
         Print.verbose "Dependency satisfied by previously selected module: #{existing.printable_name}"
       else
         Print.verbose 'Adding required modules...'
-        modules_to_add += select_modules('any', required, available_modules, modules_to_add + selected_modules, '', '', '')
+        modules_to_add += select_modules('any', required, available_modules, modules_to_add + selected_modules, '', '', '', {})
       end
     end
     modules_to_add

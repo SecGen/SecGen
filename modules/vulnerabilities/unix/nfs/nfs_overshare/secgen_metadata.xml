@@ -33,4 +33,8 @@
   <hint>A filesharing misconfiguration</hint>
   <solution>NFS can be mounted to access files</solution>
 
+  <conflict>
+    <type>nfs</type>
+  </conflict>
+
 </vulnerability>

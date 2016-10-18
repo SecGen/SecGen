@@ -59,14 +59,21 @@ class SystemReader
         module_selector.unique_id = module_node.path.gsub(/[^a-zA-Z0-9]/, '')
         # check if we need to be sending the module output to another module
         module_node.xpath('parent::input').each do |input|
-          Print.err 'parent::input'
           # Parent is input -- track that we need to send write value somewhere
           input.xpath('..').each do |input_parent|
             module_selector.write_output_variable = input.xpath('@into').to_s
             module_selector.write_to_module_with_id = input_parent.path.gsub(/[^a-zA-Z0-9]/, '')
-            Print.err "module_selector.write_output_variable #{module_selector.write_output_variable} - module_selector.write_to_module_with_id #{module_selector.write_to_module_with_id}"
           end
         end
+
+        # check if we are being passed an input *literal value*
+        module_node.xpath('input/value').each do |input_value|
+          variable = input_value.xpath('../@into').to_s
+          value = input_value.text
+          Print.verbose "  -- literal value: #{variable} = #{value}"
+          (module_selector.received_inputs[variable] ||= []).push(value)
+        end
+
 
         module_node.xpath('@*').each do |attr|
           module_selector.attributes["#{attr.name}"] = [attr.text] unless attr.text.nil? || attr.text == ''

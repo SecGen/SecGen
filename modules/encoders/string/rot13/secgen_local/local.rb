@@ -6,8 +6,8 @@ class ROT13Encoder < StringEncoder
     self.module_name = 'ROT13 Encoder'
   end
 
-  def encode
-    self.output = strings_to_encode.tr!('A-Za-z', 'N-ZA-Mn-za-m')
+  def encode(str)
+    str.tr!('A-Za-z', 'N-ZA-Mn-za-m')
   end
 end
 

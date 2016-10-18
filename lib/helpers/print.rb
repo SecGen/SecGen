@@ -35,7 +35,7 @@ class Print
 
   # local encoders/generators write messages to stderr (stdout used to return values)
   def self.local(msg)
-    $stderr.puts blue(msg)
+    $stderr.puts cyan(msg)
   end
   def self.local_verbose(msg)
     $stderr.puts cyan(' ' + msg)
