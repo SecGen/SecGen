@@ -148,7 +148,6 @@ opts.each do |opt, arg|
     when '--gui-output'
       Print.info "Gui output set (virtual machines will be spawned)"
       options[:gui_output] = true
-
     when '--memory-per-vm'
       if options.has_key? :total_memory
         Print.info 'Total memory option specified before memory per vm option, defaulting to total memory value'
@@ -156,7 +155,6 @@ opts.each do |opt, arg|
         Print.info "Memory per vm set to #{arg}"
         options[:memory_per_vm] = arg
       end
-
     when '--total-memory'
       if options.has_key? :memory_per_vm
         Print.info 'Memory per vm option specified before total memory option, defaulting to memory per vm value'
@@ -164,11 +162,9 @@ opts.each do |opt, arg|
         Print.info "Total memory to be used set to #{arg}"
         options[:total_memory] = arg
       end
-
     when '--max-cpu-cores'
       Print.info "Number of cpus to be used set to #{arg}"
       options[:max_cpu_cores] = arg
-
     when '--max-cpu-usage'
       Print.info "Max CPU usage set to #{arg}"
       options[:max_cpu_usage] = arg
