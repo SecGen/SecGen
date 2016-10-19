@@ -23,11 +23,12 @@ class StringEncoder
     self.outputs = []
   end
 
-  # override this
+  # override this for per-item encoding
   def encode (str)
-    str.tr!('A-Za-z', 'N-ZA-Mn-za-m')
+    str
   end
 
+  # override this for array processing / aggregation
   def encode_all
     self.strings_to_encode.each do |value|
       self.outputs << encode(value)

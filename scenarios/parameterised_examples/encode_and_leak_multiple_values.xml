@@ -15,7 +15,7 @@
 			<!--direct the output from below into strings_to_leak-->
 			<input into="strings_to_leak">
 				<!--and select an encoder to encode some other strings to leak-->
-				<encoder>
+				<encoder type="string_encoder">
 					<input into="strings_to_encode">
 						<!--encode the following strings-->
 						<value>Nothing to see here move along...</value>
