@@ -1,24 +1,39 @@
 require_relative '../helpers/constants.rb'
+require 'digest/md5'
+require 'securerandom'
 
 class Module
   #Vulnerability attributes hash
   attr_accessor :module_path # vulnerabilities/unix/ftp/vsftp_234_backdoor
-  attr_accessor :module_type # vulnerability|service
+  attr_accessor :module_type # vulnerability|service|utility
   attr_accessor :attributes  # attributes are hashes that contain arrays of values
   # Each attribute is stored in a hash containing an array of values (because elements such as author can repeat).
-  # For module *selectors*, filters are stored directly in the attributes hash rather than as an array of values.
+  # Module *selectors*, store filters in the attributes hash.
   # XML validity ensures valid and complete information.
 
+  attr_accessor :write_to_module_with_id # the module instance that this module writes to
+  attr_accessor :write_output_variable # the variable/fact written to
+  attr_accessor :output # the result of local processing
+  attr_accessor :unique_id # the unique id for this module *instance*
+  attr_accessor :received_inputs # any locally calculated inputs fed into this module instance
+
   attr_accessor :conflicts
+  attr_accessor :requires
   attr_accessor :puppet_file
   attr_accessor :puppet_other_path
+  attr_accessor :local_calc_file
 
   # @param [Object] module_type: such as 'vulnerability', 'base', 'service', 'network'
   def initialize(module_type)
     self.module_type = module_type
     self.conflicts = []
+    self.requires = []
     self.attributes = {}
-    self.attributes[:module_type] = module_type # add as an attribute for filtering
+    self.output = []
+    self.write_to_module_with_id = write_output_variable = ''
+    self.received_inputs = {}
+
+    # self.attributes['module_type'] = module_type # add as an attribute for filtering
   end
 
   # @return [Object] a string for console output
@@ -27,6 +42,7 @@ class Module
     #{module_type}: #{module_path}
       attributes: #{attributes.inspect}
       conflicts: #{conflicts.inspect}
+      requires: #{requires.inspect}
       puppet file: #{puppet_file}
       puppet path: #{puppet_other_path}
     END
@@ -34,10 +50,19 @@ class Module
 
   # @return [Object] a string for Vagrant/Ruby file comments
   def to_s_comment
+    out = input = ''
+    if received_inputs != {}
+      input = "\n    #   received_inputs: #{self.received_inputs}"
+    end
+    if write_to_module_with_id != ''
+      out = "\n    #   writes out ('#{self.output}') to #{self.write_to_module_with_id} -> #{self.write_output_variable}"
+    end
+
     (<<-END)
     # #{module_type}: #{module_path}
     #   attributes: #{attributes.inspect}
     #   conflicts: #{conflicts.inspect}
+    #   requires: #{requires.inspect}#{input}#{out}
     END
   end
 
@@ -76,34 +101,39 @@ class Module
   def conflicts_with(other_module)
     # for each conflict
     self.conflicts.each do |conflict|
-      all_conflict_conditions_met = true
-      # for each conflict hash key for a single conflict
-      conflict.keys.each do |conflict_key|
-        key_matched = false
-        # all_conflict_conditions_met = true
-        # does that conflict with selected modules?
-
-        if other_module.attributes["#{conflict_key}"] != nil
-          # for each corresponding value in the previously selected module
-          other_module.attributes["#{conflict_key}"].each do |value|
-            # for each value in the conflict list
-            conflict["#{conflict_key}"].each do |conflict_value|
-              if Regexp.new(conflict_value).match(value)
-                key_matched = true
-              end
-            end
-          end
-        end
-        # any failure to match a conflict
-        unless key_matched
-          all_conflict_conditions_met = false
-        end
-      end
-      if all_conflict_conditions_met
+      if other_module.matches_attributes_requirement(conflict)
         return true
       end
     end
     false
+  end
+
+  def matches_attributes_requirement(required)
+    all_conditions_met = true
+    required.keys.each do |require_key|
+      key_matched = false
+
+      if self.attributes["#{require_key}"] != nil
+        # for each corresponding value in the previously selected module
+        self.attributes["#{require_key}"].each do |value|
+          # for each value in the required list
+          required["#{require_key}"].each do |required_value|
+            if Regexp.new(required_value).match(value)
+              key_matched = true
+            end
+          end
+        end
+      end
+      # any failure to match
+      unless key_matched
+        return false
+      end
+    end
+    all_conditions_met
+  end
+
+  def printable_name
+    "#{self.attributes['name'][0]} (#{self.module_path})"
   end
 
 end

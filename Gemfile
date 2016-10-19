@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'nokogiri'
 gem 'puppet'
 gem 'librarian-puppet'
+gem 'wordlist'
 
 #development only gems go here
 group :test, :development do

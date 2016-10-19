@@ -20,6 +20,21 @@ class ModuleReader
     return read_modules('service', SERVICES_PATH, SERVICE_SCHEMA_FILE, true)
   end
 
+  # reads in all utilities
+  def self.read_utilities
+    return read_modules('utility', UTILITIES_PATH, UTILITY_SCHEMA_FILE, true)
+  end
+
+  # reads in all utilities
+  def self.read_generators
+    return read_modules('generator', GENERATORS_PATH, GENERATOR_SCHEMA_FILE, true)
+  end
+
+  # reads in all utilities
+  def self.read_encoders
+    return read_modules('encoder', ENCODERS_PATH, ENCODER_SCHEMA_FILE, true)
+  end
+
   # reads in all networks
   def self.read_networks
     return read_modules('network', NETWORKS_PATH, NETWORK_SCHEMA_FILE, false)
@@ -77,6 +92,12 @@ class ModuleReader
       new_module.puppet_file = "#{ROOT_DIR}/#{module_path}/#{module_filename}.pp"
       new_module.puppet_other_path = "#{ROOT_DIR}/#{module_path}/manifests"
 
+      # save executable path of any pre-calculation for outputs
+      local = "#{module_path}#{MODULE_LOCAL_CALC_PATH}"
+      if File.file?(local)
+        new_module.local_calc_file = local
+      end
+
       # check that the expected puppet files exist
       if require_puppet
         unless File.file?("#{new_module.puppet_file}")
@@ -107,7 +128,15 @@ class ModuleReader
           (conflict[node.name] ||= []).push(node.content)
         }
         new_module.conflicts.push(conflict)
+      end
 
+      # for each dependency in the module
+      doc.xpath("/#{module_type}/requires").each do |requires_doc|
+        require = {}
+        requires_doc.elements.each {|node|
+          (require[node.name] ||= []).push(node.content)
+        }
+        new_module.requires.push(require)
       end
 
       modules.push(new_module)

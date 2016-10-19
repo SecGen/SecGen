@@ -6,6 +6,7 @@
   <name>VSFTPD v2.3.4 Backdoor Command Execution</name>
   <author>Lewis Ardern</author>
   <author>Z. Cliffe Schreuders</author>
+  <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
   <description>A backdoor was introduced into the vsftpd-2.3.4.tar.gz archive between
     June 30th 2011 and July 1st 2011. AKA the smiley face backdoor.</description>
@@ -37,4 +38,8 @@
   <conflict>
     <software_name>vsftpd</software_name>
   </conflict>
+
+  <requires>
+    <type>update</type>
+  </requires>
 </vulnerability>
