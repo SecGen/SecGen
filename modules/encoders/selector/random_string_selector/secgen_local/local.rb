@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 require_relative '../../../../../lib/objects/local_string_encoder.rb'
-class ROT13Encoder < StringEncoder
+class RandomSelectorEncoder < StringEncoder
 
   def initialize
     super
@@ -12,4 +12,4 @@ class ROT13Encoder < StringEncoder
   end
 end
 
-ROT13Encoder.new.run
+RandomSelectorEncoder.new.run

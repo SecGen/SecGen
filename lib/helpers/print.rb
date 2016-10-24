@@ -14,7 +14,7 @@ class Print
   def self.bold(text); colorize(text, "\e[2m"); end
 
   def self.debug(msg)
-    puts grey(' ' + msg)
+    puts purple(' ' + msg)
   end
 
   def self.verbose(msg)

@@ -2,6 +2,7 @@ require 'nokogiri'
 
 require_relative '../helpers/constants.rb'
 require_relative '../objects/module'
+require_relative 'system_reader.rb'
 
 class ModuleReader
 
@@ -139,8 +140,62 @@ class ModuleReader
         new_module.requires.push(require)
       end
 
-      modules.push(new_module)
+      # for each default input
+      doc.xpath("/#{module_type}/default_input").each do |inputs_doc|
+        inputs_doc.xpath('descendant::vulnerability | descendant::service | descendant::utility | descendant::network | descendant::base | descendant::encoder | descendant::generator').each do |module_node|
 
+          # create a selector module, which is a regular module instance used as a placeholder for matching requirements
+          module_selector = Module.new(module_node.name)
+
+          # create a unique id for tracking variables between modules
+          module_selector.unique_id = "#{module_node.path}#{module_path}".gsub(/[^a-zA-Z0-9]/, '')
+          # check if we need to be sending the module output to another module
+          module_node.xpath('parent::input').each do |input|
+            # Parent is input -- track that we need to send write value somewhere
+            input.xpath('..').each do |input_parent|
+              module_selector.write_output_variable = input.xpath('@into').to_s
+              module_selector.write_to_module_with_id = "#{input_parent.path}#{module_path}".gsub(/[^a-zA-Z0-9]/, '')
+            end
+          end
+          if module_node.xpath('parent::default_input').to_s != ''
+            # input for this module -- track that we need to send write value to the module itself
+            module_selector.write_output_variable = module_node.xpath('parent::default_input/@into').to_s
+
+            module_selector.write_to_module_with_id = 'vulnerabilitydefaultinput'
+          end
+
+          # check if we are being passed an input *literal value*
+          module_node.xpath('input/value').each do |input_value|
+            variable = input_value.xpath('../@into').to_s
+            value = input_value.text
+            (module_selector.default_inputs_literals[variable] ||= []).push(value)
+          end
+
+          into = module_node.xpath('ancestor::default_input/@into').to_s
+
+          (new_module.default_inputs_selectors["#{into}"] ||= []).unshift(module_selector)
+
+          module_node.xpath('@*').each do |attr|
+            module_selector.attributes["#{attr.name}"] = [attr.text] unless attr.text.nil? || attr.text == ''
+          end
+          Print.verbose " #{module_node.name} (#{module_selector.unique_id}), selecting based on:"
+          module_selector.attributes.each do |attr|
+            if attr[0] && attr[1] && attr[0].to_s != "module_type"
+              Print.verbose "  - #{attr[0].to_s} ~= #{attr[1].to_s}"
+            end
+          end
+        end
+
+        # check if we are being passed an input *literal value* -- to the containing module's default_value itself (as opposed to a module selector)
+        inputs_doc.xpath('value').each do |input_value|
+          variable = input_value.xpath('parent::default_input/@into').to_s
+          value = input_value.text
+
+          (new_module.default_inputs_literals[variable] ||= []).push(value)
+        end
+      end
+
+      modules.push(new_module)
     end
 
     return modules

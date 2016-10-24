@@ -32,7 +32,7 @@ class System
 
       # for each module specified in the scenario
       module_selectors.each do |module_filter|
-        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_modules, selected_modules, module_filter.unique_id, module_filter.write_output_variable, module_filter.write_to_module_with_id, module_filter.received_inputs)
+        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_modules, selected_modules, module_filter.unique_id, module_filter.write_output_variable, module_filter.write_to_module_with_id, module_filter.received_inputs, module_filter.default_inputs_literals)
       end
       selected_modules
 
@@ -61,11 +61,11 @@ class System
     end
   end
 
-  # returns a list containing a module (plus dependencies recursively) of the module type with the required attributes
+  # returns a list containing a module (plus any default input modules and dependencies recursively) of the module type with the required attributes
   # modules are selected from the list of available modules and will be checked against previously selected modules for conflicts
   # raises an exception when unable to resolve and the retry limit has not been reached
-  def select_modules(module_type, required_attributes, available_modules, previously_selected_modules, unique_id, write_outputs_to, write_to_module_with_id, received_inputs)
-    # select based on selected type, access, cve...
+  def select_modules(module_type, required_attributes, available_modules, previously_selected_modules, unique_id, write_outputs_to, write_to_module_with_id, received_inputs, default_inputs_literals)
+    default_modules_to_add = []
 
     search_list = available_modules.clone
     # shuffle order of available vulnerabilities
@@ -79,6 +79,7 @@ class System
     end
 
     # filter to those that satisfy the attribute filters
+    # select based on selected type, access, cve...
     search_list.delete_if{|module_for_possible_exclusion|
       !module_for_possible_exclusion.matches_attributes_requirement(required_attributes)
     }
@@ -101,12 +102,16 @@ class System
       selected.write_output_variable = write_outputs_to
       selected.write_to_module_with_id = write_to_module_with_id
       selected.unique_id = unique_id
-      # propagate any literal values passed in via the scenario
       selected.received_inputs = received_inputs
+      selected.default_inputs_literals = selected.default_inputs_literals.merge(default_inputs_literals)
 
-      # feed through the input from any previous module's output
-      previously_selected_modules.each do |previous_module|
-        if previous_module.write_to_module_with_id == unique_id && previous_module.write_output_variable
+      # if no input received from the scenario, apply default input values/modules
+      default_modules_to_add += select_default_modules(selected, available_modules, previously_selected_modules + [selected])
+
+      # feed in the input from any previous module's output
+      (previously_selected_modules + default_modules_to_add).each do |previous_module|
+        # if previous_module.write_to_module_with_id == unique_id && previous_module.write_output_variable && !variables_received_from_scenario.include?(previous_module.write_output_variable)
+        if previous_module.write_to_module_with_id == selected.unique_id && previous_module.write_output_variable
           (selected.received_inputs[previous_module.write_output_variable] ||=[]).push(*previous_module.output)
         end
       end
@@ -122,21 +127,58 @@ class System
             args_string += "'--#{input_key}=#{input_element}' "
           end
         end
-
-        Print.debug "#{selected.local_calc_file} #{args_string}"
+        # execute calculation script and format to JSON
         selected.output = JSON.parse(`ruby #{selected.local_calc_file} #{args_string}`.chomp)
-        Print.verbose "Output: #{selected.output}"
       end
 
       # add any modules that the selected module requires
-      dependencies = select_required_modules(selected, available_modules, previously_selected_modules + [selected])
+      dependencies = select_required_modules(selected, available_modules, previously_selected_modules + default_modules_to_add + [selected])
     end
 
-    selected_modules = dependencies + [selected]
+    selected_modules = dependencies + default_modules_to_add + [selected]
 
     Print.std "Module added: #{selected.printable_name}"
 
     selected_modules
+  end
+
+  def select_default_modules(selected, available_modules, previously_selected_modules)
+    default_modules_to_add = []
+
+    # identify which keys/variables are set via default values (to consider use of defaults)
+    default_keys = selected.default_inputs_literals.keys | selected.default_inputs_selectors.keys
+
+    # check whether each defaults should be used
+    # for each variable with a default
+    default_keys.each do |default_key|
+      # if there are no inputs generated by the scenario
+      unless selected.received_inputs.has_key? default_key
+        Print.verbose "Using defaults for #{default_key}"
+        # apply literal values
+        if selected.default_inputs_literals.has_key? default_key
+          Print.verbose "Using default literal input #{selected.default_inputs_literals[default_key]}"
+          (selected.received_inputs[default_key] ||=[]).concat selected.default_inputs_literals[default_key]
+        end
+
+        # apply modules
+        if selected.default_inputs_selectors.has_key? default_key
+          Print.verbose "Using default module input #{selected.default_inputs_selectors[default_key].inspect}"
+
+          default_module_selectors_to_add = selected.default_inputs_selectors[default_key]
+
+          default_module_selectors_to_add.each do |module_to_add|
+            if module_to_add.write_to_module_with_id == 'vulnerabilitydefaultinput'
+              module_to_add.write_to_module_with_id = selected.unique_id
+            end
+
+            default_modules_to_add.concat select_modules(module_to_add.module_type, module_to_add.attributes, available_modules, previously_selected_modules + default_modules_to_add, module_to_add.unique_id, module_to_add.write_output_variable, module_to_add.write_to_module_with_id, module_to_add.received_inputs, module_to_add.default_inputs_literals)
+          end
+        end
+      else
+        Print.verbose "Scenario includes input for #{default_key} (not using default values)"
+      end
+    end
+    default_modules_to_add
   end
 
   def check_conflicts_with_list(module_for_possible_exclusion, selected_modules)
@@ -181,7 +223,7 @@ class System
         Print.verbose "Dependency satisfied by previously selected module: #{existing.printable_name}"
       else
         Print.verbose 'Adding required modules...'
-        modules_to_add += select_modules('any', required, available_modules, modules_to_add + selected_modules, '', '', '', {})
+        modules_to_add += select_modules('any', required, available_modules, modules_to_add + selected_modules, '', '', '', {}, {})
       end
     end
     modules_to_add

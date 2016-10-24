@@ -23,6 +23,9 @@ class Module
   attr_accessor :puppet_other_path
   attr_accessor :local_calc_file
 
+  attr_accessor :default_inputs_selectors # hash of into => module_selector
+  attr_accessor :default_inputs_literals # hash of into => literal values
+
   # @param [Object] module_type: such as 'vulnerability', 'base', 'service', 'network'
   def initialize(module_type)
     self.module_type = module_type
@@ -32,8 +35,14 @@ class Module
     self.output = []
     self.write_to_module_with_id = write_output_variable = ''
     self.received_inputs = {}
+    self.default_inputs_selectors = {}
+    self.default_inputs_literals = {}
 
     # self.attributes['module_type'] = module_type # add as an attribute for filtering
+  end
+
+  def inspect
+    "SECGEN_MODULE(type:#{module_type} path:#{module_path} attr:#{attributes.inspect} to:#{write_to_module_with_id}.#{write_output_variable} id:#{unique_id} received_inputs:#{received_inputs} default_inputs_selectors: #{default_inputs_selectors} default_inputs_literals: #{default_inputs_literals})"
   end
 
   # @return [Object] a string for console output
@@ -60,6 +69,7 @@ class Module
 
     (<<-END)
     # #{module_type}: #{module_path}
+    #   id: #{unique_id}
     #   attributes: #{attributes.inspect}
     #   conflicts: #{conflicts.inspect}
     #   requires: #{requires.inspect}#{input}#{out}
