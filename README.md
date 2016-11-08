@@ -88,6 +88,9 @@ SecGen's scenario specification is a powerful interface for specifying the const
 - service: a SecGen module that adds a (relatively secure) network service
 - utility: a SecGen module that adds (relatively secure) software or configuration changes
 - network: a virtual network card
+- generator: generates output, such as random text
+- encoder: receives input, such as random text, performs operations on that to produce output (such as, encoding/encryption/selection)
+
  
 The selection logic for choosing the modules to fulfill the specified constraints can filter on any of the attributes in each module's secgen_metadata.xml file (for example, difficulty level and/or CVE), and any ambiguity results in a random selection from the remaining matching options (for example, any vulnerability matching a specified difficulty level). 
 
@@ -152,7 +155,63 @@ Here scenarios/default_scenario.xml defines a scenario with a remotely exploitab
 </scenario>
 
 ```
-Note that with the exception of \<system_name>, all of the XML elements within \<system> will resolve to the addition of a SecGen module (a single module, plus any dependencies). The attributes specified filter down the set of modules to randomly select from. For example, the network card is selected from the available SecGen network card modules that are private_networks with dhcp.
+Note that with the exception of \<system_name>, all of the XML elements within \<system> will resolve to the addition of a SecGen module (a single module, plus any dependencies and default values). The attributes specified filter down the set of modules to randomly select from. For example, the network card is selected from the available SecGen network card modules that are private_networks with dhcp.
+
+#### Advanced scenarios: parameterisation
+Some modules can be fed input. For example, a vulnerability can be fed information to leak as output. In this case, a NFS share will host a publicly exported file containing the leaked text:
+```xml
+<?xml version="1.0"?>
+
+<scenario xmlns="http://www.github/cliffe/SecGen/scenario"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+
+	<system>
+		<system_name>file_server</system_name>
+		<base platform="linux"/>
+
+		<vulnerability module_path=".*nfs_overshare">
+			<input into="strings_to_leak">
+				<value>Leak this text, and a randomly generated flag</value>
+				<generator type="flag_generator"/>
+			</input>
+		</vulnerability>
+
+		<network type="private_network" range="dhcp"/>
+	</system>
+
+</scenario>
+```
+
+Encoders, generators, and literal values can be nested. For example, as above, but the message and flag are first base64 encoded:
+```xml
+<?xml version="1.0"?>
+
+<scenario xmlns="http://www.github/cliffe/SecGen/scenario"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+
+	<system>
+		<system_name>file_server</system_name>
+		<base platform="linux"/>
+
+		<vulnerability module_path=".*nfs_overshare">
+			<input into="strings_to_leak">
+				<encoder name="BASE64 Encoder">
+					<input into="strings_to_encode">
+						<value>Leak this text, and a randomly generated flag</value>
+						<generator type="flag_generator"/>
+					</input>
+				</encoder>
+			</input>
+		</vulnerability>
+
+		<network type="private_network" range="dhcp"/>
+	</system>
+
+</scenario>
+```
+
 
 ## Modules
 SecGen is designed to be easily extendable with modules that define vulnerabilities and other kinds of software, configuration, and content changes. 
@@ -163,6 +222,8 @@ As stated above, the types of modules supported in SecGen are:
  - service: a SecGen module that adds a (relatively secure) network service
  - utility: a SecGen module that adds (relatively secure) software or configuration changes
  - network: a virtual network card
+ - generator: generates output, such as random text
+ - encoder: receives input, such as text, performs operations on that to produce output (such as, encoding/encryption/selection)
 
 Each vulnerability module is contained within the modules/vulnerabilies directory tree, which is organised to match the Metasploit Framework (MSF) modules directory structure. For example, the distcc_exec vulnerability module is contained within: modules/vulnerabilities/unix/misc/distcc_exec/. 
 
@@ -300,16 +361,16 @@ A module can have multiple \<requires>, each of which will ensure a single modul
 
 For example, for a module that needs to have a repo refresh (apt-get update) first:
 ```xml
-  <requires>
-    <type>update</type>
-  </requires>
+<requires>
+  <type>update</type>
+</requires>
 ```
 Or for a module that requires apache be installed by another module (rather than the module itself installing apache, alternatively):
 ```xml
 <requires>
-    <type>httpd</type>
-    <software_name>apache</software_name>
-  </requires>
+  <type>httpd</type>
+  <software_name>apache</software_name>
+</requires>
 ```
 
 In this (silly) example, writable_shadow requires apache which requires update:
@@ -317,6 +378,74 @@ In this (silly) example, writable_shadow requires apache which requires update:
 
 In another silly example, here apache requires ftp, but all ftp modules conflict with writable_shadow: 
 ![recursive_dependency_resolution](https://cloud.githubusercontent.com/assets/670192/17168883/b18ff362-53dc-11e6-8288-fa49a5f3459e.png)
+
+#### read_fact (optional)
+
+A module can declare that it uses input it receives. The most common input parameters are "strings_to_encode", and "strings_to_leak". read_fact can also be repeated for any other configuration parameters for the module.
+
+#### default_input (optional)
+
+A module definition can specify default inputs to be used when none is specified via the scenario. This means that if a vulnerability module is selected without input (for example, randomly selected from all vulnerabilies), input for the parameters for that module can be generated automatically.
+
+For example:
+
+secgen_metadata.xml:
+```xml
+<read_fact>strings_to_leak</read_fact>
+
+<!--if an input is not specified in the scenario-->
+<default_input into="strings_to_leak">
+  <value>Plain text from the metadata default, destined for strings_to_leak...</value>
+</default_input>
+<default_input into="some_random_setting">
+  <value>true</value>
+</default_input>
+```
+
+Note that the scenario could select on and pass through specific parameters:
+
+scenario.xml:
+```xml
+<vulnerability read_fact="strings_to_leak">
+  <input into="strings_to_leak">
+    <value>LEAK THIS!</value>
+  </input>
+</vulnerability>
+```
+In the above case the "some_random_setting" parameter would take on it's default value (["true"]), and the strings leaked would be the value coming from the scenario (["LEAK THIS!"]).
+
+Parameter values can be randomly selected between using the random selection encoder module. For example:
+
+secgen_metadata.xml:
+```xml
+<default_input into="some_random_setting">
+  <encoder name="Random String Selector">
+    <value>true</value>
+    <value>false</value>
+  </encoder>
+</default_input>
+```
+As a result, any time the module is used it would randomly be configured, unless specifically specified in the scenario. 
+
+The default inputs can also be constructed using complex nested generators and encoders:
+
+secgen_metadata.xml:
+```xml
+<read_fact>strings_to_leak</read_fact>
+
+<!--if an input is not specified in the scenario-->
+<default_input into="strings_to_leak">
+  <value>Plain text from the metadata default, destined for strings_to_leak...</value>
+  <encoder type="string_encoder">
+    <input into="strings_to_encode">
+      <!--encode the following strings-->
+      <value>Encoded text from the metadata default, destined for strings_to_leak...</value>
+      <value>More encoded text from the metadata default, destined for strings_to_leak...</value>
+      <generator module_path=".*random.*"/>
+    </input>
+  </encoder>
+</default_input>
+```
 
 ### Puppet files
 Each vulnerability, service, and utility module contains Puppet files which are used to provision the software onto the VMs.
@@ -369,7 +498,19 @@ include distcc_exec::service
 
 To learn more about Puppet and understand the how to write modules check out the SecGen Wiki and also http://puppetlabs.com/
 
-## Output
+### local/secgen_local.rb
+
+Encoders and generators have code that is evaluated at project build time, such as encoding text, and generating flags and other content. In each case, this is a ruby script located within the module directory in local/secgen_local.rb. Although normally called by SecGen, secgen_local.rb scripts can be executed directly, and accept all the parameter inputs as command line arguments, and returns the output in JSON format to stdout. Other human readable output is written to stderr.
+
+```bash
+#ruby modules/encoders/string/base64/secgen_local/local.rb --strings_to_encode "encode this" --strings_to_encode "and this" 
+BASE64 Encoder
+ Encoding '["encode this", "and this"]'
+ Encoded: ["ZW5jb2RlIHRoaXM=", "YW5kIHRoaXM="]
+["ZW5jb2RlIHRoaXM=","YW5kIHRoaXM="]
+```
+
+## SecGen project output
 By default output is to projects/SecGen_[CurrentTime]/
 
 The project output includes:
@@ -380,16 +521,28 @@ The project output includes:
 The VM building process takes the project output and builds the VMs.
 
 ## Roadmap
-### Parameterisation of vulnerabilities
-A new feature in development, is the parameterisation of vulnerabilities and services, so that each vulnerability can also be configured various (and randomisable) ways. This enables a number of important enhancements, such as: 
-- the ability to feed content into hosted websites (independant of the vulnerabilities or even CMS in use)
-- specify or randomise aspects of a challenge, such as files or users
-- feed randomly generated CTF flags into hacking challenges
+- more modules!
+- Windows basebox and vulnerabilities
+- CTF-style modules
+- automated scoring
+- Web-frontend
+- variables/datastore
+
+## Acknowledgments
+*Development team:*
+- Dr Z. Cliffe Schreuders http://z.cliffe.schreuders.org
+- Tom Shaw
+- Jason Keighley
+- Lewis Ardern -- author of the first proof-of-concept release of SecGen
+- Connor Wilson
+
+Many thanks to everyone who have contributed to the project. The above list is not complete or exhaustive, please refer to the GitHub history.
+
+This project is supported by a Higher Education Academy (HEA) learning and teaching in cyber security grant (2015-2017).
 
 ## Contributing
 We encourage contributions to the project, please see the wiki for guidance on how to contribute.
 
 Briefly, please fork from github.com/cliffe/SecGen, create a branch, make and commit your changes, then create a pull request.
 
-The SecGen team have prepared a VM located at: https://drive.google.com/open?id=0B6fyxD2qGmUIaXpDZElKczdQYW8 to make 
-contributing for SecGen easier, it includes Ruby, git and RubyMine pre-installed, however, some tweaking may be required.
+The SecGen team have prepared a VM located at: https://drive.google.com/open?id=0B6fyxD2qGmUIaXpDZElKczdQYW8 to make contributing for SecGen easier, it includes Ruby, git and RubyMine pre-installed, however, some tweaking may be required.
