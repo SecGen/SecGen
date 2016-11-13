@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+
+  <name>Gitlist 0.4.0 RCE</name>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>
+    Gitlist before 0.5.0 allows remote attackers to execute arbitrary commands via shell metacharacters in the file
+    name in the URI of a request for a (1) blame, (2) file, or (3) stats page, as demonstrated by requests to
+    blame/master/, master/, and stats/master/.
+  </description>
+
+  <type>webapp</type>
+  <privilege>user</privilege>
+  <access>remote</access>
+  <platform>linux</platform>
+
+  <!--optional vulnerability details-->
+  <difficulty>low</difficulty>
+  <cve>CVE-2014-4511</cve>
+
+  <cvss_base_score>7.5</cvss_base_score>
+  <cvss_vector>AV:N/AC:L/Au:N/C:P/I:P/A:P</cvss_vector>
+
+  <!--optional hints-->
+  <msf_module>exploit/linux/http/gitlist_exec</msf_module>
+  <hint>Visit the webapp in a browser at: ip:80/gitlist </hint>
+
+  <conflict>
+    <type>webapp</type>
+  </conflict>
+
+  <requires>
+    <module_path>modules/services/unix/http/apache</module_path>
+  </requires>
+
+</vulnerability>
