@@ -22,4 +22,8 @@
     <software_name>vsftpd</software_name>
   </conflict>
 
+  <requires>
+    <module_path>utilities/unix/system/accounts</module_path>
+  </requires>
+
 </service>
