@@ -145,8 +145,8 @@ Here scenarios/default_scenario.xml defines a scenario with a remotely exploitab
     <system_name>storage_server</system_name>
     <base platform="linux"/>
 
-    <vulnerability privilege="user" access="remote" />
-    <vulnerability privilege="root" access="local" />
+    <vulnerability privilege="user_rwx" access="remote" />
+    <vulnerability privilege="root_rwx" access="local" />
 
     <service/>
 
@@ -247,7 +247,7 @@ Example:
   <description>Distcc has a documented security weakness that enables remote code execution.</description>
 
   <type>distcc</type>
-  <privilege>user</privilege>
+  <privilege>user_rwx</privilege>
   <access>remote</access>
   <platform>unix</platform>
 
@@ -288,8 +288,15 @@ A description of the module and what it does.
 #### type
 A general category, in terms of the network protocol used (for example, ftp) if relevant.
 
-#### privilege user|root
-The level of privilege a successful attacker ends up with when exploitation is successful. User account, or root level access to the VM. As other challenges are added, the possible values will need to include database and information leaks.
+#### privilege info_leak | root_r | root_rw | root_rwx | user_r| user_rw | user_rwx
+The level of privilege a successful attacker ends up with when exploitation is successful.
+
+Information leakage: info_leak (e.g. nfs/nfs_overshare)
+Shell access: root_rwx, user_rwx (e.g. local/setuid_nmap, smb/samba_symlink_traversal)
+Read and write access: root_rw, user_rw (e.g. access_control_misconfigurations/uid_vi_root, smb/samba_public_writable_share)
+Read access: root_r (e.g. access_control_misconfigurations/uid_less_root)
+
+As other challenges are added database leaks will be added as a privilege level option.
 
 #### access remote|local
 The level of access the attacker needs to carry out the attack. Local access, such as an existing shell or user account, or remote, such as a vulnerable network service.

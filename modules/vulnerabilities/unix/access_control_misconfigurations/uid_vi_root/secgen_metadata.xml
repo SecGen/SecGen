@@ -8,8 +8,8 @@
   <module_license>Apache v2</module_license>
   <description>Mis-configure files to enable root privileges</description>
 
-  <type>access_control_misconfigurations</type>
-  <privilege>root</privilege>
+  <type>access_control_misconfiguration</type>
+  <privilege>root_rw</privilege>
   <access>local</access>
   <platform>unix</platform>
 

@@ -11,7 +11,7 @@
   </description>
 
   <type>samba</type>
-  <privilege>user</privilege>
+  <privilege>user_rw</privilege>
   <access>remote</access>
   <platform>linux</platform>
 

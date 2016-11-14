@@ -128,6 +128,7 @@ class Module
         self.attributes["#{require_key}"].each do |value|
           # for each value in the required list
           required["#{require_key}"].each do |required_value|
+            required_value = prepare_required_value(require_key, required_value)
             if Regexp.new(required_value).match(value)
               key_matched = true
             end
@@ -140,6 +141,20 @@ class Module
       end
     end
     all_conditions_met
+  end
+
+  def prepare_required_value(required_key, value)
+    if required_key == 'module_path'
+      # allow omission of 'modules/' e.g. <module_path>services/platform/module_name</module_path>
+      if value.partition('/').first != 'modules'
+        value = 'modules/' + value
+      end
+      # wrap value with ^ and $ to limit start/end of string.
+      value = "^#{value}$"
+    elsif required_key == 'privilege'
+      value = "^#{value}$"
+    end
+    value
   end
 
   def printable_name

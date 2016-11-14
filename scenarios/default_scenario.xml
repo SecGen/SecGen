@@ -9,8 +9,8 @@
 		<system_name>storage_server</system_name>
 		<base platform="linux"/>
 
-		<vulnerability privilege="user" access="remote" />
-		<vulnerability privilege="root" access="local" />
+		<vulnerability privilege="user_rwx" access="remote" />
+		<vulnerability privilege="root_rwx" access="local" />
 
 		<service/>
 

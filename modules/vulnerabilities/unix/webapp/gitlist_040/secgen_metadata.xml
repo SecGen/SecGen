@@ -13,7 +13,7 @@
   </description>
 
   <type>webapp</type>
-  <privilege>user</privilege>
+  <privilege>user_rwx</privilege>
   <access>remote</access>
   <platform>linux</platform>
 

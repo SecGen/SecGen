@@ -13,6 +13,6 @@
 
   <!--Cannot co-exist with Windows-->
   <conflict>
-    <module_path>modules/[^/]*/windows/.*</module_path>
+    <platform>windows</platform>
   </conflict>
 </utility>

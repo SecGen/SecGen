@@ -12,7 +12,7 @@
     June 30th 2011 and July 1st 2011. AKA the smiley face backdoor.</description>
 
   <type>ftp</type>
-  <privilege>user</privilege>
+  <privilege>user_rwx</privilege>
   <access>remote</access>
   <platform>linux</platform>
 
