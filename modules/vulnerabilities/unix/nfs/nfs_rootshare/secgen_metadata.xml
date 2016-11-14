@@ -9,7 +9,7 @@
   <description>NFS misconfigured to be mountable from anyone that can interact with it, with full read write access to /.</description>
 
   <type>nfs</type>
-  <privilege>root</privilege>
+  <privilege>root_rw</privilege>
   <access>remote</access>
   <platform>linux</platform>
 

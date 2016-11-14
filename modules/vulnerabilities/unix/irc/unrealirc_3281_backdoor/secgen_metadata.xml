@@ -11,7 +11,7 @@
   </description>
 
   <type>irc</type>
-  <privilege>user</privilege>
+  <privilege>user_rwx</privilege>
   <access>remote</access>
   <platform>linux</platform>
 

@@ -12,7 +12,7 @@
   </description>
 
   <type>privilege_escalation</type>
-  <privilege>root</privilege>
+  <privilege>root_rwx</privilege>
   <access>local</access>
   <platform>linux</platform>
 

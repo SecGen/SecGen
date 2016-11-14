@@ -5,12 +5,9 @@
 	   xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
 	<system>
-		<system_name>file_server</system_name>
-		<base platform="linux"/>
-
-		<vulnerability software_name="vsftpd"/>
-
-		<network type="private_network" range="dhcp"/>
+		<system_name>random_escalatable_server</system_name>
+		<base module_path="modules/bases/debian_puppet_32"/>
+		<vulnerability access="remote" privilege="user_rwx"/>
+		<vulnerability access="local" privilege="root_rwx"/>
 	</system>
-
 </scenario>
