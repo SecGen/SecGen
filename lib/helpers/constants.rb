@@ -15,6 +15,7 @@ GENERATOR_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/generator_metadata_schema.xsd"
 ENCODER_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/encoder_metadata_schema.xsd"
 NETWORK_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/network_metadata_schema.xsd"
 BASE_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/base_metadata_schema.xsd"
+BUILDS_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/build_metadata_schema.xsd"
 
 # Path to projects directory
 PROJECTS_DIR = "#{ROOT_DIR}/projects"
@@ -31,11 +32,14 @@ GENERATORS_PATH = "#{MODULES_PATH}generators/"
 ENCODERS_PATH = "#{MODULES_PATH}encoders/"
 NETWORKS_PATH = "#{MODULES_PATH}networks/"
 BASES_PATH = "#{MODULES_PATH}bases/"
+BUILDS_PATH = "#{MODULES_PATH}build/"
 MODULE_LOCAL_CALC_PATH = '/secgen_local/local.rb'
 
 # Path to documentation (Make sure documentation directory is already deleted with rake yard_clean before changing this)
 DOCUMENTATION_PATH = "#{ROOT_DIR}/documentation/yard/doc"
 
+# Path to resources
+WORDLISTS_PATH = "#{ROOT_DIR}/lib/resources/wordlists"
 
 ## VAGRANT FILE CONSTANTS ##
 

@@ -43,6 +43,10 @@ def build_config(scenario, out_dir, options)
   all_available_bases = ModuleReader.read_bases
   Print.std "#{all_available_bases.size} base modules loaded"
 
+  Print.info 'Reading available build modules...'
+  all_available_builds = ModuleReader.read_builds
+  Print.std "#{all_available_builds.size} build modules loaded"
+
   Print.info 'Reading available vulnerability modules...'
   all_available_vulnerabilties = ModuleReader.read_vulnerabilities
   Print.std "#{all_available_vulnerabilties.size} vulnerability modules loaded"
@@ -69,7 +73,8 @@ def build_config(scenario, out_dir, options)
 
   Print.info 'Resolving systems: randomising scenario...'
   # for each system, select modules
-  all_available_modules = all_available_bases + all_available_vulnerabilties + all_available_services + all_available_utilities + all_available_generators + all_available_encoders + all_available_networks
+  all_available_modules = all_available_bases + all_available_builds + all_available_vulnerabilties +
+      all_available_services + all_available_utilities + all_available_generators + all_available_encoders + all_available_networks
   # update systems with module selections
   systems.map! {|system|
     system.module_selections = system.resolve_module_selection(all_available_modules)

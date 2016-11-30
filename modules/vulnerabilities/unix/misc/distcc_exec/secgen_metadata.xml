@@ -13,6 +13,18 @@
   <access>remote</access>
   <platform>unix</platform>
 
+  <read_fact>strings_to_leak</read_fact>
+  <read_fact>leaked_filename</read_fact>
+
+  <default_input into="strings_to_leak">
+    <generator type="string_generator"/>
+    <generator type="string_generator"/>
+  </default_input>
+
+  <default_input into="leaked_filename">
+    <generator module_path="generators/filenames/leaked_filename"/>
+  </default_input>
+
   <!--optional vulnerability details-->
   <difficulty>medium</difficulty>
   <cve>CVE-2004-2687</cve>

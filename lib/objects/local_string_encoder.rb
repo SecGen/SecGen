@@ -72,10 +72,14 @@ class StringEncoder
 
     read_arguments
 
-    Print.local_verbose "Encoding '#{self.strings_to_encode.to_s}'"
+    Print.local_verbose "Encoding '#{encoding_print_string}'"
     encode_all
     Print.local_verbose "Encoded: #{self.outputs.to_s}"
     puts JSON.generate self.outputs
+  end
+
+  def encoding_print_string
+    self.strings_to_encode.to_s
   end
 end
 

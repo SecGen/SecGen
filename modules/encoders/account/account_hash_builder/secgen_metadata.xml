@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+  <name>Account Hash Builder</name>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>Account Hash builder / encoder. Wrapper individually generated facts to create accounts. Enables leaking
+    facts on a per-account basis.
+  </description>
+
+  <type>account</type>
+  <platform>linux</platform>
+
+  <read_fact>username</read_fact>
+  <read_fact>password</read_fact>
+  <read_fact>super_user</read_fact>
+  <read_fact>strings_to_leak</read_fact>
+  <read_fact>leaked_filename</read_fact>
+
+  <!-- TODO: This encoder should have default values so that we can omit a default input -->
+
+  <write_fact>account</write_fact>
+</encoder>

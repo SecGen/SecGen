@@ -1,0 +1,29 @@
+<%require 'json' -%>
+<%$parsed_inputs = JSON.parse(@json_inputs)
+  $share_name = $parsed_inputs['share_name'].first
+  $storage_directory = $parsed_inputs['storage_directory'].first
+  $raw_read_only_share = $parsed_inputs['read_only_share'].first
+  $raw_guests_allowed = $parsed_inputs['guests_allowed'].first
+  $read_only_share = $raw_read_only_share ? 'yes' : 'no' # convert boolean to 'yes' or 'no'
+  $guests_allowed = $raw_guests_allowed ? 'yes' : 'no'-%>
+#
+# Share definition
+#
+[<%=$share_name%>]
+comment = Public Share
+# Path to directory
+path = <%=$storage_directory%>
+# Allow writing to share
+read only = <%=$read_only_share%>
+# Force connections as guests
+guest ok = <%=$guests_allowed%>
+locking = no
+# Sets the umask for files/directories created on this share
+force create mode = 777
+force directory mode = 777
+<%= if @symlink_traversal
+"# wide links for symlink traversal ( enabled by default in versions <= 3.4.5 )
+wide links = yes
+follow symlinks = yes
+"   end
+%>

@@ -15,6 +15,53 @@
   <access>remote</access>
   <platform>linux</platform>
 
+  <read_fact>strings_to_leak</read_fact>
+  <read_fact>leaked_filename</read_fact>
+  <read_fact>server_name</read_fact>
+  <read_fact>server_desc</read_fact>
+  <read_fact>admin_name</read_fact>
+  <read_fact>admin_email</read_fact>
+  <read_fact>user</read_fact>
+  <read_fact>group</read_fact>
+  <read_fact>motd</read_fact>
+
+  <default_input into="strings_to_leak">
+    <generator type="string_generator"/>
+    <generator type="string_generator"/>
+  </default_input>
+
+  <default_input into="leaked_filename">
+    <generator module_path="generators/filenames/leaked_filename"/>
+  </default_input>
+
+  <default_input into="server_name">
+    <value>irc.myserver.org</value>
+  </default_input>
+
+  <default_input into="server_desc">
+    <value>A description, replace this with random input.</value>
+  </default_input>
+
+  <default_input into="admin_name">
+    <value>admin</value>
+  </default_input>
+
+  <default_input into="admin_email">
+    <value>admin@myserver.org</value>
+  </default_input>
+
+  <default_input into="user">
+    <value>irc</value>
+  </default_input>
+
+  <default_input into="group">
+    <value>irc</value>
+  </default_input>
+
+  <default_input into="motd">
+    <generator type="message_generator"/>
+  </default_input>
+
   <!--optional vulnerability details-->
   <difficulty>low</difficulty>
   <!--<cve></cve>-->

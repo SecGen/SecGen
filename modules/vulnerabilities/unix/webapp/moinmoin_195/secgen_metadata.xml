@@ -17,6 +17,23 @@
   <access>remote</access>
   <platform>linux</platform>
 
+  <read_fact>strings_to_leak</read_fact>
+  <read_fact>site_name</read_fact>
+  <read_fact>default_page</read_fact>
+
+  <default_input into="strings_to_leak">
+    <value>This is some leaked data.</value>
+    <generator type="string_generator"/>
+  </default_input>
+
+  <default_input into="site_name">
+    <value>Example site name!</value>
+  </default_input>
+
+  <default_input into="default_page">
+    <value>Default Page Test</value>
+  </default_input>
+
   <!--optional vulnerability details-->
   <difficulty>medium</difficulty>
   <cve>CVE-2012-6080</cve>

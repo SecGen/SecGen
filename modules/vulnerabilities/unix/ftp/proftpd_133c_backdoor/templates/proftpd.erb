@@ -1,3 +1,8 @@
+<%  require 'json'
+    $secgen_parameters = JSON.parse(@json_inputs)
+    $server_name = $secgen_parameters['server_name'].first
+    $welcome_msg = $secgen_parameters['welcome_msg'].first
+%>
 #
 # /etc/proftpd/proftpd.conf -- This is a basic ProFTPD configuration file.
 # To really apply changes, reload proftpd after modifications, if
@@ -12,7 +17,7 @@ UseIPv6				off
 # If set on you can experience a longer connection delay in many cases.
 IdentLookups			off
 
-ServerName			"Debian"
+ServerName			"<%=$server_name%>"
 ServerType			standalone
 DeferWelcome			off
 
@@ -29,6 +34,8 @@ DisplayChdir               	.message true
 ListOptions                	"-l"
 
 DenyFilter			\*.*/
+
+AccessGrantMsg			"<%=$welcome_msg%>
 
 # Use this to jail all users in their homes
 # DefaultRoot			~

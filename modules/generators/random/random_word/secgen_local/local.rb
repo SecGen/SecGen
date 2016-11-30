@@ -8,16 +8,7 @@ class WordGenerator < StringGenerator
   end
 
   def generate
-    # require 'wordlist'
-    #
-    # list = Wordlist::FlatFile.new("#{ROOT_DIR}/lib/resources/wordlists/wordlist")
-    # list.each_unique do |word|
-    #   outputs << word
-    #   break
-    # end
-
-    self.outputs << File.readlines("#{ROOT_DIR}/lib/resources/wordlists/wordlist").sample.chomp
-
+    self.outputs << File.readlines("#{WORDLISTS_PATH}/wordlist").sample.chomp
   end
 end
 

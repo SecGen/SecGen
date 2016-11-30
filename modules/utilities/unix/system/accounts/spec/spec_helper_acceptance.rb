@@ -4,7 +4,6 @@ require 'beaker/puppet_install_helper'
 UNSUPPORTED_PLATFORMS = ['windows', 'Darwin']
 
 run_puppet_install_helper
-install_ca_certs
 
 RSpec.configure do |c|
   proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))

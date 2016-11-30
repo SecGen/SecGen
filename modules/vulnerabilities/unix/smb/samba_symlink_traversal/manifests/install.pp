@@ -1,23 +1,46 @@
 class samba_symlink_traversal::install {
+  include samba
 
-  # Insert the 'allow insecure wide links = yes' line into the [global] section
-  exec { 'sed-insert-global-allow-insecure-wide-links':
-    command => "/bin/sed -i \'/\\[global\\]/a allow insecure wide links = yes\' /etc/samba/smb.conf"
+  $secgen_parameters = parsejson($::json_inputs)
+  $storage_directory = $secgen_parameters['storage_directory'][0]
+  $leaked_filename = $secgen_parameters['leaked_filename'][0]
+  $symlink_traversal = true
+
+  # Ensure the storage directory exists
+  file { $storage_directory:
+    ensure => directory,
   }
 
+  # Add store to .conf
+  file { '/etc/samba/smb_symlink.conf':
+    ensure => file,
+    content => template ('samba/smb_share.conf.erb')
+  }
   concat { '/etc/samba/smb.conf':
     ensure => present,
   }
-
   concat::fragment { 'smb-conf-base':
     source => '/etc/samba/smb.conf',
     target => '/etc/samba/smb.conf',
     order => '01',
   }
-
-  concat::fragment { 'smb-conf-wide-links':
-    source => 'puppet:///modules/samba_symlink_traversal/smb_conf_wide_links',
+  concat::fragment { 'smb-conf-public-share-definition':
+    source => '/etc/samba/smb_symlink.conf',
     target => '/etc/samba/smb.conf',
-    order => '03',
+    order => '02',
+  }
+
+  # Insert the 'allow insecure wide links = yes' line into the [global] section of smb.conf
+  exec { 'sed-insert-global-allow-insecure-wide-links':
+    command => "/bin/sed -i \'/\\[global\\]/a allow insecure wide links = yes\' /etc/samba/smb.conf"
+  }
+
+  # Leak file and share extras
+  file { "$storage_directory/$leaked_filename":
+    ensure  => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0777',
+    content  => template('samba/overshare.erb')
   }
 }

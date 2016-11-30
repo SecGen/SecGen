@@ -16,6 +16,17 @@
   <access>remote</access>
   <platform>linux</platform>
 
+  <read_fact>anonymous_ftp</read_fact>
+  <read_fact>ftpd_banner</read_fact>
+
+  <default_input into="anonymous_ftp">
+    <value>false</value>
+  </default_input>
+
+  <default_input into="ftpd_banner">
+    <generator type="message_generator"/>
+  </default_input>
+
   <!--optional vulnerability details-->
   <difficulty>low</difficulty>
   <!--<cve></cve>-->
