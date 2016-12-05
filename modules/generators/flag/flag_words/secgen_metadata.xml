@@ -16,6 +16,6 @@
   <reference>https://github.com/sophsec/wordlist</reference>
   <reference>http://wordlist.sourceforge.net/</reference>
 
-  <write_fact>generated_strings</write_fact>
+  <output_type>generated_strings</output_type>
   
 </generator>

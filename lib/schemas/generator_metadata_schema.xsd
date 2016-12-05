@@ -37,7 +37,7 @@
         <xs:element name="software_license" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
 
         <!--I/O: a generator writes it's output to one fact-->
-        <xs:element name="write_fact" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="output_type" type="xs:string" minOccurs="1" maxOccurs="1"/>
 
         <!-- cannot co-exist with a system matching ALL of the optionally specified values (can be repeated for OR)-->
         <xs:element name="conflict" minOccurs="0" maxOccurs="unbounded">

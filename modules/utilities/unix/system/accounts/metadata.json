@@ -1,6 +1,6 @@
 {
   "name": "puppetlabs-accounts",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "puppetlabs",
   "summary": "Account management module.",
   "license": "Apache-2.0",
@@ -43,7 +43,8 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "7"
+        "7",
+        "8"
       ]
     },
     {
@@ -56,7 +57,8 @@
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "12.04",
-        "14.04"
+        "14.04",
+        "16.04"
       ]
     },
     {
@@ -67,10 +69,6 @@
     }
   ],
   "requirements": [
-    {
-      "name": "pe",
-      "version_requirement": ">= 2015.3.0 < 2015.4.0"
-    },
     {
       "name": "puppet",
       "version_requirement": ">= 4.0.0 < 5.0.0"

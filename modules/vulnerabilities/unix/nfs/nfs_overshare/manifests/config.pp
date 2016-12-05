@@ -1,5 +1,10 @@
 class nfs_overshare::config {
 
+  # Setup SecGen Parameters
+  $secgen_parameters=parsejson($::json_inputs)
+  $leaked_filename=$secgen_parameters['leaked_filename'][0]
+  $storage_directory=$secgen_parameters['storage_directory'][0]
+
   package { ['nfs-kernel-server', 'nfs-common', 'portmap']:
     ensure => installed
   }
@@ -14,7 +19,7 @@ class nfs_overshare::config {
     content  => template('nfs_overshare/exports.erb')
   }
 
-  file { '/exports':
+  file { $storage_directory:
     require => Package['nfs-common'],
     ensure => 'directory',
     owner   => 'root',
@@ -28,7 +33,7 @@ class nfs_overshare::config {
     # path    => [ "/usr/local/bin/", "/bin/" ],  # alternative syntax
   }
 
-  file { '/exports/something':
+  file { "$storage_directory/$leaked_filename":
     require => Package['nfs-common'],
     ensure  => present,
     owner   => 'root',

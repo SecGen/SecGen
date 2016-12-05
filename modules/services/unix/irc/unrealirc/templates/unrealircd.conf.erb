@@ -40,6 +40,13 @@ class servers
     connfreq 100;
 };
 
+allow {
+   ip             *@*;
+   hostname       *@*;
+   class           clients;
+   maxperip 5;
+};
+
 alias NickServ { type services; };
 alias ChanServ { type services; };
 alias OperServ { type services; };

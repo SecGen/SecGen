@@ -16,6 +16,13 @@
   <access>local</access>
   <platform>linux</platform>
 
+  <read_fact>cron_frequency</read_fact>
+
+  <!-- Run cron every: 1_minute, 5_minutes, 15_minutes or 30_minutes -->
+  <default_input into="cron_frequency">
+    <value>1_minute</value>
+  </default_input>
+
   <!--optional vulnerability details-->
   <difficulty>high</difficulty>
   <cve>CVE-2014-0476</cve>

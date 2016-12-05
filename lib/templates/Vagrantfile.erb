@@ -57,7 +57,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       }
 <%    end -%>
       <%=module_name%>.module_path = "<%="puppet/#{system.name}/modules"%>"
-      <%=module_name%>.environment_path = "<%="#{ENVIRONMENTS_PATH}"%>"
+      <%=module_name%>.environment_path = "<%="#{ENVIRONMENTS_DIR}"%>"
       <%=module_name%>.environment = "production"
       <%=module_name%>.manifests_path = "<%="#{ROOT_DIR}/#{selected_module.module_path}/"%>"
       <%=module_name%>.manifest_file = "<%="#{selected_module.module_path_end}.pp"%>"
@@ -69,7 +69,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #    # clean up script which clears history from the VMs and clobs files together
 #    <%= system.name %>.vm.provision "puppet" do |cleanup|
 #      cleanup.module_path = "<%="#{ROOT_DIR}/mount/puppet/module"%>"
-#      cleanup.environment_path = "<%="#{ENVIRONMENTS_PATH}"%>"
+#      cleanup.environment_path = "<%="#{ENVIRONMENTS_DIR}"%>"
 #      cleanup.environment = "production"
 #      cleanup.manifests_path = "<%="#{ROOT_DIR}/mount/puppet/manifest"%>"
 #      cleanup.manifest_file = "cleanup.pp"

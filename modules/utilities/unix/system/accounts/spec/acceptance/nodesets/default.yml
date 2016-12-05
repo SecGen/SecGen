@@ -1,15 +1,10 @@
 HOSTS:
-  'centos-6-vcloud':
+  ubuntu-1404-x64:
     roles:
-      - master
-    platform: el-6-x86_64
-    hypervisor: vcloud
-    template: centos-6-x86_64
+      - agent
+      - default
+    platform: ubuntu-14.04-amd64
+    hypervisor: vagrant
+    box: puppetlabs/ubuntu-14.04-64-nocm
 CONFIG:
   type: foss
-  ssh:
-    keys: "~/.ssh/id_rsa-acceptance"
-  datastore: instance0
-  folder: Delivery/Quality Assurance/Enterprise/Dynamic
-  resourcepool: delivery/Quality Assurance/Enterprise/Dynamic
-  pooling_api: http://vcloud.delivery.puppetlabs.net/

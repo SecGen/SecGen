@@ -8,37 +8,42 @@ class ModuleReader
 
   # reads in all bases
   def self.read_bases
-    return read_modules('base', BASES_PATH, BASE_SCHEMA_FILE, false)
+    return read_modules('base', BASES_DIR, BASE_SCHEMA_FILE, false)
+  end
+
+  # reads in all build modules
+  def self.read_builds
+    return read_modules('build', BUILDS_DIR, BUILDS_SCHEMA_FILE, false) #Continue this tomorrow
   end
 
   # reads in all vulnerability modules
   def self.read_vulnerabilities
-    return read_modules('vulnerability', VULNERABILITIES_PATH, VULNERABILITY_SCHEMA_FILE, true)
+    return read_modules('vulnerability', VULNERABILITIES_DIR, VULNERABILITY_SCHEMA_FILE, true)
   end
 
   # reads in all services
   def self.read_services
-    return read_modules('service', SERVICES_PATH, SERVICE_SCHEMA_FILE, true)
+    return read_modules('service', SERVICES_DIR, SERVICE_SCHEMA_FILE, true)
   end
 
   # reads in all utilities
   def self.read_utilities
-    return read_modules('utility', UTILITIES_PATH, UTILITY_SCHEMA_FILE, true)
+    return read_modules('utility', UTILITIES_DIR, UTILITY_SCHEMA_FILE, true)
   end
 
   # reads in all utilities
   def self.read_generators
-    return read_modules('generator', GENERATORS_PATH, GENERATOR_SCHEMA_FILE, true)
+    return read_modules('generator', GENERATORS_DIR, GENERATOR_SCHEMA_FILE, true)
   end
 
   # reads in all utilities
   def self.read_encoders
-    return read_modules('encoder', ENCODERS_PATH, ENCODER_SCHEMA_FILE, true)
+    return read_modules('encoder', ENCODERS_DIR, ENCODER_SCHEMA_FILE, true)
   end
 
   # reads in all networks
   def self.read_networks
-    return read_modules('network', NETWORKS_PATH, NETWORK_SCHEMA_FILE, false)
+    return read_modules('network', NETWORKS_DIR, NETWORK_SCHEMA_FILE, false)
   end
 
   # reads in xml files to create modules
@@ -94,7 +99,7 @@ class ModuleReader
       new_module.puppet_other_path = "#{ROOT_DIR}/#{module_path}/manifests"
 
       # save executable path of any pre-calculation for outputs
-      local = "#{module_path}#{MODULE_LOCAL_CALC_PATH}"
+      local = "#{module_path}#{MODULE_LOCAL_CALC_DIR}"
       if File.file?(local)
         new_module.local_calc_file = local
       end

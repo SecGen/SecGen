@@ -104,12 +104,11 @@ define unrealirc::config::set (
   $watch_away_notification = undef,
 )
 {
-  file { "${unrealirc::install_path}/config/set_${name}.conf":
+  file { "${::unrealirc::install_path}/config/set_${name}.conf":
     ensure   => file,
     mode     => '0600',
     owner    => $unrealirc::user,
     group    => $unrealirc::group,
     content  => template('unrealirc/config/set.conf.erb'),
-    require  => File['unrealirc_config_directory'],
   }
 }
