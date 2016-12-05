@@ -23,7 +23,7 @@
 
   <default_input into="strings_to_leak">
     <value>This is some leaked data.</value>
-    <generator type="string_generator"/>
+    <generator type="message_generator"/>
   </default_input>
 
   <default_input into="site_name">

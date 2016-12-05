@@ -23,4 +23,8 @@
   <hint>An access control misconfiguration</hint>
   <solution>Edit the shadow file to set a password for root</solution>
 
+  <conflict>
+    <name>Writeable Shadow File</name>
+    <author>Lewis Ardern</author>
+  </conflict>
 </vulnerability>

@@ -8,9 +8,9 @@ class WeakPasswordGenerator < StringGenerator
   end
 
   def generate
-    nouns = File.readlines("#{WORDLISTS_PATH}/nouns")
-    male_names = File.readlines("#{WORDLISTS_PATH}/top_usa_male_names")
-    female_names = File.readlines("#{WORDLISTS_PATH}/top_usa_female_names")
+    nouns = File.readlines("#{WORDLISTS_DIR}/nouns")
+    male_names = File.readlines("#{WORDLISTS_DIR}/top_usa_male_names")
+    female_names = File.readlines("#{WORDLISTS_DIR}/top_usa_female_names")
 
     all_words = nouns + male_names + female_names
 

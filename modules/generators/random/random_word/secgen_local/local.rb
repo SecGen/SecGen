@@ -8,7 +8,7 @@ class WordGenerator < StringGenerator
   end
 
   def generate
-    self.outputs << File.readlines("#{WORDLISTS_PATH}/wordlist").sample.chomp
+    self.outputs << File.readlines("#{WORDLISTS_DIR}/wordlist").sample.chomp
   end
 end
 

@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-require_relative '../../../../lib/objects/local_string_generator.rb'
+require_relative '../../../../../lib/objects/local_string_generator.rb'
 class HelloWorldGenerator < StringGenerator
   def initialize
     super

@@ -14,6 +14,6 @@
 
   <read_fact>strings_to_encode</read_fact>
 
-  <write_fact>encoded_strings</write_fact>
+  <output_type>encoded_strings</output_type>
   
 </encoder>

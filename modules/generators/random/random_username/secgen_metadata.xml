@@ -16,6 +16,6 @@
   <reference>https://github.com/aaronbassett/Pass-phrase/adjectives.txt</reference>
   <reference>https://github.com/aaronbassett/Pass-phrase/nouns.txt</reference>
 
-  <write_fact>generated_username</write_fact>
+  <output_type>generated_username</output_type>
 
 </generator>

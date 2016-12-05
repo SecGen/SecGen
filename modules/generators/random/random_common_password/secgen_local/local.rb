@@ -8,7 +8,7 @@ class CommonPasswordGenerator < StringGenerator
   end
 
   def generate
-    self.outputs << File.readlines("#{WORDLISTS_PATH}/10_million_password_list_top_100").sample.chomp
+    self.outputs << File.readlines("#{WORDLISTS_DIR}/10_million_password_list_top_100").sample.chomp
   end
 end
 

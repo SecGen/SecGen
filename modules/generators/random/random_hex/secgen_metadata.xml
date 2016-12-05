@@ -15,6 +15,6 @@
 
   <reference>http://ruby-doc.org/stdlib-2.2.2/libdoc/securerandom/rdoc/SecureRandom.html#method-c-hex</reference>
 
-  <write_fact>generated_strings</write_fact>
+  <output_type>generated_strings</output_type>
   
 </generator>

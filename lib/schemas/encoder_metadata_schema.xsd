@@ -38,7 +38,7 @@
 
         <!--I/O: an encoder writes it's output to one fact, and reads from one or more-->
         <xs:element name="read_fact" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
-        <xs:element name="write_fact" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="output_type" type="xs:string" minOccurs="1" maxOccurs="1"/>
 
         <!-- cannot co-exist with a system matching ALL of the optionally specified values (can be repeated for OR)-->
         <xs:element name="conflict" minOccurs="0" maxOccurs="unbounded">

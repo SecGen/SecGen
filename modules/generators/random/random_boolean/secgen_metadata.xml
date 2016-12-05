@@ -13,6 +13,6 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
-  <write_fact>generated_boolean</write_fact>
+  <output_type>generated_boolean</output_type>
   
 </generator>

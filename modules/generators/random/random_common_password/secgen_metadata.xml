@@ -17,6 +17,6 @@
 
   <reference>https://github.com/danielmiessler/SecLists</reference>
 
-  <write_fact>generated_passwords</write_fact>
+  <output_type>generated_passwords</output_type>
 
 </generator>

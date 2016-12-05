@@ -10,8 +10,8 @@ class WordGenerator < StringGenerator
   # Generate a username based on a random adjective and a random noun
   def generate
     # Load adjectives + nouns
-    adjectives = File.readlines("#{WORDLISTS_PATH}/adjectives")
-    nouns = File.readlines("#{WORDLISTS_PATH}/nouns")
+    adjectives = File.readlines("#{WORDLISTS_DIR}/adjectives")
+    nouns = File.readlines("#{WORDLISTS_DIR}/nouns")
 
     # Maximum length username: 20 characters
     max_username_length = 20

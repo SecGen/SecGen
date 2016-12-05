@@ -15,5 +15,5 @@
 
   <read_fact>strings_to_encode</read_fact>
 
-  <write_fact>selected_string</write_fact>
+  <output_type>selected_string</output_type>
 </encoder>
