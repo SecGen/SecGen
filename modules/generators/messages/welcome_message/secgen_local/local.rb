@@ -7,7 +7,8 @@ class WelcomeMessageGenerator < StringGenerator
   end
 
   def generate
-    messages = ['Welcome to the server!', 'Greetings! Welcome to the server.', "'G'day mate!'"]
+    # TODO: Fix the single quote bug in Vagrantfile provisioning from generator output
+    messages = ['Welcome to the server!', 'Greetings! Welcome to the server.', "Gday mate!"]
     self.outputs << messages.sample
   end
 end
