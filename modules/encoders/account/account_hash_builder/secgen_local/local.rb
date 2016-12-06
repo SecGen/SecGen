@@ -5,7 +5,7 @@ class AccountHashBuilder < StringEncoder
   attr_accessor :input_password
   attr_accessor :input_super_user
   attr_accessor :input_strings_to_leak
-  attr_accessor :input_leaked_filename
+  attr_accessor :input_leaked_filenames
 
   def initialize
     super
@@ -14,7 +14,7 @@ class AccountHashBuilder < StringEncoder
     self.input_password = ''
     self.input_super_user = ''
     self.input_strings_to_leak = []
-    self.input_leaked_filename = ''
+    self.input_leaked_filenames = []
   end
 
   def encode_all
@@ -23,7 +23,7 @@ class AccountHashBuilder < StringEncoder
     account_hash['password'] = self.input_password
     account_hash['super_user'] = self.input_super_user
     account_hash['strings_to_leak'] = self.input_strings_to_leak
-    account_hash['leaked_filename'] = self.input_leaked_filename
+    account_hash['leaked_filenames'] = self.input_leaked_filenames
 
     self.outputs << account_hash
   end
@@ -34,7 +34,7 @@ class AccountHashBuilder < StringEncoder
         [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
         [ '--strings_to_encode', '-s', GetoptLong::OPTIONAL_ARGUMENT ],
         [ '--strings_to_leak', GetoptLong::OPTIONAL_ARGUMENT ],
-        [ '--leaked_filename', GetoptLong::OPTIONAL_ARGUMENT ],
+        [ '--leaked_filenames', GetoptLong::OPTIONAL_ARGUMENT ],
         [ '--username', GetoptLong::REQUIRED_ARGUMENT ],
         [ '--password', GetoptLong::REQUIRED_ARGUMENT ],
         [ '--super_user', GetoptLong::REQUIRED_ARGUMENT ],
@@ -53,8 +53,8 @@ class AccountHashBuilder < StringEncoder
           self.input_super_user << arg;
         when '--strings_to_leak'
           self.input_strings_to_leak << arg;
-        when '--leaked_filename'
-          self.input_leaked_filename << arg;
+        when '--leaked_filenames'
+          self.input_leaked_filenames << arg;
         else
           Print.err "Argument not valid: #{arg}"
           usage
@@ -68,7 +68,7 @@ class AccountHashBuilder < StringEncoder
     password: ' + self.input_password.to_s  + ',
     super_user: ' + self.input_super_user.to_s + ',
     strings_to_leak: ' + self.input_strings_to_leak.to_s + ',
-    leaked_filename: ' + self.input_leaked_filename.to_s
+    leaked_filenames: ' + self.input_leaked_filenames.to_s
   end
 end
 

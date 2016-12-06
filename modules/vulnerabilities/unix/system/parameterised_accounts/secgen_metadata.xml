@@ -32,7 +32,8 @@
         <generator type="message_generator"/>
         <generator type="message_generator"/>
       </input>
-      <input into="leaked_filename">
+      <input into="leaked_filenames">
+        <generator module_path="generators/filenames/leaked_filename"/>
         <generator module_path="generators/filenames/leaked_filename"/>
       </input>
     </encoder>

@@ -15,7 +15,7 @@
   <platform>linux</platform>
 
   <read_fact>strings_to_leak</read_fact>
-  <read_fact>leaked_filename</read_fact>
+  <read_fact>leaked_filenames</read_fact>
   <read_fact>share_name</read_fact>
   <read_fact>storage_directory</read_fact>
   <read_fact>read_only_share</read_fact>
@@ -24,7 +24,7 @@
   <!--if an input is not specified in the scenario-->
   <default_input into="strings_to_leak">
     <value>Plain text from the metadata default, destined for strings_to_leak...</value>
-    <encoder>
+    <encoder type="string_encoder">
       <input into="strings_to_encode">
         <!--encode the following strings-->
         <value>Encoded text from the metadata default, destined for strings_to_leak...</value>
@@ -33,7 +33,8 @@
     </encoder>
   </default_input>
 
-  <default_input into="leaked_filename">
+  <default_input into="leaked_filenames">
+    <generator module_path="generators/filenames/leaked_filename"/>
     <generator module_path="generators/filenames/leaked_filename"/>
   </default_input>
 

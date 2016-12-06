@@ -3,7 +3,8 @@ class samba_symlink_traversal::install {
 
   $secgen_parameters = parsejson($::json_inputs)
   $storage_directory = $secgen_parameters['storage_directory'][0]
-  $leaked_filename = $secgen_parameters['leaked_filename'][0]
+  $leaked_filenames = $secgen_parameters['leaked_filenames']
+  $strings_to_leak = $secgen_parameters['strings_to_leak']
   $symlink_traversal = true
 
   # Ensure the storage directory exists
@@ -35,12 +36,10 @@ class samba_symlink_traversal::install {
     command => "/bin/sed -i \'/\\[global\\]/a allow insecure wide links = yes\' /etc/samba/smb.conf"
   }
 
-  # Leak file and share extras
-  file { "$storage_directory/$leaked_filename":
-    ensure  => present,
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0777',
-    content  => template('samba/overshare.erb')
+  ::secgen_functions::leak_files { 'samba_symlink_traversal-file-leak':
+    storage_directory => $storage_directory,
+    leaked_filenames  => $leaked_filenames,
+    strings_to_leak   => $strings_to_leak,
+    leaked_from       => 'samba_symlink_traversal',
   }
 }
