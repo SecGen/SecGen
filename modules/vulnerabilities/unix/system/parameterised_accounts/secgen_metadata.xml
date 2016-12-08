@@ -15,7 +15,6 @@
   <platform>linux</platform>
 
   <read_fact>accounts</read_fact>
-  <read_fact>strings_to_leak</read_fact>
 
   <default_input into="accounts">
     <encoder type="account">
@@ -23,10 +22,10 @@
         <generator type="username_generator"/>
       </input>
       <input into="password">
-        <generator type="password_generator"/>
+        <generator type="weak_password_generator"/>
       </input>
       <input into="super_user">
-        <generator type="boolean_generator"/>
+        <value>false</value>
       </input>
       <input into="strings_to_leak">
         <generator type="message_generator"/>

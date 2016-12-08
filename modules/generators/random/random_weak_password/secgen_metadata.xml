@@ -9,6 +9,7 @@
   <description>Selects a random dictionary word or english name between 3 and 6 characters long. </description>
 
   <type>password_generator</type>
+  <type>weak_password_generator</type>
   <type>local_calculation</type>
   <platform>linux</platform>
   <platform>windows</platform>
