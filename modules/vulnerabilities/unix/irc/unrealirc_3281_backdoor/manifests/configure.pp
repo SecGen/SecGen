@@ -1,6 +1,8 @@
 class unrealirc_3281_backdoor::configure {
 
   $secgen_parameters = parsejson($::json_inputs)
+  $strings_to_leak = $secgen_parameters['strings_to_leak']
+  $leaked_filenames = $secgen_parameters['leaked_filenames']
   $user = $secgen_parameters['user'][0]
   $group = $secgen_parameters['group'][0]
   $motd = $secgen_parameters['motd'][0]
@@ -31,12 +33,16 @@ class unrealirc_3281_backdoor::configure {
     command => 'cat ircd.motd2 > ircd.motd'
   }
 
-  # Leak file and share extras
-  file { "$user_home/$leaked_filename":
-    ensure  => present,
-    owner   => $user,
-    group   => $group,
-    mode    => '0777',
-    content  => template('unrealirc_3281_backdoor/overshare.erb')
+  # Create $user_home dir
+  file { $user_home:
+    ensure => directory,
+  }
+
+  ::secgen_functions::leak_files { 'unrealirc_3281-file-leak':
+    storage_directory => $user_home,
+    leaked_filenames  => $leaked_filenames,
+    strings_to_leak   => $strings_to_leak,
+    owner             => $user,
+    leaked_from       => "unrealirc_3281_backdoor",
   }
 }

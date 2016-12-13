@@ -1,7 +1,8 @@
 class gitlist_040::configure {
 
   $secgen_parameters = parsejson($::json_inputs)
-  $leaked_filename = $secgen_parameters['leaked_filename'][0]
+  $leaked_filenames = $secgen_parameters['leaked_filenames']
+  $strings_to_leak = $secgen_parameters['strings_to_leak']
   $github_repository = $secgen_parameters['github_repository'][0]
 
   Exec { path => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'] }
@@ -31,11 +32,12 @@ class gitlist_040::configure {
     redirect_dest   => '/gitlist/',
   }
 
-  # Overshare, file leak
-  file { "/var/www/gitlist/$leaked_filename":
-    ensure  => present,
-    owner   => 'www-data',
-    mode    => '0750',
-    content  => template('apache/overshare.erb')
+  ::secgen_functions::leak_files { 'gitlist_040-file-leak':
+    storage_directory => '/var/www/gitlist/',
+    leaked_filenames  => $leaked_filenames,
+    strings_to_leak   => $strings_to_leak,
+    owner             => 'www-data',
+    mode              => '0750',
+    leaked_from       => 'gitlist_040',
   }
 }

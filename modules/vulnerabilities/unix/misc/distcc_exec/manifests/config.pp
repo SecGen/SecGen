@@ -1,6 +1,7 @@
 class distcc_exec::config{
   $secgen_parameters = parsejson($::json_inputs)
-  $leaked_filename = $secgen_parameters['leaked_filename'][0]
+  $leaked_filenames = $secgen_parameters['leaked_filenames']
+  $strings_to_leak = $secgen_parameters['strings_to_leak']
 
   file { '/etc/default/distcc':
     require => Package['distcc'],
@@ -24,11 +25,12 @@ class distcc_exec::config{
     command => 'usermod -d /home/distccd distccd'
   }
 
-  # Overread
-    file { "/home/distccd/$leaked_filename":
-      ensure  => present,
-      owner   => 'distccd',
-      mode    => '0750',
-      content  => template('distcc_exec/overshare.erb')
-    }
+  ::secgen_functions::leak_files { 'distcc_exec-file-leak':
+    storage_directory => "/home/distccd",
+    leaked_filenames  => $leaked_filenames,
+    strings_to_leak   => $strings_to_leak,
+    owner             => 'distccd',
+    mode              => '0750',
+    leaked_from       => 'distcc_exec',
+  }
 }

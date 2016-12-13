@@ -41,6 +41,9 @@ DOCUMENTATION_DIR = "#{ROOT_DIR}/documentation/yard/doc"
 # Path to resources
 WORDLISTS_DIR = "#{ROOT_DIR}/lib/resources/wordlists"
 
+# Path to secgen_functions puppet module
+SECGEN_FUNCTIONS_PUPPET_DIR = "#{MODULES_DIR}build/puppet/secgen_functions"
+
 ## VAGRANT FILE CONSTANTS ##
 
 #

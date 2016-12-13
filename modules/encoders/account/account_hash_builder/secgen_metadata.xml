@@ -17,7 +17,7 @@
   <read_fact>password</read_fact>
   <read_fact>super_user</read_fact>
   <read_fact>strings_to_leak</read_fact>
-  <read_fact>leaked_filename</read_fact>
+  <read_fact>leaked_filenames</read_fact>
 
   <!-- TODO: This encoder should have default values so that we can omit a default input -->
 

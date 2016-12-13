@@ -11,6 +11,7 @@
   </description>
 
   <type>password_generator</type>
+  <type>weak_password_generator</type>
   <type>local_calculation</type>
   <platform>linux</platform>
   <platform>windows</platform>
