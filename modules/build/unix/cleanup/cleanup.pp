@@ -1,1 +1,1 @@
-include cleanup::config
+include cleanup::init

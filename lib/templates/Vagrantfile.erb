@@ -50,7 +50,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%     else -%>
     <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module.attributes['range'].first)%>"
 <%     end -%>
-<%   when 'vulnerability', 'service', 'utility' -%>
+<%   when 'vulnerability', 'service', 'utility', 'build' -%>
 <%     module_name = selected_module.module_path_name -%>
     <%= system.name %>.vm.provision "puppet" do | <%=module_name%> |
 <%     # if there are facter variables to define
@@ -68,17 +68,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%   end -%>
 <% end -%>
 
-    #TODO: fixme!
-#    # clean up script which clears history from the VMs and clobs files together
-#    <%= system.name %>.vm.provision "puppet" do |cleanup|
-#      cleanup.module_path = "<%="#{ROOT_DIR}/mount/puppet/module"%>"
-#      cleanup.environment_path = "<%="#{ENVIRONMENTS_DIR}"%>"
-#      cleanup.environment = "production"
-#      cleanup.manifests_path = "<%="#{ROOT_DIR}/mount/puppet/manifest"%>"
-#      cleanup.manifest_file = "cleanup.pp"
-#    end
-    <%= system.name %>.vm.provision :shell, :inline => "history -c && history -w"
-#    <%= system.name %>.vm.provision :shell, :inline => "umount /mount/"
   end
 <% end %>
 end

@@ -13,7 +13,7 @@ class ModuleReader
 
   # reads in all build modules
   def self.read_builds
-    return read_modules('build', BUILDS_DIR, BUILDS_SCHEMA_FILE, false) #Continue this tomorrow
+    return read_modules('build', BUILDS_DIR, BUILDS_SCHEMA_FILE, true)
   end
 
   # reads in all vulnerability modules

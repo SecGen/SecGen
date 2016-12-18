@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<scenario xmlns="http://www.github/cliffe/SecGen/scenario"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+  <!-- an example with a random vulnerability and the cleanup module with some inputs. -->
+  <system>
+    <system_name>storage_server</system_name>
+    <base platform="linux"/>
+
+    <vulnerability/>
+
+    <build type="cleanup">
+      <input into="remove_history">
+        <value>true</value>
+      </input>
+      <input into="root_password">
+        <value>test</value>
+        <!--<generator module_path=".*strong_password.*"/>-->
+      </input>
+      <input into="clobber_file_times">
+        <value>false</value>
+      </input>
+      <input into="disable_ssh">
+        <value>false</value>
+      </input>
+    </build>
+
+    <network type="private_network" range="dhcp"/>
+  </system>
+</scenario>
