@@ -551,5 +551,3 @@ This project is supported by a Higher Education Academy (HEA) learning and teach
 We encourage contributions to the project, please see the wiki for guidance on how to contribute.
 
 Briefly, please fork from github.com/cliffe/SecGen, create a branch, make and commit your changes, then create a pull request.
-
-The SecGen team have prepared a VM located at: https://drive.google.com/open?id=0B6fyxD2qGmUIaXpDZElKczdQYW8 to make contributing for SecGen easier, it includes Ruby, git and RubyMine pre-installed, however, some tweaking may be required.
