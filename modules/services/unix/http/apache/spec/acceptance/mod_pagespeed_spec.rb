@@ -1,6 +1,12 @@
 require 'spec_helper_acceptance'
+require_relative './version.rb'
 
-describe 'apache::mod::pagespeed class' do
+# Don't run this test on Debian < 8 or Ubuntu < 12, because Debian doesn't like
+# updating packages and Pagespeed doesn't like old packages.
+describe 'apache::mod::pagespeed class', :unless =>
+  ((fact('operatingsystem') == 'Debian' && fact('operatingsystemmajrelease') < '8') or
+   (fact('operatingsystem') == 'Ubuntu' && fact('operatingsystemmajrelease') < '12') or
+   (fact('operatingsystem') == 'SLES' )) do
   context "default pagespeed config" do
     it 'succeeds in puppeting pagespeed' do
       pp= <<-EOS
@@ -36,10 +42,10 @@ describe 'apache::mod::pagespeed class' do
         }
         apache::vhost { 'pagespeed.example.com':
           port    => '80',
-          docroot => '/var/www/pagespeed',
+          docroot => '#{$doc_root}/pagespeed',
         }
         host { 'pagespeed.example.com': ip => '127.0.0.1', }
-        file { '/var/www/pagespeed/index.html':
+        file { '#{$doc_root}/pagespeed/index.html':
           ensure  => file,
           content => "<html>\n<!-- comment -->\n<body>\n<p>Hello World!</p>\n</body>\n</html>",
         }
