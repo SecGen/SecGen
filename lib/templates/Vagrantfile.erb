@@ -40,12 +40,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%   case selected_module.module_type
      when 'base' -%>
     <%= system.name %>.vm.box = "<%= selected_module.module_path_name %>"
-    <%= system.name %>.vm.box_url = "<%= selected_module.attributes['url'][0] %>"
+    <%= system.name %>.vm.box_url = "<%= selected_module.attributes['url'].first %>"
 <%   when 'network' -%>
-<%     if selected_module.attributes['range'][0].nil? || selected_module.attributes['range'][0] == "dhcp" -%>
-    <%= system.name %>.vm.network :<%= selected_module.attributes['type'][0] %>, type: "dhcp"
+<%     if selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp" -%>
+    <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp"
 <%     else -%>
-    <%= system.name %>.vm.network :<%= selected_module.attributes['type'][0] %>, ip: "<%= selected_module.attributes['range'][0] %>"
+    <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= selected_module.attributes['range'].first %>"
 <%     end -%>
 <%   when 'vulnerability', 'service', 'utility' -%>
 <%     module_name = selected_module.module_path_name -%>

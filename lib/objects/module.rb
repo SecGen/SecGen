@@ -158,7 +158,7 @@ class Module
   end
 
   def printable_name
-    "#{self.attributes['name'][0]} (#{self.module_path})"
+    "#{self.attributes['name'].first} (#{self.module_path})"
   end
 
 end
