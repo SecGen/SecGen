@@ -5,14 +5,12 @@ class apache::mod::prefork (
   $serverlimit         = '256',
   $maxclients          = '256',
   $maxrequestsperchild = '4000',
-  $apache_version      = undef,
+  $apache_version      = $::apache::apache_version,
 ) {
-  include ::apache
-  $_apache_version = pick($apache_version, $apache::apache_version)
   if defined(Class['apache::mod::event']) {
     fail('May not include both apache::mod::prefork and apache::mod::event on the same node')
   }
-  if versioncmp($_apache_version, '2.4') < 0 {
+  if versioncmp($apache_version, '2.4') < 0 {
     if defined(Class['apache::mod::itk']) {
       fail('May not include both apache::mod::prefork and apache::mod::itk on the same node')
     }
@@ -46,9 +44,9 @@ class apache::mod::prefork (
 
   case $::osfamily {
     'redhat': {
-      if versioncmp($_apache_version, '2.4') >= 0 {
+      if versioncmp($apache_version, '2.4') >= 0 {
         ::apache::mpm{ 'prefork':
-          apache_version => $_apache_version,
+          apache_version => $apache_version,
         }
       }
       else {
@@ -62,15 +60,9 @@ class apache::mod::prefork (
         }
       }
     }
-    'debian', 'freebsd': {
-      ::apache::mpm{ 'prefork':
-        apache_version => $_apache_version,
-      }
-    }
-    'Suse': {
+    'debian', 'freebsd', 'Suse' : {
       ::apache::mpm{ 'prefork':
         apache_version => $apache_version,
-        lib_path       => '/usr/lib64/apache2-prefork',
       }
     }
     'gentoo': {

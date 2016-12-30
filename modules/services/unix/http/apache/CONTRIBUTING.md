@@ -159,7 +159,7 @@ If you already have those gems installed, make sure they are up-to-date:
 With all dependencies in place and up-to-date we can now run the tests:
 
 ```shell
-% bundle exec rake spec
+% rake spec
 ```
 
 This will execute all the [rspec tests](http://rspec-puppet.com/) tests
@@ -178,8 +178,8 @@ installed on your system.
 You can run them by issuing the following command
 
 ```shell
-% bundle exec rake spec_clean
-% bundle exec rspec spec/acceptance
+% rake spec_clean
+% rspec spec/acceptance
 ```
 
 This will now download a pre-fabricated image configured in the [default node-set](./spec/acceptance/nodesets/default.yml),
@@ -208,9 +208,11 @@ review.
 Additional Resources
 ====================
 
-* [Getting additional help](http://puppet.com/community/get-help)
+* [Getting additional help](http://puppetlabs.com/community/get-help)
 
-* [Writing tests](https://docs.puppet.com/guides/module_guides/bgtm.html#step-three-module-testing)
+* [Writing tests](http://projects.puppetlabs.com/projects/puppet/wiki/Development_Writing_Tests)
+
+* [Patchwork](https://patchwork.puppetlabs.com)
 
 * [General GitHub documentation](http://help.github.com/)
 

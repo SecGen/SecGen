@@ -1,5 +1,4 @@
 class apache::mod::fastcgi {
-  include ::apache
 
   # Debian specifies it's fastcgi lib path, but RedHat uses the default value
   # with no config file
@@ -15,7 +14,6 @@ class apache::mod::fastcgi {
     file { 'fastcgi.conf':
       ensure  => file,
       path    => "${::apache::mod_dir}/fastcgi.conf",
-      mode    => $::apache::file_mode,
       content => template('apache/mod/fastcgi.conf.erb'),
       require => Exec["mkdir ${::apache::mod_dir}"],
       before  => File[$::apache::mod_dir],

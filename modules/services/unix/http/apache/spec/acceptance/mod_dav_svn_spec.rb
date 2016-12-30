@@ -1,15 +1,17 @@
 require 'spec_helper_acceptance'
 require_relative './version.rb'
 
-describe 'apache::mod::dav_svn class', :unless => (fact('operatingsystem') == 'OracleLinux' and fact('operatingsystemmajrelease') == '7') || (fact('operatingsystem') == 'SLES' and fact('operatingsystemmajorrelease') < '11') do
+describe 'apache::mod::dav_svn class', :unless => (fact('operatingsystem') == 'OracleLinux' and fact('operatingsystemmajrelease') == '7') do
   case fact('osfamily')
   when 'Debian'
-    if fact('operatingsystemmajrelease') == '6' or fact('operatingsystemmajrelease') == '10.04' or fact('operatingsystemrelease') == '10.04' or fact('operatingsystemmajrelease') == '16.04'
+    if fact('operatingsystemmajrelease') == '6' or fact('operatingsystemmajrelease') == '10.04' or fact('operatingsystemrelease') == '10.04'
       authz_svn_load_file = 'dav_svn_authz_svn.load'
     else
       authz_svn_load_file = 'authz_svn.load'
     end
-  else
+  when 'RedHat'
+    authz_svn_load_file = 'dav_svn_authz_svn.load'
+  when 'FreeBSD'
     authz_svn_load_file = 'dav_svn_authz_svn.load'
   end
 

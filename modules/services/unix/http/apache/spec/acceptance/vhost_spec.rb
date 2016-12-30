@@ -8,13 +8,8 @@ describe 'apache::vhost define' do
         class { 'apache':
           default_vhost => false,
           default_ssl_vhost => false,
-          service_ensure => stopped,
+          service_ensure => stopped
         }
-        if ($::osfamily == 'Suse') {
-          exec { '/usr/bin/gensslcert':
-            require => Class['apache'],
-          }
-         }
       EOS
 
       apply_manifest(pp, :catch_failures => true)
@@ -77,7 +72,7 @@ describe 'apache::vhost define' do
     it 'should configure an apache vhost' do
       pp = <<-EOS
         class { 'apache': }
-        file { '/var/www':
+        file { '#{$run_dir}':
           ensure  => 'directory',
           recurse => true,
         }
@@ -85,7 +80,7 @@ describe 'apache::vhost define' do
         apache::vhost { 'first.example.com':
           port    => '80',
           docroot => '/var/www/first',
-          require => File['/var/www'],
+          require => File['#{$run_dir}'],
         }
       EOS
       apply_manifest(pp, :catch_failures => true)
@@ -120,38 +115,34 @@ describe 'apache::vhost define' do
       it { is_expected.to contain "ProxyPass" }
       it { is_expected.to contain "ProxyPreserveHost On" }
       it { is_expected.to contain "ProxyErrorOverride On" }
-      it { is_expected.not_to contain "ProxyAddHeaders" }
       it { is_expected.not_to contain "<Proxy \*>" }
     end
   end
 
-  unless (fact('operatingsystem') == 'SLES' and fact('operatingsystemmajorrelease') <= '10')
-    context 'new proxy vhost on port 80' do
-      it 'should configure an apache proxy vhost' do
-        pp = <<-EOS
-          class { 'apache': }
-          apache::vhost { 'proxy.example.com':
-            port    => '80',
-            docroot => '#{$docroot}/proxy',
-            proxy_pass_match => [
-              { 'path' => '/foo', 'url' => 'http://backend-foo/'},
-            ],
-          proxy_preserve_host   => true,
-          proxy_error_override  => true,
-          }
-        EOS
-        apply_manifest(pp, :catch_failures => true)
-      end
+  context 'new proxy vhost on port 80' do
+    it 'should configure an apache proxy vhost' do
+      pp = <<-EOS
+        class { 'apache': }
+        apache::vhost { 'proxy.example.com':
+          port    => '80',
+          docroot => '/var/www/proxy',
+          proxy_pass_match => [
+            { 'path' => '/foo', 'url' => 'http://backend-foo/'},
+          ],
+        proxy_preserve_host   => true,
+        proxy_error_override  => true,
+        }
+      EOS
+      apply_manifest(pp, :catch_failures => true)
+    end
 
-      describe file("#{$vhost_dir}/25-proxy.example.com.conf") do
-        it { is_expected.to contain '<VirtualHost \*:80>' }
-        it { is_expected.to contain "ServerName proxy.example.com" }
-        it { is_expected.to contain "ProxyPassMatch /foo http://backend-foo/" }
-        it { is_expected.to contain "ProxyPreserveHost On" }
-        it { is_expected.to contain "ProxyErrorOverride On" }
-        it { is_expected.not_to contain "ProxyAddHeaders" }
-        it { is_expected.not_to contain "<Proxy \*>" }
-      end
+    describe file("#{$vhost_dir}/25-proxy.example.com.conf") do
+      it { is_expected.to contain '<VirtualHost \*:80>' }
+      it { is_expected.to contain "ServerName proxy.example.com" }
+      it { is_expected.to contain "ProxyPassMatch /foo http://backend-foo/" }
+      it { is_expected.to contain "ProxyPreserveHost On" }
+      it { is_expected.to contain "ProxyErrorOverride On" }
+      it { is_expected.not_to contain "<Proxy \*>" }
     end
   end
 
@@ -314,7 +305,7 @@ describe 'apache::vhost define' do
         pp = <<-EOS
           class { 'apache': }
 
-          if versioncmp($apache_version, '2.4') >= 0 {
+          if versioncmp($apache::apache_version, '2.4') >= 0 {
             $_files_match_directory = { 'path' => '(\.swp|\.bak|~)$', 'provider' => 'filesmatch', 'require' => 'all denied', }
           } else {
             $_files_match_directory = { 'path' => '(\.swp|\.bak|~)$', 'provider' => 'filesmatch', 'deny' => 'from all', }
@@ -362,7 +353,7 @@ describe 'apache::vhost define' do
         pp = <<-EOS
           class { 'apache': }
 
-          if versioncmp($apache_version, '2.4') >= 0 {
+          if versioncmp($apache::apache_version, '2.4') >= 0 {
             $_files_match_directory = { 'path' => 'private.html$', 'provider' => 'filesmatch', 'require' => 'all denied' }
           } else {
             $_files_match_directory = [
@@ -671,49 +662,47 @@ describe 'apache::vhost define' do
     end
   end
 
-  unless (fact('operatingsystem') == 'SLES' and fact('operatingsystemmajorrelease') <= '10')
-    context 'proxy_pass_match for alternative vhost' do
-      it 'should configure a local vhost and a proxy vhost' do
-        apply_manifest(%{
-          class { 'apache': default_vhost => false, }
-          apache::vhost { 'localhost':
-            docroot => '/var/www/local',
-            ip      => '127.0.0.1',
-            port    => '8888',
-          }
-          apache::listen { '*:80': }
-          apache::vhost { 'proxy.example.com':
-            docroot    => '/var/www',
-            port       => '80',
-            add_listen => false,
-            proxy_pass_match => {
-              'path' => '/',
-              'url'  => 'http://localhost:8888/subdir/',
-            },
-          }
-          host { 'proxy.example.com': ip => '127.0.0.1', }
-          file { ['/var/www/local', '/var/www/local/subdir']: ensure => directory, }
-          file { '/var/www/local/subdir/index.html':
-            ensure  => file,
-            content => "Hello from localhost\\n",
-          }
-                      }, :catch_failures => true)
-      end
+  context 'proxy_pass_match for alternative vhost' do
+    it 'should configure a local vhost and a proxy vhost' do
+      apply_manifest(%{
+        class { 'apache': default_vhost => false, }
+        apache::vhost { 'localhost':
+          docroot => '/var/www/local',
+          ip      => '127.0.0.1',
+          port    => '8888',
+        }
+        apache::listen { '*:80': }
+        apache::vhost { 'proxy.example.com':
+          docroot    => '/var/www',
+          port       => '80',
+          add_listen => false,
+          proxy_pass_match => {
+            'path' => '/',
+            'url'  => 'http://localhost:8888/subdir/',
+          },
+        }
+        host { 'proxy.example.com': ip => '127.0.0.1', }
+        file { ['/var/www/local', '/var/www/local/subdir']: ensure => directory, }
+        file { '/var/www/local/subdir/index.html':
+          ensure  => file,
+          content => "Hello from localhost\\n",
+        }
+                     }, :catch_failures => true)
+    end
 
-      describe service($service_name) do
-        if (fact('operatingsystem') == 'Debian' && fact('operatingsystemmajrelease') == '8')
-          pending 'Should be enabled - Bug 760616 on Debian 8'
-        else
-          it { should be_enabled }
-        end
-        it { is_expected.to be_running }
+    describe service($service_name) do
+      if (fact('operatingsystem') == 'Debian' && fact('operatingsystemmajrelease') == '8')
+        pending 'Should be enabled - Bug 760616 on Debian 8'
+      else
+        it { should be_enabled }
       end
+      it { is_expected.to be_running }
+    end
 
-      it 'should get a response from the back end' do
-        shell("/usr/bin/curl --max-redirs 0 proxy.example.com:80") do |r|
-          expect(r.stdout).to eq("Hello from localhost\n")
-          expect(r.exit_code).to eq(0)
-        end
+    it 'should get a response from the back end' do
+      shell("/usr/bin/curl --max-redirs 0 proxy.example.com:80") do |r|
+        expect(r.stdout).to eq("Hello from localhost\n")
+        expect(r.exit_code).to eq(0)
       end
     end
   end
@@ -735,34 +724,6 @@ describe 'apache::vhost define' do
     describe file($ports_file) do
       it { is_expected.to be_file }
       it { is_expected.not_to contain 'NameVirtualHost test.server' }
-    end
-    describe file("#{$vhost_dir}/25-test.server.conf") do
-      it { is_expected.to be_file }
-      it { is_expected.to contain "ServerName test.server" }
-    end
-  end
-
-  describe 'ip_based and no servername' do
-    it 'applies cleanly' do
-      pp = <<-EOS
-        class { 'apache': }
-        host { 'test.server': ip => '127.0.0.1' }
-        apache::vhost { 'test.server':
-          docroot    => '/tmp',
-          ip_based   => true,
-          servername => '',
-        }
-      EOS
-      apply_manifest(pp, :catch_failures => true)
-    end
-
-    describe file($ports_file) do
-      it { is_expected.to be_file }
-      it { is_expected.not_to contain 'NameVirtualHost test.server' }
-    end
-    describe file("#{$vhost_dir}/25-test.server.conf") do
-      it { is_expected.to be_file }
-      it { is_expected.not_to contain "ServerName" }
     end
   end
 
@@ -831,11 +792,9 @@ describe 'apache::vhost define' do
       it { is_expected.to be_file }
       if fact('osfamily') == 'RedHat' and fact('operatingsystemmajrelease') == '7'
         it { is_expected.not_to contain 'NameVirtualHost test.server' }
-      elsif fact('operatingsystem') == 'Ubuntu' and fact('operatingsystemrelease') =~ /(14\.04|13\.10|16\.04)/
+      elsif fact('operatingsystem') == 'Ubuntu' and fact('operatingsystemrelease') =~ /(14\.04|13\.10)/
         it { is_expected.not_to contain 'NameVirtualHost test.server' }
       elsif fact('operatingsystem') == 'Debian' and fact('operatingsystemmajrelease') == '8'
-        it { is_expected.not_to contain 'NameVirtualHost test.server' }
-      elsif fact('operatingsystem') == 'SLES' and fact('operatingsystemrelease') >= '12'
         it { is_expected.not_to contain 'NameVirtualHost test.server' }
       else
         it { is_expected.to contain 'NameVirtualHost test.server' }
@@ -1114,7 +1073,7 @@ describe 'apache::vhost define' do
           action  => 'php-fastcgi',
         }
       EOS
-      pp = pp + "\nclass { 'apache::mod::actions': }" if fact('osfamily') == 'Debian' || fact('osfamily') == 'Suse'
+      pp = pp + "\nclass { 'apache::mod::actions': }" if fact('osfamily') == 'Debian'
       apply_manifest(pp, :catch_failures => true)
     end
 
@@ -1144,25 +1103,6 @@ describe 'apache::vhost define' do
       it { is_expected.to contain "suPHP_AddHandler #{$suphp_handler}" }
       it { is_expected.to contain 'suPHP_Engine on' }
       it { is_expected.to contain "suPHP_ConfigPath \"#{$suphp_configpath}\"" }
-    end
-  end
-
-  describe 'rack_base_uris' do
-    unless fact('osfamily') == 'RedHat' or fact('operatingsystem') == 'SLES'
-      it 'applies cleanly' do
-        test = lambda do
-          pp = <<-EOS
-            class { 'apache': }
-            host { 'test.server': ip => '127.0.0.1' }
-            apache::vhost { 'test.server':
-              docroot          => '/tmp',
-              rack_base_uris  => ['/test'],
-            }
-          EOS
-          apply_manifest(pp, :catch_failures => true)
-        end
-        test.call
-      end
     end
   end
 
@@ -1333,7 +1273,7 @@ describe 'apache::vhost define' do
 
     describe file("#{$vhost_dir}/25-test.server.conf") do
       it { is_expected.to be_file }
-      it { is_expected.to contain '<DirectoryMatch .*\.(svn|git|bzr|hg|ht)/.*>' }
+      it { is_expected.to contain '<DirectoryMatch .*\.(svn|git|bzr)/.*>' }
     end
   end
 
@@ -1351,7 +1291,6 @@ describe 'apache::vhost define' do
             wsgi_daemon_process_options => {processes => '2'},
             wsgi_process_group          => 'nobody',
             wsgi_script_aliases         => { '/test' => '/test1' },
-            wsgi_script_aliases_match   => { '/test/([^/*])' => '/test1' },
             wsgi_pass_authorization     => 'On',
           }
         EOS
@@ -1359,7 +1298,7 @@ describe 'apache::vhost define' do
       end
     end
 
-    context 'on everything but lucid', :unless => (fact('lsbdistcodename') == 'lucid' or fact('operatingsystem') == 'SLES') do
+    context 'on everything but lucid', :unless => fact('lsbdistcodename') == 'lucid' do
       it 'import_script applies cleanly' do
         pp = <<-EOS
           class { 'apache': }
@@ -1374,7 +1313,6 @@ describe 'apache::vhost define' do
             wsgi_import_script_options  => { application-group => '%{GLOBAL}', process-group => 'wsgi' },
             wsgi_process_group          => 'nobody',
             wsgi_script_aliases         => { '/test' => '/test1' },
-            wsgi_script_aliases_match   => { '/test/([^/*])' => '/test1' },
             wsgi_pass_authorization     => 'On',
             wsgi_chunked_request        => 'On',
           }
@@ -1439,42 +1377,44 @@ describe 'apache::vhost define' do
     describe 'fastcgi' do
       it 'applies cleanly' do
         pp = <<-EOS
-          $_os = $::operatingsystem
+          unless $::operatingsystem == 'Ubuntu' and versioncmp($::operatingsystemrelease, '12.04') >= 0 {
+            $_os = $::operatingsystem
 
-          if $_os == 'Ubuntu' {
-            $_location = "http://archive.ubuntu.com/ubuntu/"
-            $_security_location = "http://archive.ubuntu.com/ubuntu/"
-            $_release = $::lsbdistcodename
-            $_release_security = "${_release}-security"
-            $_repos = "main universe multiverse"
-          } else {
-            $_location = "http://httpredir.debian.org/debian/"
-            $_security_location = "http://security.debian.org/"
-            $_release = $::lsbdistcodename
-            $_release_security = "${_release}/updates"
-            $_repos = "main contrib non-free"
-          }
+            if $_os == 'Ubuntu' {
+              $_location = "http://archive.ubuntu.com/"
+              $_security_location = "http://archive.ubuntu.com/"
+              $_release = $::lsbdistcodename
+              $_release_security = "${_release}-security"
+              $_repos = "main universe multiverse"
+            } else {
+              $_location = "http://httpredir.debian.org/debian/"
+              $_security_location = "http://security.debian.org/"
+              $_release = $::lsbdistcodename
+              $_release_security = "${_release}/updates"
+              $_repos = "main contrib non-free"
+            }
 
-          include ::apt
-          apt::source { "${_os}_${_release}":
-            location    => $_location,
-            release     => $_release,
-            repos       => $_repos,
-            include_src => false,
-          }
+            include ::apt
+            apt::source { "${_os}_${_release}":
+              location    => $_location,
+              release     => $_release,
+              repos       => $_repos,
+              include_src => false,
+            }
 
-          apt::source { "${_os}_${_release}-updates":
-            location    => $_location,
-            release     => "${_release}-updates",
-            repos       => $_repos,
-            include_src => false,
-          }
+            apt::source { "${_os}_${_release}-updates":
+              location    => $_location,
+              release     => "${_release}-updates",
+              repos       => $_repos,
+              include_src => false,
+            }
 
-          apt::source { "${_os}_${_release}-security":
-            location    => $_security_location,
-            release     => $_release_security,
-            repos       => $_repos,
-            include_src => false,
+            apt::source { "${_os}_${_release}-security":
+              location    => $_security_location,
+              release     => $_release_security,
+              repos       => $_repos,
+              include_src => false,
+            }
           }
         EOS
 

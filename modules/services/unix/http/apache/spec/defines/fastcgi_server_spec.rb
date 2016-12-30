@@ -108,32 +108,10 @@ describe 'apache::fastcgi::server', :type => :define do
         :is_pe                  => false,
       }
     end
-    describe ".conf content using TCP communication" do
+    describe ".conf content" do
       let :params do
         {
           :host       => '127.0.0.1:9001',
-          :timeout    => 30,
-          :flush      => true,
-          :faux_path  => '/var/www/php-www.fcgi',
-          :fcgi_alias => '/php-www.fcgi',
-          :file_type  => 'application/x-httpd-php',
-          :pass_header => 'Authorization'
-        }
-      end
-      let :expected do
-'FastCGIExternalServer /var/www/php-www.fcgi -idle-timeout 30 -flush -host 127.0.0.1:9001 -pass-header Authorization
-Alias /php-www.fcgi /var/www/php-www.fcgi
-Action application/x-httpd-php /php-www.fcgi
-'
-      end
-      it do
-        should contain_file("fastcgi-pool-www.conf").with_content(expected)
-      end
-    end
-    describe ".conf content using socket communication" do
-      let :params do
-        {
-          :host       => '/var/run/fcgi.sock',
           :timeout    => 30,
           :flush      => true,
           :faux_path  => '/var/www/php-www.fcgi',
@@ -142,7 +120,7 @@ Action application/x-httpd-php /php-www.fcgi
         }
       end
       let :expected do
-'FastCGIExternalServer /var/www/php-www.fcgi -idle-timeout 30 -flush -socket /var/run/fcgi.sock
+'FastCGIExternalServer /var/www/php-www.fcgi -idle-timeout 30 -flush -host 127.0.0.1:9001
 Alias /php-www.fcgi /var/www/php-www.fcgi
 Action application/x-httpd-php /php-www.fcgi
 '
@@ -151,6 +129,5 @@ Action application/x-httpd-php /php-www.fcgi
         should contain_file("fastcgi-pool-www.conf").with_content(expected)
       end
     end
-
   end
 end

@@ -8,7 +8,7 @@ class apache::mod::peruser (
   $expiretimeout = '120',
   $keepalive = 'Off',
 ) {
-  include ::apache
+
   case $::osfamily {
     'freebsd' : {
       fail("Unsupported osfamily ${::osfamily}")
@@ -52,7 +52,6 @@ class apache::mod::peruser (
       # - $mod_dir
       file { "${::apache::mod_dir}/peruser.conf":
         ensure  => file,
-        mode    => $::apache::file_mode,
         content => template('apache/mod/peruser.conf.erb'),
         require => Exec["mkdir ${::apache::mod_dir}"],
         before  => File[$::apache::mod_dir],

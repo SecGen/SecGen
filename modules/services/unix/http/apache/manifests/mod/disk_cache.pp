@@ -1,7 +1,6 @@
 class apache::mod::disk_cache (
   $cache_root = undef,
 ) {
-  include ::apache
   if $cache_root {
     $_cache_root = $cache_root
   }
@@ -33,7 +32,6 @@ class apache::mod::disk_cache (
   file { 'disk_cache.conf':
     ensure  => file,
     path    => "${::apache::mod_dir}/disk_cache.conf",
-    mode    => $::apache::file_mode,
     content => template('apache/mod/disk_cache.conf.erb'),
     require => Exec["mkdir ${::apache::mod_dir}"],
     before  => File[$::apache::mod_dir],

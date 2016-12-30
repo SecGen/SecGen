@@ -6,7 +6,9 @@ def general_mime_magic_specs
 end
 
 describe 'apache::mod::mime_magic', :type => :class do
-  it_behaves_like "a mod class, without including apache"
+  let :pre_condition do
+    'include apache'
+  end
 
   context "On a Debian OS with default params" do
     let :facts do

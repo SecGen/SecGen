@@ -50,12 +50,7 @@ define apache::mod (
   if $package {
     $_package = $package
   } elsif has_key($mod_packages, $mod) { # 2.6 compatibility hack
-    if ($::apache::apache_version == '2.4' and $::operatingsystem =~ /^[Aa]mazon$/) {
-      # On amazon linux we need to prefix our package name with mod24 instead of mod to support apache 2.4
-      $_package = regsubst($mod_packages[$mod],'^(mod_)?(.*)','mod24_\2')
-    } else {
-      $_package = $mod_packages[$mod]
-    }
+    $_package = $mod_packages[$mod]
   } else {
     $_package = undef
   }
@@ -69,10 +64,7 @@ define apache::mod (
         File[$_loadfile_name],
         File["${::apache::conf_dir}/${::apache::params::conf_file}"]
       ],
-      default => [
-        File[$_loadfile_name],
-        File[$::apache::confd_dir],
-      ],
+      default => File[$_loadfile_name],
     }
     # if there are any packages, they should be installed before the associated conf file
     Package[$_package] -> File<| title == "${mod}.conf" |>
@@ -81,7 +73,6 @@ define apache::mod (
       ensure  => $package_ensure,
       require => Package['httpd'],
       before  => $package_before,
-      notify  => Class['apache::service'],
     }
   }
 

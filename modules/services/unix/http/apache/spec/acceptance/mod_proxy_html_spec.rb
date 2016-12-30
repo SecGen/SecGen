@@ -1,8 +1,7 @@
 require 'spec_helper_acceptance'
 require_relative './version.rb'
 
-# Don't run proxy_html tests on RHEL7 because the yum repos are missing packages required by it.
-describe 'apache::mod::proxy_html class', :unless => (fact('osfamily') == 'RedHat' and fact('operatingsystemmajrelease') == '7') do
+describe 'apache::mod::proxy_html class' do
   context "default proxy_html config" do
     if fact('osfamily') == 'RedHat' and fact('operatingsystemmajrelease') =~ /(5|6)/
       it 'adds epel' do

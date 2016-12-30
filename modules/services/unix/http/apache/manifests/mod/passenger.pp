@@ -14,21 +14,17 @@ class apache::mod::passenger (
   $passenger_default_ruby           = $::apache::params::passenger_default_ruby,
   $passenger_max_pool_size          = undef,
   $passenger_min_instances          = undef,
-  $passenger_max_instances_per_app  = undef,
   $passenger_use_global_queue       = undef,
   $passenger_app_env                = undef,
   $passenger_log_file               = undef,
-  $passenger_log_level              = undef,
-  $passenger_data_buffer_dir        = undef,
-  $manage_repo                      = true,
   $mod_package                      = undef,
   $mod_package_ensure               = undef,
   $mod_lib                          = undef,
   $mod_lib_path                     = undef,
   $mod_id                           = undef,
   $mod_path                         = undef,
-) inherits ::apache::params {
-  include ::apache
+) {
+
   if $passenger_spawn_method {
     validate_re($passenger_spawn_method, '(^smart$|^direct$|^smart-lv2$|^conservative$)', "${passenger_spawn_method} is not permitted for passenger_spawn_method. Allowed values are 'smart', 'direct', 'smart-lv2', or 'conservative'.")
   }
@@ -56,39 +52,16 @@ class apache::mod::passenger (
     $_lib_path = $mod_lib_path
   }
 
-  if $::osfamily == 'RedHat' and $manage_repo {
-    if $::operatingsystem == 'Amazon' {
-      $baseurl = 'https://oss-binaries.phusionpassenger.com/yum/passenger/el/6Server/$basearch'
-    } else {
-      $baseurl = 'https://oss-binaries.phusionpassenger.com/yum/passenger/el/$releasever/$basearch'
-    }
-
-    yumrepo { 'passenger':
-      ensure        => 'present',
-      baseurl       => $baseurl,
-      descr         => 'passenger',
-      enabled       => '1',
-      gpgcheck      => '0',
-      gpgkey        => 'https://packagecloud.io/gpg.key',
-      repo_gpgcheck => '1',
-      sslcacert     => '/etc/pki/tls/certs/ca-bundle.crt',
-      sslverify     => '1',
-      before        => Apache::Mod['passenger'],
-    }
-  }
-
-  unless ($::operatingsystem == 'SLES') {
-    $_id = $mod_id
-    $_path = $mod_path
-    ::apache::mod { 'passenger':
-      package        => $_package,
-      package_ensure => $_package_ensure,
-      lib            => $_lib,
-      lib_path       => $_lib_path,
-      id             => $_id,
-      path           => $_path,
-      loadfile_name  => 'zpassenger.load',
-    }
+  $_id = $mod_id
+  $_path = $mod_path
+  ::apache::mod { 'passenger':
+    package        => $_package,
+    package_ensure => $_package_ensure,
+    lib            => $_lib,
+    lib_path       => $_lib_path,
+    id             => $_id,
+    path           => $_path,
+    loadfile_name  => 'zpassenger.load',
   }
 
   # Template uses:
@@ -97,16 +70,13 @@ class apache::mod::passenger (
   # - $passenger_default_ruby
   # - $passenger_max_pool_size
   # - $passenger_min_instances
-  # - $passenger_max_instances_per_app
   # - $passenger_high_performance
   # - $passenger_max_requests
   # - $passenger_spawn_method
   # - $passenger_stat_throttle_rate
   # - $passenger_use_global_queue
   # - $passenger_log_file
-  # - $passenger_log_level
   # - $passenger_app_env
-  # - $passenger_data_buffer_dir
   # - $rack_autodetect
   # - $rails_autodetect
   file { 'passenger.conf':

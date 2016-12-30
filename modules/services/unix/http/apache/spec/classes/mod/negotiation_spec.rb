@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe 'apache::mod::negotiation', :type => :class do
-  it_behaves_like "a mod class, without including apache"
   describe "OS independent tests" do
+
     let :facts do
       {
         :osfamily               => 'Debian',
@@ -18,6 +18,9 @@ describe 'apache::mod::negotiation', :type => :class do
     end
 
     context "default params" do
+      let :pre_condition do
+        'class {"::apache": }'
+      end
       it { should contain_class("apache") }
       it do
         should contain_file('negotiation.conf').with( {
@@ -30,6 +33,9 @@ ForceLanguagePriority Prefer Fallback
     end
 
     context 'with force_language_priority parameter' do
+      let :pre_condition do
+        'class {"::apache": default_mods => ["negotiation"]}'
+      end
       let :params do
         { :force_language_priority => 'Prefer' }
       end
@@ -42,6 +48,9 @@ ForceLanguagePriority Prefer Fallback
     end
 
     context 'with language_priority parameter' do
+      let :pre_condition do
+        'class {"::apache": default_mods => ["negotiation"]}'
+      end
       let :params do
         { :language_priority => [ 'en', 'es' ] }
       end
