@@ -50,6 +50,19 @@ class SystemReader
         system_attributes["#{attr.name}"] = attr.text unless attr.text.nil? || attr.text == ''
       end
 
+      # literal values to store directly in a datastore
+      system_node.xpath('*[@into_datastore]/value').each do |value|
+        name = value.xpath('../@into_datastore').to_s
+        ($datastore[name] ||= []).push(value.text)
+      end
+
+      # datastore in a datastore
+      if system_node.xpath('//*[@into_datastore]/datastore').to_s != ""
+        Print.err "WARNING: a datastore cannot capture the values from another datastore (this will be ignored)"
+        Print.err "The scenario has datastore(s) that try to save directly into another datastore -- currently this is only possible via an encoder"
+        sleep 2
+      end
+
       # for each module selection
       system_node.xpath('//vulnerability | //service | //utility | //network | //base | //encoder | //generator').each do |module_node|
         # create a selector module, which is a regular module instance used as a placeholder for matching requirements
@@ -60,10 +73,18 @@ class SystemReader
         # check if we need to be sending the module output to another module
         module_node.xpath('parent::input').each do |input|
           # Parent is input -- track that we need to send write value somewhere
-          input.xpath('..').each do |input_parent|
-            module_selector.write_output_variable = input.xpath('@into').to_s
-            module_selector.write_to_module_with_id = input_parent.path.gsub(/[^a-zA-Z0-9]/, '')
+          # if we need to feed results to parent module
+          if input.xpath('@into').to_s
+            input.xpath('..').each do |input_parent|
+              module_selector.write_output_variable = input.xpath('@into').to_s
+              module_selector.write_to_module_with_id = input_parent.path.gsub(/[^a-zA-Z0-9]/, '')
+            end
           end
+          # check if we need to send the module output to a datastore
+          if input.xpath('@into_datastore').to_s
+            module_selector.write_to_datastore = input.xpath('@into_datastore').to_s
+          end
+
         end
 
         # check if we are being passed an input *literal value*
@@ -72,6 +93,14 @@ class SystemReader
           value = input_value.text
           Print.verbose "  -- literal value: #{variable} = #{value}"
           (module_selector.received_inputs[variable] ||= []).push(value)
+        end
+
+        # check if we are being passed a datastore as input
+        module_node.xpath('input/datastore').each do |input_value|
+          variable = input_value.xpath('../@into').to_s
+          value = input_value.text
+          Print.verbose "  -- datastore: #{variable} = #{value}"
+          (module_selector.received_datastores[variable] ||= []).push(value)
         end
 
 

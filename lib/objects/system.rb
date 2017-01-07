@@ -32,7 +32,7 @@ class System
 
       # for each module specified in the scenario
       module_selectors.each do |module_filter|
-        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_modules, selected_modules, module_filter.unique_id, module_filter.write_output_variable, module_filter.write_to_module_with_id, module_filter.received_inputs, module_filter.default_inputs_literals)
+        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_modules, selected_modules, module_filter.unique_id, module_filter.write_output_variable, module_filter.write_to_module_with_id, module_filter.received_inputs, module_filter.default_inputs_literals, module_filter.write_to_datastore, module_filter.received_datastores)
       end
       selected_modules
 
@@ -64,7 +64,7 @@ class System
   # returns a list containing a module (plus any default input modules and dependencies recursively) of the module type with the required attributes
   # modules are selected from the list of available modules and will be checked against previously selected modules for conflicts
   # raises an exception when unable to resolve and the retry limit has not been reached
-  def select_modules(module_type, required_attributes, available_modules, previously_selected_modules, unique_id, write_outputs_to, write_to_module_with_id, received_inputs, default_inputs_literals)
+  def select_modules(module_type, required_attributes, available_modules, previously_selected_modules, unique_id, write_outputs_to, write_to_module_with_id, received_inputs, default_inputs_literals, write_to_datastore, received_datastores)
     default_modules_to_add = []
 
     search_list = available_modules.clone
@@ -101,9 +101,22 @@ class System
       # propagate module relationships established when the filter was created
       selected.write_output_variable = write_outputs_to
       selected.write_to_module_with_id = write_to_module_with_id
+      selected.write_to_datastore = write_to_datastore
       selected.unique_id = unique_id
       selected.received_inputs = received_inputs
+      selected.received_datastores = received_datastores
       selected.default_inputs_literals = selected.default_inputs_literals.merge(default_inputs_literals)
+
+      # feed in input from any received datastores
+      if selected.received_datastores != {}
+        Print.verbose "Receiving datastores: #{selected.received_datastores}"
+        selected.received_datastores.each do |input_key, datastore_value|
+          datastore_value.each do |datastore|
+            (received_inputs[input_key] ||=[]).push(*$datastore[datastore])
+            Print.verbose "Adding #{input_key} - #{datastore} (#{$datastore[datastore]})"
+          end
+        end
+      end
 
       # if no input received from the scenario, apply default input values/modules
       default_modules_to_add += select_default_modules(selected, available_modules, previously_selected_modules + [selected])
@@ -129,6 +142,12 @@ class System
         end
         # execute calculation script and format to JSON
         selected.output = JSON.parse(`ruby #{selected.local_calc_file} #{args_string}`.chomp)
+      end
+
+      # store the output of the module into a datastore, if specified
+      if selected.write_to_datastore && selected.write_to_datastore.size != 0
+        ($datastore[selected.write_to_datastore] ||=[]).push(*selected.output)
+        Print.verbose "Storing into datastore: #{selected.write_to_datastore} = #{$datastore[selected.write_to_datastore].to_s}"
       end
 
       # add any modules that the selected module requires
@@ -178,7 +197,7 @@ class System
           default_module_selectors_to_add.each do |module_to_add|
             module_to_add.write_to_module_with_id = selected.unique_id
 
-            default_modules_to_add.concat select_modules(module_to_add.module_type, module_to_add.attributes, available_modules, previously_selected_modules + default_modules_to_add, module_to_add.unique_id, module_to_add.write_output_variable, module_to_add.write_to_module_with_id, module_to_add.received_inputs, module_to_add.default_inputs_literals)
+            default_modules_to_add.concat select_modules(module_to_add.module_type, module_to_add.attributes, available_modules, previously_selected_modules + default_modules_to_add, module_to_add.unique_id, module_to_add.write_output_variable, module_to_add.write_to_module_with_id, module_to_add.received_inputs, module_to_add.default_inputs_literals, module_to_add.write_to_datastore, module_to_add.received_datastores)
           end
         end
       else
@@ -230,7 +249,7 @@ class System
         Print.verbose "Dependency satisfied by previously selected module: #{existing.printable_name}"
       else
         Print.verbose 'Adding required modules...'
-        modules_to_add += select_modules('any', required, available_modules, modules_to_add + selected_modules, '', '', '', {}, {})
+        modules_to_add += select_modules('any', required, available_modules, modules_to_add + selected_modules, '', '', '', {}, {}, {}, {})
       end
     end
     modules_to_add

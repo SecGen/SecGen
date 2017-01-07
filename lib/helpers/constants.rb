@@ -1,3 +1,6 @@
+# ONE global variable
+$datastore = {}
+
 ## FILE / DIR CONSTANTS ##
 
 # Root directory of SecGen file structure

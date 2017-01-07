@@ -12,10 +12,12 @@ class Module
   # XML validity ensures valid and complete information.
 
   attr_accessor :write_to_module_with_id # the module instance that this module writes to
+  attr_accessor :write_to_datastore # the datastore to store the result to
   attr_accessor :write_output_variable # the variable/fact written to
   attr_accessor :output # the result of local processing
   attr_accessor :unique_id # the unique id for this module *instance*
   attr_accessor :received_inputs # any locally calculated inputs fed into this module instance
+  attr_accessor :received_datastores # any datastores to be fed into this module instance
 
   attr_accessor :conflicts
   attr_accessor :requires
@@ -35,6 +37,7 @@ class Module
     self.output = []
     self.write_to_module_with_id = write_output_variable = ''
     self.received_inputs = {}
+    self.received_datastores = {}
     self.default_inputs_selectors = {}
     self.default_inputs_literals = {}
 

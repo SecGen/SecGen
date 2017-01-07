@@ -21,9 +21,11 @@
         <xs:element name='generator' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='encoder' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='value' type='xs:string' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='datastore' type='xs:string' minOccurs='0' maxOccurs='unbounded' />
       </xs:choice>
     </xs:sequence>
     <xs:attribute name='into' type='xs:string'/>
+    <xs:attribute name='into_datastore' type='xs:string'/>
 
   </xs:complexType>
   <xs:complexType name="SystemType">
@@ -37,6 +39,7 @@
       </xs:element>
       <xs:element name='base' type='BaseType' minOccurs='1' maxOccurs='1' />
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="input" type="InputElements" minOccurs="0" maxOccurs="unbounded" />
         <xs:element name='vulnerability' type='VulnerabilityType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='service' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='utility' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
