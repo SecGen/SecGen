@@ -3,10 +3,10 @@
 <generator xmlns="http://www.github/cliffe/SecGen/generator"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
-  <name>Random Word Generator</name>
+  <name>Random Words Flag Generator</name>
   <author>Z. Cliffe Schreuders</author>
   <module_license>MIT</module_license>
-  <description>Uses a wordlist (Ruby gem + a wordlist) to generate a random (mostly English) dictionary word. May include punctuation.</description>
+  <description>Uses a wordlist (Ruby gem + a wordlist) to generate a list of random (mostly English) dictionary words. May include punctuation.</description>
 
   <type>flag_generator</type>
   <type>local_calculation</type>
