@@ -2,12 +2,12 @@ class unix_update::unix{
   case $operatingsystem {
     'Debian': {
       exec { 'update':
-        command => "/usr/bin/apt-get update"
+        command => "/usr/bin/apt-get update --fix-missing"
       }
     }
     'Ubuntu': {
       exec { 'update':
-        command => "/usr/bin/apt-get update"
+        command => "/usr/bin/apt-get update --fix-missing"
       }
     }
     'RedHat': {
