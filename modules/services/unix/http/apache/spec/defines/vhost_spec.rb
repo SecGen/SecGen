@@ -157,7 +157,9 @@ describe 'apache::vhost', :type => :define do
           'ssl_proxy_verify'            => 'require',
           'ssl_proxy_check_peer_cn'     => 'on',
           'ssl_proxy_check_peer_name'   => 'on',
+          'ssl_proxy_check_peer_expire' => 'on',
           'ssl_proxyengine'             => true,
+          'ssl_proxy_protocol'          => 'TLSv1.2',
 
           'priority'                    => '30',
           'default_vhost'               => true,
@@ -170,6 +172,8 @@ describe 'apache::vhost', :type => :define do
           'logroot'                     => '/var/www/logs',
           'logroot_ensure'              => 'directory',
           'logroot_mode'                => '0600',
+          'logroot_owner'               => 'root',
+          'logroot_group'               => 'root',
           'log_level'                   => 'crit',
           'access_log'                  => false,
           'access_log_file'             => 'httpd_access_log',
@@ -184,9 +188,41 @@ describe 'apache::vhost', :type => :define do
               'require'  => [ 'valid-user', 'all denied', ],
             },
             {
+                'path'     => '/var/www/files',
+                'provider' => 'files',
+                'additional_includes'  => [ '/custom/path/includes', '/custom/path/another_includes', ],
+            },
+            {
               'path'     => '/var/www/files',
               'provider' => 'files',
               'require'  => 'all granted',
+            },
+            {
+              'path'     => '/var/www/files',
+              'provider' => 'files',
+              'require'  =>
+              {
+                'enforce'  => 'all',
+                'requires' => ['all-valid1', 'all-valid2'],
+              },
+            },
+            {
+              'path'     => '/var/www/files',
+              'provider' => 'files',
+              'require'  =>
+              {
+                'enforce'  => 'none',
+                'requires' => ['none-valid1', 'none-valid2'],
+              },
+            },
+            {
+              'path'     => '/var/www/files',
+              'provider' => 'files',
+              'require'  =>
+              {
+                'enforce'  => 'any',
+                'requires' => ['any-valid1', 'any-valid2'],
+              },
             },
             {
               'path'     => '*',
@@ -200,6 +236,19 @@ describe 'apache::vhost', :type => :define do
             },
             { 'path'              => '/var/www/files/output_filtered',
               'set_output_filter' => 'output_filter',
+            },
+            { 'path'     => '/var/www/files',
+              'provider' => 'location',
+              'limit'    => [
+                { 'methods' => 'GET HEAD',
+                  'require' => ['valid-user']
+                },
+              ],
+            },
+            { 'path'               => '/var/www/dav',
+              'dav'                => 'filesystem',
+              'dav_depth_infinity' => true,
+              'dav_min_timeout'    => '600',
             },
           ],
           'error_log'                   => false,
@@ -224,6 +273,8 @@ describe 'apache::vhost', :type => :define do
               'path'            => '/a',
               'url'             => 'http://backend-a/',
               'keywords'        => ['noquery', 'interpolate'],
+              'no_proxy_uris'       => ['/a/foo', '/a/bar'],
+              'no_proxy_uris_match' => ['/a/foomatch'],
               'reverse_cookies' => [
 								{
                   'path'          => '/a',
@@ -238,11 +289,6 @@ describe 'apache::vhost', :type => :define do
                       'retry'   => '0',
                       'timeout' => '5'
               },
-              'options'         => {
-                'Require'  =>'valid-user',
-                'AuthType' =>'Kerberos',
-                'AuthName' =>'"Kerberos Login"'
-              },
               'setenv'   => ['proxy-nokeepalive 1','force-proxy-request-1.0 1'],
             }
           ],
@@ -251,6 +297,8 @@ describe 'apache::vhost', :type => :define do
               'path'     => '/a',
               'url'      => 'http://backend-a/',
               'keywords' => ['noquery', 'interpolate'],
+              'no_proxy_uris'       => ['/a/foo', '/a/bar'],
+              'no_proxy_uris_match' => ['/a/foomatch'],
               'params'   => {
                       'retry'   => '0',
                       'timeout' => '5'
@@ -266,6 +314,7 @@ describe 'apache::vhost', :type => :define do
           'no_proxy_uris'               => '/foo',
           'no_proxy_uris_match'         => '/foomatch',
           'proxy_preserve_host'         => true,
+          'proxy_add_headers'           => true,
           'proxy_error_override'        => true,
           'redirect_source'             => '/bar',
           'redirect_dest'               => '/',
@@ -294,8 +343,10 @@ describe 'apache::vhost', :type => :define do
           'rewrite_base'                => '/',
           'rewrite_rule'                => '^index\.html$ welcome.html',
           'rewrite_cond'                => '%{HTTP_USER_AGENT} ^MSIE',
+          'rewrite_inherit'             => true,
           'setenv'                      => ['FOO=/bin/true'],
           'setenvif'                    => 'Request_URI "\.gif$" object_is_image=gif',
+          'setenvifnocase'              => 'REMOTE_ADDR ^127.0.0.1 localhost=true',
           'block'                       => 'scm',
           'wsgi_application_group'      => '%{GLOBAL}',
           'wsgi_daemon_process'         => 'wsgi',
@@ -313,6 +364,9 @@ describe 'apache::vhost', :type => :define do
           'wsgi_script_aliases'         => {
             '/' => '/var/www/demo.wsgi'
           },
+          'wsgi_script_aliases_match'   => {
+            '^/test/(^[/*)' => '/var/www/demo.wsgi'
+          },
           'wsgi_pass_authorization'     => 'On',
           'custom_fragment'             => '#custom string',
           'itk'                         => {
@@ -324,6 +378,7 @@ describe 'apache::vhost', :type => :define do
           'fastcgi_server'              => 'localhost',
           'fastcgi_socket'              => '/tmp/fastcgi.socket',
           'fastcgi_dir'                 => '/tmp',
+          'fastcgi_idle_timeout'        => '120',
           'additional_includes'         => '/custom/path/includes',
           'apache_version'              => '2.4',
           'use_optional_includes'       => true,
@@ -335,14 +390,26 @@ describe 'apache::vhost', :type => :define do
           'passenger_min_instances'     => '1',
           'passenger_start_timeout'     => '600',
           'passenger_pre_start'         => 'http://localhost/myapp',
+          'passenger_high_performance'  => true,
+          'passenger_user'              => 'sandbox',
+          'passenger_nodejs'            => '/usr/bin/node',
+          'passenger_sticky_sessions'   => true,
+          'passenger_startup_file'      => 'bin/www',
           'add_default_charset'         => 'UTF-8',
+          'jk_mounts'                   => [
+            { 'mount'   => '/*',     'worker' => 'tcnode1', },
+            { 'unmount' => '/*.jpg', 'worker' => 'tcnode1', },
+          ],
           'auth_kerb'                   => true,
           'krb_method_negotiate'        => 'off',
           'krb_method_k5passwd'         => 'off',
           'krb_authoritative'           => 'off',
           'krb_auth_realms'             => ['EXAMPLE.ORG','EXAMPLE.NET'],
           'krb_5keytab'                 => '/tmp/keytab5',
-          'krb_local_user_mapping'      => 'off'
+          'krb_local_user_mapping'      => 'off',
+          'keepalive'                   => 'on',
+          'keepalive_timeout'           => '100',
+          'max_keepalive_requests'      => '1000',
         }
       end
       let :facts do
@@ -387,6 +454,7 @@ describe 'apache::vhost', :type => :define do
       it { is_expected.to contain_class('apache::mod::fastcgi') }
       it { is_expected.to contain_class('apache::mod::headers') }
       it { is_expected.to contain_class('apache::mod::filter') }
+      it { is_expected.to contain_class('apache::mod::env') }
       it { is_expected.to contain_class('apache::mod::setenvif') }
       it { is_expected.to contain_concat('30-rspec.example.com.conf').with({
         'owner'   => 'root',
@@ -409,11 +477,39 @@ describe 'apache::vhost', :type => :define do
       it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
         :content => /^\s+<Proxy "\*">$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+Include\s'\/custom\/path\/includes'$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+          :content => /^\s+Include\s'\/custom\/path\/another_includes'$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
         :content => /^\s+Require valid-user$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
         :content => /^\s+Require all denied$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
         :content => /^\s+Require all granted$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+<RequireAll>$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+<\/RequireAll>$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+Require all-valid1$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+Require all-valid2$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+<RequireNone>$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+<\/RequireNone>$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+Require none-valid1$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+Require none-valid2$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+<RequireAny>$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+<\/RequireAny>$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+Require any-valid1$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+Require any-valid2$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
         :content => /^\s+Options\sIndexes\sFollowSymLinks\sMultiViews$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
@@ -424,6 +520,16 @@ describe 'apache::vhost', :type => :define do
         :content => /^\s+DirectoryIndex\sdisabled$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
         :content => /^\s+SetOutputFilter\soutput_filter$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+<Limit GET HEAD>$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /\s+<Limit GET HEAD>\s*Require valid-user\s*<\/Limit>/m ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+Dav\sfilesystem$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+DavDepthInfinity\sOn$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-directories').with(
+        :content => /^\s+DavMinTimeout\s600$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-additional_includes') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-logging') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-serversignature') }
@@ -442,22 +548,26 @@ describe 'apache::vhost', :type => :define do
       it { is_expected.to contain_concat__fragment('rspec.example.com-proxy').with_content(
               /noquery interpolate/) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-proxy').with_content(
+              /ProxyPreserveHost On/) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-proxy').with_content(
+              /ProxyAddHeaders On/) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-proxy').with_content(
               /ProxyPassReverseCookiePath\s+\/a\s+http:\/\//) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-proxy').with_content(
               /ProxyPassReverseCookieDomain\s+foo\s+http:\/\/foo/) }
-      it { is_expected.to contain_concat__fragment('rspec.example.com-proxy').with_content(
-              /Require valid-user/) }
-      it { is_expected.to contain_concat__fragment('rspec.example.com-proxy').with_content(
-              /AuthType Kerberos/) }
-      it { is_expected.to contain_concat__fragment('rspec.example.com-proxy').with_content(
-              /AuthName "Kerberos Login"/) }
-
       it { is_expected.to contain_concat__fragment('rspec.example.com-rack') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-redirect') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-rewrite') }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-rewrite').with(
+        :content => /^\s+RewriteOptions Inherit$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-scriptalias') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-serveralias') }
-      it { is_expected.to contain_concat__fragment('rspec.example.com-setenv') }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-setenv').with_content(
+              %r{SetEnv FOO=/bin/true}) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-setenv').with_content(
+              %r{SetEnvIf Request_URI "\\.gif\$" object_is_image=gif}) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-setenv').with_content(
+              %r{SetEnvIfNoCase REMOTE_ADDR \^127.0.0.1 localhost=true}) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-ssl') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-ssl').with(
         :content => /^\s+SSLOpenSSLConfCmd\s+DHParameters "foo.pem"$/ ) }
@@ -468,6 +578,10 @@ describe 'apache::vhost', :type => :define do
         :content => /^\s+SSLProxyCheckPeerCN\s+on$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-sslproxy').with(
         :content => /^\s+SSLProxyCheckPeerName\s+on$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-sslproxy').with(
+        :content => /^\s+SSLProxyCheckPeerExpire\s+on$/ ) }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-sslproxy').with(
+        :content => /^\s+SSLProxyProtocol\s+TLSv1.2$/ ) }
       it { is_expected.to contain_concat__fragment('rspec.example.com-suphp') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-php_admin') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-header') }
@@ -481,7 +595,12 @@ describe 'apache::vhost', :type => :define do
       it { is_expected.to contain_concat__fragment('rspec.example.com-allow_encoded_slashes') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-passenger') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-charsets') }
+      it { is_expected.to_not contain_concat__fragment('rspec.example.com-security') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-file_footer') }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-jk_mounts').with(
+        :content => /^\s+JkMount\s+\/\*\s+tcnode1$/)}
+      it { is_expected.to contain_concat__fragment('rspec.example.com-jk_mounts').with(
+        :content => /^\s+JkUnMount\s+\/\*\.jpg\s+tcnode1$/)}
       it { is_expected.to contain_concat__fragment('rspec.example.com-auth_kerb').with(
         :content => /^\s+KrbMethodNegotiate\soff$/)}
       it { is_expected.to contain_concat__fragment('rspec.example.com-auth_kerb').with(
@@ -498,6 +617,12 @@ describe 'apache::vhost', :type => :define do
         :content => /^\s+KrbSaveCredentials\soff$/)}
       it { is_expected.to contain_concat__fragment('rspec.example.com-auth_kerb').with(
         :content => /^\s+KrbVerifyKDC\son$/)}
+      it { is_expected.to contain_concat__fragment('rspec.example.com-keepalive_options').with(
+        :content => /^\s+KeepAlive\son$/)}
+      it { is_expected.to contain_concat__fragment('rspec.example.com-keepalive_options').with(
+        :content => /^\s+KeepAliveTimeout\s100$/)}
+      it { is_expected.to contain_concat__fragment('rspec.example.com-keepalive_options').with(
+        :content => /^\s+MaxKeepAliveRequests\s1000$/)}
     end
     context 'vhost with multiple ip addresses' do
       let :params do
@@ -600,6 +725,28 @@ describe 'apache::vhost', :type => :define do
       it { is_expected.to_not contain_concat__fragment('NameVirtualHost *:80') }
     end
 
+    context 'modsec_audit_log' do
+      let :params do
+        {
+          'docroot'          => '/rspec/docroot',
+          'modsec_audit_log' => true,
+        }
+      end
+      it { is_expected.to compile }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-security').with(
+        :content => /^\s*SecAuditLog "\/var\/log\/apache2\/rspec\.example\.com_security\.log"$/ ) }
+    end
+    context 'modsec_audit_log_file' do
+      let :params do
+        {
+          'docroot'               => '/rspec/docroot',
+          'modsec_audit_log_file' => 'foo.log',
+        }
+      end
+      it { is_expected.to compile }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-security').with(
+        :content => /\s*SecAuditLog "\/var\/log\/apache2\/foo.log"$/ ) }
+    end
     context 'set only aliases' do
       let :params do
         {
@@ -775,6 +922,19 @@ describe 'apache::vhost', :type => :define do
       it { is_expected.to compile }
       it { is_expected.not_to contain_concat__fragment('rspec.example.com-ssl') }
       it { is_expected.to contain_concat__fragment('rspec.example.com-sslproxy') }
+    end
+    context 'ssl_proxy_protocol without ssl_proxyengine' do
+      let :params do
+        {
+          'docroot'            => '/rspec/docroot',
+          'ssl'                => true,
+          'ssl_proxyengine'    => false,
+          'ssl_proxy_protocol' => 'TLSv1.2',
+        }
+      end
+      it { is_expected.to compile }
+      it { is_expected.to contain_concat__fragment('rspec.example.com-ssl') }
+      it { is_expected.not_to contain_concat__fragment('rspec.example.com-sslproxy') }
     end
   end
   describe 'access logs' do

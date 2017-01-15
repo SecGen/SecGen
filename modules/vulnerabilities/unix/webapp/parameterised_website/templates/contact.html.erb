@@ -1,0 +1,86 @@
+<% require 'json'
+   $secgen_parameters = JSON.parse(@json_inputs)
+   $business_name = $secgen_parameters['business_name'].first
+   $business_motto = $secgen_parameters['business_motto'].first
+   $manager_profile = $secgen_parameters['manager_profile'].first
+   $business_address = $secgen_parameters['business_address'].first
+   $office_telephone = $secgen_parameters['office_telephone'].first
+   $office_email = $secgen_parameters['office_email'].first
+   $industry = $secgen_parameters['industry'].first
+   $employees = $secgen_parameters['employees']
+   $comment_flag = $secgen_parameters['ctf_flags'][1]
+%>
+<html>
+<head>
+  <title><%= $business_name %> - Contact Us</title>  <!-- Default stylesheet -->
+  <link rel="stylesheet" href="css/default.css"/>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="css/bootstrap.min.css"/>
+  <!-- Optional theme -->
+  <link rel="stylesheet" href=css/bootstrap-theme.min.css"/>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"></a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="index.html">Home</a></li>
+        <li class="active"><a href="#">Contact Us</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div>
+</nav>
+
+<div id="main_container" class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="intro-text">
+        <h1 class="name"><%= $business_name %></h1>
+        <hr class="star-light">
+        <h3> <%= $business_motto %></h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div id="business_address">
+      <p><strong>Contact <%= $business_name %></strong></p>
+      <p>Address: <%= $business_address %></p>
+      <p>Telephone: <%= $office_telephone %></p>
+      <p>Email: <%= $office_email %></p>
+    </div>
+  </div>
+  <div class="row">
+    <h4>Manager</h4>
+    <p><%= $manager_profile['name'] %></p>
+    <p><%= $manager_profile['phone_number'] %></p>
+    <p><%= $manager_profile['email_address'] %></p>
+  </div>
+
+  <div id="employees" class="row">
+    <h4>Subordinates</h4>
+    <% $employees.each do |employee| %>
+        <p><strong><%= employee['name'] %></strong></p>
+        <p><%= employee['phone_number'] %></p>
+        <p><%= employee['email_address'] %></p>
+        <p/>
+    <% end %>
+  </div>
+</div>
+
+</body>
+
+<footer>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- <%= $comment_flag %> -->
+</footer>
+</html>

@@ -20,6 +20,13 @@ describe 'apache::default_mods class' do
   end
 
   describe 'no default mods and failing' do
+    before :all do
+      pp = <<-PP
+      include apache::params
+      class { 'apache': default_mods => false, service_ensure => stopped, }
+      PP
+      apply_manifest(pp)
+    end
     # Using puppet_apply as a helper
     it 'should apply with errors' do
       pp = <<-EOS
@@ -27,26 +34,26 @@ describe 'apache::default_mods class' do
           default_mods => false,
         }
         apache::vhost { 'defaults.example.com':
-          docroot => '/var/www/defaults',
-          aliases => {
+          docroot     => '#{$doc_root}/defaults',
+          aliases     => {
             alias => '/css',
-            path  => '/var/www/css',
+            path  => '#{$doc_root}/css',
           },
-          setenv  => 'TEST1 one',
+          directories => [
+	        {
+              'path'            => "#{$doc_root}/admin",
+              'auth_basic_fake' => 'demo demopass',
+            }
+          ],
+          setenv      => 'TEST1 one',
         }
       EOS
 
       apply_manifest(pp, { :expect_failures => true })
     end
 
-    # Are these the same?
     describe service($service_name) do
       it { is_expected.not_to be_running }
-    end
-    describe "service #{$service_name}" do
-      it 'should not be running' do
-        shell("pidof #{$service_name}", {:acceptable_exit_codes => 1})
-      end
     end
   end
 
@@ -64,10 +71,10 @@ describe 'apache::default_mods class' do
           ],
         }
         apache::vhost { 'defaults.example.com':
-          docroot => '/var/www/defaults',
+          docroot => '#{$doc_root}/defaults',
           aliases => {
             alias => '/css',
-            path  => '/var/www/css',
+            path  => '#{$doc_root}/css',
           },
           setenv  => 'TEST1 one',
         }

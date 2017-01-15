@@ -17,25 +17,8 @@
   <read_fact>accounts</read_fact>
 
   <default_input into="accounts">
-    <encoder type="account">
-      <input into="username">
-        <generator type="username_generator"/>
-      </input>
-      <input into="password">
-        <generator type="weak_password_generator"/>
-      </input>
-      <input into="super_user">
-        <value>false</value>
-      </input>
-      <input into="strings_to_leak">
-        <generator type="message_generator"/>
-        <generator type="message_generator"/>
-      </input>
-      <input into="leaked_filenames">
-        <generator module_path="generators/filenames/leaked_filename"/>
-        <generator module_path="generators/filenames/leaked_filename"/>
-      </input>
-    </encoder>
+    <generator type="account"/>
+    <generator type="account"/>
   </default_input>
 
   <!--optional details-->

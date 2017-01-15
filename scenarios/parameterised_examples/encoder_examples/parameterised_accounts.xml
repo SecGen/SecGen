@@ -8,28 +8,8 @@
 		<system_name>storage_server</system_name>
 		<base platform="linux"/>
 
-		<vulnerability module_path=".*parameterised_accounts">
-			<input into="accounts">
-				<!--When using the account encoder fill in all facts for now.-->
-				<encoder type="account">
-					<input into="username">
-						<value>scenario_username</value>
-					</input>
-					<input into="password">
-						<generator type="password_generator"/>
-					</input>
-					<input into="super_user">
-						<generator type="boolean_generator"/>
-					</input>
-					<input into="strings_to_leak">
-						<generator type="message_generator"/>
-					</input>
-					<input into="leaked_filenames">
-						<generator module_path="generators/filenames/leaked_filename"/>
-					</input>
-				</encoder>
-			</input>
-		</vulnerability>
+		<vulnerability module_path=".*parameterised_accounts"/>
+
 		<network type="private_network" range="dhcp"/>
 	</system>
 </scenario>
