@@ -9,8 +9,7 @@ class WordGenerator < StringGenerator
 
   def generate
     file = File.readlines("#{ROOT_DIR}/lib/resources/wordlists/wordlist")
-    self.outputs << "flag:" + file.sample.chomp + file.sample.chomp + file.sample.chomp + file.sample.chomp + file.sample.chomp
-
+    self.outputs << 'flag{' + file.sample.chomp + file.sample.chomp + file.sample.chomp + file.sample.chomp + file.sample.chomp + '}'
   end
 end
 

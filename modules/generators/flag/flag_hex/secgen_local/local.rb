@@ -8,7 +8,7 @@ class HexGenerator < StringGenerator
 
   def generate
     require 'securerandom'
-    self.outputs << "flag:#{SecureRandom.hex}"
+    self.outputs << "flag{#{SecureRandom.hex}}"
   end
 end
 
