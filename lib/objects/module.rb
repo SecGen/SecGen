@@ -37,7 +37,7 @@ class Module
     self.output = []
     self.write_to_module_with_id = write_output_variable = ''
     self.received_inputs = {}
-    self.received_datastores = {}
+    self.received_datastores = {} # into_variable => [[variablename] and [access], ]
     self.default_inputs_selectors = {}
     self.default_inputs_literals = {}
 

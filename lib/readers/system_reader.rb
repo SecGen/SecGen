@@ -97,12 +97,15 @@ class SystemReader
 
         # check if we are being passed a datastore as input
         module_node.xpath('input/datastore').each do |input_value|
+          access = input_value.xpath('@access').to_s
+          if access == ''
+            access = 'all'
+          end
           variable = input_value.xpath('../@into').to_s
           value = input_value.text
           Print.verbose "  -- datastore: #{variable} = #{value}"
-          (module_selector.received_datastores[variable] ||= []).push(value)
+          (module_selector.received_datastores[variable] ||= []).push('variablename' => value, 'access' => access)
         end
-
 
         module_node.xpath('@*').each do |attr|
           module_selector.attributes["#{attr.name}"] = [attr.text] unless attr.text.nil? || attr.text == ''

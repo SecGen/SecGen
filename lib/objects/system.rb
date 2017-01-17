@@ -110,10 +110,52 @@ class System
       # feed in input from any received datastores
       if selected.received_datastores != {}
         Print.verbose "Receiving datastores: #{selected.received_datastores}"
-        selected.received_datastores.each do |input_key, datastore_value|
-          datastore_value.each do |datastore|
-            (received_inputs[input_key] ||=[]).push(*$datastore[datastore])
-            Print.verbose "Adding #{input_key} - #{datastore} (#{$datastore[datastore]})"
+        selected.received_datastores.each do |input_into, datastore_list|
+          datastore_list.each do |datastore_variablename_and_access_type|
+            datastore_access = datastore_variablename_and_access_type['access']
+            datastore_variablename = datastore_variablename_and_access_type['variablename']
+            datastore_retrieved = []
+            if datastore_access == 'first'
+              datastore_retrieved = [$datastore[datastore_variablename].first]
+            elsif datastore_access == 'next'
+              last_accessed = $datastore_iterators[datastore_variablename]
+              # first use? start at beginning
+              if last_accessed == nil
+                index_to_access = 0
+              else
+                index_to_access = last_accessed + 1
+              end
+              $datastore_iterators[datastore_variablename] = index_to_access
+              datastore_retrieved = [$datastore[datastore_variablename][index_to_access]]
+            elsif datastore_access == 'previous'
+              last_accessed = $datastore_iterators[datastore_variablename]
+              # first use? start at end
+              if last_accessed == nil
+                index_to_access = $datastore[datastore_variablename].size - 1
+              else
+                index_to_access = last_accessed - 1
+              end
+              $datastore_iterators[datastore_variablename] = index_to_access
+              datastore_retrieved = [$datastore[datastore_variablename][index_to_access]]
+            elsif datastore_access.to_s == datastore_access.to_i.to_s
+              # Test for a valid element key (integer)
+              index_to_access = datastore_access.to_i
+              $datastore_iterators[datastore_variablename] = index_to_access
+              datastore_retrieved = [$datastore[datastore_variablename][index_to_access]]
+            elsif datastore_access == "all"
+              datastore_retrieved = $datastore[datastore_variablename]
+            else
+              Print.err "Error: invalid access value (#{datastore_access})"
+              raise 'failed'
+            end
+            if datastore_retrieved && datastore_retrieved != [nil]
+              (received_inputs[input_into] ||=[]).push(*datastore_retrieved)
+              Print.verbose "Adding (#{datastore_access}) #{datastore_variablename} to #{input_into}: #{datastore_retrieved}"
+            else
+              Print.err "Error: can't add no data. Feeding #{datastore_retrieved} into #{input_into}"
+              Print.err "Check the scenario, not enough data is generated for this datastore (#{datastore_variablename}) to access this index (#{datastore_access})"
+              raise 'failed'
+            end
           end
         end
       end
@@ -137,7 +179,11 @@ class System
         selected.received_inputs.each do |input_key, input_values|
           puts input_values.inspect
           input_values.each do |input_element|
-            args_string += "'--#{input_key}=#{input_element}' "
+            if input_key == ''
+              Print.warn "Warning: output values not directed to module input"
+            else
+              args_string += "'--#{input_key}=#{input_element}' "
+            end
           end
         end
         # execute calculation script and format to JSON
