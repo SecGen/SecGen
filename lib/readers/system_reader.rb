@@ -38,7 +38,7 @@ class SystemReader
     # remove xml namespaces for ease of processing
     doc.remove_namespaces!
 
-    doc.xpath('/scenario/system').each do |system_node|
+    doc.xpath('/scenario/system').each_with_index do |system_node, system_index|
       module_selectors = []
       system_attributes = {}
 
@@ -114,22 +114,25 @@ class SystemReader
           end
         end
 
-        # insert into module list
-        # if this module feeds output to another, ensure list order makes sense for processing...
-        if module_selector.write_output_variable != nil
-          Print.verbose "  -- writes to: #{module_selector.write_to_module_with_id} - #{module_selector.write_output_variable}"
-          # insert into module list before the module we are writing to
-          insert_pos = -1 # end of list
-          for i in 0..module_selectors.size-1
-            if module_selector.write_to_module_with_id == module_selectors[i].unique_id
-              # found position of earlier module this one feeds into, so put this one first
-              insert_pos = i
+        # If this module is for this system
+        if module_selector.system_number == (system_index + 1)
+          # insert into module list
+          # if this module feeds output to another, ensure list order makes sense for processing...
+          if module_selector.write_output_variable != nil
+            Print.verbose "  -- writes to: #{module_selector.write_to_module_with_id} - #{module_selector.write_output_variable}"
+            # insert into module list before the module we are writing to
+            insert_pos = -1 # end of list
+            for i in 0..module_selectors.size-1
+              if module_selector.write_to_module_with_id == module_selectors[i].unique_id
+                # found position of earlier module this one feeds into, so put this one first
+                insert_pos = i
+              end
             end
+            module_selectors.insert(insert_pos, module_selector)
+          else
+            # otherwise just append module to end of list
+            module_selectors << module_selector
           end
-          module_selectors.insert(insert_pos, module_selector)
-        else
-          # otherwise just append module to end of list
-          module_selectors << module_selector
         end
 
       end

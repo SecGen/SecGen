@@ -160,6 +160,12 @@ class Module
     value
   end
 
+  # Get the system that this module is for, based on the unique_id.
+  # Gets the first integer e.g. the 1 in scenariosystem1
+  def system_number
+    unique_id[/\d+/].to_i
+  end
+
   def printable_name
     "#{self.attributes['name'].first} (#{self.module_path})"
   end

@@ -9,6 +9,7 @@ class ProjectFilesCreator
 # to create the virtual machines
   @systems
   @currently_processing_system
+  @scenario_networks
 
 # @param [Object] systems list of systems that have been defined and randomised
 # @param [Object] out_dir the directory that the project output should be stored into
@@ -25,7 +26,7 @@ class ProjectFilesCreator
     @scenario = scenario
     @time = Time.new.to_s
     @options = options
-
+    @scenario_networks = Hash.new { |h, k| h[k] = 0 }
   end
 
 # Generate all relevant files for the project
@@ -79,6 +80,21 @@ class ProjectFilesCreator
       Print.err "Error writing file: #{e.message}"
       exit
     end
+  end
+
+# Resolves the network based on the scenario and ip_range.
+  def resolve_network(ip_range)
+    # increment @scenario_networks{ip_range=>counter}
+    @scenario_networks[ip_range] += 1
+
+    # Split the range up and replace the last octet with the counter value
+    split_ip = ip_range.split('.')
+    last_octet = @scenario_networks[ip_range]
+    last_octet = last_octet % 254
+
+    # Replace the last octet in our split_ip array and return the IP
+    split_ip[3] = last_octet.to_s
+    split_ip.join('.')
   end
 
 # Returns binding for erb files (access to variables in this classes scope)
