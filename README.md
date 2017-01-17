@@ -31,7 +31,7 @@ And the required Ruby Gems (including Nokogiri and Librarian-puppet)
 curl -o vagrant.deb https://releases.hashicorp.com/vagrant/1.8.4/vagrant_1.8.4_x86_64.deb
 sudo dpkg -i vagrant.deb
 sudo apt-get install ruby-dev zlib1g-dev liblzma-dev build-essential patch virtualbox
-gem install bundle
+sudo gem install bundle
 ```
 
 Copy SecGen to a directory of your choosing, such as /home/user/bin/SecGen, then:
