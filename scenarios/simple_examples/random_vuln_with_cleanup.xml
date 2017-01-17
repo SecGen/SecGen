@@ -11,18 +11,8 @@
     <vulnerability/>
 
     <build type="cleanup">
-      <input into="remove_history">
-        <value>true</value>
-      </input>
       <input into="root_password">
-        <value>test</value>
-        <!--<generator module_path=".*strong_password.*"/>-->
-      </input>
-      <input into="clobber_file_times">
-        <value>false</value>
-      </input>
-      <input into="disable_ssh">
-        <value>false</value>
+        <value>pwnable</value>
       </input>
     </build>
 

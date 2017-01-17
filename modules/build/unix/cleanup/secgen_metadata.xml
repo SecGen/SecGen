@@ -15,7 +15,21 @@
   <read_fact>clobber_file_times</read_fact>
   <read_fact>disable_ssh</read_fact>
 
-  <!--TODO: default values-->
+  <default_input into="remove_history">
+    <value>true</value>
+  </default_input>
+
+  <default_input into="root_password">
+    <generator module_path=".*strong_password.*"/>
+  </default_input>
+
+  <default_input into="clobber_file_times">
+    <value>false</value>
+  </default_input>
+
+  <default_input into="disable_ssh">
+    <value>false</value>
+  </default_input>
 
   <requires>
     <module_path>utilities/unix/system/accounts</module_path>
