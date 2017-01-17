@@ -161,9 +161,15 @@ class Module
   end
 
   # Get the system that this module is for, based on the unique_id.
-  # Gets the first integer e.g. the 1 in scenariosystem1
+  # If there is more that 1 system we gets the first integer e.g. the 1 in scenariosystem1
   def system_number
-    unique_id[/\d+/].to_i
+    split_string_array = unique_id.split('scenariosystem')
+
+    if split_string_array[1][0] =~ /[[:alpha:]]/
+      1 # only 1 system so return 1
+    elsif split_string_array[1][0] =~ /[[:digit:]]/
+      split_string_array[1][0].to_i # return the system id
+    end
   end
 
   def printable_name
