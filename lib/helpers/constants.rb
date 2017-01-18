@@ -1,5 +1,6 @@
-# ONE global variable
+# datastore related global variables
 $datastore = {}
+$datastore_iterators = {} # keeps track of previous access to datastore elements datastorevariablename => prev_index_accessed
 
 ## FILE / DIR CONSTANTS ##
 

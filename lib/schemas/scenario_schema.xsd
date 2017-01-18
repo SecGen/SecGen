@@ -22,7 +22,7 @@
         <xs:element name='generator' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='encoder' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='value' type='xs:string' minOccurs='0' maxOccurs='unbounded' />
-        <xs:element name='datastore' type='xs:string' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='datastore' type='DatastoreType' minOccurs='0' maxOccurs='unbounded' />
       </xs:choice>
     </xs:sequence>
     <xs:attribute name='into' type='xs:string'/>
@@ -63,7 +63,6 @@
     <xs:attribute name='vagrantbase' type='xs:string'/>
     <xs:attribute name='reference' type='xs:string'/>
     <xs:attribute name='software_license' type='xs:string'/>
-
   </xs:complexType>
 
   <xs:complexType name="VulnerabilityType">
@@ -131,7 +130,14 @@
     <xs:attribute name="description" type="xs:string"/>
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name='range' type='xs:string'/>
+  </xs:complexType>
 
+  <xs:complexType name="DatastoreType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="access" type="xs:string" default="next"/>
+      </xs:extension>
+    </xs:simpleContent>
   </xs:complexType>
 
 </xs:schema>
