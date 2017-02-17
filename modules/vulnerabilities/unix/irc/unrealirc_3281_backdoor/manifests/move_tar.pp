@@ -1,4 +1,4 @@
-class unrealirc_3281_backdoor::install {
+class unrealirc_3281_backdoor::move_tar {
   $archive = 'Unreal3.2.8.1.tar.gz'
   $vuln_archive = 'unrealircd_3.2.8.1.vuln.tar.gz'
 

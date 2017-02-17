@@ -25,6 +25,10 @@
   <read_fact>product_name</read_fact>
   <read_fact>main_page_paragraph_content</read_fact>
 
+  <!-- Team Project markers, generate and host an acceptable use policy on a basic website. -->
+  <read_fact>host_acceptable_use_policy</read_fact>
+  <read_fact>security_audit</read_fact>
+
   <default_input into="ctf_flags">
     <generator type="flag_generator"/>
     <generator type="flag_generator"/>
@@ -69,6 +73,10 @@
 
   <default_input into="main_page_paragraph_content">
     <generator type="text_paragraph"/>
+  </default_input>
+
+  <default_input into="host_acceptable_use_policy">
+    <value>false</value>
   </default_input>
 
   <conflict>

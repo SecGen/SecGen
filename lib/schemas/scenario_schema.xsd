@@ -116,6 +116,8 @@
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="platform" type="xs:string"/>
 
+    <xs:attribute name="read_fact" type="xs:string"/>
+
     <xs:attribute name="reference" type="xs:string"/>
     <xs:attribute name="software_name" type="xs:string"/>
     <xs:attribute name="software_license" type="xs:string"/>

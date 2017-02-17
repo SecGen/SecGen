@@ -17,8 +17,9 @@ class unrealirc(
 ) {
 
   class { '::unrealirc::vulnerabilities': } ->
-  class { '::unrealirc::install': }
-  if !defined('unrealirc_3281_backdoor') {
+  class { '::unrealirc::install': } ->
+  class { '::unrealirc::config': } ~>
+  class { '::unrealirc::service': }
 
     unrealirc::config::set { 'network':
       network_name        =>  "Public Name of My Server",
@@ -45,8 +46,4 @@ class unrealirc(
     unrealirc::config::log { 'default':
       flags =>  ['oper','kline','connects','server-connects','kills','errors','sadmin-commands','chg-commands','oper-override','spamfilter'],
     }
-
-    class { '::unrealirc::config': } ~>
-    class { '::unrealirc::service': }
-  }
 }

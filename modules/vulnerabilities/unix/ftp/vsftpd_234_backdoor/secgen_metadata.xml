@@ -19,6 +19,12 @@
   <read_fact>anonymous_ftp</read_fact>
   <read_fact>ftpd_banner</read_fact>
 
+  <!-- Team project selectors -->
+  <read_fact>business_name</read_fact>
+  <!--TODO: Remove below + match only on business_name? Currently does nothing.-->
+  <read_fact>business_domain</read_fact>
+  <read_fact>person</read_fact>
+
   <default_input into="anonymous_ftp">
     <value>false</value>
   </default_input>

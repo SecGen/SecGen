@@ -24,11 +24,11 @@
     </input>
 
     <input into_datastore="business_domain">
-      <encoder type="domain">
+      <generator type="domain">
         <input into="name">
           <datastore>business_name</datastore>
         </input>
-      </encoder>
+      </generator>
     </input>
 
     <input into_datastore="manager">
@@ -37,14 +37,14 @@
           <generator type="name_generator"/>
         </input>
         <input into="email_address">
-          <encoder type="business_email">  <!-- e.g. contact@business.co.uk -->
+          <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
             <input into="name">
               <datastore>manager_name</datastore>
             </input>
             <input into="domain">
               <datastore>business_domain</datastore>
             </input>
-          </encoder>
+          </generator>
         </input>
       </generator>
     </input>
@@ -58,14 +58,14 @@
     </input>
 
     <input into_datastore="office_email">
-      <encoder type="business_email">  <!-- e.g. contact@business.co.uk -->
+      <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
         <input into="name">
           <value>contact</value>
         </input>
         <input into="domain">
           <datastore>business_domain</datastore>
         </input>
-      </encoder>
+      </generator>
     </input>
 
     <input into_datastore="product_name">
@@ -89,14 +89,14 @@
         </input>
 
         <input into="email_address">
-          <encoder type="business_email">  <!-- e.g. contact@business.co.uk -->
+          <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
             <input into="name">
               <datastore>employee_1_name</datastore>
             </input>
             <input into="domain">
               <datastore>business_domain</datastore>
             </input>
-          </encoder>
+          </generator>
         </input>
       </generator>
 
@@ -106,14 +106,14 @@
           <datastore>employee_2_name</datastore>
         </input>
         <input into="email_address">
-          <encoder type="business_email">  <!-- e.g. contact@business.co.uk -->
+          <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
             <input into="name">
               <datastore>employee_2_name</datastore>
             </input>
             <input into="domain">
               <datastore>business_domain</datastore>
             </input>
-          </encoder>
+          </generator>
         </input>
       </generator>
     </input>

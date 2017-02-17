@@ -17,32 +17,32 @@ class EmailAddressGenerator < StringEncoder
     end
     self.outputs << Faker::Internet.email(self.name)
   end
-end
 
-def read_arguments
-  # Get command line arguments
-  opts = GetoptLong.new(
-      ['--help', '-h', GetoptLong::NO_ARGUMENT],
-      ['--name ', GetoptLong::OPTIONAL_ARGUMENT],
-  )
+  def read_arguments
+    # Get command line arguments
+    opts = GetoptLong.new(
+        ['--help', '-h', GetoptLong::NO_ARGUMENT],
+        ['--name', GetoptLong::OPTIONAL_ARGUMENT],
+    )
 
-  # process option arguments
-  opts.each do |opt, arg|
-    case opt
-      when '--help'
-        usage
-      when '--name'
-        self.name << arg;
-      else
-        Print.err "Argument not valid: #{arg}"
-        usage
-        exit
+    # process option arguments
+    opts.each do |opt, arg|
+      case opt
+        when '--help'
+          usage
+        when '--name'
+          self.name << arg;
+        else
+          Print.err "Argument not valid: #{arg}"
+          usage
+          exit
+      end
     end
   end
-end
 
-def encoding_print_string
-  'name: ' + self.name.to_s
+  def encoding_print_string
+    'name: ' + self.name.to_s
+  end
 end
 
 EmailAddressGenerator.new.run

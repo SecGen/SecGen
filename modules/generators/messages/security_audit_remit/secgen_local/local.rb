@@ -9,7 +9,7 @@ class SecurityAuditRemitGenerator < StringGenerator
   attr_accessor :remote_backup
   attr_accessor :physical_security
   LOCAL_DIR = File.expand_path('../../',__FILE__)
-  TEMPLATE_PATH = "#{LOCAL_DIR}/templates/security_audit_remit.md.erb"
+  TEMPLATE_PATH = "#{LOCAL_DIR}/templates/security_audit_remit.html.erb"
   
   def initialize
     super

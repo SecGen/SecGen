@@ -1,16 +1,15 @@
 <?xml version="1.0"?>
 
-<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
+<generator xmlns="http://www.github/cliffe/SecGen/generator"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+           xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
   <name>Business Email Address Encoder</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>Creates a formatted email address based on user inputting a name and business name using the Faker ruby
-    gem.
+  <description>Creates a formatted email address based on a name and business name using the Faker ruby gem.
   </description>
 
-  <type>string_encoder</type>
+  <type>string_generator</type>
   <type>email_address</type>
   <type>business_email</type>
   <type>local_calculation</type>
@@ -25,4 +24,4 @@
   <read_fact>domain</read_fact>  <!-- empty by default, used if provided.-->
 
   <output_type>email_address</output_type>
-</encoder>
+</generator>

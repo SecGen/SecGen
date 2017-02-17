@@ -17,8 +17,16 @@
   <read_fact>accounts</read_fact>
 
   <default_input into="accounts">
-    <generator type="account"/>
-    <generator type="account"/>
+    <generator type="account">
+      <input into="password">
+        <generator type="weak_password_generator"/>
+      </input>
+    </generator>
+    <generator type="account">
+      <input into="password">
+        <generator type="weak_password_generator"/>
+      </input>
+    </generator>
   </default_input>
 
   <!--optional details-->

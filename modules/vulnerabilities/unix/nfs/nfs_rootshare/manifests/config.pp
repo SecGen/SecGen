@@ -11,7 +11,7 @@ class nfs_rootshare::config {
     owner   => 'root',
     group   => 'root',
     mode    => '0777',
-    content  => template('nfs_overshare/exports.erb')
+    content  => template('nfs_rootshare/exports.erb')
   }
 
   exec { "exportfs":

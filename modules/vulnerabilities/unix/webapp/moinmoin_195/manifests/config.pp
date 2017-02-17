@@ -1,6 +1,11 @@
 class moinmoin_195::config {
   $secgen_parameters = parsejson($::json_inputs)
-  $raw_default_page = $secgen_parameters['default_page'][0]
+
+  if $secgen_parameters['business_name'] {
+    $raw_default_page = regsubst($secgen_parameters['business_name'][0], ',', '', 'G')  # Remove commas from co. names
+  } else{
+    $raw_default_page = $secgen_parameters['default_page'][0]
+  }
   $default_page = regsubst($raw_default_page,' ','(20)', 'G') # replace space with (20) for default pages w/ space.
 
   # Config files

@@ -5,8 +5,15 @@ class unrealirc_3281_backdoor::configure {
   $leaked_filenames = $secgen_parameters['leaked_filenames']
   $user = $secgen_parameters['user'][0]
   $group = $secgen_parameters['group'][0]
-  $motd = $secgen_parameters['motd'][0]
   $user_home = "/home/$user"
+
+  if $secgen_parameters['business_name'] {
+    $business_name = $secgen_parameters['business_name'][0]
+    $motd = "Welcome to the $business_name irc server!"
+  }
+  else{
+    $motd = $secgen_parameters['motd'][0]
+  }
 
   Exec { path => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'], }
 

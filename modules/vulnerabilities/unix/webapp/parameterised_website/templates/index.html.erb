@@ -1,69 +1,26 @@
 <% require 'json'
    $secgen_parameters = JSON.parse(@json_inputs)
+
    $business_name = $secgen_parameters['business_name'].first
    $business_motto = $secgen_parameters['business_motto'].first
    $manager_profile = $secgen_parameters['manager_profile'].first
    $business_address = $secgen_parameters['business_address'].first
    $industry = $secgen_parameters['industry'].first
    $employees = $secgen_parameters['employees']
-   $comment_flag = $secgen_parameters['ctf_flags'].first
-
    $product_name = $secgen_parameters['product_name'].first
+
    $main_page_paragraph_content = $secgen_parameters['main_page_paragraph_content']
+   $acceptable_use_policy = $secgen_parameters['host_acceptable_use_policy'].first == 'true'
+   $security_audit = $secgen_parameters['security_audit']
+
+   $current_page = 'Homepage'
 %>
 <html>
-<head>
-  <title><%= $business_name %> - Home Page</title>
-  <!-- Default stylesheet -->
-  <link rel="stylesheet" href="css/default.css"/>
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="css/bootstrap.min.css" />
-  <!-- Optional theme -->
-  <link rel="stylesheet" href=css/bootstrap-theme.min.css" />
-</head>
+<!-- <%= $comment_flag %> -->
+<%= scope.function_template(['parameterised_website/subtemplates/header.html.erb']) %>
 <body>
-  <!-- <%= $comment_flag %> -->
-
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#"></a>
-      </div>
-      <div id="navbar" class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-      </div><!--/.nav-collapse -->
-    </div>
-  </nav>
-
-  <div id="main_container" class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="intro-text">
-          <h1 class="name"><%= $business_name %></h1>
-          <hr class="star-light">
-          <h3> <%= $business_motto %></h3>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="main_page_content">
-        <h1><%= $product_name %></h1>
-        <p class="lead"><%= $main_page_paragraph_content.join %></p>
-      </div>
-    </div>
-  </div>
+  <%= scope.function_template(['parameterised_website/subtemplates/navbar.html.erb']) %>
+  <%= scope.function_template(['parameterised_website/subtemplates/main_container.html.erb']) %>
 </body>
-
-<footer>
-  <!-- Latest compiled and minified JavaScript -->
-  <script src="js/bootstrap.min.js"></script>
-</footer>
+<%= scope.function_template(['parameterised_website/subtemplates/footer.html.erb']) %>
 </html>

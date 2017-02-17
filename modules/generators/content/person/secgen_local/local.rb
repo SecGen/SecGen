@@ -7,6 +7,7 @@ class PersonHashBuilder < StringEncoder
   attr_accessor :address
   attr_accessor :phone_number
   attr_accessor :email_address
+  attr_accessor :username
 
   def initialize
     super
@@ -15,6 +16,7 @@ class PersonHashBuilder < StringEncoder
     self.address = ''
     self.phone_number = ''
     self.email_address = ''
+    self.username = ''
   end
 
   def encode_all
@@ -23,6 +25,7 @@ class PersonHashBuilder < StringEncoder
     person_hash['address'] = self.address
     person_hash['phone_number'] = self.phone_number
     person_hash['email_address'] = self.email_address
+    person_hash['username'] = self.username
 
     self.outputs << person_hash
   end
@@ -34,7 +37,8 @@ class PersonHashBuilder < StringEncoder
         [ '--name', GetoptLong::REQUIRED_ARGUMENT ],
         [ '--address', GetoptLong::REQUIRED_ARGUMENT ],
         [ '--phone_number', GetoptLong::REQUIRED_ARGUMENT ],
-        [ '--email_address', GetoptLong::REQUIRED_ARGUMENT ]
+        [ '--email_address', GetoptLong::REQUIRED_ARGUMENT ],
+        [ '--username', GetoptLong::REQUIRED_ARGUMENT ]
     )
 
     # process option arguments
@@ -48,6 +52,8 @@ class PersonHashBuilder < StringEncoder
           self.phone_number << arg;
         when '--email_address'
           self.email_address << arg;
+        when '--username'
+          self.username << arg;
         else
           Print.err "Argument not valid: #{arg}"
           usage
@@ -60,7 +66,8 @@ class PersonHashBuilder < StringEncoder
     'name: ' + self.name.to_s + ',
     address: ' + self.address.to_s  + ',
     phone_number: ' + self.phone_number.to_s + ',
-    email_address: ' + self.email_address.to_s
+    email_address: ' + self.email_address.to_s + ',
+    username: ' + self.username.to_s
   end
 end
 

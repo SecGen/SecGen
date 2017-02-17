@@ -1,2 +1,23 @@
-<% require 'json' -%>
-<%= JSON.parse(@json_inputs)["strings_to_leak"].join("\n----\n") %>
+<% require 'json'
+   $secgen_parameters = JSON.parse(@json_inputs)
+   if $secgen_parameters['person']
+     $person = $secgen_parameters['person'][0]
+   end
+
+   if $secgen_parameters['business_name']
+     $business_name = $secgen_parameters['business_name'][0]
+   end
+
+-%>
+<% if $business_name %>
+Welcome to the <%= $business_name %> Wiki!
+<% end %>
+<% if $person %>
+Manager:
+<%= $person['name'] + "\n" %>
+<%= $person['phone_number'] + "\n"  %>
+<%= $person['email_address'] + "\n"  %>
+----
+<% end %>
+
+<%= $secgen_parameters['strings_to_leak'].join("\n----\n") %>

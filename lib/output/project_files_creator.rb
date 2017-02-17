@@ -85,6 +85,9 @@ class ProjectFilesCreator
 # Resolves the network based on the scenario and ip_range.
   def resolve_network(ip_range)
     # increment @scenario_networks{ip_range=>counter}
+    if @scenario_networks[ip_range] == 0
+      @scenario_networks[ip_range] = 1
+    end
     @scenario_networks[ip_range] += 1
 
     # Split the range up and replace the last octet with the counter value

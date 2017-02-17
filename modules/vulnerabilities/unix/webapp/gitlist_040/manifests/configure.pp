@@ -20,7 +20,6 @@ class gitlist_040::configure {
     command => "git clone $github_repository",
   }
 
-  include ::apache
   include ::apache::mod::rewrite
   include ::apache::mod::php
 

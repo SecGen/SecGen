@@ -21,6 +21,10 @@
   <read_fact>site_name</read_fact>
   <read_fact>default_page</read_fact>
 
+  <!-- Team project selectors -->
+  <read_fact>business_name</read_fact>
+  <read_fact>person</read_fact>
+
   <default_input into="strings_to_leak">
     <value>This is some leaked data.</value>
     <generator type="message_generator"/>

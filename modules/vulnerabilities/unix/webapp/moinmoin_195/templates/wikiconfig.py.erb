@@ -9,6 +9,17 @@
     $secgen_parameters = JSON.parse(@json_inputs)
     $site_name = $secgen_parameters['site_name'].first
     $default_page = $secgen_parameters['default_page'].first
+
+    if $secgen_parameters['business_name']
+        $default_page = $secgen_parameters['business_name'][0]
+        $default_page = $default_page.gsub(/[,]/, '')
+    else
+        $default_page = $secgen_parameters['default_page'][0]
+    end
+
+    if $secgen_parameters['business_name']
+      $site_name = $secgen_parameters['business_name'].first
+    end
 %>
 """
     MoinMoin - Configuration for a single wiki

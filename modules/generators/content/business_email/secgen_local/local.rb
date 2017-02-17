@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-require_relative '../../../../lib/objects/local_string_encoder.rb'
+require_relative '../../../../../lib/objects/local_string_encoder.rb'
 require 'faker'
 
 class BusinessEmailEncoder < StringEncoder

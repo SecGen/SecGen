@@ -17,9 +17,15 @@
   <read_fact>strings_to_leak</read_fact>
   <read_fact>leaked_filenames</read_fact>
   <read_fact>share_name</read_fact>
+  <read_fact>share_comment</read_fact>
   <read_fact>storage_directory</read_fact>
   <read_fact>read_only_share</read_fact>
   <read_fact>guests_allowed</read_fact>
+
+  <!-- Team Project-style scenario selectors. No default and overrides other values if populated. -->
+  <read_fact>business_name</read_fact>
+  <read_fact>business_domain</read_fact>
+  <read_fact>person</read_fact>
 
   <!--if an input is not specified in the scenario-->
   <default_input into="strings_to_leak">
@@ -42,8 +48,12 @@
     <value>public</value>
   </default_input>
 
+  <default_input into="share_comment">
+    <value>Public Share</value>
+  </default_input>
+
   <default_input into="storage_directory">
-    <generator module_path="generators/filenames/storage_directory"/>
+    <value>/tmp</value>
   </default_input>
 
   <default_input into="read_only_share">

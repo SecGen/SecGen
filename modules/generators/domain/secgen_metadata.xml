@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 
-<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
+<generator xmlns="http://www.github/cliffe/SecGen/generator"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+           xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
   <name>Domain Encoder</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
   <description>Creates a domain based on user inputting a name.</description>
 
-  <type>string_encoder</type>
-  <type>domain_encoder</type>
+  <type>string_generator</type>
+  <type>domain_generator</type>
   <type>domain</type>
   <type>local_calculation</type>
   <platform>linux</platform>
@@ -20,5 +20,5 @@
   <!-- Convert a name into a randomly formatted domain. Works with business names too. e.g. thomas_shaw.org-->
   <read_fact>name</read_fact>
 
-  <output_type>email_address</output_type>
-</encoder>
+  <output_type>domain</output_type>
+</generator>

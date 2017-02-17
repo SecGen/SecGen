@@ -4,6 +4,9 @@ class nfs_share::config {
       ensure => installed
   }
 
+  group { 'wheel':
+    ensure => present,
+  }
 
   file { '/export_nfs':
     ensure => 'directory',

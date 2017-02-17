@@ -1,5 +1,13 @@
 class parameterised_website::install {
+  $secgen_parameters = parsejson($::json_inputs)
+  $acceptable_use_policy = str2bool($secgen_parameters['host_acceptable_use_policy'][0])
   $docroot = '/var/www'
+
+  if $acceptable_use_policy {  # Use alternative intranet index.html template
+    $index_template = 'parameterised_website/intranet_index.html.erb'
+  } else {
+    $index_template = 'parameterised_website/index.html.erb'
+  }
 
   # Move boostrap css+js over
   file { "$docroot/css":
@@ -21,13 +29,13 @@ class parameterised_website::install {
 
   # Apply index page template
   file { "$docroot/index.html":
-    ensure => file,
-    content => template('parameterised_website/index.html.erb'),
+    ensure  => file,
+    content => template($index_template),
   }
 
   # Apply contact page template
   file { "$docroot/contact.html":
-    ensure => file,
+    ensure  => file,
     content => template('parameterised_website/contact.html.erb'),
   }
 }

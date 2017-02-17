@@ -5,6 +5,18 @@
     $admins = [ $secgen_parameters['admin_name'].first + ' <' + $secgen_parameters['admin_email'].first + '>' ]
     $user = $secgen_parameters['user'].first
     $group = $secgen_parameters['group'].first
+
+    # Team Project style scenario overrides.
+    if $secgen_parameters['person']
+      $admin = $secgen_parameters['person'].first
+      $admins = [ $admin['username'] + ' <' + $admin['email_address'] + '>' ]
+    end
+
+    if $secgen_parameters['business_name'] and $secgen_parameters['business_domain']
+      $server_name = $secgen_parameters['business_domain'].first
+      $business_name = $secgen_parameters['business_name'].first
+      $server_desc = "Welcome to the #{$business_name} IRC server!"
+    end
 %>
 # Example UnrealIRCd 3.2.8.1 configuration file
 # Written by Mp5shooter for the SwiftIRC Wiki

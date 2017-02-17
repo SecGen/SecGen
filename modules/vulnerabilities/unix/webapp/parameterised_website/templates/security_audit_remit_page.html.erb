@@ -1,0 +1,30 @@
+<% require 'json'
+   $secgen_parameters = JSON.parse(@json_inputs)
+
+   $business_name = $secgen_parameters['business_name'].first
+   $business_motto = $secgen_parameters['business_motto'].first
+   $manager_profile = $secgen_parameters['manager_profile'].first
+   $business_address = $secgen_parameters['business_address'].first
+   $industry = $secgen_parameters['industry'].first
+   $employees = $secgen_parameters['employees']
+   $product_name = $secgen_parameters['product_name'].first
+
+   $acceptable_use_policy = $secgen_parameters['host_acceptable_use_policy'].first == 'true'
+   $security_audit = $secgen_parameters['security_audit']
+
+   $current_page = 'Security Audit Remit'
+%>
+<html>
+<%= scope.function_template(['parameterised_website/subtemplates/header.html.erb']) %>
+<body>
+  <%= scope.function_template(['parameterised_website/subtemplates/navbar.html.erb']) %>
+  <div id="main_container" class="container">
+    <div class="row">
+      <div class="main_page_content">
+         <%= @security_audit_remit %>
+      </div>
+    </div>
+  </div>
+</body>
+<%= scope.function_template(['parameterised_website/subtemplates/footer.html.erb']) %>
+</html>

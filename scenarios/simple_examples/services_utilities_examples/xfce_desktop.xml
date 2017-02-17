@@ -8,9 +8,10 @@
     <system_name>desktop</system_name>
     <base platform="linux"/>
 
-    <utility module_path=".*xfce" />
+    <utility module_path=".*xfce"/>
+    <utility module_path=".*iceweasel" />
 
-    <network type="private_network" range="dhcp"></network>
+    <network module_path=".*private_network_2"/>
     
   </system>
 

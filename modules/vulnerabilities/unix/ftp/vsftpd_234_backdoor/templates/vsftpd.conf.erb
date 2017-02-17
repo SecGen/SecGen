@@ -3,6 +3,11 @@
     $raw_anonymous_ftp = $secgen_parameters['anonymous_ftp'].first
     $anonymous_ftp = $raw_anonymous_ftp ? 'YES' : 'NO'
     $ftpd_banner = $secgen_parameters['ftpd_banner'].first
+
+    if $secgen_parameters['business_name']
+      $business_name = $secgen_parameters['business_name'].first
+      $ftpd_banner = "Welcome to the #{$business_name} FTP server!"
+    end
 %>
 # Example config file /etc/vsftpd.conf
 #

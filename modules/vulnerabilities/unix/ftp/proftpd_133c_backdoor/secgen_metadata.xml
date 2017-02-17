@@ -20,6 +20,11 @@
   <read_fact>strings_to_leak</read_fact>
   <read_fact>welcome_msg</read_fact>
 
+  <!-- Team project selectors -->
+  <read_fact>business_name</read_fact>
+  <read_fact>business_domain</read_fact>
+  <read_fact>person</read_fact>
+
   <default_input into="server_name">
     <generator type="username_generator"/>
   </default_input>
