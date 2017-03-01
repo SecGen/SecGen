@@ -12,29 +12,21 @@ class RangeEncoder < StringEncoder
   end
 
   def encode_all
-    self.outputs << rand(lower_bound.to_i .. upper_bound.to_i)
+    self.outputs << rand(lower_bound.to_i .. upper_bound.to_i).to_s
   end
 
-  def read_arguments
-    # Get command line arguments
-    opts = GetoptLong.new(
-        ['--help', '-h', GetoptLong::NO_ARGUMENT],
-        ['--lower_bound', GetoptLong::REQUIRED_ARGUMENT],
-        ['--upper_bound', GetoptLong::REQUIRED_ARGUMENT]
-    )
+  def get_options_array
+    super + [['--lower_bound', GetoptLong::REQUIRED_ARGUMENT],
+             ['--upper_bound', GetoptLong::REQUIRED_ARGUMENT]]
+  end
 
-    # process option arguments
-    opts.each do |opt, arg|
-      case opt
-        when '--lower_bound'
-          self.lower_bound << arg;
-        when '--upper_bound'
-          self.upper_bound << arg;
-        else
-          Print.err "Argument not valid: #{arg}"
-          usage
-          exit
-      end
+  def process_options(opt, arg)
+    super
+    case opt
+      when '--lower_bound'
+        self.lower_bound << arg;
+      when '--upper_bound'
+        self.upper_bound << arg;
     end
   end
 

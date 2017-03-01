@@ -27,38 +27,30 @@ class PersonHashBuilder < StringEncoder
     person_hash['email_address'] = self.email_address
     person_hash['username'] = self.username
 
-    self.outputs << person_hash
+    self.outputs << person_hash.to_json
   end
 
-  def read_arguments
-    # Get command line arguments
-    opts = GetoptLong.new(
-        [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
-        [ '--name', GetoptLong::REQUIRED_ARGUMENT ],
-        [ '--address', GetoptLong::REQUIRED_ARGUMENT ],
-        [ '--phone_number', GetoptLong::REQUIRED_ARGUMENT ],
-        [ '--email_address', GetoptLong::REQUIRED_ARGUMENT ],
-        [ '--username', GetoptLong::REQUIRED_ARGUMENT ]
-    )
+  def get_options_array
+    super + [['--name', GetoptLong::REQUIRED_ARGUMENT],
+             ['--address', GetoptLong::REQUIRED_ARGUMENT],
+             ['--phone_number', GetoptLong::REQUIRED_ARGUMENT],
+             ['--email_address', GetoptLong::REQUIRED_ARGUMENT],
+             ['--username', GetoptLong::REQUIRED_ARGUMENT]]
+  end
 
-    # process option arguments
-    opts.each do |opt, arg|
-      case opt
-        when '--name'
-          self.name << arg;
-        when '--address'
-          self.address << arg;
-        when '--phone_number'
-          self.phone_number << arg;
-        when '--email_address'
-          self.email_address << arg;
-        when '--username'
-          self.username << arg;
-        else
-          Print.err "Argument not valid: #{arg}"
-          usage
-          exit
-      end
+  def process_options(opt, arg)
+    super
+    case opt
+      when '--name'
+        self.name << arg;
+      when '--address'
+        self.address << arg;
+      when '--phone_number'
+        self.phone_number << arg;
+      when '--email_address'
+        self.email_address << arg;
+      when '--username'
+        self.username << arg;
     end
   end
 

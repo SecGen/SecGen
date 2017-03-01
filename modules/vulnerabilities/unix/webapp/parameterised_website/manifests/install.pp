@@ -1,5 +1,21 @@
 class parameterised_website::install {
-  $secgen_parameters = parsejson($::json_inputs)
+  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_parameters = parsejson($json_inputs)
+
+  # Parse out parameters
+  $business_name = $secgen_parameters['business_name'][0]
+  $business_motto = $secgen_parameters['business_motto'][0]
+  $manager_profile = parsejson($secgen_parameters['manager_profile'][0])
+  $business_address = $secgen_parameters['business_address'][0]
+  $office_telephone = $secgen_parameters['office_telephone'][0]
+  $office_email = $secgen_parameters['office_email'][0]
+  $industry = $secgen_parameters['industry'][0]
+  $product_name = $secgen_parameters['product_name'][0]
+  $employees = $secgen_parameters['employees']
+  $ctf_flags = $secgen_parameters['ctf_flags']
+  $main_page_paragraph_content = $secgen_parameters['main_page_paragraph_content']
+
+  $security_audit = $secgen_parameters['security_audit']
   $acceptable_use_policy = str2bool($secgen_parameters['host_acceptable_use_policy'][0])
   $docroot = '/var/www'
 

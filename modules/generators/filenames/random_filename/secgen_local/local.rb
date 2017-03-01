@@ -34,27 +34,19 @@ class FilenameGenerator < StringEncoder
     self.outputs << outputs
   end
 
-  def read_arguments
-    # Get command line arguments
-    opts = GetoptLong.new(
-        ['--help', '-h', GetoptLong::NO_ARGUMENT],
-        ['--file_name', GetoptLong::OPTIONAL_ARGUMENT],
-        ['--extension', GetoptLong::OPTIONAL_ARGUMENT]
-    )
-
-    # process option arguments
-    opts.each do |opt, arg|
-      case opt
-        when '--file_name'
-          self.extension << arg;
-        when '--extension'
-          self.extension << arg;
-        else
-          Print.err "Argument not valid: #{arg}"
-          usage
-          exit
-      end
+  def process_options(opt, arg)
+    super
+    case opt
+      when '--file_name'
+        self.extension << arg;
+      when '--extension'
+        self.extension << arg;
     end
+  end
+
+  def get_options_array
+    super + [['--file_name', GetoptLong::OPTIONAL_ARGUMENT],
+             ['--extension', GetoptLong::OPTIONAL_ARGUMENT]]
   end
 
   def encoding_print_string

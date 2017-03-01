@@ -41,31 +41,21 @@ class BusinessEmailEncoder < StringEncoder
     domain.gsub(/[^0-9a-z\s_-]/i, '')
   end
 
-  def read_arguments
-    # Get command line arguments
-    opts = GetoptLong.new(
-        ['--help', '-h', GetoptLong::NO_ARGUMENT],
-        ['--name', GetoptLong::REQUIRED_ARGUMENT],
-        ['--business_name', GetoptLong::REQUIRED_ARGUMENT],
-        ['--domain', GetoptLong::OPTIONAL_ARGUMENT],
-    )
+  def get_options_array
+    super + [['--name', GetoptLong::REQUIRED_ARGUMENT],
+             ['--business_name', GetoptLong::REQUIRED_ARGUMENT],
+             ['--domain', GetoptLong::OPTIONAL_ARGUMENT]]
+  end
 
-    # process option arguments
-    opts.each do |opt, arg|
-      case opt
-        when '--help'
-          usage
-        when '--name'
-          self.name << arg;
-        when '--business_name'
-          self.business_name << arg;
-        when '--domain'
-          self.domain << arg;
-        else
-          Print.err "Argument not valid: #{arg}"
-          usage
-          exit
-      end
+  def process_options(opt, arg)
+    super
+    case opt
+      when '--name'
+        self.name << arg;
+      when '--business_name'
+        self.business_name << arg;
+      when '--domain'
+        self.domain << arg;
     end
   end
 

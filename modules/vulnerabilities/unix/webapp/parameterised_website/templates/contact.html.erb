@@ -1,20 +1,4 @@
-<% require 'json'
-   $secgen_parameters = JSON.parse(@json_inputs)
-   $business_name = $secgen_parameters['business_name'].first
-   $business_motto = $secgen_parameters['business_motto'].first
-   $manager_profile = $secgen_parameters['manager_profile'].first
-   $business_address = $secgen_parameters['business_address'].first
-   $office_telephone = $secgen_parameters['office_telephone'].first
-   $office_email = $secgen_parameters['office_email'].first
-   $industry = $secgen_parameters['industry'].first
-   $employees = $secgen_parameters['employees']
-   $comment_flag = $secgen_parameters['ctf_flags'][1]
-
-   $security_audit = $secgen_parameters['security_audit']
-   $acceptable_use = $secgen_parameters['host_acceptable_use_policy'][0] == 'true'
-
-   $current_page = 'Contact Us'
-%>
+<% $current_page = 'Contact Us' -%>
 <html>
 <%= scope.function_template(['parameterised_website/subtemplates/header.html.erb']) %>
 <body>
@@ -23,28 +7,29 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="intro-text">
-        <h1 class="name"><%= $business_name %></h1>
+        <h1 class="name"><%= @business_name %></h1>
         <hr class="star-light">
-        <h3> <%= $business_motto %></h3>
+        <h3> <%= @business_motto %></h3>
       </div>
 
       <div id="business_address">
-        <p><strong>Contact <%= $business_name %></strong></p>
-        <p>Address: <%= $business_address %></p>
-        <p>Telephone: <%= $office_telephone %></p>
-        <p>Email: <%= $office_email %></p>
+        <p><strong>Contact <%= @business_name %></strong></p>
+        <p>Address: <%= @business_address %></p>
+        <p>Telephone: <%= @office_telephone %></p>
+        <p>Email: <%= @office_email %></p>
       </div>
 
       <div id="manager">
         <h4>Manager</h4>
-        <p><%= $manager_profile['name'] %></p>
-        <p><%= $manager_profile['phone_number'] %></p>
-        <p><%= $manager_profile['email_address'] %></p>
+        <p><%= @manager_profile['name'] %></p>
+        <p><%= @manager_profile['phone_number'] %></p>
+        <p><%= @manager_profile['email_address'] %></p>
       </div>
 
       <div id="employees">
         <h4>Employees</h4>
-        <% $employees.each do |employee| %>
+        <% @employees.each do |employee|
+            employee = JSON.parse(employee) %>
             <p><strong><%= employee['name'] %></strong></p>
             <p><%= employee['phone_number'] %></p>
             <p><%= employee['email_address'] %></p>

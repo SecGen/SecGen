@@ -187,7 +187,15 @@
         <value>true</value>
       </input>
       <input into="security_audit">
-         <generator module_path=".*security_audit_remit"/>
+        <encoder type="markdown_to_html_encoder">
+          <input into="strings_to_encode">
+            <generator module_path=".*security_audit_remit">
+              <input into="business_name">
+                <datastore>business_name</datastore>
+              </input>
+            </generator>
+          </input>
+        </encoder>
       </input>
       <input into="business_name">
         <datastore>business_name</datastore>

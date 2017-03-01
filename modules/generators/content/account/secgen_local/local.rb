@@ -25,41 +25,30 @@ class AccountGenerator < StringEncoder
     account_hash['strings_to_leak'] = self.strings_to_leak
     account_hash['leaked_filenames'] = self.leaked_filenames
 
-    self.outputs << account_hash
+    self.outputs << account_hash.to_json
   end
 
-  def read_arguments
-    # Get command line arguments
-    opts = GetoptLong.new(
-        [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
-        [ '--strings_to_encode', '-s', GetoptLong::OPTIONAL_ARGUMENT ],
-        [ '--strings_to_leak', GetoptLong::OPTIONAL_ARGUMENT ],
-        [ '--leaked_filenames', GetoptLong::OPTIONAL_ARGUMENT ],
-        [ '--username', GetoptLong::REQUIRED_ARGUMENT ],
-        [ '--password', GetoptLong::REQUIRED_ARGUMENT ],
-        [ '--super_user', GetoptLong::REQUIRED_ARGUMENT ],
-    )
+  def get_options_array
+    super + [['--strings_to_leak', GetoptLong::OPTIONAL_ARGUMENT],
+             ['--leaked_filenames', GetoptLong::OPTIONAL_ARGUMENT],
+             ['--username', GetoptLong::REQUIRED_ARGUMENT],
+             ['--password', GetoptLong::REQUIRED_ARGUMENT],
+             ['--super_user', GetoptLong::REQUIRED_ARGUMENT]]
+  end
 
-    # process option arguments
-    opts.each do |opt, arg|
-      case opt
-        when '--help'
-          usage
-        when '--username'
-          self.username << arg;
-        when '--password'
-          self.password << arg;
-        when '--super_user'
-          self.super_user << arg;
-        when '--strings_to_leak'
-          self.strings_to_leak << arg;
-        when '--leaked_filenames'
-          self.leaked_filenames << arg;
-        else
-          Print.err "Argument not valid: #{arg}"
-          usage
-          exit
-      end
+  def process_options(opt, arg)
+    super
+    case opt
+      when '--username'
+        self.username << arg;
+      when '--password'
+        self.password << arg;
+      when '--super_user'
+        self.super_user << arg;
+      when '--strings_to_leak'
+        self.strings_to_leak << arg;
+      when '--leaked_filenames'
+        self.leaked_filenames << arg;
     end
   end
 

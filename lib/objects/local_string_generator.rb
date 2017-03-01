@@ -1,6 +1,6 @@
 require 'getoptlong'
 require_relative '../helpers/constants'
-require 'json'
+require 'base64'
 
 # Inherited by local string generators
 # stdout used to return value
@@ -12,12 +12,14 @@ class StringGenerator
   require_relative '../helpers/print.rb'
 
   attr_accessor :module_name
+  attr_accessor :has_base64_inputs
   attr_accessor :outputs
 
   # override this
   def initialize
     # default values
     self.module_name = 'Null generator'
+    self.has_base64_inputs = false
     self.outputs = []
   end
 
@@ -28,20 +30,43 @@ class StringGenerator
 
   def read_arguments
     # Get command line arguments
-    opts = GetoptLong.new(
-        [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
-    )
+    opts = get_options
 
     # process option arguments
     opts.each do |opt, arg|
-      case opt
-        when '--help'
-          usage
-        else
-          Print.err "Argument not valid: #{arg}"
-          usage
-          exit
+      # Check if base64 decoding is required and set instance variable
+      if opt == '--b64'
+        self.has_base64_inputs = true
       end
+      # Decode if required
+      argument = self.has_base64_inputs ? Base64.strict_decode64(arg) : arg
+      process_options(opt, argument)
+    end
+  end
+
+  # Override this when using read_fact's in your module
+  def get_options
+    GetoptLong.new(*get_options_array)
+  end
+
+  def get_options_array
+    [['--help', '-h', GetoptLong::NO_ARGUMENT],
+     ['--b64', GetoptLong::OPTIONAL_ARGUMENT]]
+  end
+
+  # Override this when using read_fact's in your module. Always call super first
+  def process_options(opt, arg)
+    unless option_is_valid(opt)
+      Print.err "Argument not valid: #{arg}"
+      usage
+      exit
+    end
+
+    case opt
+      when '--help'
+        usage
+      when '--b64'
+        # do nothing
     end
   end
 
@@ -63,7 +88,24 @@ class StringGenerator
     Print.local_verbose "Generating..."
     generate
     Print.local_verbose "Generated: #{self.outputs.to_s}"
-    puts JSON.generate self.outputs
+    puts has_base64_inputs ? base64_encode_outputs : self.outputs
+  end
+
+  def base64_encode_outputs
+    self.outputs.map { |o| Base64.strict_encode64 o }
+  end
+
+  def option_is_valid(opt_to_check)
+    arg_validity = false
+    valid_arguments = get_options_array
+    valid_arguments.each{ |valid_arg_array|
+      valid_arg_array.each_with_index  { |valid_arg|
+        if valid_arg == opt_to_check
+          arg_validity = true
+        end
+      }
+    }
+    arg_validity
   end
 end
 

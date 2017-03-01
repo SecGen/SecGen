@@ -6,6 +6,7 @@ gem 'librarian-puppet'
 gem 'wordlist'
 gem 'faker'
 gem 'forgery'
+gem 'redcarpet'
 
 #development only gems go here
 group :test, :development do

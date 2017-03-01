@@ -1,6 +1,6 @@
 class unrealirc_3281_backdoor::configure {
-
-  $secgen_parameters = parsejson($::json_inputs)
+  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_parameters = parsejson($json_inputs)
   $strings_to_leak = $secgen_parameters['strings_to_leak']
   $leaked_filenames = $secgen_parameters['leaked_filenames']
   $user = $secgen_parameters['user'][0]

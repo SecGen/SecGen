@@ -8,7 +8,7 @@
 
     # Team Project style scenario overrides.
     if $secgen_parameters['person']
-      $admin = $secgen_parameters['person'].first
+      $admin = JSON.parse($secgen_parameters['person'].first)
       $admins = [ $admin['username'] + ' <' + $admin['email_address'] + '>' ]
     end
 

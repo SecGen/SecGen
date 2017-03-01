@@ -1,5 +1,6 @@
 class distcc_exec::config{
-  $secgen_parameters = parsejson($::json_inputs)
+  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_parameters = parsejson($json_inputs)
   $leaked_filenames = $secgen_parameters['leaked_filenames']
   $strings_to_leak = $secgen_parameters['strings_to_leak']
 

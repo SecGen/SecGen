@@ -1,19 +1,4 @@
-<% require 'json'
-   $secgen_parameters = JSON.parse(@json_inputs)
-
-   $business_name = $secgen_parameters['business_name'].first
-   $business_motto = $secgen_parameters['business_motto'].first
-   $manager_profile = $secgen_parameters['manager_profile'].first
-   $business_address = $secgen_parameters['business_address'].first
-   $industry = $secgen_parameters['industry'].first
-   $employees = $secgen_parameters['employees']
-   $product_name = $secgen_parameters['product_name'].first
-
-   $acceptable_use_policy = $secgen_parameters['host_acceptable_use_policy'].first == 'true'
-   $security_audit = $secgen_parameters['security_audit']
-
-   $current_page = 'Acceptable Use Policy'
-%>
+<% $current_page = 'Acceptable Use Policy' %>
 <html>
 <%= scope.function_template(['parameterised_website/subtemplates/header.html.erb']) %>
 <body>

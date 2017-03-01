@@ -1,6 +1,7 @@
 class parameterised_website::security_audit_remit {
   # Pull SecGen Parameters through
-  $secgen_parameters = parsejson($::json_inputs)
+  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_parameters = parsejson($json_inputs)
   $security_audit = $secgen_parameters['security_audit']
 
   if $security_audit {

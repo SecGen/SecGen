@@ -27,26 +27,15 @@ class DomainEncoder < StringEncoder
     domain.gsub(/[^0-9a-z\s_-]/i, '')
   end
 
-  def read_arguments
-    # Get command line arguments
-    opts = GetoptLong.new(
-        ['--help', '-h', GetoptLong::NO_ARGUMENT],
-        ['--name', GetoptLong::REQUIRED_ARGUMENT],
-    )
-
-    # process option arguments
-    opts.each do |opt, arg|
-      case opt
-        when '--help'
-          usage
-        when '--name'
-          self.name << arg;
-        else
-          Print.err "Argument not valid: #{arg}"
-          usage
-          exit
-      end
+  def process_options(opt, arg)
+    super
+    if opt == '--name'
+      self.name << arg
     end
+  end
+
+  def get_options_array
+    super + [['--name', GetoptLong::REQUIRED_ARGUMENT]]
   end
 
   def encoding_print_string

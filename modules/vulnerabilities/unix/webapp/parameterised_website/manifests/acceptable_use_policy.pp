@@ -1,6 +1,7 @@
 class parameterised_website::acceptable_use_policy {
   # Pull SecGen Parameters through
-  $secgen_parameters = parsejson($::json_inputs)
+  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_parameters = parsejson($json_inputs)
   $acceptable_use_policy = str2bool($secgen_parameters['host_acceptable_use_policy'][0])
 
   if $acceptable_use_policy {

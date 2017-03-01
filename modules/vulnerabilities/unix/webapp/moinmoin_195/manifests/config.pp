@@ -1,5 +1,6 @@
 class moinmoin_195::config {
-  $secgen_parameters = parsejson($::json_inputs)
+  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_parameters = parsejson($json_inputs)
 
   if $secgen_parameters['business_name'] {
     $raw_default_page = regsubst($secgen_parameters['business_name'][0], ',', '', 'G')  # Remove commas from co. names

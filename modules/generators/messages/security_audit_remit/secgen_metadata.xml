@@ -6,7 +6,7 @@
   <name>Security Audit Remit Generator</name>
   <author>Z. Cliffe Schreuders</author>
   <module_license>MIT</module_license>
-  <description>Generates a html message describing a security audit.</description>
+  <description>Generates a markdown message describing a security audit.</description>
 
   <type>string_generator</type>
   <type>local_calculation</type>
