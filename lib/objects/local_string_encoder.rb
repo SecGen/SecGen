@@ -105,7 +105,7 @@ class StringEncoder
     Print.local_verbose "Encoding '#{encoding_print_string}'"
     encode_all
     Print.local_verbose "Encoded: #{self.outputs.to_s}"
-    puts base64_encode_outputs
+    puts has_base64_inputs ? base64_encode_outputs : self.outputs
   end
 
   def base64_encode_outputs
