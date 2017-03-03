@@ -88,14 +88,11 @@
 			</input>
 		</vulnerability>
 
-		<!--TODO parameterise root level vulnerabilities-->
-		<vulnerability privilege="root_rwx" access="local" />
-
-		<!--<vulnerability read_fact="strings_to_leak" access="local" privilege="root_rwx">-->
-			<!--<input into="strings_to_leak" into_datastore="flags">-->
-				<!--<generator type="flag_generator" />-->
-			<!--</input>-->
-		<!--</vulnerability>-->
+		<vulnerability read_fact="strings_to_leak" access="local" privilege="root_rwx">
+			<input into="strings_to_leak" into_datastore="flags">
+				<generator type="flag_generator" />
+			</input>
+		</vulnerability>
 
 		<service/>
 
