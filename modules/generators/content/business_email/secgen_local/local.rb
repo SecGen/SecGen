@@ -60,9 +60,29 @@ class BusinessEmailEncoder < StringEncoder
   end
 
   def encoding_print_string
-    'name: ' + self.name.to_s + ',
-    business_name: ' + self.business_name.to_s + ',
-    domain: ' + self.domain.to_s
+    no_input_message = 'to generate...'
+
+    if self.name.to_s.empty?
+      name = no_input_message
+    else
+      name = self.name.to_s
+    end
+
+    if self.business_name.to_s.empty?
+      business_name = no_input_message
+    else
+      business_name = self.business_name.to_s
+    end
+
+    if self.domain.to_s.empty?
+      domain = no_input_message
+    else
+      domain = self.domain.to_s
+    end
+
+    'name: ' + name + ',
+    business_name: ' + business_name + ',
+    domain: ' + domain
   end
 end
 

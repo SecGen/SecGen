@@ -20,14 +20,14 @@
 
   <default_input into="paragraph_count">
     <!--The number range encoder wrappers the rand() function and passes in the upper / lower bounds-->
-    <encoder type="number_range">
+    <generator type="number_range">
       <input into="lower_bound">
         <value>3</value>
       </input>
       <input into="upper_bound">
         <value>5</value>
       </input>
-    </encoder>
+    </generator>
   </default_input>
 
   <output_type>paragraph</output_type>

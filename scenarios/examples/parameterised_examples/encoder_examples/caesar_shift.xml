@@ -13,9 +13,6 @@
 			<!--direct the output from below into strings_to_leak-->
 			<input into="strings_to_leak">
 				<encoder module_path="modules/encoders/cipher/caesar_shift">
-					<input into="shift_key">
-						<value>5</value>
-					</input>
 					<input into="strings_to_encode">
 						<generator type="string_generator"/>
 						<generator type="flag_generator"/>

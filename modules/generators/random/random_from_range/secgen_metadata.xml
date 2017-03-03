@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
+<generator xmlns="http://www.github/cliffe/SecGen/generator"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+         xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
   <name>Random from Range Encoder</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
@@ -24,4 +24,4 @@
   </default_input>
 
   <output_type>integer</output_type>
-</encoder>
+</generator>
