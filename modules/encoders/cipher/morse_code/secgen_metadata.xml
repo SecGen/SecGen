@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+  <name>Morse Code Encoder</name>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>Encodes a string into Morse code.</description>
+
+  <type>morse_code_encoder</type>
+  <type>ascii_reversable</type>
+  <type>string_encoder</type>
+  <platform>linux</platform>
+  <platform>windows</platform>
+
+  <reference>https://gist.github.com/mikedamage/105081</reference>
+
+  <read_fact>strings_to_encode</read_fact>
+
+  <default_input into="strings_to_encode">
+    <generator type="string_generator"/>
+  </default_input>
+
+  <output_type>encoded_strings</output_type>
+</encoder>
