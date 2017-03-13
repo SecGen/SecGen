@@ -19,15 +19,36 @@ def usage
    --project [output dir], -p [output dir]: directory for the generated project
               (output will default to #{default_project_dir})
    --help, -h: shows this usage information
+   --forensic-image-type [image type] Forensic image format of generated image (raw, ewf)
 
    COMMANDS:
    run, r: builds project and then builds the VMs
    build-project, p: builds project (vagrant and puppet config), but does not build VMs
    build-vms [/project/dir], v [project #]: builds VMs from a previously generated project
               (use in combination with --project [dir])
+   create-forensic-image [/project/dir], v [project #]: builds forensic images from a previously generated project
+              (use in combination with --project [dir])
    list-scenarios: lists all scenarios that can be used with the --scenario option
+   list-projects: lists all projects that can be used with the --project option
 "
   exit
+end
+
+# Displays the current ForGen version number
+#
+# @author Jason Keighley
+# @see constants.rb
+# @return [Void]
+def display_version
+  @colour.help VERSION_NUMBER
+end
+
+# Delete all current project directories
+#
+# @author Jason Keighley
+# @return [Void]
+def delete_all_projects
+  FileUtils.rm_r(Dir.glob("#{PROJECTS_DIR}/*"))
 end
 
 # Builds the vagrant configuration file based on a scenario file
@@ -87,6 +108,7 @@ def build_config(scenario, out_dir, options)
   creator.write_files
 
   Print.info 'Project files created.'
+  return systems
 end
 
 # Builds the vm via the vagrant file in the project dir
@@ -95,6 +117,70 @@ def build_vms(project_dir)
   Print.info "Building project: #{project_dir}"
   GemExec.exe('vagrant', project_dir, 'up')
   Print.info 'VMs created.'
+end
+
+# Make forensic image helper methods
+#################################################
+# Create an EWF forensic image
+#
+# @author Jason Keighley
+# @return [Void]
+def create_ewf_image(drive_path ,image_output_location)
+  ## Make E01 image
+  Print.info "Creating E01 image with path #{image_output_location}.E01"
+  Print.info 'This may take a while:'
+  Print.info "E01 image #{image_output_location}.E01 created" if system "ftkimager '#{drive_path}' '#{image_output_location}' --e01"
+end
+
+# Create an DD forensic image
+#
+# @author Jason Keighley
+# @return [Void]
+def create_dd_image(drive_path, image_output_location)
+  ## Make DD image
+  Print.info "Creating dd image with path #{image_output_location}.raw"
+  Print.info 'This may take a while:'
+  Print.info "Raw image #{image_output_location}.raw created" if system "VBoxManage clonemedium disk '#{drive_path}' '#{image_output_location}.raw' --format RAW"
+end
+
+# Delete virtualbox virtual machine
+#
+# @author Jason Keighley
+# @param [String] vm_name Virtual machine name in VirtualBox
+# @return [Void]
+def delete_virtualbox_vm(vm_name)
+  Print.info "Deleting VirtualBox VM #{vm_name}"
+  Print.info "VirtualBox VM #{vm_name} deleted" if system "VBoxManage unregistervm #{vm_name} --delete"
+end
+
+# Make forensic image helper methods \end
+#################################################
+
+# Make forensic image
+#
+# @author Jason Keighley
+# @param [Hash] options Main options hash containing all options for the running ForGen instance
+# @return [Hash] options Main options hash containing all options for the running ForGen instance
+def make_forensic_image(project_dir, image_output_location, image_type)
+  drive_path = %x(VBoxManage list hdds | grep '#{project_dir.split('/').last}').sub(/\ALocation:\s*/, '').sub(/\n/, '')
+  drive_name = drive_path.split('/').last
+
+  image_output_location = "#{project_dir}/#{drive_name}".sub(/.vmdk|.vdi/, '') unless image_output_location
+
+    ## Ensure all vms are shutdown
+    system "cd '#{project_dir}' && vagrant halt"
+
+  case image_type.downcase
+    when 'raw', 'dd'
+      create_dd_image(drive_path, image_output_location)
+
+    when 'ewf', 'e01'
+      create_ewf_image(drive_path, image_output_location)
+
+    else
+      Print.info "The image type [#{image_type}] is not recognised."
+  end
+
 end
 
 # Runs methods to run and configure a new vm from the configuration file
@@ -108,8 +194,15 @@ def default_project_dir
 end
 
 def list_scenarios
-  Print.info "Full paths to scenario files are displayed below"
+  Print.std "Full paths to scenario files are displayed below"
   Dir["#{ROOT_DIR}/scenarios/**/*"].select{ |file| !File.directory? file}.each_with_index do |scenario_name, scenario_number|
+    Print.std "#{scenario_number}) #{scenario_name}"
+  end
+end
+
+def list_projects
+  Print.std "Full paths to project directories are displayed below"
+  Dir["#{PROJECTS_DIR}/*"].select{ |file| !File.file? file}.each_with_index do |scenario_name, scenario_number|
     Print.std "#{scenario_number}) #{scenario_name}"
   end
 end
@@ -132,6 +225,9 @@ opts = GetoptLong.new(
   [ '--total-memory', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-usage', GetoptLong::REQUIRED_ARGUMENT],
+  [ '--delete-vm-after-image-creation', GetoptLong::NO_ARGUMENT],
+  [ '--build-from-iso', GetoptLong::REQUIRED_ARGUMENT],
+  [ '--forensic-image-type', GetoptLong::REQUIRED_ARGUMENT],
 )
 
 scenario = SCENARIO_XML
@@ -174,6 +270,14 @@ opts.each do |opt, arg|
       Print.info "Max CPU usage set to #{arg}"
       options[:max_cpu_usage] = arg
 
+    when '--delete-vm-after-image-creation'
+      Print.info "Will delete the virtual machine after a forensic image has been generated"
+      options[:delete_vm_after_image_creation] = true
+
+    when '--forensic-image-type'
+      Print.info "Image output type set to #{arg}"
+      options[:forensic_image_type] = arg
+
     else
       Print.err "Argument not valid: #{arg}"
       usage
@@ -204,9 +308,33 @@ case ARGV[0]
       usage
       exit
     end
+
+  when 'create-forensic-image'
+    image_type = options.has_key?(:forensic_image_type)?options[:forensic_image_type]:'raw';
+
+    if project_dir
+      build_vms(project_dir)
+      make_forensic_image(project_dir, nil, image_type)
+    else
+      project_dir = default_project_dir unless project_dir
+      build_config(scenario, project_dir, options)
+      build_vms(project_dir)
+      make_forensic_image(project_dir, nil, image_type)
+    end
+
   when 'list-scenarios'
     list_scenarios
-    exit
+    exit 0
+
+  when 'list-projects'
+    list_projects
+    exit 0
+
+  when 'delete-all-projects'
+    delete_all_projects
+    Print.std 'All projects deleted'
+    exit 0
+
   else
     Print.err "Command not valid: #{ARGV[0]}"
     usage
