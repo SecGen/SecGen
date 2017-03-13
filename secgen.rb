@@ -14,22 +14,23 @@ def usage
    #{$0} [--options] <command>
 
    OPTIONS:
-   --scenario [xml file], -s [xml file]: set the scenario to use
+   --scenario [xml file], -s [xml file]: Set the scenario to use
               (defaults to #{SCENARIO_XML})
-   --project [output dir], -p [output dir]: directory for the generated project
+   --project [output dir], -p [output dir]: Directory for the generated project
               (output will default to #{default_project_dir})
-   --help, -h: shows this usage information
-   --forensic-image-type [image type] Forensic image format of generated image (raw, ewf)
+   --help, -h: Shows this usage information
+   --forensic-image-type [image type]: Forensic image format of generated image (raw, ewf)
 
    COMMANDS:
-   run, r: builds project and then builds the VMs
-   build-project, p: builds project (vagrant and puppet config), but does not build VMs
-   build-vms [/project/dir], v [project #]: builds VMs from a previously generated project
+   run, r: Builds project and then builds the VMs
+   build-project, p: Builds project (vagrant and puppet config), but does not build VMs
+   build-vms [/project/dir], v [project #]: Builds VMs from a previously generated project
               (use in combination with --project [dir])
-   create-forensic-image [/project/dir], v [project #]: builds forensic images from a previously generated project
-              (use in combination with --project [dir])
-   list-scenarios: lists all scenarios that can be used with the --scenario option
-   list-projects: lists all projects that can be used with the --project option
+   create-forensic-image [/project/dir], v [project #]: Builds forensic images from a previously generated project
+              (can be used in combination with --project [dir])
+   list-scenarios: Lists all scenarios that can be used with the --scenario option
+   list-projects: Lists all projects that can be used with the --project option
+   delete-all-projects: Deletes all current projects in the projects directory
 "
   exit
 end
@@ -226,7 +227,6 @@ opts = GetoptLong.new(
   [ '--max-cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-usage', GetoptLong::REQUIRED_ARGUMENT],
   [ '--delete-vm-after-image-creation', GetoptLong::NO_ARGUMENT],
-  [ '--build-from-iso', GetoptLong::REQUIRED_ARGUMENT],
   [ '--forensic-image-type', GetoptLong::REQUIRED_ARGUMENT],
 )
 
