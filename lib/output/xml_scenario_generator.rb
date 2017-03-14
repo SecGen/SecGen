@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 # Convert systems objects into xml
-class XMLReportGenerator
+class XmlScenarioGenerator
 
   # @param [Object] systems the list of systems
   # @param [Object] scenario the scenario file used to generate

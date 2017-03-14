@@ -9,6 +9,8 @@
   <description>Converts to BASE64 encoding.</description>
 
   <type>string_encoder</type>
+  <type>ascii_reversable</type>
+  <type>alpha_reversable</type>
   <platform>linux</platform>
   <platform>windows</platform>
 
