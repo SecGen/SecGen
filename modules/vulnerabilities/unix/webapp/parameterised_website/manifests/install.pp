@@ -12,7 +12,7 @@ class parameterised_website::install {
   $industry = $secgen_parameters['industry'][0]
   $product_name = $secgen_parameters['product_name'][0]
   $employees = $secgen_parameters['employees']
-  $ctf_flags = $secgen_parameters['ctf_flags']
+  $strings_to_leak = $secgen_parameters['strings_to_leak']
   $main_page_paragraph_content = $secgen_parameters['main_page_paragraph_content']
 
   $security_audit = $secgen_parameters['security_audit']
@@ -53,5 +53,11 @@ class parameterised_website::install {
   file { "$docroot/contact.html":
     ensure  => file,
     content => template('parameterised_website/contact.html.erb'),
+  }
+
+  $image_contents = $secgen_parameters['images_to_leak'][0]
+  file { "$docroot/image.png":
+    ensure => file,
+    content => base64('decode', $image_contents)
   }
 }

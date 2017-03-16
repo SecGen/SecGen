@@ -1,6 +1,9 @@
 <div id="main_container" class="container">
   <div class="row">
     <div class="main_page_content">
+      <% if @images_to_leak -%>
+          <img src="image.png" height="128" width="128">
+      <% end -%>
       <% # Intranet style -%>
       <% if @security_audit or @acceptable_use_policy -%>
           <p class="lead">Welcome to the internal intranet server for <%=@business_name%>.</p>
