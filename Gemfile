@@ -7,6 +7,7 @@ gem 'wordlist'
 gem 'faker'
 gem 'forgery'
 gem 'redcarpet'
+gem 'rqrcode'
 
 #development only gems go here
 group :test, :development do

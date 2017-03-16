@@ -13,6 +13,7 @@
   <type>shift_cipher</type>
   <type>ascii_value_cipher</type>
   <type>cipher_encoder</type>
+  <type>ascii_reversable</type>
   <platform>linux</platform>
   <platform>windows</platform>
 
@@ -23,8 +24,15 @@
     <generator type="string_generator"/>
   </default_input>
   <default_input into="shift_key">
-    <value>10</value>
+    <generator type="number_range">
+      <input into="lower_bound">
+        <value>1</value>
+      </input>
+      <input into="upper_bound">
+        <value>94</value>
+      </input>
+    </generator>
   </default_input>
 
-  <output_type>string</output_type>
+  <output_type>encoded_strings</output_type>
 </encoder>

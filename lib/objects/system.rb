@@ -244,9 +244,22 @@ class System
           default_module_selectors_to_add = selected.default_inputs_selectors[default_key]
 
           default_module_selectors_to_add.each do |module_to_add|
-            module_to_add.write_to_module_with_id = selected.unique_id
-
-            default_modules_to_add.concat select_modules(module_to_add.module_type, module_to_add.attributes, available_modules, previously_selected_modules + default_modules_to_add, module_to_add.unique_id, module_to_add.write_output_variable, module_to_add.write_to_module_with_id, module_to_add.received_inputs, module_to_add.default_inputs_literals, module_to_add.write_to_datastore, module_to_add.received_datastores)
+            # calculate new names for these module instances...
+            def_write_to = module_to_add.write_to_module_with_id
+            def_unique_id = module_to_add.unique_id
+            # write to this module?
+            if /^.*defaultinput$/ =~ def_write_to
+              def_write_to = selected.unique_id
+            end
+            # nested default?
+            if /^.*defaultinput/ =~ def_write_to
+              def_write_to = def_write_to.gsub(/^.*defaultinput/, selected.unique_id)
+            end
+            if /^.*defaultinput/ =~ def_unique_id
+              def_unique_id = def_unique_id.gsub(/^.*defaultinput/, selected.unique_id)
+            end
+            
+            default_modules_to_add.concat select_modules(module_to_add.module_type, module_to_add.attributes, available_modules, previously_selected_modules + default_modules_to_add, def_unique_id, module_to_add.write_output_variable, def_write_to, module_to_add.received_inputs, module_to_add.default_inputs_literals, module_to_add.write_to_datastore, module_to_add.received_datastores)
           end
         end
       else

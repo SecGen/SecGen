@@ -1,6 +1,7 @@
 require 'erb'
 require_relative '../helpers/constants.rb'
-require_relative 'xml_report_generator.rb'
+require_relative 'xml_scenario_generator.rb'
+require_relative 'xml_marker_generator.rb'
 require 'fileutils'
 require 'librarian'
 
@@ -51,10 +52,10 @@ class ProjectFilesCreator
     Print.std "Creating Vagrant file: #{vfile}"
     template_based_file_write(VAGRANT_TEMPLATE_FILE, vfile)
 
-    # Create the Report.xml file
+    # Create the scenario xml file
     xfile = "#{@out_dir}/scenario.xml"
 
-    xml_report_generator = XMLReportGenerator.new(@systems, @scenario, @time)
+    xml_report_generator = XmlScenarioGenerator.new(@systems, @scenario, @time)
     xml = xml_report_generator.output
     Print.std "Creating scenario definition file: #{xfile}"
     begin
@@ -65,6 +66,22 @@ class ProjectFilesCreator
       Print.err "Error writing file: #{e.message}"
       exit
     end
+
+    # Create the marker xml file
+    x2file = "#{@out_dir}/marker.xml"
+
+    xml_marker_generator = XmlMarkerGenerator.new(@systems, @scenario, @time)
+    xml = xml_marker_generator.output
+    Print.std "Creating marker file: #{x2file}"
+    begin
+      File.open(x2file, 'w+') do |file|
+        file.write(xml)
+      end
+    rescue StandardError => e
+      Print.err "Error writing file: #{e.message}"
+      exit
+    end
+
   end
 
 # @param [Object] template erb path

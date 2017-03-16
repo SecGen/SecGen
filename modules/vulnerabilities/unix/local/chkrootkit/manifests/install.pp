@@ -1,6 +1,9 @@
 class chkrootkit::install {
   Exec { path => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'] }
-
+  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_parameters = parsejson($json_inputs)
+  $leaked_filenames = $secgen_parameters['leaked_filenames']
+  $strings_to_leak = $secgen_parameters['strings_to_leak']
   $archive = 'chkrootkit-0.49.tar.gz'
 
   file { "/usr/local/$archive":
@@ -26,5 +29,13 @@ class chkrootkit::install {
   exec { "remove-$archive":
     require => Exec['unpack-chkrootkit'],
     command => "rm /usr/local/$archive",
+  }
+
+  # Leak a file containing a string/flag to /root/
+  ::secgen_functions::leak_files { 'nfs_overshare-file-leak':
+    storage_directory => '/root',
+    leaked_filenames => $leaked_filenames,
+    strings_to_leak => $strings_to_leak,
+    leaked_from => "chkrootkit_vuln",
   }
 }

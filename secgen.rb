@@ -123,7 +123,7 @@ end
 
 Print.std '~'*47
 Print.std 'SecGen - Creates virtualised security scenarios'
-Print.std '            Licensed GPLv3 2014-16'
+Print.std '            Licensed GPLv3 2014-17'
 Print.std '~'*47
 
 # Get command line arguments
