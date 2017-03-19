@@ -22,6 +22,7 @@ You will need to install the following:
 
 Ruby: https://www.ruby-lang.org/en/  
 Vagrant: http://www.vagrantup.com/  
+Packer: https://www.packer.io/downloads.html  
 Virtual Box: https://www.virtualbox.org/  
 Puppet: http://puppet.com/  
 And the required Ruby Gems (including Nokogiri and Librarian-puppet)

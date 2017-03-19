@@ -48,6 +48,13 @@ WORDLISTS_DIR = "#{ROOT_DIR}/lib/resources/wordlists"
 # Path to secgen_functions puppet module
 SECGEN_FUNCTIONS_PUPPET_DIR = "#{MODULES_DIR}build/puppet/secgen_functions"
 
+## PACKER CONSTANTS ##
+
+# Path to Packerfile.erb file
+PUPPET_VERSION = '3.8.7'
+
+VAGRANT_BASEBOX_STORAGE = "#{ROOT_DIR}/.generated"
+
 ## VAGRANT FILE CONSTANTS ##
 
 #
