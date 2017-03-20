@@ -19,6 +19,10 @@ def usage
    --project [output dir], -p [output dir]: directory for the generated project
               (output will default to #{default_project_dir})
    --help, -h: shows this usage information
+   --gui-output', '-g' gui output
+   --nopae: disable PAE support
+   --hwvirtex: enable HW virtex support
+   --vtxvpid: enable VTX support
 
    COMMANDS:
    run, r: builds project and then builds the VMs
@@ -128,6 +132,9 @@ opts = GetoptLong.new(
   [ '--project', '-p', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--scenario', '-s', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--gui-output', '-g', GetoptLong::NO_ARGUMENT],
+  [ '--nopae', GetoptLong::NO_ARGUMENT],
+  [ '--hwvirtex', GetoptLong::NO_ARGUMENT],
+  [ '--vtxvpid', GetoptLong::NO_ARGUMENT],
   [ '--memory-per-vm', GetoptLong::REQUIRED_ARGUMENT],
   [ '--total-memory', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
@@ -153,6 +160,15 @@ opts.each do |opt, arg|
     when '--gui-output'
       Print.info "Gui output set (virtual machines will be spawned)"
       options[:gui_output] = true
+    when '--nopae'
+      Print.info "no pae"
+      options[:nopae] = true
+    when '--hwvirtex'
+      Print.info "with HW virtualisation"
+      options[:hwvirtex] = true
+    when '--vtxvpid'
+      Print.info "with VT support"
+      options[:vtxvpid] = true
     when '--memory-per-vm'
       if options.has_key? :total_memory
         Print.info 'Total memory option specified before memory per vm option, defaulting to total memory value'
