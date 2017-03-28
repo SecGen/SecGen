@@ -15,6 +15,18 @@
 
   <reference>http://ruby-doc.org/stdlib-2.2.2/libdoc/securerandom/rdoc/SecureRandom.html#method-c-hex</reference>
 
+  <read_fact>line_length</read_fact>
+  <read_fact>number_of_lines</read_fact>
+
+  <!--Default behaviour returns 1 random hex string, override the read_facts for multi-line data. -->
+  <default_input into="line_length">
+    <value>16</value>
+  </default_input>
+
+  <default_input into="number_of_lines">
+    <value>1</value>
+  </default_input>
+
   <output_type>generated_strings</output_type>
   
 </generator>

@@ -7,7 +7,7 @@ define secgen_functions::leak_file($leaked_filename, $storage_directory, $string
       notice("File with that name already defined, appending leaked strings instead...")
       exec { "$leaked_from-$path_to_leak":
         path    => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'],
-        command => "echo $strings_to_leak >> $path_to_leak",
+        command => "echo \"\n------\n$strings_to_leak\" >> $path_to_leak",
       }
     } else {
       file { $path_to_leak:
