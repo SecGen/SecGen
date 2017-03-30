@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+
+  <name>XSS Cookie Stealing Challenge</name>
+  <author>emeth-</author>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>BreakTheNet - XSS Cookie Stealing Challenge. Try become the 'admin' user.For purposes of this challenge,
+    anything you successfully "alert()" in the admin's browser will be passed along to you. (Admin browser is simulated
+    using phantomjs).
+  </description>
+
+  <type>webapp</type>
+  <type>xss_challenge</type>
+  <privilege>none</privilege>
+  <access>remote</access>
+  <platform>linux</platform>
+
+  <read_fact>strings_to_leak</read_fact>
+
+  <!--ctf flag-->
+  <default_input into="strings_to_leak">
+    <generator type="message_generator"/>
+  </default_input>
+
+  <!--optional hints-->
+  <hint>Create your own account and perform an XSS attack on your own user profile.</hint>
+
+  <conflict>
+    <type>webapp</type>
+  </conflict>
+
+  <requires>
+    <module_path>modules/services/unix/http/lamp</module_path>
+  </requires>
+
+</vulnerability>
