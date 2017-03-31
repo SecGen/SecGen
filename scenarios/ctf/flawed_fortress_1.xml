@@ -17,6 +17,11 @@
 							<generator type="flag_generator" />
 					</input>
 				</encoder>
+				<encoder type="alpha_reversable">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</encoder>
 				<encoder type="ascii_reversable">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
@@ -41,11 +46,16 @@
 						</encoder>
 					</input>
 				</encoder>
+				<encoder type="vignere_cipher">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</encoder>
 				<generator name="Bitwise XOR Challenge Generator"/>
 			</input>
 		</vulnerability>
 
-		<network type="private_network" range="dhcp"/>
+		<network module_path=".*private_network_1"/>
 	</system>
 
 
@@ -90,10 +100,16 @@
 			</input>
 		</vulnerability>
 
+		<vulnerability module_path=".*ssh_leaked_keys">
+			<input into="strings_to_leak">
+				<generator type="flag_generator"/>
+			</input>
+		</vulnerability>
+
 		<service/>
 		<service/>
 
-		<network type="private_network" range="dhcp"/>
+		<network module_path=".*private_network_1"/>
 	</system>
 
 	<!-- an example remote storage system, with a remotely exploitable vulnerability that can then be escalated to root -->
@@ -115,7 +131,7 @@
 
 		<service/>
 
-		<network type="private_network" range="dhcp"/>
+		<network module_path=".*private_network_1"/>
 	</system>
 
 
