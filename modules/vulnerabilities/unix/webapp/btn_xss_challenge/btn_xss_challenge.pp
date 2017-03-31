@@ -1,1 +1,0 @@
-require btn_xss_challenge
