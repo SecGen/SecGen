@@ -28,16 +28,10 @@
   <read_fact>business_domain</read_fact>
   <read_fact>person</read_fact>
 
-  <!--if an input is not specified in the scenario-->
+  <!-- drops 2 flags, one in the store and one in the root directory-->
   <default_input into="strings_to_leak">
-    <value>Plain text from the metadata default, destined for strings_to_leak...</value>
-    <encoder type="string_encoder">
-      <input into="strings_to_encode">
-        <!--encode the following strings-->
-        <value>Encoded text from the metadata default, destined for strings_to_leak...</value>
-        <value>More encoded text from the metadata default, destined for strings_to_leak...</value>
-      </input>
-    </encoder>
+    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>
   </default_input>
 
   <default_input into="leaked_filenames">
