@@ -95,7 +95,7 @@ class XmlScenarioGenerator
         xml.network(selected_module.attributes_for_scenario_output)
       else
         puts "Unexpected module type: #{selected_module.attributes_for_scenario_output}"
-        exit
+        # exit
     end
   end
 end
