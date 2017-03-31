@@ -51,14 +51,14 @@
 						<generator type="flag_generator" />
 					</input>
 				</encoder>
-				<generator name="Bitwise XOR Challenge Generator"/>
+				<generator type="ctf_challenge" />
 			</input>
 		</vulnerability>
 
 		<network module_path=".*private_network_1"/>
 		<build type="cleanup">
 			<input into="root_password">
-				<generator type="password_generator"/>
+				<generator type="strong_password_generator"/>
 			</input>
 		</build>
 	</system>
@@ -106,7 +106,7 @@
 			</input>
 		</vulnerability>
 
-		<vulnerability module_path=".*ssh_leaked_keys">
+		<vulnerability read_fact="strings_to_leak">
 			<input into="strings_to_leak">
 				<generator type="flag_generator"/>
 			</input>
@@ -118,7 +118,7 @@
 		<network module_path=".*private_network_1"/>
 		<build type="cleanup">
 			<input into="root_password">
-				<generator type="password_generator"/>
+				<generator type="strong_strong_password_generator"/>
 			</input>
 		</build>
 	</system>
@@ -145,7 +145,7 @@
 		<network module_path=".*private_network_1"/>
 		<build type="cleanup">
 			<input into="root_password">
-				<generator type="password_generator"/>
+				<generator type="strong_password_generator"/>
 			</input>
 		</build>
 	</system>
