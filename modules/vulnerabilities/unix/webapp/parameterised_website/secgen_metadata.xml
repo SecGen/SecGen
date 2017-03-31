@@ -37,7 +37,6 @@
 
   <default_input into="images_to_leak">
     <generator type="image_generator"/>
-    <generator type="image_generator"/>
   </default_input>
 
   <default_input into="business_name">

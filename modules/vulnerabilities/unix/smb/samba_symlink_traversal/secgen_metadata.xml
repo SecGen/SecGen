@@ -10,7 +10,7 @@
     and the unix extensions = yes, wide links = yes and allow insecure wide links = yes settings. </description>
 
   <type>samba</type>
-  <privilege>user_rwx</privilege>
+  <privilege>user_rw</privilege>
   <access>remote</access>
   <platform>linux</platform>
 
@@ -43,11 +43,6 @@
   <default_input into="leaked_filenames">
     <generator module_path="generators/filenames/leaked_filename"/>
     <generator module_path="generators/filenames/leaked_filename"/>
-  </default_input>
-
-  <default_input into="images_to_leak">
-    <generator type="image_generator"/>
-    <generator type="image_generator"/>
   </default_input>
 
   <default_input into="share_name">

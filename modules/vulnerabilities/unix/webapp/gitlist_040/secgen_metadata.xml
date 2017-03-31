@@ -26,11 +26,6 @@
     <generator type="message_generator"/>
   </default_input>
 
-  <!-- Images to leak is dropped in /var/www/gitlist/ -->
-  <default_input into="images_to_leak">
-    <generator type="image_generator"/>
-  </default_input>
-
   <default_input into="leaked_filenames">
     <generator module_path="generators/filenames/leaked_filename"/>
     <generator module_path="generators/filenames/leaked_filename"/>
