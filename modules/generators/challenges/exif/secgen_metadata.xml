@@ -9,7 +9,8 @@
   <description>TODO</description>
 
   <type>modified_exif</type>
-  <type>string_generator</type>
+  <type>image_generator</type>
+  <type>image_challenge_generator</type>
   <type>local_calculation</type>
   <platform>linux</platform>
   <platform>windows</platform>

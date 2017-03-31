@@ -56,6 +56,11 @@
 		</vulnerability>
 
 		<network module_path=".*private_network_1"/>
+		<build type="cleanup">
+			<input into="root_password">
+				<generator type="password_generator"/>
+			</input>
+		</build>
 	</system>
 
 
@@ -93,10 +98,11 @@
 
 		<!-- vulnerability which can leak images, leak 2 image challenges and a random red-herring image -->
 		<vulnerability read_fact="images_to_leak">
-			<input into="images_to_leak">
-				<generator name="Hidden Data in Image File Challenge"/>
-				<generator name="QR Code Generator"/>
-				<generator name="Random Image Generator"/>
+			<input into="images_to_leak" unique_module_list="image_challenges">
+				<generator type="image_challenge_generator"/>
+				<generator type="image_generator"/>
+				<generator type="image_challenge_generator"/>
+				<generator type="image_challenge_generator"/>
 			</input>
 		</vulnerability>
 
@@ -110,6 +116,11 @@
 		<service/>
 
 		<network module_path=".*private_network_1"/>
+		<build type="cleanup">
+			<input into="root_password">
+				<generator type="password_generator"/>
+			</input>
+		</build>
 	</system>
 
 	<!-- an example remote storage system, with a remotely exploitable vulnerability that can then be escalated to root -->
@@ -132,6 +143,11 @@
 		<service/>
 
 		<network module_path=".*private_network_1"/>
+		<build type="cleanup">
+			<input into="root_password">
+				<generator type="password_generator"/>
+			</input>
+		</build>
 	</system>
 
 

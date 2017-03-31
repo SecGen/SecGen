@@ -11,6 +11,7 @@
   </description>
 
   <type>hidden_data_in_image_file</type>
+  <type>image_generator</type>
   <type>image_challenge_generator</type>
   <type>local_calculation</type>
   <platform>linux</platform>
