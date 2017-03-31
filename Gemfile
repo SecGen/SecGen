@@ -8,6 +8,7 @@ gem 'faker'
 gem 'forgery'
 gem 'redcarpet'
 gem 'rqrcode'
+gem 'mini_exiftool_vendored'
 
 #development only gems go here
 group :test, :development do
