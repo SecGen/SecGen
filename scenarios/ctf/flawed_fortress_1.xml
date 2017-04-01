@@ -14,7 +14,7 @@
 				<generator type="flag_generator" />
 				<encoder type="ascii_reversable">
 					<input into="strings_to_encode">
-							<generator type="flag_generator" />
+						<generator type="flag_generator" />
 					</input>
 				</encoder>
 				<encoder type="alpha_reversable">
@@ -46,12 +46,11 @@
 						</encoder>
 					</input>
 				</encoder>
-				<encoder type="vignere_cipher">
+				<encoder type="alpha_reversable">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
 					</input>
 				</encoder>
-				<generator type="ctf_challenge" />
 			</input>
 		</vulnerability>
 
@@ -98,11 +97,18 @@
 
 		<!-- vulnerability which can leak images, leak 2 image challenges and a random red-herring image -->
 		<vulnerability read_fact="images_to_leak">
-			<input into="images_to_leak" unique_module_list="image_challenges">
-				<generator type="image_challenge_generator"/>
+			<input into="images_to_leak">
+				<generator read_fact="strings_to_leak" type="image_generator" >
+					<input into="strings_to_leak">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
 				<generator type="image_generator"/>
-				<generator type="image_challenge_generator"/>
-				<generator type="image_challenge_generator"/>
+				<generator read_fact="strings_to_leak" type="image_generator" >
+					<input into="strings_to_leak">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
 			</input>
 		</vulnerability>
 
@@ -113,12 +119,11 @@
 		</vulnerability>
 
 		<service/>
-		<service/>
 
 		<network module_path=".*private_network_1"/>
 		<build type="cleanup">
 			<input into="root_password">
-				<generator type="strong_strong_password_generator"/>
+				<generator type="strong_password_generator"/>
 			</input>
 		</build>
 	</system>
@@ -128,9 +133,18 @@
 		<system_name>that_escalated_quickly</system_name>
 		<base platform="linux"/>
 
-		<vulnerability read_fact="strings_to_leak" access="remote" privilege="user_rwx">
+		<vulnerability read_fact="images_to_leak" access="remote" privilege="user_rwx">
+			<input into="images_to_leak" >
+				<generator read_fact="strings_to_leak" type="image_generator" >
+					<input into="strings_to_leak">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
+				<generator type="image_generator"/>
+			</input>
 			<input into="strings_to_leak">
 				<generator type="flag_generator" />
+				<generator type="ctf_challenge" />
 			</input>
 		</vulnerability>
 
@@ -149,6 +163,5 @@
 			</input>
 		</build>
 	</system>
-
 
 </scenario>
