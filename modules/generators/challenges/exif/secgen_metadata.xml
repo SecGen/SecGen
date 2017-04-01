@@ -20,7 +20,7 @@
   <read_fact>exif_field</read_fact>
 
   <default_input into="base64_image">
-    <generator type="random_image"/>
+    <generator type="random_jpg"/>
   </default_input>
 
   <default_input into="strings_to_leak">

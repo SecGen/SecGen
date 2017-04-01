@@ -48,6 +48,7 @@ GEM
     rdoc (4.2.2)
       json (~> 1.4)
     redcarpet (3.4.0)
+    rmagick (2.16.0)
     rqrcode (0.10.1)
       chunky_png (~> 1.0)
     rsync (1.0.9)
@@ -73,6 +74,7 @@ DEPENDENCIES
   rake
   rdoc
   redcarpet
+  rmagick
   rqrcode
   wordlist
   yard

@@ -9,6 +9,7 @@ gem 'forgery'
 gem 'redcarpet'
 gem 'rqrcode'
 gem 'mini_exiftool_vendored'
+gem 'rmagick'
 
 #development only gems go here
 group :test, :development do

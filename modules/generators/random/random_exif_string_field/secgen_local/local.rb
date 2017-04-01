@@ -9,9 +9,7 @@ class RandomExifStringField < StringGenerator
 
   def generate
 
-    fields = %w(ProcessingSoftware DocumentName ImageDescription Make Model PageName Software ModifyDate Artist
-                ImageHistory UserComment UniqueCameraModel LocalizedCameraModel CameraSerialNumber OriginalRawFileName
-                ReelName CameraLabel OwnerName SerialNumber Lens)
+    fields = %w(title comment make)
 
     self.outputs << fields.sample.chomp
   end

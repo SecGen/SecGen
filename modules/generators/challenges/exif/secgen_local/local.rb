@@ -16,36 +16,18 @@ class ExifModifiedGenerator < StringEncoder
   end
 
   def encode_all
-
-
-    fields = %w(ProcessingSoftware DocumentName ImageDescription Make Model PageName Software ModifyDate Artist
-                ImageHistory UserComment UniqueCameraModel LocalizedCameraModel CameraSerialNumber OriginalRawFileName
-                ReelName CameraLabel OwnerName SerialNumber Lens)
-
-    # selected_field = fields.sample.chomp
-
-
-
-
-
     # Decode the base64 image data into raw contents
     raw_image_contents = Base64.strict_decode64(self.base64_image)
 
-    # Store the raw_image_contents as a temporary image file called 'tmp.png'
-    tmp_file_path = GENERATORS_DIR + 'challenges/exif/secgen_local/tmp/tmp.png'
+    # Store the raw_image_contents as a temporary image file called 'tmp.jpg'
+    tmp_file_path = GENERATORS_DIR + 'challenges/exif/secgen_local/tmp.jpg'
     File.open(tmp_file_path, 'wb') { |f| f.write(raw_image_contents) }
 
     image = MiniExiftool.new(tmp_file_path)
-
-    fields.each { |field|
-      image[field] = self.strings_to_leak
-    }
+    image[self.exif_field] = self.strings_to_leak[0]
     image.save
 
-    # Get a list of string-writable exif tags + create a generator
-
-
-    # self.outputs << Base64.strict_encode64(contents_with_data)
+    self.outputs << Base64.strict_encode64(File.binread(tmp_file_path))
   end
 
   def get_options_array
