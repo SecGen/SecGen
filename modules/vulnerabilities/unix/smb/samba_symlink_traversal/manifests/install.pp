@@ -12,6 +12,7 @@ class samba_symlink_traversal::install {
   # Ensure the storage directory exists
   file { $storage_directory:
     ensure => directory,
+    mode   => '777',
   }
 
   # Add store to .conf

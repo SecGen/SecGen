@@ -7,7 +7,6 @@
   $raw_guests_allowed = $parsed_inputs['guests_allowed'].first
   $read_only_share = $raw_read_only_share == 'true' ? 'yes' : 'no' # convert boolean to 'yes' or 'no'
   $guests_allowed = $raw_guests_allowed  == 'true' ? 'yes' : 'no'
-  $storage_directory = '/tmp' if @symlink_traversal
 
   # Team Project overrides
   if $parsed_inputs['business_domain']
