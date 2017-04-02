@@ -51,5 +51,6 @@ class unrealirc_3281_backdoor::configure {
     strings_to_leak   => $strings_to_leak,
     owner             => $user,
     leaked_from       => "unrealirc_3281_backdoor",
+    mode              => '0600'
   }
 }
