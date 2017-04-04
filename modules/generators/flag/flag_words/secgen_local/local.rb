@@ -1,10 +1,10 @@
 #!/usr/bin/ruby
 require_relative '../../../../../lib/objects/local_string_generator.rb'
 
-class WordGenerator < StringGenerator
+class WordFlagGenerator < StringGenerator
   def initialize
     super
-    self.module_name = 'Random Word Generator'
+    self.module_name = 'Random Word Based Flag Generator'
   end
 
   def generate
@@ -15,4 +15,4 @@ class WordGenerator < StringGenerator
   end
 end
 
-WordGenerator.new.run
+WordFlagGenerator.new.run
