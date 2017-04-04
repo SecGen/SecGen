@@ -12,6 +12,7 @@ class samba_symlink_traversal::install {
   # Ensure the storage directory exists
   file { $storage_directory:
     ensure => directory,
+    mode   => '777',
   }
 
   # Add store to .conf
@@ -38,11 +39,20 @@ class samba_symlink_traversal::install {
     command => "/bin/sed -i \'/\\[global\\]/a allow insecure wide links = yes\' /etc/samba/smb.conf"
   }
 
-  ::secgen_functions::leak_files { 'samba_symlink_traversal-file-leak':
+  # Leak a flag/string to the samba share directory
+  ::secgen_functions::leak_files { 'samba_symlink_traversal-file-leak-1':
     storage_directory => $storage_directory,
-    leaked_filenames  => $leaked_filenames,
-    strings_to_leak   => $strings_to_leak,
+    leaked_filenames  => [$leaked_filenames[0]],
+    strings_to_leak   => [$strings_to_leak[0]],
     images_to_leak    => $images_to_leak,
+    leaked_from       => 'samba_symlink_traversal',
+  }
+
+  # Leak a flag/string to root directory
+  ::secgen_functions::leak_files { 'samba_symlink_traversal-file-leak-2':
+    storage_directory => '/',
+    leaked_filenames  => [$leaked_filenames[1]],
+    strings_to_leak   => [$strings_to_leak[1]],
     leaked_from       => 'samba_symlink_traversal',
   }
 }

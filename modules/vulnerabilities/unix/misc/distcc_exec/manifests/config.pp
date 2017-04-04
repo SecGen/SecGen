@@ -31,7 +31,7 @@ class distcc_exec::config{
     leaked_filenames  => $leaked_filenames,
     strings_to_leak   => $strings_to_leak,
     owner             => 'distccd',
-    mode              => '0750',
+    mode              => '0600',
     leaked_from       => 'distcc_exec',
   }
 }

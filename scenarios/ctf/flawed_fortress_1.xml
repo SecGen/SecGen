@@ -14,7 +14,12 @@
 				<generator type="flag_generator" />
 				<encoder type="ascii_reversable">
 					<input into="strings_to_encode">
-							<generator type="flag_generator" />
+						<generator type="flag_generator" />
+					</input>
+				</encoder>
+				<encoder type="alpha_reversable">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
 					</input>
 				</encoder>
 				<encoder type="ascii_reversable">
@@ -41,11 +46,20 @@
 						</encoder>
 					</input>
 				</encoder>
-				<generator name="Bitwise XOR Challenge Generator"/>
+				<encoder type="alpha_reversable">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</encoder>
 			</input>
 		</vulnerability>
 
-		<network type="private_network" range="dhcp"/>
+		<network module_path=".*private_network_1"/>
+		<build type="cleanup">
+			<input into="root_password">
+				<generator type="strong_password_generator"/>
+			</input>
+		</build>
 	</system>
 
 
@@ -84,16 +98,34 @@
 		<!-- vulnerability which can leak images, leak 2 image challenges and a random red-herring image -->
 		<vulnerability read_fact="images_to_leak">
 			<input into="images_to_leak">
-				<generator name="Hidden Data in Image File Challenge"/>
-				<generator name="QR Code Generator"/>
-				<generator name="Random Image Generator"/>
+				<generator read_fact="strings_to_leak" type="image_generator" >
+					<input into="strings_to_leak">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
+				<generator type="image_generator"/>
+				<generator read_fact="strings_to_leak" type="image_generator" >
+					<input into="strings_to_leak">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
+			</input>
+		</vulnerability>
+
+		<vulnerability read_fact="strings_to_leak">
+			<input into="strings_to_leak">
+				<generator type="flag_generator"/>
 			</input>
 		</vulnerability>
 
 		<service/>
-		<service/>
 
-		<network type="private_network" range="dhcp"/>
+		<network module_path=".*private_network_1"/>
+		<build type="cleanup">
+			<input into="root_password">
+				<generator type="strong_password_generator"/>
+			</input>
+		</build>
 	</system>
 
 	<!-- an example remote storage system, with a remotely exploitable vulnerability that can then be escalated to root -->
@@ -101,9 +133,18 @@
 		<system_name>that_escalated_quickly</system_name>
 		<base platform="linux"/>
 
-		<vulnerability read_fact="strings_to_leak" access="remote" privilege="user_rwx">
+		<vulnerability read_fact="images_to_leak" access="remote" privilege="user_rwx">
+			<input into="images_to_leak" >
+				<generator read_fact="strings_to_leak" type="image_generator" >
+					<input into="strings_to_leak">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
+				<generator type="image_generator"/>
+			</input>
 			<input into="strings_to_leak">
 				<generator type="flag_generator" />
+				<generator type="ctf_challenge" />
 			</input>
 		</vulnerability>
 
@@ -115,8 +156,12 @@
 
 		<service/>
 
-		<network type="private_network" range="dhcp"/>
+		<network module_path=".*private_network_1"/>
+		<build type="cleanup">
+			<input into="root_password">
+				<generator type="strong_password_generator"/>
+			</input>
+		</build>
 	</system>
-
 
 </scenario>

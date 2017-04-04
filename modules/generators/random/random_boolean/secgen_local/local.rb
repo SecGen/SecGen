@@ -8,7 +8,7 @@ class BooleanGenerator < StringGenerator
   end
 
   def generate
-    self.outputs << [true, false].sample
+    self.outputs << [true, false].sample.to_s
   end
 end
 

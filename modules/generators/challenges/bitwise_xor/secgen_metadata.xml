@@ -10,6 +10,7 @@
     XOR's the 2 strings, outputs the binary streams.
   </description>
 
+  <type>ctf_challenge</type>
   <type>bitstream_generator</type>
   <type>string_generator</type>
   <type>local_calculation</type>

@@ -131,4 +131,3 @@ class StringEncoder
     option_validity
   end
 end
-
