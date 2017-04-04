@@ -9,7 +9,9 @@ class WordGenerator < StringGenerator
 
   def generate
     file = File.readlines("#{ROOT_DIR}/lib/resources/wordlists/wordlist")
-    self.outputs << 'flag{' + file.sample.chomp + file.sample.chomp + file.sample.chomp + file.sample.chomp + file.sample.chomp + '}'
+    flag_string = file.sample.chomp + file.sample.chomp + file.sample.chomp + file.sample.chomp + file.sample.chomp
+    flag_string.gsub!(/[^0-9a-z ]/i, '')  # strip special characters from the word string. removes umlauts/accents etc.
+    self.outputs << 'flag{' + flag_string + '}'
   end
 end
 
