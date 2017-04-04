@@ -16,6 +16,7 @@
 
   <read_fact>strings_to_leak</read_fact>
   <read_fact>accounts</read_fact>
+  <read_fact>ssh_key_pair</read_fact>
 
   <default_input into="strings_to_leak">
     <generator type="flag_generator"/>
@@ -27,6 +28,10 @@
         <generator module_path=".*strong_password.*"/>
       </input>
     </generator>
+  </default_input>
+
+  <default_input into="ssh_key_pair">
+    <generator type="ssh_key_generator"/>
   </default_input>
 
   <!--optional details-->

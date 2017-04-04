@@ -11,7 +11,8 @@ class ssh_leaked_keys::init {
         username         => $username,
         password         => $account['password'],
         strings_to_leak  => $strings_to_leak,
-        leaked_filenames => $account['leaked_filenames']
+        leaked_filenames => $account['leaked_filenames'],
+        ssh_key_pair     => parsejson($secgen_parameters['ssh_key_pair'][0]),
       }
     }
 }

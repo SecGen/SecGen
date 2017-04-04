@@ -10,6 +10,7 @@ gem 'redcarpet'
 gem 'rqrcode'
 gem 'mini_exiftool_vendored'
 gem 'rmagick'
+gem 'sshkey'
 
 #development only gems go here
 group :test, :development do
