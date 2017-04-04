@@ -32,8 +32,8 @@
 
   <!-- File-name which contains strings_to_leak -->
   <default_input into="leaked_filenames">
-    <generator module_path="generators/filenames/leaked_filename"/>
-    <generator module_path="generators/filenames/leaked_filename"/>
+    <generator type="filename_generator"/>
+    <generator type="filename_generator"/>
   </default_input>
 
   <!--optional vulnerability details-->

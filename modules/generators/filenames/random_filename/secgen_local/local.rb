@@ -29,9 +29,12 @@ class FilenameGenerator < StringEncoder
       extension = ''
     end
 
-    outputs = Faker::File.file_name('', file_name, extension, '').chomp('.')
+    leaked_filenames = %w(top_secret_information secrets hush_hush private_stuff restricted classified confidential)
+    15.times{ leaked_filenames << Faker::File.file_name('', file_name, extension, '').chomp('.') }
 
-    self.outputs << outputs
+    output = leaked_filenames.sample
+
+    self.outputs << output
   end
 
   def process_options(opt, arg)

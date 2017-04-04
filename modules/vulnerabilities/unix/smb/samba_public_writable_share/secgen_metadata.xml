@@ -41,8 +41,8 @@
   </default_input>
 
   <default_input into="leaked_filenames">
-    <generator module_path="generators/filenames/leaked_filename"/>
-    <generator module_path="generators/filenames/leaked_filename"/>
+    <generator type="filename_generator"/>
+    <generator type="filename_generator"/>
   </default_input>
 
   <default_input into="share_name">
