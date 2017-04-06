@@ -74,8 +74,22 @@ Existing scenarios make SecGen's barrier for entry low: when invoking SecGen, a 
 
 Scenarios can be found in the scenarios/ directory. For example, to spin up a VM that has any random vulnerability:
 ```bash
-   ruby secgen.rb --scenario scenarios/simple_examples/simple_any_random_vulnerability.xml run
+   ruby secgen.rb --scenario scenarios/examples/any_random_vulnerability.xml run
 ```
+####VMs for a security audit of an organisation
+To generate a set of VMs for a randomly generated fictional organisation, with a desktop system, webserver, and intranet server:
+```bash
+   ruby secgen.rb --scenario scenarios/security_audit/team_project_scenario.xml run
+```
+Note that the intranet server has a security remit, with instructions on performing a security audit of these systems. The desktop system can access the intranet to access the remit, but the attacker VM (for example, Kali) can be connected to the NIC only shared by the Web server to simulate the need to pivot attacks through the Web server, as they can't connect to the intranet system directly. The "marking guide" is in the form of the output scenario.xml in the project directory, which provides the details of the systems generated.
+
+####VMs for a CTF event
+To generate a set of VMs for a CTF competition:
+```bash
+   ruby secgen.rb --scenario scenarios/ctf/flawed_fortress_1.xml run
+```
+Note the flags and hints are stored on marker.xml
+We also have developed and released a frontend web interface for hosting CTF events.
 
 ### Defining new scenarios
 Writing your own scenarios enables you to define a VM or set of VMs with a configuration as specific or general as desired.
@@ -130,7 +144,7 @@ Note that the filters specified are [regular expression (regexp)](https://en.wik
 </scenario>
 ```
 
-Here scenarios/default_scenario.xml defines a scenario with a remotely exploitable vulnerability that grants access to a user account, and a locally exploitable root-level privilege escalation vulnerability. 
+Here scenarios/default_scenario.xml defines a scenario with a remotely exploitable vulnerability that grants access to a user account, and a locally exploitable root-level privilege escalation vulnerability.
 
 ```xml
 <?xml version="1.0"?>
@@ -182,7 +196,17 @@ Some modules can be fed input. For example, a vulnerability can be fed informati
 </scenario>
 ```
 
-Encoders, generators, and literal values can be nested. For example, as above, but the message and flag are first base64 encoded:
+Encoders, generators, and literal values can be nested.
+
+SecGen module parameters are analogous to [named and (always) optional parameters](https://en.wikipedia.org/wiki/Named_parameter) (for example, [as in C#](https://msdn.microsoft.com/en-us/library/dd264739.aspx)).
+
+The above can be illustrated in pseudo code:
+```C#
+// This is just some pseudo code to help explain
+vulnerabilty_nfs_overshare(strings_to_leak: ["Leak this text, and a randomly generated flag", generator_flag()]);
+```
+
+Another example, as above, but the message and flag are first base64 encoded:
 ```xml
 <?xml version="1.0"?>
 
@@ -211,6 +235,160 @@ Encoders, generators, and literal values can be nested. For example, as above, b
 </scenario>
 ```
 
+Generators and encoders will always produce/return an (unnamed) array of Strings, which can be directed to input parameters for other modules (by parameter name into modules they are nested under, as illustrated above). 
+
+All encoders will accept and process the "strings_to_encode" parameter, so it's safe to pass input into any randomly selected encoder (though you may want to filter to reversable encoders for a decoding challenge, as shown below). It's possible to direct the output from multiple modules to input to the same module parameter. For example: 
+
+```xml
+<?xml version="1.0"?>
+
+<scenario xmlns="http://www.github/cliffe/SecGen/scenario"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+
+	<system>
+		<system_name>file_server</system_name>
+		<base platform="linux"/>
+
+		<vulnerability module_path=".*nfs_overshare">
+			<input into="strings_to_leak">
+				<!--output from this encoder...-->
+				<encoder type="ascii_reversable">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</encoder>
+				<!--and from this generator:-->
+				<generator type="flag_generator" />
+            </input>
+        </vulnerability>
+
+		<network type="private_network" range="dhcp"/>
+	</system>
+
+</scenario>
+
+```
+
+In this case each of the nested inputs to that same parameter are concatenated into the same array of strings. This is roughly analogous to:
+```C#
+// This is just some pseudo code to help explain
+// (C#-like methods with named arguments)
+vulnerability_nfs_share_leak(strings_to_leak: encoder_selected_ascii_reversable(strings_to_encode: encoder_flag_generator()) CONCATENATE_WITH encoder_flag_generator());
+```
+
+You might want to write to any module that has a particular parameter: for example, a vulnerability that has a "strings_to_leak" parameter, meaning a vulnerability that when exploited reveals strings to the attacker:
+ ```xml
+ <?xml version="1.0"?>
+ 
+ <scenario xmlns="http://www.github/cliffe/SecGen/scenario"
+ 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ 	   xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+ 
+ 	<system>
+ 		<system_name>file_server</system_name>
+ 		<base platform="linux"/>
+		<!--this line selects a vulnerability that can leak strings:-->
+ 		<vulnerability read_fact="strings_to_leak">
+ 			<input into="strings_to_leak">
+ 				<encoder type="ascii_reversable">
+ 					<input into="strings_to_encode">
+ 						<generator type="flag_generator" />
+ 					</input>
+ 				</encoder>
+ 				<generator type="flag_generator" />
+             </input>
+         </vulnerability>
+ 
+ 		<network type="private_network" range="dhcp"/>
+ 	</system>
+ 
+ </scenario>
+ 
+ ```
+
+The parameters that each module accepts is listed in each module's secgen_metadata.xml file, as described below.
+
+#### Advanced scenarios: Ensuring modules selected are unique
+
+If you want to use a bunch of modules to generate input for another module's parameters, you can specify a (named) list to exclude modules from being selected more than once.
+```xml
+[snip]
+		<vulnerability name="NFS Share Leak">
+			<input into="strings_to_leak" unique_module_list="unique_encoders">
+				<encoder type="ascii_reversable">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</encoder>
+				<encoder type="alpha_reversable">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</encoder>
+				<encoder type="alpha_reversable">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</encoder>
+			</input>
+		</vulnerability>
+[snip]
+```
+The "unique_module_list='unique_encoders'" ensures that the encoders selected will not be repeated.
+
+#### Advanced scenarios: Using datastores (variables) to hold values for reuse
+
+Datastores are essentially variables that you can write to and then reuse. This is *similar* to "variables" in other languages. However, a datastore always holds an array of strings, and writing to the datastore concatenates to the array of strings.
+
+You can use datastores, to capture values. Here we generate two flags and store them in the same datastore:
+
+```xml
+		<input into_datastore="flags">
+			<generator type="flag_generator" />
+			<generator type="flag_generator" />
+		</input>
+```
+Here we generate two flags and store them in separate datastores.
+```xml
+		<input into_datastore="flag1">
+			<generator type="flag_generator" />
+		</input>
+		<input into_datastore="flag2">
+			<generator type="flag_generator" />
+		</input>
+```
+We can then pass the datastore (flag2) into a module parameter, and capture the output into a separate datastore (encoded_flag):
+```xml
+
+		<input into_datastore="encoded_flag">
+			<encoder type="ascii_reversable">
+				<input into="strings_to_encode">
+					<datastore>flag2</datastore>
+				</input>
+			</encoder>
+		</input>
+```
+And leak the result via a vulnerability:
+```xml
+		<!--  vulnerability_nfs_share(strings_to_leak: encoded_flag CONCAT flag1)   -->
+		<vulnerability name="NFS Share Leak">
+			<input into="strings_to_leak" unique_module_list="unique_encoders">
+				<datastore>encoded_flag</datastore>
+				<datastore>flag1</datastore>
+			</input>
+		</vulnerability>
+```
+
+You can use datastores to store generate information for complex scenarios, such as the organisation's name, employees, and so on. Then feed that information through to websites, and services, user accounts, and so on. For a detailed example, see the team project security audit scenario:
+
+```scenarios/security_audit/team_project_scenario.xml```
+
+For a CTF competition scenario:
+```scenarios/ctf/flawed_fortress_1.xml```
+
+It is also possible to iterate through a datastore, and feed each value into separate modules. This is illustrated in:
+```scenarios/examples/datastore_examples/iteration_and_element_access.xml```
 
 ## Modules
 SecGen is designed to be easily extendable with modules that define vulnerabilities and other kinds of software, configuration, and content changes. 
