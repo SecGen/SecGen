@@ -80,6 +80,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       <%=module_name%>.module_path = "<%="puppet/#{system.name}/modules"%>"
       <%=module_name%>.environment_path = "<%="#{ENVIRONMENTS_DIR}"%>"
       <%=module_name%>.environment = "production"
+      <%=module_name%>.synced_folder_type = "rsync"
       <%=module_name%>.manifests_path = "<%="#{ROOT_DIR}/#{selected_module.module_path}/"%>"
       <%=module_name%>.manifest_file = "<%="#{selected_module.module_path_end}.pp"%>"
     end
