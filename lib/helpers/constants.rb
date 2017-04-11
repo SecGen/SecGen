@@ -24,9 +24,6 @@ BUILDS_SCHEMA_FILE = "#{ROOT_DIR}/lib/schemas/build_metadata_schema.xsd"
 # Path to projects directory
 PROJECTS_DIR = "#{ROOT_DIR}/projects"
 
-# Path to environments directory
-ENVIRONMENTS_DIR = "#{ROOT_DIR}/modules/build/environments"
-
 # Path to modules directories
 MODULES_DIR = "#{ROOT_DIR}/modules/"
 VULNERABILITIES_DIR = "#{MODULES_DIR}vulnerabilities/"

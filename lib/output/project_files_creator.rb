@@ -34,6 +34,7 @@ class ProjectFilesCreator
   def write_files
     FileUtils.mkpath "#{@out_dir}" unless File.exists?("#{@out_dir}")
     FileUtils.mkpath "#{@out_dir}/puppet/" unless File.exists?("#{@out_dir}/puppet/")
+    FileUtils.mkpath "#{@out_dir}/environments/production/" unless File.exists?("#{@out_dir}/environments/production/")
 
     threads = []
     # for each system, create a puppet modules directory using librarian-puppet
@@ -47,6 +48,11 @@ class ProjectFilesCreator
       Print.std 'Preparing puppet modules using librarian-puppet'
       GemExec.exe('librarian-puppet', path, 'install')
     end
+
+    # Create environments/production/environment.conf - Required in Puppet 4+
+    efile = "#{@out_dir}/environments/production/environment.conf"
+    Print.std "Creating Puppet Environent file: #{efile}"
+    FileUtils.touch(efile)
 
     vfile = "#{@out_dir}/Vagrantfile"
     Print.std "Creating Vagrant file: #{vfile}"
