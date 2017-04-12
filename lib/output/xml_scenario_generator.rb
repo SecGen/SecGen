@@ -50,52 +50,41 @@ class XmlScenarioGenerator
       return
     end
     case selected_module.module_type
-      # FIXME: repetition of logic :-(
       when 'vulnerability'
         xml.vulnerability(selected_module.attributes_for_scenario_output) {
-          selected_module.received_inputs.each do |key,value|
-            xml.input({"into" => key}) {
-              xml.value value
-            }
-          end
+          insert_inputs_and_values(selected_module,xml)
         }
       when 'base'
         xml.base(selected_module.attributes_for_scenario_output) {
-          selected_module.received_inputs.each do |key,value|
-            xml.input({"into" => key}) {
-              xml.value value
-            }
-          end
+          insert_inputs_and_values(selected_module,xml)
         }
       when 'build'
         xml.build(selected_module.attributes_for_scenario_output) {
-          selected_module.received_inputs.each do |key,value|
-            xml.input({"into" => key}) {
-              xml.value value
-            }
-          end
+          insert_inputs_and_values(selected_module,xml)
         }
       when 'service'
         xml.service(selected_module.attributes_for_scenario_output) {
-          selected_module.received_inputs.each do |key,value|
-            xml.input({"into" => key}) {
-              xml.value value
-            }
-          end
+          insert_inputs_and_values(selected_module,xml)
         }
       when 'utility'
         xml.utility(selected_module.attributes_for_scenario_output) {
-          selected_module.received_inputs.each do |key,value|
-            xml.input({"into" => key}) {
-              xml.value value
-            }
-          end
+          insert_inputs_and_values(selected_module,xml)
         }
       when 'network'
         xml.network(selected_module.attributes_for_scenario_output)
       else
         puts "Unexpected module type: #{selected_module.attributes_for_scenario_output}"
         # exit
+    end
+  end
+
+  def insert_inputs_and_values(selected_module, xml)
+    selected_module.received_inputs.each do |key, value|
+      xml.input({"into" => key}) {
+        value.each { |val|
+          xml.value val
+        }
+      }
     end
   end
 end

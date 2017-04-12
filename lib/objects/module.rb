@@ -97,7 +97,7 @@ class Module
     attr_flattened = {}
 
     attributes.each do |key, array|
-      unless "#{key}" == 'module_type' || "#{key}" == 'conflict'
+      unless "#{key}" == 'module_type' || "#{key}" == 'conflict' || "#{key}" == 'default_input' || "#{key}" == 'requires'
         # creates a valid regexp that can match the original module
         attr_flattened["#{key}"] = Regexp.escape(array.join('~~~')).gsub(/\n\w*/, '.*').gsub(/\\ /, ' ').gsub(/~~~/, '|')
       end
