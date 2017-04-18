@@ -14,9 +14,9 @@ class WeakPasswordGenerator < StringGenerator
 
     all_words = nouns + male_names + female_names
 
-    # only keep words 3-6 characters
+    # only keep words 3-5 characters
     all_words.delete_if { |word|
-      word.length >=7 || word.length <= 2
+      word.length >=6 || word.length <= 2
     }
     self.outputs << all_words.sample.chomp
   end
