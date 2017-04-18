@@ -10,7 +10,7 @@ class onlinestore::install {
 
   $docroot = '/var/www'
   $db_username = 'csecvm'
-  $db_password = 'H93AtG6akq'
+  $db_password = $secgen_parameters['db_password'][0]
 
   package { ['mysql-client','php5-mysql']:
     ensure => 'installed',
@@ -33,6 +33,13 @@ class onlinestore::install {
     cwd     => "$docroot",
     command => "tar -xzf /tmp/www-data.tar.gz && chown -R www-data:www-data $docroot && chmod 0600 $docroot/mysql.php",
     path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
+    notify => Exec['add_generated_password_to_mysql_php'],
+  }
+
+  # Change the default database password to our randomly generated one
+  exec { 'add_generated_password_to_mysql_php':
+    cwd => $docroot,
+    command => "/bin/sed -ie 's/H93AtG6akq/$db_password/g' mysql.php",
     notify => Exec['setup_mysql'],
   }
 
