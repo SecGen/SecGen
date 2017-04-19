@@ -14,6 +14,8 @@ file { ['/home/user/testfile', '/home/user/testdir/test']:
   ensure => 'file',
 }
 
+$json_inputs = base64('decode', $::base64_inputs)
+
 class { 'vsftpd':
   template         => 'vsftpd/vsftpd.conf.erb',
   anonymous_enable => false,

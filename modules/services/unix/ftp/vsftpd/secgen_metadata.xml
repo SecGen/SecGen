@@ -12,16 +12,16 @@
   <type>ftp</type>
   <platform>linux</platform>
 
-  <!--optional details-->
-  <reference>https://security.appspot.com/vsftpd.html</reference>
-  <software_name>vsftpd</software_name>
-  <software_license>Apache v2</software_license>
-
   <read_fact>port</read_fact>
 
   <default_input into="port">
     <value>21</value>
   </default_input>
+
+  <!--optional details-->
+  <reference>https://security.appspot.com/vsftpd.html</reference>
+  <software_name>vsftpd</software_name>
+  <software_license>Apache v2</software_license>
 
   <conflict>
     <software_name>vsftpd</software_name>
