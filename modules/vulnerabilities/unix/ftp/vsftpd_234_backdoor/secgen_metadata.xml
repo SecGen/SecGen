@@ -18,6 +18,7 @@
 
   <read_fact>anonymous_ftp</read_fact>
   <read_fact>ftpd_banner</read_fact>
+  <read_fact>port</read_fact>
 
   <!-- Team project selectors -->
   <read_fact>business_name</read_fact>
@@ -31,6 +32,10 @@
 
   <default_input into="ftpd_banner">
     <generator type="message_generator"/>
+  </default_input>
+
+  <default_input into="port">
+    <value>21</value>
   </default_input>
 
   <!--optional vulnerability details-->
