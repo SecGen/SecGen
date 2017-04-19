@@ -24,6 +24,11 @@
   <read_fact>business_name</read_fact>
   <read_fact>business_domain</read_fact>
   <read_fact>person</read_fact>
+  <read_fact>port</read_fact>
+
+  <default_input into="port">
+    <value>21</value>
+  </default_input>
 
   <default_input into="server_name">
     <generator type="username_generator"/>
