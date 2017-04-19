@@ -17,6 +17,12 @@
   <software_name>vsftpd</software_name>
   <software_license>Apache v2</software_license>
 
+  <read_fact>port</read_fact>
+
+  <default_input into="port">
+    <value>21</value>
+  </default_input>
+
   <conflict>
     <software_name>vsftpd</software_name>
   </conflict>
