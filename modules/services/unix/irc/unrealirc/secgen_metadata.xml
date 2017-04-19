@@ -16,7 +16,7 @@
   <read_fact>port</read_fact>
 
   <default_input into="port">
-    <value>1337</value>
+    <value>6667</value>
   </default_input>
 
   <!--optional details-->
