@@ -13,6 +13,12 @@
   <type>irc</type>
   <platform>linux</platform>
 
+  <read_fact>port</read_fact>
+
+  <default_input into="port">
+    <value>1337</value>
+  </default_input>
+
   <!--optional details-->
   <software_name>unreal</software_name>
   <software_license>MIT</software_license>
