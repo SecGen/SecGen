@@ -1,0 +1,16 @@
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <% if @security_audit -%>
+          <li><a href="security_audit_remit.html">Security Audit Remit</a></li>
+          <% end -%>
+          <% if @security_audit -%>
+          <li><a href="acceptable_use_policy.html">Acceptable Use Policy</a></li>
+          <% end -%>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </nav>

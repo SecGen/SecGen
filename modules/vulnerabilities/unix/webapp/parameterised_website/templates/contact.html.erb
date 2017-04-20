@@ -1,0 +1,45 @@
+<% $current_page = 'Contact Us' -%>
+<html>
+<%= scope.function_template(['parameterised_website/subtemplates/header.html.erb']) %>
+<body>
+<%= scope.function_template(['parameterised_website/subtemplates/navbar.html.erb']) %>
+<div id="main_container" class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="intro-text">
+        <h1 class="name"><%= @business_name %></h1>
+        <hr class="star-light">
+        <h3> <%= @business_motto %></h3>
+      </div>
+
+      <div id="business_address">
+        <p><strong>Contact <%= @business_name %></strong></p>
+        <p>Address: <%= @business_address %></p>
+        <p>Telephone: <%= @office_telephone %></p>
+        <p>Email: <%= @office_email %></p>
+      </div>
+
+      <div id="manager">
+        <h4>Manager</h4>
+        <p><%= @manager_profile['name'] %></p>
+        <p><%= @manager_profile['phone_number'] %></p>
+        <p><%= @manager_profile['email_address'] %></p>
+      </div>
+
+      <div id="employees">
+        <h4>Employees</h4>
+        <% @employees.each do |employee|
+            employee = JSON.parse(employee) %>
+            <p><strong><%= employee['name'] %></strong></p>
+            <p><%= employee['phone_number'] %></p>
+            <p><%= employee['email_address'] %></p>
+            <p/>
+
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+<%= scope.function_template(['parameterised_website/subtemplates/footer.html.erb']) %>
+</html>

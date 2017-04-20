@@ -1,0 +1,40 @@
+<%require 'json' -%>
+<%$parsed_inputs = JSON.parse(@json_inputs)
+  $share_name = $parsed_inputs['share_name'].first
+  $share_comment = $parsed_inputs['share_comment'].first
+  $storage_directory = $parsed_inputs['storage_directory'].first
+  $raw_read_only_share = $parsed_inputs['read_only_share'].first
+  $raw_guests_allowed = $parsed_inputs['guests_allowed'].first
+  $read_only_share = $raw_read_only_share == 'true' ? 'yes' : 'no' # convert boolean to 'yes' or 'no'
+  $guests_allowed = $raw_guests_allowed  == 'true' ? 'yes' : 'no'
+
+  # Team Project overrides
+  if $parsed_inputs['business_domain']
+    $split_business_domain = $parsed_inputs['business_domain'][0].split('.')
+    $share_name = $split_business_domain[0] + '_public_share' # strip domain tld
+  end
+
+  if $parsed_inputs['business_name']
+    $share_comment =  $parsed_inputs['business_name'].first + ' Public SMB Share'
+  end -%>
+#
+# Share definition
+#
+[<%=$share_name%>]
+comment = <%=$share_comment%>
+# Path to directory
+path = <%=$storage_directory%>
+# Allow writing to share
+read only = <%=$read_only_share%>
+# Force connections as guests
+guest ok = <%=$guests_allowed%>
+locking = no
+# Sets the umask for files/directories created on this share
+force create mode = 777
+force directory mode = 777
+<%= if @symlink_traversal
+"# wide links for symlink traversal ( enabled by default in versions <= 3.4.5 )
+wide links = yes
+follow symlinks = yes
+"   end
+%>

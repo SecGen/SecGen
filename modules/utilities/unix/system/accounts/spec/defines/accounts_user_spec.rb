@@ -6,6 +6,7 @@ describe '::accounts::user' do
   let(:facts) { {} }
 
   describe 'expected defaults' do
+    let(:facts) { { :osfamily => "Debian" } }
     it { is_expected.to contain_user('dan').with({'shell'      => '/bin/bash'}) }
     it { is_expected.to contain_user('dan').with({'home'       => "/home/#{title}"}) }
     it { is_expected.to contain_user('dan').with({'ensure'     => 'present'}) }
@@ -106,29 +107,29 @@ describe '::accounts::user' do
   describe 'invalid parameter values' do
     it 'should only accept absent and present for ensure' do
       params['ensure'] = 'invalid'
-      expect { subject.call }.to raise_error
+      expect { subject.call }.to raise_error Puppet::Error
     end
     it 'should fail if locked is not a boolean' do
       params['locked'] = 'true'
-      expect { subject.call }.to raise_error
+      expect { subject.call }.to raise_error Puppet::Error
     end
     ['home', 'shell'].each do |param|
       it "should fail is #{param} does not start with '/'" do
         params[param] = 'no_leading_slash'
-        expect { subject.call }.to raise_error
+        expect { subject.call }.to raise_error Puppet::Error
       end
     end
     it 'should fail if gid is not composed of digits' do
       params['gid'] = 'name'
-      expect { subject.call }.to raise_error
+      expect { subject.call }.to raise_error Puppet::Error
     end
     it 'should not accept non-boolean values for locked' do
       params['locked'] = 'false'
-      expect { subject.call }.to raise_error
+      expect { subject.call }.to raise_error Puppet::Error
     end
     it 'should not accept non-boolean values for managehome' do
       params['managehome'] = 'false'
-      expect { subject.call }.to raise_error
+      expect { subject.call }.to raise_error Puppet::Error
     end
   end
 
@@ -138,26 +139,34 @@ describe '::accounts::user' do
 
     describe 'on debian' do
       before { facts['operatingsystem'] = 'debian' }
+      before { facts['osfamily'] = 'Debian' }
       it { is_expected.to contain_user('dan').with({'shell' => '/usr/sbin/nologin'}) }
     end
 
     describe 'on ubuntu' do
       before { facts['operatingsystem'] = 'ubuntu' }
+      before { facts['osfamily'] = 'Ubuntu' }
       it { is_expected.to contain_user('dan').with({'shell' => '/usr/sbin/nologin'}) }
     end
 
     describe 'on solaris' do
       before { facts['operatingsystem'] = 'solaris' }
+      before { facts['osfamily'] = 'Solaris' }
       it { is_expected.to contain_user('dan').with({'shell' => '/usr/bin/false'}) }
     end
 
     describe 'on all other platforms' do
       before { facts['operatingsystem'] = 'anything_else' }
+      before { facts['osfamily'] = 'anything_else' }
       it { is_expected.to contain_user('dan').with({'shell' => '/sbin/nologin'}) }
     end
   end
 
   describe 'when supplying resource defaults' do
+    before do
+      facts['osfamily'] = 'Debian'
+      facts['operatingsystem'] = 'debian'
+    end
 
     let(:pre_condition) { "Accounts::User{ shell => '/bin/zsh' }" }
 
@@ -170,7 +179,7 @@ describe '::accounts::user' do
 
     describe 'locked overrides should override defaults and user params' do
       let(:params) { { 'shell' => '/bin/csh', 'locked' => true} }
-      it { is_expected.to contain_user('dan').with({'shell' => '/sbin/nologin'}) }
+      it { is_expected.to contain_user('dan').with({'shell' => '/usr/sbin/nologin'}) }
     end
   end
 end

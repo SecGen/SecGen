@@ -9,6 +9,7 @@
   <description>Uses a wordlist (Ruby gem + a wordlist) to generate a random (mostly English) dictionary word. May include punctuation.</description>
 
   <type>string_generator</type>
+  <type>random_word_generator</type>
   <type>local_calculation</type>
   <platform>linux</platform>
   <platform>windows</platform>
@@ -16,6 +17,6 @@
   <reference>https://github.com/sophsec/wordlist</reference>
   <reference>http://wordlist.sourceforge.net/</reference>
 
-  <write_fact>generated_strings</write_fact>
+  <output_type>generated_strings</output_type>
   
 </generator>

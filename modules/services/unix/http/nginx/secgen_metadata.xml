@@ -21,6 +21,9 @@
   <conflict>
     <software_name>nginx</software_name>
   </conflict>
+  <conflict>
+    <type>httpd</type>
+  </conflict>
 
   <requires>
     <type>update</type>

@@ -8,10 +8,12 @@
 
 forge "https://forgeapi.puppetlabs.com"
 
+mod 'puppetlabs-stdlib'  # stdlib enables parsejson() in manifests and other useful functions
+mod 'SecGen-secgen_functions', :path => '<%= SECGEN_FUNCTIONS_PUPPET_DIR %>'
 
 <% @currently_processing_system.module_selections.each do |selected_module| -%>
 <%   case selected_module.module_type
-       when 'vulnerability', 'service', 'utility' -%>
+       when 'vulnerability', 'service', 'utility', 'build' -%>
 mod 'SecGen-<%= selected_module.module_path_name %>/<%= selected_module.module_path_end %>', :path => '<%="#{ROOT_DIR}/#{selected_module.module_path}"%>'
 <%   end -%>
 <%  end -%>

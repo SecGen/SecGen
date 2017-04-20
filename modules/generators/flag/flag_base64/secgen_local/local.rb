@@ -8,7 +8,7 @@ class Base64FlagGenerator < StringGenerator
 
   def generate
     require 'securerandom'
-    self.outputs << "flag:#{SecureRandom.base64}"
+    self.outputs << "flag{#{SecureRandom.base64}}"
   end
 end
 

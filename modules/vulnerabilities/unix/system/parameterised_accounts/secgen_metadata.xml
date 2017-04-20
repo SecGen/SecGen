@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+  <name>Parameterised Accounts Module</name>
+  <author>Thomas Shaw</author>
+  <author>Puppet Labs</author>
+  <module_license>Apache v2</module_license>
+  <description>Parameterised user account creation and modification. Adds an account with a generated weak password by default.</description>
+
+  <type>system</type>
+  <privilege>none</privilege>
+  <access>local</access>
+  <platform>linux</platform>
+
+  <read_fact>accounts</read_fact>
+
+  <default_input into="accounts">
+    <generator type="account">
+      <input into="password">
+        <generator type="weak_password_generator"/>
+      </input>
+    </generator>
+    <generator type="account">
+      <input into="password">
+        <generator type="weak_password_generator"/>
+      </input>
+    </generator>
+  </default_input>
+
+  <!--optional details-->
+  <reference>https://forge.puppet.com/puppetlabs/accounts</reference>
+
+  <requires>
+    <module_path>utilities/unix/system/accounts</module_path>
+  </requires>
+
+</vulnerability>

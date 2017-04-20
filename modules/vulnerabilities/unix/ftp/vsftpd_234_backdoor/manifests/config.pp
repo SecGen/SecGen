@@ -1,5 +1,6 @@
 class vsftpd_234_backdoor::config {
 
+  $json_inputs = base64('decode', $::base64_inputs)
   # Config files + manuals
   file { ['/usr/local/man/man5/vsftpd.conf.5']:
     require => File['/usr/local/src/vsftpd-2.3.4/Makefile'],
@@ -16,7 +17,7 @@ class vsftpd_234_backdoor::config {
   file { ['/etc/vsftpd.conf']:
     require => File['/usr/local/src/vsftpd-2.3.4/Makefile'],
     ensure  => file,
-    source  => 'puppet:///modules/vsftpd_234_backdoor/vsftpd.conf'
+    content  => template('vsftpd_234_backdoor/vsftpd.conf.erb')
   }
 
   user { 'ftp':

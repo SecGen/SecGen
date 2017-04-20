@@ -9,6 +9,8 @@
   <description>Converts to BASE64 encoding.</description>
 
   <type>string_encoder</type>
+  <type>ascii_reversable</type>
+  <type>alpha_reversable</type>
   <platform>linux</platform>
   <platform>windows</platform>
 
@@ -32,14 +34,8 @@
   <!--valid_match="retain_caps|lower|upper" default_value="retain_caps"-->
   <read_fact>base64_options</read_fact>
 
-  <write_fact>encoded_strings</write_fact>
+  <output_type>encoded_strings</output_type>
   
-  <!-- ensure a module has prepared input -->
-<!--  <require>
-    <write_fact>strings_to_encode</write_fact>
-  </require>-->
-  
-
   <!--Cannot co-exist with other installations-->
 <!--  <conflict>
     <software_name>proftpd</software_name>

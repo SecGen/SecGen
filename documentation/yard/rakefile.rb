@@ -16,7 +16,7 @@ task :yard do
     t.options = [
         "--title=SecGen #{VERSION_NUMBER} Documentation",
         "--readme=#{ROOT_DIR}/README.md",
-        "--output-dir #{DOCUMENTATION_PATH}"
+        "--output-dir #{DOCUMENTATION_DIR}"
     ] # optional
     t.stats_options = ['--list-undoc']         # optional
   end
@@ -28,5 +28,5 @@ task :yard_clean do
   # NEED TO FIND A BETTER WAY TO CLEAN FILES AS VULNERABILITIES IN 'rm_rf'
 
   # Remove the documentation directory and all files in it
-  rm_rf(DOCUMENTATION_PATH)
+  rm_rf(DOCUMENTATION_DIR)
 end

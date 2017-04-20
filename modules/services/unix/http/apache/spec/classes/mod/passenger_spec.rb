@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 describe 'apache::mod::passenger', :type => :class do
-  let :pre_condition do
-    'include apache'
-  end
+  it_behaves_like "a mod class, without including apache"
   context "on a Debian OS" do
     let :facts do
       {
@@ -100,6 +98,12 @@ describe 'apache::mod::passenger', :type => :class do
       end
       it { is_expected.to contain_file('passenger.conf').with_content(/^  PassengerMinInstances 5$/) }
     end
+    describe "with passenger_max_instances_per_app => 8" do
+      let :params do
+        { :passenger_max_instances_per_app => 8 }
+      end
+      it { is_expected.to contain_file('passenger.conf').with_content(/^  PassengerMaxInstancesPerApp 8$/) }
+    end
     describe "with rack_autodetect => on" do
       let :params do
         { :rack_autodetect => 'on' }
@@ -129,6 +133,12 @@ describe 'apache::mod::passenger', :type => :class do
         { :passenger_log_file => '/var/log/apache2/passenger.log' }
       end
       it { is_expected.to contain_file('passenger.conf').with_content(%r{^  PassengerLogFile /var/log/apache2/passenger.log$}) }
+    end
+    describe "with passenger_log_level => 3" do
+      let :params do
+        { :passenger_log_level => 3 }
+      end
+      it { is_expected.to contain_file('passenger.conf').with_content(%r{^  PassengerLogLevel 3$}) }
     end
     describe "with mod_path => '/usr/lib/foo/mod_foo.so'" do
       let :params do

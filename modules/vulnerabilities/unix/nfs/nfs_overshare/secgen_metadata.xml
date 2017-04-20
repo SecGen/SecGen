@@ -14,8 +14,46 @@
   <platform>linux</platform>
 
   <read_fact>strings_to_leak</read_fact>
-  <read_fact>files_to_leak</read_fact>
+  <read_fact>images_to_leak</read_fact>
+  <read_fact>leaked_filenames</read_fact>
+  <read_fact>storage_directory</read_fact>
 
+  <!--if an input is not specified in the scenario-->
+  <default_input into="strings_to_leak">
+    <value>Plain text from the metadata default, destined for strings_to_leak...</value>
+    <encoder type="string_encoder">
+      <input into="strings_to_encode">
+        <!--encode the following strings-->
+        <value>Encoded text from the metadata default, destined for strings_to_leak...</value>
+        <value>More encoded text from the metadata default, destined for strings_to_leak...</value>
+        <generator module_path=".*random.*"/>
+      </input>
+    </encoder>
+    <generator type="message_generator"/>
+  </default_input>
+
+  <!-- File-name which contains strings_to_leak -->
+  <default_input into="leaked_filenames">
+    <generator type="filename_generator"/>
+    <generator type="filename_generator"/>
+  </default_input>
+
+  <default_input into="storage_directory">
+    <generator type="storage_directory_generator"/>
+  </default_input>
+
+  <!--For testing, you can define default values for whatever values you want through to factor:-->
+  <!--<default_input into="harmless_unset_variable">-->
+    <!--<value>Plain text from the metadata default, destined for harmless_unset_variable...</value>-->
+    <!--<encoder module_path=".*1337">-->
+      <!--<input into="strings_to_encode">-->
+        <!--&lt;!&ndash;encode the following strings&ndash;&gt;-->
+        <!--<value>Encoded text from the metadata default..., destined for harmless_unset_variable, via encoder</value>-->
+        <!--<value>More encoded text from the metadata default..., destined for harmless_unset_variable, via encoder</value>-->
+        <!--<generator module_path=".*word.*"/>-->
+      <!--</input>-->
+    <!--</encoder>-->
+  <!--</default_input>-->
   <!--optional vulnerability details-->
   <difficulty>low</difficulty>
   <!--<cve></cve>-->

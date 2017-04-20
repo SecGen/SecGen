@@ -19,6 +19,10 @@ def usage
    --project [output dir], -p [output dir]: directory for the generated project
               (output will default to #{default_project_dir})
    --help, -h: shows this usage information
+   --gui-output', '-g' gui output
+   --nopae: disable PAE support
+   --hwvirtex: enable HW virtex support
+   --vtxvpid: enable VTX support
 
    COMMANDS:
    run, r: builds project and then builds the VMs
@@ -42,6 +46,10 @@ def build_config(scenario, out_dir, options)
   Print.info 'Reading available base modules...'
   all_available_bases = ModuleReader.read_bases
   Print.std "#{all_available_bases.size} base modules loaded"
+
+  Print.info 'Reading available build modules...'
+  all_available_builds = ModuleReader.read_builds
+  Print.std "#{all_available_builds.size} build modules loaded"
 
   Print.info 'Reading available vulnerability modules...'
   all_available_vulnerabilties = ModuleReader.read_vulnerabilities
@@ -69,7 +77,8 @@ def build_config(scenario, out_dir, options)
 
   Print.info 'Resolving systems: randomising scenario...'
   # for each system, select modules
-  all_available_modules = all_available_bases + all_available_vulnerabilties + all_available_services + all_available_utilities + all_available_generators + all_available_encoders + all_available_networks
+  all_available_modules = all_available_bases + all_available_builds + all_available_vulnerabilties +
+      all_available_services + all_available_utilities + all_available_generators + all_available_encoders + all_available_networks
   # update systems with module selections
   systems.map! {|system|
     system.module_selections = system.resolve_module_selection(all_available_modules)
@@ -114,7 +123,7 @@ end
 
 Print.std '~'*47
 Print.std 'SecGen - Creates virtualised security scenarios'
-Print.std '            Licensed GPLv3 2014-16'
+Print.std '            Licensed GPLv3 2014-17'
 Print.std '~'*47
 
 # Get command line arguments
@@ -123,6 +132,9 @@ opts = GetoptLong.new(
   [ '--project', '-p', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--scenario', '-s', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--gui-output', '-g', GetoptLong::NO_ARGUMENT],
+  [ '--nopae', GetoptLong::NO_ARGUMENT],
+  [ '--hwvirtex', GetoptLong::NO_ARGUMENT],
+  [ '--vtxvpid', GetoptLong::NO_ARGUMENT],
   [ '--memory-per-vm', GetoptLong::REQUIRED_ARGUMENT],
   [ '--total-memory', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
@@ -148,6 +160,15 @@ opts.each do |opt, arg|
     when '--gui-output'
       Print.info "Gui output set (virtual machines will be spawned)"
       options[:gui_output] = true
+    when '--nopae'
+      Print.info "no pae"
+      options[:nopae] = true
+    when '--hwvirtex'
+      Print.info "with HW virtualisation"
+      options[:hwvirtex] = true
+    when '--vtxvpid'
+      Print.info "with VT support"
+      options[:vtxvpid] = true
     when '--memory-per-vm'
       if options.has_key? :total_memory
         Print.info 'Total memory option specified before memory per vm option, defaulting to total memory value'

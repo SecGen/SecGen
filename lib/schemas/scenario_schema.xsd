@@ -15,15 +15,19 @@
     <xs:sequence>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element name='vulnerability' type='VulnerabilityType' minOccurs='0' maxOccurs='unbounded' />
-        <xs:element name='service' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
-        <xs:element name='utility' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='service' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='utility' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='network' type='NetworkType' minOccurs='0' maxOccurs='unbounded' />
-        <xs:element name='generator' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
-        <xs:element name='encoder' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='build' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='generator' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='encoder' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='value' type='xs:string' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='datastore' type='DatastoreType' minOccurs='0' maxOccurs='unbounded' />
       </xs:choice>
     </xs:sequence>
     <xs:attribute name='into' type='xs:string'/>
+    <xs:attribute name='into_datastore' type='xs:string'/>
+    <xs:attribute name='unique_module_list' type='xs:string'/>
 
   </xs:complexType>
   <xs:complexType name="SystemType">
@@ -37,9 +41,11 @@
       </xs:element>
       <xs:element name='base' type='BaseType' minOccurs='1' maxOccurs='1' />
       <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="input" type="InputElements" minOccurs="0" maxOccurs="unbounded" />
         <xs:element name='vulnerability' type='VulnerabilityType' minOccurs='0' maxOccurs='unbounded' />
-        <xs:element name='service' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
-        <xs:element name='utility' type='ServiceUtilityEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='service' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='utility' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
+        <xs:element name='build' type='ServiceUtilityBuildEncoderGeneratorType' minOccurs='0' maxOccurs='unbounded' />
         <xs:element name='network' type='NetworkType' minOccurs='0' maxOccurs='unbounded' />
       </xs:choice>
     </xs:sequence>
@@ -58,7 +64,6 @@
     <xs:attribute name='vagrantbase' type='xs:string'/>
     <xs:attribute name='reference' type='xs:string'/>
     <xs:attribute name='software_license' type='xs:string'/>
-
   </xs:complexType>
 
   <xs:complexType name="VulnerabilityType">
@@ -99,7 +104,7 @@
     <xs:attribute name="solution" type="xs:string"/>
   </xs:complexType>
 
-  <xs:complexType name="ServiceUtilityEncoderGeneratorType">
+  <xs:complexType name="ServiceUtilityBuildEncoderGeneratorType">
     <xs:sequence>
       <xs:element name="input" type="InputElements" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
@@ -111,6 +116,8 @@
     <xs:attribute name="description" type="xs:string"/>
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="platform" type="xs:string"/>
+
+    <xs:attribute name="read_fact" type="xs:string"/>
 
     <xs:attribute name="reference" type="xs:string"/>
     <xs:attribute name="software_name" type="xs:string"/>
@@ -126,7 +133,14 @@
     <xs:attribute name="description" type="xs:string"/>
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name='range' type='xs:string'/>
+  </xs:complexType>
 
+  <xs:complexType name="DatastoreType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="access" type="xs:string" default="next"/>
+      </xs:extension>
+    </xs:simpleContent>
   </xs:complexType>
 
 </xs:schema>

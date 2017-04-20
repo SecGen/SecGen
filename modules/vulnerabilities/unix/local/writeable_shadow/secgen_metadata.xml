@@ -10,7 +10,7 @@
     This is not a common misconfiguration, and not particularly subtle.</description>
 
   <type>access_controls</type>
-  <privilege>root</privilege>
+  <privilege>root_rw</privilege>
   <access>local</access>
   <platform>linux</platform>
 
@@ -27,5 +27,4 @@
     <name>Writeable Shadow File</name>
     <author>Lewis Ardern</author>
   </conflict>
-
 </vulnerability>

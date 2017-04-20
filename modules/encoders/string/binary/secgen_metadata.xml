@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+  <name>Binary Encoder</name>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>Converts a String to Binary.</description>
+
+  <type>ascii_reversable</type>
+  <type>binary_encoder</type>
+  <type>string_encoder</type>
+  <platform>linux</platform>
+  <platform>windows</platform>
+
+  <read_fact>strings_to_encode</read_fact>
+
+  <output_type>encoded_strings</output_type>
+</encoder>

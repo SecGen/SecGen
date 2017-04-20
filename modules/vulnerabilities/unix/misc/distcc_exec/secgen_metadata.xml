@@ -9,9 +9,22 @@
   <description>Distcc has a documented security weakness that enables remote code execution.</description>
 
   <type>distcc</type>
-  <privilege>user</privilege>
+  <privilege>user_rwx</privilege>
   <access>remote</access>
   <platform>unix</platform>
+
+  <read_fact>strings_to_leak</read_fact>
+  <read_fact>leaked_filenames</read_fact>
+
+  <default_input into="strings_to_leak">
+    <generator type="message_generator"/>
+    <generator type="message_generator"/>
+  </default_input>
+
+  <default_input into="leaked_filenames">
+    <generator type="filename_generator"/>
+    <generator type="filename_generator"/>
+  </default_input>
 
   <!--optional vulnerability details-->
   <difficulty>medium</difficulty>

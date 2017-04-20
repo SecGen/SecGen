@@ -12,9 +12,26 @@
     June 30th 2011 and July 1st 2011. AKA the smiley face backdoor.</description>
 
   <type>ftp</type>
-  <privilege>user</privilege>
+  <privilege>root_rwx</privilege>
   <access>remote</access>
   <platform>linux</platform>
+
+  <read_fact>anonymous_ftp</read_fact>
+  <read_fact>ftpd_banner</read_fact>
+
+  <!-- Team project selectors -->
+  <read_fact>business_name</read_fact>
+  <!--TODO: Remove below + match only on business_name? Currently does nothing.-->
+  <read_fact>business_domain</read_fact>
+  <read_fact>person</read_fact>
+
+  <default_input into="anonymous_ftp">
+    <value>false</value>
+  </default_input>
+
+  <default_input into="ftpd_banner">
+    <generator type="message_generator"/>
+  </default_input>
 
   <!--optional vulnerability details-->
   <difficulty>low</difficulty>

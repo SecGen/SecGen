@@ -1,0 +1,28 @@
+# Security Audit Remit of <%= self.business_name %>
+
+## About us
+We are <%= self.business_name %>, a startup company, we have a fairly high risk threshold, and a restricted budget. We are aiming to get a new product to market in the next 6 months. By this time we hope to have our relocation completed.
+
+## Our security policy
+A complete copy of our organisation's security policy documents are available via the Intranet server. We do not have any other formal security policy.
+
+## Backups
+We backup all our data (including code and documents) via <%= self.local_backup %>. We also do a weekly backup to <%= self.remote_backup %>.
+
+## Office location
+We are planning to lease <%= self.business_location %> for our operations (including employees and server rooms). The other areas of the building would continue to be used by third parties, as is it is currently. We have not yet decided which specific rooms would be used for employees and servers. We plan to add <%= self.physical_security %> to control access to our rooms.
+
+## IT infrastructure
+Our IT team has started developing the servers that we will be deploying; although these are incomplete, we hope that an early security audit will help us direct further development.
+
+Our network design is to have a web server connected to an Internet accessible IP address (DMZ), and all other servers and end user desktops will be connected to an intranet, any connections out to the Internet via NAT.
+
+Our systems include:
+* A web server with network services
+* An intranet server, hosting our security policy documents for internal access
+* Desktop systems
+
+The Web host will eventually be processing credit card transactions; hopefully thousands of transactions every month.
+
+## Your remit
+Your team has been contracted to provide a grey-box security audit of our business, in preparation for the upcoming business relocation. It is your remit to produce a Security Assessment Report. This security assessment must take into account any relevant security issues, including management and policy, physical and (of particular importance) digital security. You should decide on a security testing methodology and report structure that meets our security needs. Make use of any software tools of your choosing to carry out the technical analysis. The report should include the results of a detailed security audit, highlighting priority issues and security vulnerabilities and risks, with recommended mitigations. Please consider our organisation profile when making your recommendations.

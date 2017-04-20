@@ -31,8 +31,16 @@ AccessFileName .htaccess
 </FilesMatch>
 
 <Directory />
-  Options FollowSymLinks
+  Options <%= Array(@root_directory_options).join(' ') %>
   AllowOverride None
+<%- if @root_directory_secured -%>
+<%- if scope.function_versioncmp([@apache_version, '2.4']) >= 0 -%>
+  Require all denied
+<%- else -%>
+  Order deny,allow
+  Deny from all
+<%- end -%>
+<%- end -%>
 </Directory>
 
 <% if @default_charset -%>
@@ -43,7 +51,11 @@ AddDefaultCharset <%= @default_charset %>
 DefaultType <%= @default_type %>
 <%- end -%>
 HostnameLookups Off
+<%- if /^[|\/]/.match(@error_log) || /^syslog:/.match(@error_log) -%>
+ErrorLog "<%= @error_log %>"
+<%- else -%>
 ErrorLog "<%= @logroot %>/<%= @error_log %>"
+<%- end -%>
 LogLevel <%= @log_level %>
 EnableSendfile <%= @sendfile %>
 <%- if @allow_encoded_slashes -%>
