@@ -1,0 +1,13 @@
+<div id="main_container" class="container">
+  <div id="tabs">
+    <ul class="nav nav-tabs">
+      <li class="nav-item active"><a class="nav-link active" data-toggle="tab" href="#tabs-1">Start here!</a></li>
+      <% @visible_tabs.each_with_index{ |_, counter| -%>
+      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="tab_<%=counter + 1 %>.html"><%=counter + 1 %></a></li>
+      <%} -%>
+    </ul>
+    <div id="tabs-1">
+      <p>Here's some default content that will be replaced by a some content.</p>
+    </div>
+  </div>
+</div>

@@ -18,6 +18,9 @@ class parameterised_website::install {
 
   $security_audit = $secgen_parameters['security_audit']
   $acceptable_use_policy = str2bool($secgen_parameters['host_acceptable_use_policy'][0])
+
+  $visible_tabs = $secgen_parameters['visible_tabs']
+
   $docroot = '/var/www'
 
   if $acceptable_use_policy {  # Use alternative intranet index.html template
@@ -56,9 +59,13 @@ class parameterised_website::install {
     content => template('parameterised_website/contact.html.erb'),
   }
 
-  # TODO: make this non-shitty
-  exec { 'echo_a_test_html':
-    command => "/bin/echo '<b>asdfasdfasdf</b>' >> $docroot/test.html; /bin/echo '<b>success!</b>' >> $docroot/test1.html"
+  $visible_tabs.each |$counter, $visible_tab| {
+    $n = $counter + 1
+
+    file { "$docroot/tab_$n.html":
+      ensure  => file,
+      content => $visible_tab,
+    }
   }
 
   ::secgen_functions::leak_files{ 'parameterised_website-image-leak':

@@ -30,12 +30,17 @@
   <read_fact>host_acceptable_use_policy</read_fact>
   <read_fact>security_audit</read_fact>
 
+  <!-- Tab-pane contents, add some HTML, usually CTF challenges, here. -->
+  <read_fact>visible_tabs</read_fact>
+  <read_fact>hidden_tabs</read_fact>
+
   <default_input into="strings_to_leak">
     <generator type="flag_generator"/>
     <generator type="message_generator"/>
   </default_input>
 
   <default_input into="images_to_leak">
+    <generator type="image_generator"/>
     <generator type="image_generator"/>
   </default_input>
 
