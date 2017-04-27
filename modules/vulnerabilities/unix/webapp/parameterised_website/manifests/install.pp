@@ -56,6 +56,11 @@ class parameterised_website::install {
     content => template('parameterised_website/contact.html.erb'),
   }
 
+  # TODO: make this non-shitty
+  exec { 'echo_a_test_html':
+    command => "/bin/echo '<b>asdfasdfasdf</b>' >> $docroot/test.html; /bin/echo '<b>success!</b>' >> $docroot/test1.html"
+  }
+
   ::secgen_functions::leak_files{ 'parameterised_website-image-leak':
     storage_directory => $docroot,
     images_to_leak => $images_to_leak,

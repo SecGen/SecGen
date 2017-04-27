@@ -45,6 +45,16 @@
 						<generator type="flag_generator" />
 					</input>
 				</encoder>
+				<generator type="ctf_challenge">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
+				<generator type="ctf_challenge">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
 				<encoder type="ascii_reversable">
 					<input into="strings_to_encode">
 						<encoder type="ascii_reversable">
@@ -55,14 +65,26 @@
 					</input>
 				</encoder>
 			</input>
+			<input into="images_to_leak">
+				<generator type="image_challenge_generator">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
+				<generator type="image_challenge_generator">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
+			</input>
 		</vulnerability>
 
 		<network module_path=".*private_network_1"/>
-		<build type="cleanup">
-			<input into="root_password">
-				<generator type="strong_password_generator"/>
-			</input>
-		</build>
+		<!--<build type="cleanup">-->
+			<!--<input into="root_password">-->
+				<!--<generator type="strong_password_generator"/>-->
+			<!--</input>-->
+		<!--</build>-->
 	</system>
 
 </scenario>
