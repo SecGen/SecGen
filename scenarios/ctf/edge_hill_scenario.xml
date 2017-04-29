@@ -17,6 +17,10 @@
 				<value>This is another tab!</value>
 				<value>This is another tab!!!!</value>
 			</input>
+			<input into="hidden_tabs" unique_module_list="unique_encoders">
+				<value>this shows on tab_0.html</value>
+				<value>this shows on tab_4.html</value>
+			</input>
 
 			<!--<input into="hidden_tabs">-->
 				<!--<generator type="flag_generator" />-->

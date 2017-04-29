@@ -20,6 +20,7 @@ class parameterised_website::install {
   $acceptable_use_policy = str2bool($secgen_parameters['host_acceptable_use_policy'][0])
 
   $visible_tabs = $secgen_parameters['visible_tabs']
+  $hidden_tabs = $secgen_parameters['hidden_tabs']
 
   $docroot = '/var/www'
 
@@ -59,12 +60,27 @@ class parameterised_website::install {
     content => template('parameterised_website/contact.html.erb'),
   }
 
+  # Create visible tab html files
   $visible_tabs.each |$counter, $visible_tab| {
     $n = $counter + 1
 
     file { "$docroot/tab_$n.html":
       ensure  => file,
       content => $visible_tab,
+    }
+  }
+
+  # Create hidden tab html files
+  $hidden_tabs.each |$counter, $hidden_tab| {
+    if $counter == 0 {
+      $n = 0
+    } else {
+      $n = $counter + $visible_tabs.length
+    }
+
+    file { "$docroot/tab_$n.html":
+      ensure  => file,
+      content => $hidden_tab,
     }
   }
 
