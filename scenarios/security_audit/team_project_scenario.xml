@@ -89,7 +89,7 @@
       </generator>
     </input>
 
-    <vulnerability module_path="vulnerabilities/unix/webapp/parameterised_website">
+    <service module_path="vulnerabilities/unix/webapp/parameterised_website">
       <input into="business_name">
         <datastore>business_name</datastore>
       </input>
@@ -121,7 +121,7 @@
       <input into="product_name" into_datastore="product_name">
         <generator type="product"/>
       </input>
-    </vulnerability>
+    </service>
 
     <vulnerability privilege="user_rwx" access="remote" type="^((?!webapp).)*$">
       <input into="business_domain">
@@ -182,7 +182,7 @@
       </input>
     </vulnerability>
 
-    <vulnerability module_path="vulnerabilities/unix/webapp/parameterised_website">
+    <service module_path="vulnerabilities/unix/webapp/parameterised_website">
       <input into="host_acceptable_use_policy">
         <value>true</value>
       </input>
@@ -221,7 +221,7 @@
       <input into="product_name">
         <datastore>product_name</datastore>
       </input>
-    </vulnerability>
+    </service>
 
     <service/>
     <service/>

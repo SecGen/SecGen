@@ -120,7 +120,7 @@
 
     <!-- FEED GENERATED 'BUSINESS' DATA ABOVE INTO VULNERABILITY MODULES. -->
 
-    <vulnerability module_path="vulnerabilities/unix/webapp/parameterised_website">
+    <service module_path="vulnerabilities/unix/webapp/parameterised_website">
       <input into="business_name">
         <datastore>business_name</datastore>
       </input>
@@ -145,7 +145,7 @@
       <input into="product_name">
         <datastore>product_name</datastore>
       </input>
-    </vulnerability>
+    </service>
 
     <network type="private_network" range="dhcp"/>
   </system>

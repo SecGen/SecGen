@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
+<service xmlns="http://www.github/cliffe/SecGen/service"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
 
   <name>Random Parameterised Website</name>
   <author>Thomas Shaw</author>
@@ -9,8 +9,6 @@
   <description>Parameterised website filled with SecGen generated content.</description>
 
   <type>webapp</type>
-  <privilege>info_leak</privilege>
-  <access>remote</access>
   <platform>linux</platform>
 
   <read_fact>strings_to_leak</read_fact>
@@ -97,4 +95,4 @@
     <module_path>modules/services/unix/http/apache</module_path>
   </requires>
 
-</vulnerability>
+</service>

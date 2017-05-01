@@ -11,7 +11,7 @@
 
 		<!-- comment describes using pseudo code (C#-like methods with named optional arguments) -->
 		<!-- vulnerability_nfs_share_leak(strings_to_leak: encoder_flag_generator() CONCAT encoder_ascii_reversable(strings_to_encode: encoder_flag_generator()) CONCAT ...) -->
-		<vulnerability name="Random Parameterised Website">
+		<service name="Random Parameterised Website">
 			<input into="visible_tabs">
 				<generator type="html_snippet_generator" >
 					<input into="heading">
@@ -122,7 +122,7 @@
 					</input>
 				</generator>
 			</input>
-		</vulnerability>
+		</service>
 
 		<!-- Remote privilege escalation -->
 		<vulnerability read_fact="strings_to_leak" access="remote" privilege="user_rwx">
