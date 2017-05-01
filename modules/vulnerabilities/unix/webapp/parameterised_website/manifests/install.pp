@@ -62,11 +62,13 @@ class parameterised_website::install {
 
   # Create visible tab html files
   $visible_tabs.each |$counter, $visible_tab| {
-    $n = $counter + 1
+    if $counter != 0 {
+      $n = $counter
 
-    file { "$docroot/tab_$n.html":
-      ensure  => file,
-      content => $visible_tab,
+      file { "$docroot/tab_$n.html":
+        ensure  => file,
+        content => $visible_tab,
+      }
     }
   }
 
@@ -75,7 +77,7 @@ class parameterised_website::install {
     if $counter == 0 {
       $n = 0
     } else {
-      $n = $counter + $visible_tabs.length
+      $n = $counter + $visible_tabs.length - 1  # minus one accounts for the information tab
     }
 
     file { "$docroot/tab_$n.html":

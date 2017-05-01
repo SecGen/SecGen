@@ -6,13 +6,22 @@
 
 	<!--some basic decoding challenges-->
 	<system>
-		<system_name>decode_me</system_name>
+		<system_name>nw_cyber_games</system_name>
 		<base platform="linux"/>
 
 		<!-- comment describes using pseudo code (C#-like methods with named optional arguments) -->
 		<!-- vulnerability_nfs_share_leak(strings_to_leak: encoder_flag_generator() CONCAT encoder_ascii_reversable(strings_to_encode: encoder_flag_generator()) CONCAT ...) -->
 		<vulnerability name="Random Parameterised Website">
 			<input into="visible_tabs">
+				<generator type="html_snippet_generator" >
+					<input into="heading">
+						<value>Welcome to the North West Cyber Games!</value>
+					</input>
+					<input into="paragraphs" unique_module_list="unique_encoders">
+						<value>Hunt down the flags. Good luck, have fun!</value>
+					</input>
+				</generator>
+
 				<generator type="html_snippet_generator" >
 					<input into="heading">
 						<value>Challenge 1</value>
@@ -114,6 +123,20 @@
 				</generator>
 			</input>
 		</vulnerability>
+
+		<!-- Remote privilege escalation -->
+		<vulnerability read_fact="strings_to_leak" access="remote" privilege="user_rwx">
+			<input into="strings_to_leak">
+				<generator type="flag_generator" />
+			</input>
+		</vulnerability>
+
+		<vulnerability read_fact="strings_to_leak" access="local" privilege="root_rwx">
+			<input into="strings_to_leak">
+				<generator type="flag_generator" />
+			</input>
+		</vulnerability>
+
 
 		<network module_path=".*private_network_1"/>
 		<!--<build type="cleanup">-->
