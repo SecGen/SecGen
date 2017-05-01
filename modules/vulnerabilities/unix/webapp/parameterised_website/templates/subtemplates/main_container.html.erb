@@ -17,13 +17,16 @@
           <p><%= @main_page_paragraph_content.join %></p>
       <% end -%>
       <br/>
-      <% @images_to_leak.each_with_index{ |_, counter| -%>
-          <img src="image<%=counter + 1 %>.png" height="128" width="128">
-      <%} -%>
 
       <% if @visible_tabs -%>
           <%= scope.function_template(['parameterised_website/subtemplates/tab_panel.html.erb']) %>
       <% end -%>
+
+      <br/>
+      <% @images_to_leak.each_with_index{ |_, counter| -%>
+          <img src="image<%=counter + 1 %>.png" height="128" width="128">
+      <%} -%>
+
     </div>
   </div>
 </div>
