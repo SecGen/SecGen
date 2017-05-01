@@ -61,28 +61,32 @@ class parameterised_website::install {
   }
 
   # Create visible tab html files
-  $visible_tabs.each |$counter, $visible_tab| {
-    if $counter != 0 {
-      $n = $counter
+  unless $visible_tabs == undef {
+    $visible_tabs.each |$counter, $visible_tab| {
+      if $counter != 0 {
+        $n = $counter
 
-      file { "$docroot/tab_$n.html":
-        ensure  => file,
-        content => $visible_tab,
+        file { "$docroot/tab_$n.html":
+          ensure  => file,
+          content => $visible_tab,
+        }
       }
     }
   }
 
   # Create hidden tab html files
-  $hidden_tabs.each |$counter, $hidden_tab| {
-    if $counter == 0 {
-      $n = 0
-    } else {
-      $n = $counter + $visible_tabs.length - 1  # minus one accounts for the information tab
-    }
+  unless $hidden_tabs == undef {
+    $hidden_tabs.each |$counter, $hidden_tab| {
+      if $counter == 0 {
+        $n = 0
+      } else {
+        $n = $counter + $visible_tabs.length - 1  # minus one accounts for the information tab
+      }
 
-    file { "$docroot/tab_$n.html":
-      ensure  => file,
-      content => $hidden_tab,
+      file { "$docroot/tab_$n.html":
+        ensure  => file,
+        content => $hidden_tab,
+      }
     }
   }
 
