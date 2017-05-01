@@ -12,89 +12,107 @@
 		<!-- comment describes using pseudo code (C#-like methods with named optional arguments) -->
 		<!-- vulnerability_nfs_share_leak(strings_to_leak: encoder_flag_generator() CONCAT encoder_ascii_reversable(strings_to_encode: encoder_flag_generator()) CONCAT ...) -->
 		<vulnerability name="Random Parameterised Website">
-			<input into="visible_tabs" unique_module_list="unique_encoders">
-				<generator type="html_snippet_generator"/>
-				<value>This is another tab!</value>
-				<value>This is another tab!!!!</value>
+			<input into="visible_tabs">
+				<generator type="html_snippet_generator" >
+					<input into="heading">
+						<value>Challenge 1</value>
+					</input>
+					<input into="paragraphs" unique_module_list="unique_encoders">
+						<encoder type="ascii_reversable">
+							<input into="strings_to_encode">
+								<generator type="flag_generator" />
+							</input>
+						</encoder>
+					</input>
+				</generator>
+
+				<generator type="html_snippet_generator">
+					<input into="heading">
+						<value>Challenge 2</value>
+					</input>
+					<input into="paragraphs" unique_module_list="unique_encoders">
+						<encoder type="alpha_reversable">
+							<input into="strings_to_encode">
+								<generator type="flag_generator" />
+							</input>
+						</encoder>
+					</input>
+				</generator>
+
+				<generator type="html_snippet_generator">
+					<input into="heading">
+						<value>Challenge 3</value>
+					</input>
+					<input into="paragraphs" unique_module_list="unique_encoders">
+						<encoder type="ascii_reversable">
+							<input into="strings_to_encode">
+								<generator type="flag_generator" />
+							</input>
+						</encoder>
+					</input>
+				</generator>
+
+				<generator type="html_snippet_generator">
+					<input into="heading">
+						<value>Challenge 4</value>
+					</input>
+					<input into="paragraphs" unique_module_list="unique_encoders">
+						<encoder type="alpha_reversable">
+							<input into="strings_to_encode">
+								<generator type="flag_generator" />
+							</input>
+						</encoder>
+					</input>
+				</generator>
+
+				<generator type="html_snippet_generator">
+					<input into="heading">
+						<value>Challenge 5</value>
+					</input>
+					<input into="paragraphs" unique_module_list="unique_encoders">
+						<generator type="ctf_challenge">
+							<input into="strings_to_encode">
+								<generator type="flag_generator" />
+							</input>
+						</generator>
+					</input>
+				</generator>
+
+				<generator type="html_snippet_generator">
+					<input into="heading">
+						<value>Challenge 6</value>
+					</input>
+					<input into="paragraphs" unique_module_list="unique_encoders">
+						<generator type="ctf_challenge">
+							<input into="strings_to_encode">
+								<generator type="flag_generator" />
+							</input>
+						</generator>
+					</input>
+				</generator>
 			</input>
+
 			<input into="hidden_tabs" unique_module_list="unique_encoders">
-				<value>this shows on tab_0.html</value>
-				<value>this shows on tab_4.html</value>
+				<generator type="flag_generator" />
+				<encoder type="ascii_reversable">
+					<input into="strings_to_encode" unique_module_list="unique_encoders">
+						<generator type="flag_generator" />
+					</input>
+				</encoder>
 			</input>
 
-			<!--<input into="hidden_tabs">-->
-				<!--<generator type="flag_generator" />-->
-				<!--<encoder type="alpha_reversable">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</encoder>-->
-			<!--</input>-->
-
-
-				<!--<encoder type="ascii_reversable">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</encoder>-->
-				<!--<encoder type="alpha_reversable">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</encoder>-->
-				<!--<encoder type="ascii_reversable">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</encoder>-->
-				<!--<encoder type="ascii_reversable">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</encoder>-->
-				<!--<encoder type="ascii_reversable">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</encoder>-->
-
-				<!--<encoder type="alpha_reversable">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</encoder>-->
-				<!--<generator type="ctf_challenge">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</generator>-->
-				<!--<generator type="ctf_challenge">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</generator>-->
-				<!--<encoder type="ascii_reversable">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<encoder type="ascii_reversable">-->
-							<!--<input into="strings_to_encode">-->
-								<!--<generator type="flag_generator" />-->
-							<!--</input>-->
-						<!--</encoder>-->
-					<!--</input>-->
-				<!--</encoder>-->
-			<!--</input>-->
-			<!--<input into="images_to_leak">-->
-				<!--<generator type="image_challenge_generator">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</generator>-->
-				<!--<generator type="image_challenge_generator">-->
-					<!--<input into="strings_to_encode">-->
-						<!--<generator type="flag_generator" />-->
-					<!--</input>-->
-				<!--</generator>-->
-			<!--</input>-->
+			<input into="images_to_leak" unique_module_list="unique_encoders">
+				<generator type="image_challenge_generator">
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
+				<generator type="image_challenge_generator" >
+					<input into="strings_to_encode">
+						<generator type="flag_generator" />
+					</input>
+				</generator>
+			</input>
 		</vulnerability>
 
 		<network module_path=".*private_network_1"/>
