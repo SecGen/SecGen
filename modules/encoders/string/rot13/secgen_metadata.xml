@@ -10,7 +10,7 @@
   </description>
 
   <type>string_encoder</type>
-  <type>alpha_reversable</type>
+  <type>alpha_reversible</type>
   <platform>linux</platform>
   <platform>windows</platform>
 

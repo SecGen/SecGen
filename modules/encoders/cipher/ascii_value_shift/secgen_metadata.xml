@@ -13,7 +13,7 @@
   <type>shift_cipher</type>
   <type>ascii_value_cipher</type>
   <type>cipher_encoder</type>
-  <type>ascii_reversable</type>
+  <type>ascii_reversible</type>
   <platform>linux</platform>
   <platform>windows</platform>
 

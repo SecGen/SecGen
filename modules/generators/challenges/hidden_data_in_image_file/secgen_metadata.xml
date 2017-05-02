@@ -27,7 +27,7 @@
   </default_input>
 
   <default_input into="strings_to_leak">
-    <encoder type="ascii_reversable">
+    <encoder type="ascii_reversible">
       <input into="strings_to_encode">
         <generator type="flag_generator"/>
       </input>

@@ -8,7 +8,7 @@
 		<system_name>example_server</system_name>
 		<base platform="linux"/>
 
-		<!-- Generator which outputs an ascii_reversable encoded string (usually a flag) appended to raw image data. -->
+		<!-- Generator which outputs an ascii_reversible encoded string (usually a flag) appended to raw image data. -->
 		<vulnerability read_fact="images_to_leak">
 			<input into="images_to_leak">
 				<generator type="hidden_data_in_image_file"/>

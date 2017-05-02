@@ -3,10 +3,10 @@
 <encoder xmlns="http://www.github/cliffe/SecGen/encoder"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
-  <name>Vignere Cipher</name>
+  <name>Vigenere Cipher</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>The Vignere cipher is a type of polyalphabetic cipher, a square table of alphabets shifted 1 space on
+  <description>The Vigenere cipher is a type of polyalphabetic cipher, a square table of alphabets shifted 1 space on
     each row (aka a 'tabula recta').
 
     The encryption key is repeated for the length of the string being encoded. To encrypt, select the column with the
@@ -14,8 +14,8 @@
     where they intercept.
   </description>
 
-  <type>vignere_cipher</type>
-  <type>alpha_reversable</type>
+  <type>vigenere_cipher</type>
+  <type>alpha_reversible</type>
   <type>cipher_encoder</type>
   <platform>linux</platform>
   <platform>windows</platform>

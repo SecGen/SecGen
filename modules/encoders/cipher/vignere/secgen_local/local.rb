@@ -1,12 +1,12 @@
 #!/usr/bin/ruby
 # Encryption algorithm code from http://rosettacode.org/wiki/Vigen%C3%A8re_cipher#Ruby
 require_relative '../../../../../lib/objects/local_string_encoder.rb'
-class VignereCipher < StringEncoder
+class VigenereCipher < StringEncoder
   attr_accessor :encryption_key
 
   def initialize
     super
-    self.module_name = 'Vignere Cipher Encoder'
+    self.module_name = 'Vigenere Cipher Encoder'
     self.encryption_key = ''
   end
 
@@ -53,4 +53,4 @@ class VignereCipher < StringEncoder
   end
 end
 
-VignereCipher.new.run
+VigenereCipher.new.run

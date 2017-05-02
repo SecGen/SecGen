@@ -10,7 +10,7 @@
 		<base platform="linux"/>
 
 		<!-- comment describes using pseudo code (C#-like methods with named optional arguments) -->
-		<!-- vulnerability_nfs_share_leak(strings_to_leak: encoder_flag_generator() CONCAT encoder_ascii_reversable(strings_to_encode: encoder_flag_generator()) CONCAT ...) -->
+		<!-- vulnerability_nfs_share_leak(strings_to_leak: encoder_flag_generator() CONCAT encoder_ascii_reversible(strings_to_encode: encoder_flag_generator()) CONCAT ...) -->
 		<service name="Random Parameterised Website">
 			<input into="visible_tabs">
 				<generator type="html_snippet_generator" >
@@ -27,7 +27,7 @@
 						<value>Challenge 1</value>
 					</input>
 					<input into="paragraphs" unique_module_list="unique_encoders">
-						<encoder type="ascii_reversable">
+						<encoder type="ascii_reversible">
 							<input into="strings_to_encode">
 								<generator type="flag_generator" />
 							</input>
@@ -40,7 +40,7 @@
 						<value>Challenge 2</value>
 					</input>
 					<input into="paragraphs" unique_module_list="unique_encoders">
-						<encoder type="alpha_reversable">
+						<encoder type="alpha_reversible">
 							<input into="strings_to_encode">
 								<generator type="flag_generator" />
 							</input>
@@ -53,7 +53,7 @@
 						<value>Challenge 3</value>
 					</input>
 					<input into="paragraphs" unique_module_list="unique_encoders">
-						<encoder type="ascii_reversable">
+						<encoder type="ascii_reversible">
 							<input into="strings_to_encode">
 								<generator type="flag_generator" />
 							</input>
@@ -66,7 +66,7 @@
 						<value>Challenge 4</value>
 					</input>
 					<input into="paragraphs" unique_module_list="unique_encoders">
-						<encoder type="alpha_reversable">
+						<encoder type="alpha_reversible">
 							<input into="strings_to_encode">
 								<generator type="flag_generator" />
 							</input>
@@ -103,7 +103,7 @@
 
 			<input into="hidden_tabs" unique_module_list="unique_encoders">
 				<generator type="flag_generator" />
-				<encoder type="ascii_reversable">
+				<encoder type="ascii_reversible">
 					<input into="strings_to_encode" unique_module_list="unique_encoders">
 						<generator type="flag_generator" />
 					</input>

@@ -8,7 +8,7 @@
   <module_license>MIT</module_license>
   <description>Converts a String to Binary.</description>
 
-  <type>ascii_reversable</type>
+  <type>ascii_reversible</type>
   <type>binary_encoder</type>
   <type>string_encoder</type>
   <platform>linux</platform>

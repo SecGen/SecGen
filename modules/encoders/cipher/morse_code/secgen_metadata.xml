@@ -9,7 +9,7 @@
   <description>Encodes a string into Morse code.</description>
 
   <type>morse_code_encoder</type>
-  <type>ascii_reversable</type>
+  <type>ascii_reversible</type>
   <type>string_encoder</type>
   <platform>linux</platform>
   <platform>windows</platform>

@@ -10,7 +10,7 @@
   </description>
 
   <type>shift_cipher</type>
-  <type>alpha_reversable</type>
+  <type>alpha_reversible</type>
   <type>caesar_cipher</type>
   <type>cipher_encoder</type>
   <platform>linux</platform>

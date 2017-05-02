@@ -244,7 +244,7 @@ Another example, as above, but the message and flag are first base64 encoded:
 
 Generators and encoders will always produce/return an (unnamed) array of Strings, which can be directed to input parameters for other modules (by parameter name into modules they are nested under, as illustrated above). 
 
-All encoders will accept and process the "strings_to_encode" parameter, so it's safe to pass input into any randomly selected encoder (though you may want to filter to reversable encoders for a decoding challenge, as shown below). It's possible to direct the output from multiple modules to input to the same module parameter. For example: 
+All encoders will accept and process the "strings_to_encode" parameter, so it's safe to pass input into any randomly selected encoder (though you may want to filter to reversible encoders for a decoding challenge, as shown below). It's possible to direct the output from multiple modules to input to the same module parameter. For example: 
 
 ```xml
 <?xml version="1.0"?>
@@ -260,7 +260,7 @@ All encoders will accept and process the "strings_to_encode" parameter, so it's 
 		<vulnerability module_path=".*nfs_overshare">
 			<input into="strings_to_leak">
 				<!--output from this encoder...-->
-				<encoder type="ascii_reversable">
+				<encoder type="ascii_reversible">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
 					</input>
@@ -281,7 +281,7 @@ In this case each of the nested inputs to that same parameter are concatenated i
 ```C
 // This is just some pseudo code to help explain
 // (C#-like methods with named arguments)
-vulnerability_nfs_share_leak(strings_to_leak: encoder_selected_ascii_reversable(strings_to_encode: encoder_flag_generator()) CONCATENATE_WITH encoder_flag_generator());
+vulnerability_nfs_share_leak(strings_to_leak: encoder_selected_ascii_reversible(strings_to_encode: encoder_flag_generator()) CONCATENATE_WITH encoder_flag_generator());
 ```
 
 You might want to write to any module that has a particular parameter: for example, a vulnerability that has a "strings_to_leak" parameter, meaning a vulnerability that when exploited reveals strings to the attacker:
@@ -298,7 +298,7 @@ You might want to write to any module that has a particular parameter: for examp
 		<!--this line selects a vulnerability that can leak strings:-->
  		<vulnerability read_fact="strings_to_leak">
  			<input into="strings_to_leak">
- 				<encoder type="ascii_reversable">
+ 				<encoder type="ascii_reversible">
  					<input into="strings_to_encode">
  						<generator type="flag_generator" />
  					</input>
@@ -323,17 +323,17 @@ If you want to use a bunch of modules to generate input for another module's par
 [snip]
 		<vulnerability name="NFS Share Leak">
 			<input into="strings_to_leak" unique_module_list="unique_encoders">
-				<encoder type="ascii_reversable">
+				<encoder type="ascii_reversible">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
 					</input>
 				</encoder>
-				<encoder type="alpha_reversable">
+				<encoder type="alpha_reversible">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
 					</input>
 				</encoder>
-				<encoder type="alpha_reversable">
+				<encoder type="alpha_reversible">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
 					</input>
@@ -369,7 +369,7 @@ We can then pass the datastore (flag2) into a module parameter, and capture the 
 ```xml
 
 		<input into_datastore="encoded_flag">
-			<encoder type="ascii_reversable">
+			<encoder type="ascii_reversible">
 				<input into="strings_to_encode">
 					<datastore>flag2</datastore>
 				</input>

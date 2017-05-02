@@ -4,7 +4,7 @@
 		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		  xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-	<!--some basic decoding challenges (just two flags, one of which encoded in a reversable way)-->
+	<!--some basic decoding challenges (just two flags, one of which encoded in a reversible way)-->
 	<!--comments describe using pseudo code-->
 	<system>
 		<system_name>decode_me</system_name>
@@ -20,9 +20,9 @@
 			<generator type="flag_generator" />
 		</input>
 
-		<!--  encoded_flag = encoder_ascii_reversable(encoded_flag: flag2)   -->
+		<!--  encoded_flag = encoder_ascii_reversible(encoded_flag: flag2)   -->
 		<input into_datastore="encoded_flag">
-			<encoder type="ascii_reversable">
+			<encoder type="ascii_reversible">
 				<input into="strings_to_encode">
 					<datastore>flag2</datastore>
 				</input>

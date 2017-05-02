@@ -8,7 +8,7 @@
   <module_license>MIT</module_license>
   <description>Takes ASCII strings and encodes each character into it's hexadecimal representation.</description>
 
-  <type>ascii_reversable</type>
+  <type>ascii_reversible</type>
   <type>hex_encoder</type>
   <type>string_encoder</type>
   <platform>linux</platform>
