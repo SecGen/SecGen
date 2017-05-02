@@ -14,6 +14,10 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
+  <hint>Convert the octal (base 8) string into its ASCII value, character by character in sets of 3.
+    Decoders are available online e.g. http://www.unit-conversion.info/texttools/octal/
+  </hint>
+
   <read_fact>strings_to_encode</read_fact>
 
   <output_type>encoded_strings</output_type>

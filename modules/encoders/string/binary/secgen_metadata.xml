@@ -14,6 +14,10 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
+  <hint>Convert the binary (base 2) string into its ASCII value. Watch: https://www.youtube.com/watch?v=wCQSIub_g7M
+    Converters available online e.g. https://www.branah.com/ascii-converter
+  </hint>
+
   <read_fact>strings_to_encode</read_fact>
 
   <output_type>encoded_strings</output_type>
