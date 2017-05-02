@@ -16,6 +16,10 @@
 
   <reference>https://gist.github.com/mikedamage/105081</reference>
 
+  <hint>Morse code decoders are available online e.g. https://morsecode.scphillips.com/translator.html
+    Morse code has a single representation for parenthesis, the SecGen flag format uses curly braces. Replace them!
+  </hint>
+
   <read_fact>strings_to_encode</read_fact>
 
   <default_input into="strings_to_encode">

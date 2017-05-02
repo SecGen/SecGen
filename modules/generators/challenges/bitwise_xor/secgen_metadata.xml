@@ -17,7 +17,7 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
-  <!--<hint>Take both binary strings and perform a bitwise XOR on them.</hint>-->
+  <hint>Take both binary strings and perform a bitwise XOR on them. - https://www.youtube.com/watch?v=YtghBxoBxpA</hint>
 
   <read_fact>string_to_mask</read_fact>
   <default_input into="string_to_mask">
