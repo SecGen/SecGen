@@ -98,6 +98,13 @@ class XmlMarkerGenerator
           add_hint("The flag has been encoded using a standard encoding method, look for an unusual string of text and try to figure out how it was encoded, and decode it", "#{search_module.unique_id}stringencoder", "normal", xml)
         end
         add_hint("The flag is encoded using a #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
+        if search_module.attributes['hint']
+          add_hint(search_module.attributes['hint'].first, "#{search_module.unique_id}hint", "big_hint", xml)
+        end
+      when "generator"
+        if search_module.attributes['hint']
+          add_hint(search_module.attributes['hint'].first, "#{search_module.unique_id}hint", "big_hint", xml)
+        end
     end
 
   end

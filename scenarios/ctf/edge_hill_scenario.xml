@@ -79,11 +79,7 @@
 						<value>Challenge 5</value>
 					</input>
 					<input into="paragraphs" unique_module_list="unique_encoders">
-						<generator type="ctf_challenge">
-							<input into="strings_to_encode">
-								<generator type="flag_generator" />
-							</input>
-						</generator>
+						<generator type="ctf_challenge" />
 					</input>
 				</generator>
 
@@ -92,11 +88,7 @@
 						<value>Challenge 6</value>
 					</input>
 					<input into="paragraphs" unique_module_list="unique_encoders">
-						<generator type="ctf_challenge">
-							<input into="strings_to_encode">
-								<generator type="flag_generator" />
-							</input>
-						</generator>
+						<generator type="ctf_challenge"/>
 					</input>
 				</generator>
 			</input>
@@ -104,23 +96,15 @@
 			<input into="hidden_tabs" unique_module_list="unique_encoders">
 				<generator type="flag_generator" />
 				<encoder type="ascii_reversible">
-					<input into="strings_to_encode" unique_module_list="unique_encoders">
+					<input into="strings_to_encode" >
 						<generator type="flag_generator" />
 					</input>
 				</encoder>
 			</input>
 
 			<input into="images_to_leak" unique_module_list="unique_encoders">
-				<generator type="image_challenge_generator">
-					<input into="strings_to_encode">
-						<generator type="flag_generator" />
-					</input>
-				</generator>
-				<generator type="image_challenge_generator" >
-					<input into="strings_to_encode">
-						<generator type="flag_generator" />
-					</input>
-				</generator>
+				<generator type="image_challenge_generator" />
+				<generator type="image_challenge_generator" />
 			</input>
 		</service>
 
