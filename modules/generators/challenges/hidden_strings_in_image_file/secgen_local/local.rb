@@ -1,13 +1,13 @@
 #!/usr/bin/ruby
 require_relative '../../../../../lib/objects/local_string_encoder.rb'
 
-class HideDataInImgChallenge < StringEncoder
+class HideStringsInImgChallenge < StringEncoder
   attr_accessor :base64_image
   attr_accessor :strings_to_leak
 
   def initialize
     super
-    self.module_name = 'Hidden Data in Image File Challenge Generator'
+    self.module_name = 'Hidden Strings in Image File Challenge Generator'
     self.base64_image = ''
     self.strings_to_leak = []
   end
@@ -44,4 +44,4 @@ class HideDataInImgChallenge < StringEncoder
   end
 end
 
-HideDataInImgChallenge.new.run
+HideStringsInImgChallenge.new.run

@@ -3,7 +3,7 @@
 <generator xmlns="http://www.github/cliffe/SecGen/generator"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
-  <name>Hidden Data in Image File</name>
+  <name>Hidden Strings in Image File</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
   <description>Makes use of a random image, encodes a string_to_leak (flag) then inserts the data to decode into the end
