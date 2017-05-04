@@ -17,13 +17,17 @@ class ZipFileGenerator < StringEncoder
   def encode_all
     zip_file_path = GENERATORS_DIR + 'compression/zip/secgen_local/archive.zip'
 
+    # Create a zip archive compressing a file containing strings_to_leak
     Zip::File.open(zip_file_path, Zip::File::CREATE) do |zip_file|
       zip_file.get_output_stream(self.file_name) { |os|
         os.write self.strings_to_leak.join("\n")
       }
     end
 
+    # Read zip file contents into memory & delete the archive.zip from disk
     file_contents = File.binread(zip_file_path)
+    FileUtils.rm(zip_file_path)
+
     self.outputs << Base64.strict_encode64(file_contents)
   end
 
