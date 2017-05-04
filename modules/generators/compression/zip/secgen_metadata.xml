@@ -6,12 +6,16 @@
   <name>Zip File Generator</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>TODO</description>
+  <description>Creates a zip archive containing a text file which holds the contents of strings_to_leak and returns it
+    in base64 format.
+  </description>
 
   <type>zip_file</type>
   <type>zip_file_generator</type>
   <platform>linux</platform>
   <platform>windows</platform>
+
+  <reference>https://github.com/rubyzip/rubyzip</reference>
 
   <read_fact>file_name</read_fact>
   <read_fact>strings_to_leak</read_fact>
@@ -24,5 +28,5 @@
     <generator type="flag_generator"/>
   </default_input>
 
-  <output_type>zip_file</output_type>
+  <output_type>base64_zip_file</output_type>
 </generator>

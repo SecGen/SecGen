@@ -4,7 +4,9 @@
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
   <name>MySQL database</name>
-  <author>TODO</author>
+  <author>Connor Wilson</author>
+  <author>David Schmitt</author>
+  <author>Puppet Labs</author>
   <module_license>Apache v2</module_license>
   <description>A secure instalation of MySQL</description>
 
@@ -13,6 +15,7 @@
 
   <!--optional details-->
   <reference>https://www.mysql.com/</reference>
+  <reference>https://forge.puppet.com/puppetlabs/mysql/0.6.1/readme</reference>
   <software_name>mysql</software_name>
   <software_license>GPL v2</software_license>
 

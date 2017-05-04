@@ -4,7 +4,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
   <name>Apache HTTP Server</name>
-  <author>TODO</author>
+  <author>Connor Wilson</author>
+  <author>Puppet Labs</author>
   <module_license>Apache v2</module_license>
   <description>An installation of Apache</description>
 
@@ -13,6 +14,7 @@
 
   <!--optional details-->
   <reference>https://httpd.apache.org/</reference>
+  <reference>https://forge.puppet.com/puppetlabs/apache</reference>
   <software_name>apache</software_name>
   <software_license>Apache v2</software_license>
 
