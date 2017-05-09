@@ -14,7 +14,10 @@
 
   <platform>linux</platform>
 
-  <hint>Sort the sets of strings, check if there are any differences in content and decode the hex.</hint>
+  <hint>Sort the sets of strings alphabetically.</hint>
+  <solution>Check if there are any differences in content either manually or with the 'diff' utility.
+    Online tools available: https://www.diffchecker.com/
+  </solution>
 
   <read_fact>random_data</read_fact>
   <read_fact>strings_to_leak</read_fact>

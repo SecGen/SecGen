@@ -17,7 +17,11 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
-  <hint>Take both binary strings and perform a bitwise XOR on them. - https://www.youtube.com/watch?v=YtghBxoBxpA</hint>
+  <hint>Perform a bitwise XOR on both strings - https://www.youtube.com/watch?v=YtghBxoBxpA</hint>
+  <solution>Example bitwise XOR tool:
+    http://www.mobilefish.com/services/big_number_bitwise_calculation/big_number_bitwise_calculation.php
+    Decode the result into it's ASCII representation.
+  </solution>
 
   <read_fact>string_to_mask</read_fact>
   <default_input into="string_to_mask">

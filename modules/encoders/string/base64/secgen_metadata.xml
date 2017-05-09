@@ -14,7 +14,7 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
-  <hint>Decoding tools available online e.g. https://www.base64decode.org/</hint>
+  <solution>Encoded using Base64. Decoding tools available online e.g. https://www.base64decode.org/</solution>
 
   <read_fact>strings_to_encode</read_fact>
   <read_fact>base64_options</read_fact>

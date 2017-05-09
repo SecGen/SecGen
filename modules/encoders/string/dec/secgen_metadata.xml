@@ -14,9 +14,9 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
-  <hint>Convert the decimal (base 10) string into its ASCII value, character by character in sets of 3.
+  <solution>Convert the decimal (base 10) string into its ASCII value, character by character in sets of 3.
     Use an ascii table e.g. http://www.asciitable.com OR an online converter e.g. https://www.branah.com/ascii-converter
-  </hint>
+  </solution>
 
   <read_fact>strings_to_encode</read_fact>
 

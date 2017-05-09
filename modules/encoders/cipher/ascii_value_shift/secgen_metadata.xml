@@ -17,9 +17,10 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
-  <hint>Encoded with a rotation cipher based on the ASCII value. Uses the 94 printable ascii characters.
-    Decoding tools are available online e.g. http://www.dcode.fr/rot-cipher
+  <hint>Encoded with a rotation cipher based on the ASCII value using a random key. Uses the 94 printable ascii
+    characters.
   </hint>
+  <solution>Decoding tools are available online e.g. http://www.dcode.fr/rot-cipher</solution>
 
   <read_fact>strings_to_encode</read_fact>
   <read_fact>shift_key</read_fact>

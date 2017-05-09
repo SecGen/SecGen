@@ -70,8 +70,6 @@ class XmlMarkerGenerator
 
     case search_module.module_type
       when "vulnerability"
-        add_hint("There is a vulnerability of some kind for you to exploit", "#{search_module.unique_id}itsavulnerability", "normal", xml)
-
         case search_module.attributes['access'].first
           when "remote"
             add_hint("A vulnerability that can be accessed/exploited remotely. Perhaps try scanning the system/network?", "#{search_module.unique_id}remote", "normal", xml)
@@ -89,21 +87,27 @@ class XmlMarkerGenerator
         end
 
       when "service"
-        add_hint("There is a service of some kind waiting for you to discover and access", "#{search_module.unique_id}itsaservice", "normal", xml)
-        add_hint("The flag is hosted using #{search_module.attributes['type'].first}", "#{search_module.unique_id}type", "big_hint", xml)
-        add_hint("The flag is hosted using #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
+        add_hint("The flag is hosted using #{search_module.attributes['type'].first}", "#{search_module.unique_id}type", "normal", xml)
       when "encoder"
         add_hint("The flag is encoded/hidden somewhere", "#{search_module.unique_id}itsanencoder", "normal", xml)
         if search_module.attributes['type'].include? 'string_encoder'
-          add_hint("The flag has been encoded using a standard encoding method, look for an unusual string of text and try to figure out how it was encoded, and decode it", "#{search_module.unique_id}stringencoder", "normal", xml)
+          add_hint("There is a layer of encoding using a standard encoding method, look for an unusual string of text and try to figure out how it was encoded, and decode it", "#{search_module.unique_id}stringencoder", "normal", xml)
         end
-        add_hint("The flag is encoded using a #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
+        if search_module.attributes['solution'] == nil
+          add_hint("The flag is encoded using a #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
+        end
         if search_module.attributes['hint']
           add_hint(search_module.attributes['hint'].first, "#{search_module.unique_id}hint", "big_hint", xml)
+        end
+        if search_module.attributes['solution']
+          add_hint(search_module.attributes['solution'].first, "#{search_module.unique_id}solution", "big_hint", xml)
         end
       when "generator"
         if search_module.attributes['hint']
-          add_hint(search_module.attributes['hint'].first, "#{search_module.unique_id}hint", "big_hint", xml)
+          add_hint(search_module.attributes['hint'].first, "#{search_module.unique_id}hint", "normal", xml)
+        end
+        if search_module.attributes['solution']
+          add_hint(search_module.attributes['solution'].first, "#{search_module.unique_id}solution", "big_hint", xml)
         end
     end
 

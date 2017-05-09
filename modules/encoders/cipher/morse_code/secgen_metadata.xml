@@ -16,7 +16,7 @@
 
   <reference>https://gist.github.com/mikedamage/105081</reference>
 
-  <hint>Morse code decoders are available online e.g. https://morsecode.scphillips.com/translator.html</hint>
+  <solution>Morse code decoders are available online e.g. https://morsecode.scphillips.com/translator.html</solution>
 
   <read_fact>strings_to_encode</read_fact>
 

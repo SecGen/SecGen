@@ -17,7 +17,7 @@
 
   <reference>https://github.com/whomwah/rqrcode</reference>
 
-  <hint>Use a QR reader mobile app or online decoder e.g. http://blog.qr4.nl/Online-QR-Code_decoder.aspx</hint>
+  <solution>Use a QR reader mobile app or online decoder e.g. http://blog.qr4.nl/Online-QR-Code_decoder.aspx</solution>
 
   <read_fact>strings_to_leak</read_fact>
   <default_input into="strings_to_leak">

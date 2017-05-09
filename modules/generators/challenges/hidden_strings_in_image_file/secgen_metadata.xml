@@ -17,7 +17,8 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
-  <hint>Inspect the file's raw hex. Look at end for something to decode. Example tools: hexedit/hexeditor</hint>
+  <hint>Inspect the file's raw hex. Example tools: hexedit/hexeditor</hint>
+  <solution>Look at the end of the file for something to decode. </solution>
 
   <read_fact>base64_image</read_fact>
   <read_fact>strings_to_leak</read_fact>

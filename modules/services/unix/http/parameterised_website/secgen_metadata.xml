@@ -8,7 +8,7 @@
   <module_license>MIT</module_license>
   <description>Parameterised website filled with SecGen generated content.</description>
 
-  <type>webapp</type>
+  <type>http</type>
   <platform>linux</platform>
 
   <read_fact>strings_to_leak</read_fact>

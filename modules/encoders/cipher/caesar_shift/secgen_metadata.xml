@@ -16,9 +16,8 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
-  <hint>Encoded with a rotation/shift cipher using a random key. Watch: https://www.youtube.com/watch?v=o6TPx1Co_wg
-    Decoding tools are available online e.g. http://www.dcode.fr/rot-cipher
-  </hint>
+  <hint>Encoded with a rotation/shift cipher using a random key. Watch: https://www.youtube.com/watch?v=o6TPx1Co_wg</hint>
+  <solution>Decoding tools are available online e.g. http://www.dcode.fr/rot-cipher</solution>
 
   <read_fact>strings_to_encode</read_fact>
   <read_fact>shift_key</read_fact>
