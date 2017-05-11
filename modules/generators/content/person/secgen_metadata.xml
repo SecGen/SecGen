@@ -18,6 +18,7 @@
   <read_fact>phone_number</read_fact>
   <read_fact>email_address</read_fact>
   <read_fact>username</read_fact>
+  <read_fact>password</read_fact>
 
   <default_input into="name">
     <generator type="name_generator"/>
@@ -33,6 +34,9 @@
   </default_input>
   <default_input into="username">
     <generator type="username_generator"/>
+  </default_input>
+  <default_input into="password">
+    <generator type="password_generator"/>
   </default_input>
 
   <output_type>person</output_type>

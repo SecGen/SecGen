@@ -7,6 +7,9 @@ class onlinestore::install {
   $admin_flag = $secgen_parameters['strings_to_leak'][1]
   $root_file_flag = $secgen_parameters['strings_to_leak'][2]
   $black_market_flag = $secgen_parameters['strings_to_leak'][3]
+  $admin_token_flag = $secgen_parameters['strings_to_leak'][4]
+  $accounts = $secgen_parameters['accounts']
+  $domain = $secgen_parameters['domain'][0]
 
   $docroot = '/var/www'
   $db_username = 'csecvm'
@@ -40,6 +43,18 @@ class onlinestore::install {
   exec { 'add_generated_password_to_mysql_php':
     cwd => $docroot,
     command => "/bin/sed -ie 's/H93AtG6akq/$db_password/g' mysql.php",
+    notify => Exec['update_domain_restriction_on_email_signup'],
+  }
+
+  # Add the domain to the webapp registration restriction (signup.php and settings.php)
+  exec { 'update_domain_restriction_on_email_signup':
+    cwd => $docroot,
+    command => "/bin/sed -ie 's/bham.ac.uk/$domain/g' signup.php",
+    notify => Exec['update_domain_restriction_on_email_settings'],
+  }
+  exec { 'update_domain_restriction_on_email_settings':
+    cwd => "$docroot/u/",
+    command => "/bin/sed -ie 's/bham.ac.uk/$domain/g' settings.php",
     notify => Exec['setup_mysql'],
   }
 
@@ -48,7 +63,7 @@ class onlinestore::install {
     group  => root,
     mode   => '0600',
     ensure => file,
-    source => 'puppet:///modules/onlinestore/csecvm.sql',
+    content => template('onlinestore/csecvm.sql.erb'),
   }
 
   file { "/tmp/mysql_setup.sh":
@@ -84,6 +99,13 @@ class onlinestore::install {
   exec { 'create_black_market_flag':
     cwd     => "$docroot",
     command => "echo '$black_market_flag' > ./.marketToken && chown -f www-data:www-data ./.marketToken && chmod -f 0600 ./.marketToken",
+    path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
+    notify => Exec['create_admin_token_flag'],
+  }
+
+  exec { 'create_admin_token_flag':
+    cwd     => "$docroot/admin/",
+    command => "echo '$admin_token_flag' > ./.adminToken && chown -f www-data:www-data ./.adminToken && chmod -f 0600 ./.adminToken",
     path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
   }
 }
