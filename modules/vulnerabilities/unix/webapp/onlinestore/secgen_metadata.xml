@@ -17,6 +17,10 @@
   <read_fact>db_password</read_fact>
   <read_fact>accounts</read_fact>
   <read_fact>domain</read_fact>
+  <read_fact>dealer_id</read_fact>
+  <read_fact>murderer_id</read_fact>
+  <read_fact>murdered_on</read_fact>
+  <read_fact>murdered_ids</read_fact>
 
   <!--strings_to_leak contains the following flags: -->
   <default_input into="strings_to_leak">
@@ -31,6 +35,7 @@
     <generator type="strong_password_generator"/>
   </default_input>
 
+  <!-- Requires 5 user accounts -->
   <default_input into="accounts">
     <generator type="person">
       <input into="name">
@@ -102,6 +107,23 @@
 
   <default_input into="domain">
     <value>bham.ac.uk</value>
+  </default_input>
+
+  <default_input into="dealer_id">
+    <value>4</value>
+  </default_input>
+
+  <default_input into="murderer_id">
+    <value>4</value>
+  </default_input>
+
+  <default_input into="murdered_on">
+    <value>2015-01-02 16:39:01</value>
+  </default_input>
+
+  <default_input into="murdered_ids">
+    <value>2</value>
+    <value>3</value>
   </default_input>
 
   <conflict>

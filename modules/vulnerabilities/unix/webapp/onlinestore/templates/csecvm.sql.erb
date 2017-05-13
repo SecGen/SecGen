@@ -196,12 +196,12 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES
 <% @accounts.each_with_index { |json_account, counter| -%>
-<% position = counter + 1
+<% position = (counter + 1).to_s
    account = JSON.parse(json_account)
-   killed_on_date = (position == 2 or position == 3) ? '2015-01-02 16:39:01' : 'NULL'
-   killed_by = (position == 2 or position == 3) ? '4' : 'NULL'
-   is_dealer = position == 4 ? '1' : '0'
-   line_end = position == @accounts.size ? ';' : ',' -%>
+   is_dealer = @dealer_id == position ? '1' : '0'
+   killed_on_date = @murdered_ids.include?(position) ? @murdered_on : 'NULL'
+   killed_by = @murdered_ids.include?(position) ? @murderer_id : 'NULL'
+   line_end = position == @accounts.size.to_s ? ';' : ',' -%>
   <%="(#{counter+1},'#{account['username']}','#{account['name']}','#{account['password']}',#{is_dealer},'#{account['username']}@#{@domain}','#{killed_on_date}',#{killed_by})#{line_end}" %>
 <% } -%>
 
