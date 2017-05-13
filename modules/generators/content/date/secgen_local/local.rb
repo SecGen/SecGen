@@ -8,7 +8,7 @@ class DateGenerator < StringEncoder
 
   def initialize
     super
-    self.module_name = 'Person Hash Builder'
+    self.module_name = 'Date Generator'
     self.format = ''
   end
 
