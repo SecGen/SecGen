@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<generator xmlns="http://www.github/cliffe/SecGen/generator"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
+  <name>Date Generator</name>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>Date generator.</description>
+
+  <type>date_generator</type>
+  <platform>linux</platform>
+  <platform>windows</platform>
+
+  <read_fact>format</read_fact>
+
+  <default_input into="format">
+    <value>mysql_datetime</value>
+  </default_input>
+
+  <output_type>date</output_type>
+</generator>
