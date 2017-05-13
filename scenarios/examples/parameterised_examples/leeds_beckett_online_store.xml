@@ -111,14 +111,14 @@
       </input>
     </vulnerability>
 
-    <!--<build type="cleanup">-->
-      <!--<input into="root_password">-->
-        <!--<generator type="medium_password_generator"/>-->
-      <!--</input>-->
-      <!--<input into="disable_ssh">-->
-        <!--<value>true</value>-->
-      <!--</input>-->
-    <!--</build>-->
+    <build type="cleanup">
+      <input into="root_password">
+        <generator type="medium_password_generator"/>
+      </input>
+      <input into="disable_ssh">
+        <value>true</value>
+      </input>
+    </build>
 
     <network type="private_network" range="dhcp"/>
   </system>
