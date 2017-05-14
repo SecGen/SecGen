@@ -19,7 +19,7 @@
 					</input>
 					<input into="paragraphs" unique_module_list="unique_encoders">
 						<value>Hunt down the flags. There are more challenges than meets the eye.</value>
-						<value>There are vulnerabilities on the server. Try scanning the network.</value>
+						<value>There are vulnerabilities on the server.</value>
 						<value>Good luck, have fun!</value>
 					</input>
 				</generator>
@@ -108,6 +108,38 @@
 				<generator type="image_challenge_generator" />
 				<generator type="image_challenge_generator" />
 			</input>
+
+			<!-- No business facts. -->
+			<input into="business_name">
+				<value></value>
+			</input>
+			<input into="business_motto">
+				<value></value>
+			</input>
+			<input into="manager_profile">
+				<value></value>
+			</input>
+			<input into="business_address">
+				<value></value>
+			</input>
+			<input into="office_telephone">
+				<value></value>
+			</input>
+			<input into="office_email">
+				<value></value>
+			</input>
+			<input into="industry">
+				<value></value>
+			</input>
+			<input into="employees">
+				<value></value>
+			</input>
+			<input into="product_name">
+				<value></value>
+			</input>
+			<input into="main_page_paragraph_content">
+				<value></value>
+			</input>
 		</service>
 
 		<vulnerability read_fact="strings_to_leak" access="remote" >
@@ -117,11 +149,11 @@
 		</vulnerability>
 
 		<network module_path=".*private_network_1"/>
-		<!--<build type="cleanup">-->
-			<!--<input into="root_password">-->
-				<!--<generator type="strong_password_generator"/>-->
-			<!--</input>-->
-		<!--</build>-->
+		<build type="cleanup">
+			<input into="root_password">
+				<generator type="strong_password_generator"/>
+			</input>
+		</build>
 	</system>
 
 </scenario>

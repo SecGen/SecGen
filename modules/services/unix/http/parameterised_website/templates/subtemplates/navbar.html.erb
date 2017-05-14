@@ -3,7 +3,9 @@
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <li><a href="index.html">Home</a></li>
+          <% if @manager_profile != '' or @employees[0] != '' or @business_address != '' -%>
           <li><a href="contact.html">Contact Us</a></li>
+          <% end -%>
           <% if @security_audit -%>
           <li><a href="security_audit_remit.html">Security Audit Remit</a></li>
           <% end -%>

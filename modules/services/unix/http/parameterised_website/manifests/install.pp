@@ -5,7 +5,8 @@ class parameterised_website::install {
   # Parse out parameters
   $business_name = $secgen_parameters['business_name'][0]
   $business_motto = $secgen_parameters['business_motto'][0]
-  $manager_profile = parsejson($secgen_parameters['manager_profile'][0])
+  $manager_profile = $secgen_parameters['manager_profile'][0]
+  if $manager_profile != '' { $manager_profile = parsejson($manager_profile) }
   $business_address = $secgen_parameters['business_address'][0]
   $office_telephone = $secgen_parameters['office_telephone'][0]
   $office_email = $secgen_parameters['office_email'][0]
@@ -54,10 +55,12 @@ class parameterised_website::install {
     content => template($index_template),
   }
 
-  # Apply contact page template
-  file { "$docroot/contact.html":
-    ensure  => file,
-    content => template('parameterised_website/contact.html.erb'),
+  if $manager_profile != '' or $business_address != '' or $employees[0] != '' {
+    # Apply contact page template
+    file { "$docroot/contact.html":
+      ensure  => file,
+      content => template('parameterised_website/contact.html.erb'),
+    }
   }
 
   # Create visible tab html files

@@ -11,7 +11,7 @@
           <p>Find the Acceptable Use Policy <a href="acceptable_use_policy.html">here</a>.</p>
         <% end -%>
       <% # Externally input / default style -%>
-      <% else -%>
+      <% elsif @manager_profile != '' or @employees[0] != '' or @business_address != ''-%>
           <h1><%= @business_name %></h1>
           <h2><%= @product_name %></h2>
           <p><%= @main_page_paragraph_content.join %></p>
