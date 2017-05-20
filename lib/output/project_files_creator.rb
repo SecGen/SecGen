@@ -1,6 +1,7 @@
 require 'erb'
 require_relative '../helpers/constants.rb'
-require_relative 'xml_report_generator.rb'
+require_relative 'xml_scenario_generator.rb'
+require_relative 'xml_marker_generator.rb'
 require 'fileutils'
 require 'librarian'
 
@@ -33,6 +34,7 @@ class ProjectFilesCreator
   def write_files
     FileUtils.mkpath "#{@out_dir}" unless File.exists?("#{@out_dir}")
     FileUtils.mkpath "#{@out_dir}/puppet/" unless File.exists?("#{@out_dir}/puppet/")
+    FileUtils.mkpath "#{@out_dir}/environments/production/" unless File.exists?("#{@out_dir}/environments/production/")
 
     threads = []
     # for each system, create a puppet modules directory using librarian-puppet
@@ -47,14 +49,19 @@ class ProjectFilesCreator
       GemExec.exe('librarian-puppet', path, 'install')
     end
 
+    # Create environments/production/environment.conf - Required in Puppet 4+
+    efile = "#{@out_dir}/environments/production/environment.conf"
+    Print.std "Creating Puppet Environent file: #{efile}"
+    FileUtils.touch(efile)
+
     vfile = "#{@out_dir}/Vagrantfile"
     Print.std "Creating Vagrant file: #{vfile}"
     template_based_file_write(VAGRANT_TEMPLATE_FILE, vfile)
 
-    # Create the Report.xml file
+    # Create the scenario xml file
     xfile = "#{@out_dir}/scenario.xml"
 
-    xml_report_generator = XMLReportGenerator.new(@systems, @scenario, @time)
+    xml_report_generator = XmlScenarioGenerator.new(@systems, @scenario, @time)
     xml = xml_report_generator.output
     Print.std "Creating scenario definition file: #{xfile}"
     begin
@@ -65,6 +72,22 @@ class ProjectFilesCreator
       Print.err "Error writing file: #{e.message}"
       exit
     end
+
+    # Create the marker xml file
+    x2file = "#{@out_dir}/marker.xml"
+
+    xml_marker_generator = XmlMarkerGenerator.new(@systems, @scenario, @time)
+    xml = xml_marker_generator.output
+    Print.std "Creating marker file: #{x2file}"
+    begin
+      File.open(x2file, 'w+') do |file|
+        file.write(xml)
+      end
+    rescue StandardError => e
+      Print.err "Error writing file: #{e.message}"
+      exit
+    end
+
   end
 
 # @param [Object] template erb path

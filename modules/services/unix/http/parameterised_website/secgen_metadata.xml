@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<service xmlns="http://www.github/cliffe/SecGen/service"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
+
+  <name>Random Parameterised Website</name>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>Parameterised website filled with SecGen generated content.</description>
+
+  <type>http</type>
+  <platform>linux</platform>
+
+  <read_fact>strings_to_leak</read_fact>
+  <read_fact>images_to_leak</read_fact>
+  <read_fact>business_name</read_fact>
+  <read_fact>business_motto</read_fact>
+  <read_fact>manager_profile</read_fact>
+  <read_fact>business_address</read_fact>
+  <read_fact>office_telephone</read_fact>
+  <read_fact>office_email</read_fact>
+  <read_fact>industry</read_fact>
+  <read_fact>employees</read_fact>
+  <read_fact>product_name</read_fact>
+  <read_fact>main_page_paragraph_content</read_fact>
+
+  <!-- Team Project markers, generate and host an acceptable use policy on a basic website. -->
+  <read_fact>host_acceptable_use_policy</read_fact>
+  <read_fact>security_audit</read_fact>
+
+  <!-- Tab-pane contents, add some HTML, usually CTF challenges, here. -->
+  <read_fact>visible_tabs</read_fact>
+  <read_fact>hidden_tabs</read_fact>
+
+  <default_input into="strings_to_leak">
+    <generator type="flag_generator"/>
+    <generator type="message_generator"/>
+  </default_input>
+
+  <default_input into="images_to_leak">
+    <generator type="image_generator"/>
+    <generator type="image_generator"/>
+  </default_input>
+
+  <default_input into="business_name">
+    <generator type="business_name"/>
+  </default_input>
+
+  <default_input into="business_motto">
+    <generator type="motto"/>
+  </default_input>
+
+  <default_input into="manager_profile">
+    <generator type="person"/>
+  </default_input>
+
+  <default_input into="business_address">
+    <generator type="address_generator"/>
+  </default_input>
+
+  <default_input into="office_telephone">
+    <generator type="phone_number"/>
+  </default_input>
+
+  <default_input into="office_email">
+    <generator type="email_address"/>
+  </default_input>
+
+  <default_input into="industry">
+    <generator type="industry_generator"/>
+  </default_input>
+
+  <default_input into="employees">
+    <generator type="person"/>
+    <generator type="person"/>
+  </default_input>
+
+  <default_input into="product_name">
+    <generator type="application_name"/>
+  </default_input>
+
+  <default_input into="main_page_paragraph_content">
+    <generator type="text_paragraph"/>
+  </default_input>
+
+  <default_input into="host_acceptable_use_policy">
+    <value>false</value>
+  </default_input>
+
+  <conflict>
+    <type>webapp</type>
+  </conflict>
+
+  <requires>
+    <module_path>modules/services/unix/http/apache</module_path>
+  </requires>
+
+</service>

@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+
+<scenario xmlns="http://www.github/cliffe/SecGen/scenario"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+
+  <!-- an example system hosting a parameterised randomly generated website -->
+  <system>
+    <system_name>web_server</system_name>
+    <base platform="linux"/>
+
+    <!-- DEFINE A BUSINESS THROUGH DATASTORES -->
+
+    <input into_datastore="business_name">
+      <generator type="business_name"/>
+    </input>
+
+    <input into_datastore="industry">
+      <generator type="industry_generator"/>
+    </input>
+
+    <input into_datastore="business_motto">
+      <generator type="motto"/>
+    </input>
+
+    <input into_datastore="business_domain">
+      <generator type="domain">
+        <input into="name">
+          <datastore>business_name</datastore>
+        </input>
+      </generator>
+    </input>
+
+    <input into_datastore="manager">
+      <generator type="person">
+        <input into="name" into_datastore="manager_name">
+          <generator type="name_generator"/>
+        </input>
+        <input into="email_address">
+          <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
+            <input into="name">
+              <datastore>manager_name</datastore>
+            </input>
+            <input into="domain">
+              <datastore>business_domain</datastore>
+            </input>
+          </generator>
+        </input>
+      </generator>
+    </input>
+
+    <input into_datastore="business_address">
+      <generator type="address_generator"/>
+    </input>
+
+    <input into_datastore="office_telephone">
+      <generator type="phone_number"/>
+    </input>
+
+    <input into_datastore="office_email">
+      <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
+        <input into="name">
+          <value>contact</value>
+        </input>
+        <input into="domain">
+          <datastore>business_domain</datastore>
+        </input>
+      </generator>
+    </input>
+
+    <input into_datastore="product_name">
+      <generator type="product"/>
+    </input>
+
+    <!--Two Employees-->
+    <input into="name" into_datastore="employee_1_name">
+      <generator type="name_generator"/>
+    </input>
+
+    <input into="name" into_datastore="employee_2_name">
+      <generator type="name_generator"/>
+    </input>
+
+    <input into_datastore="employees">
+      <!--Employee 1-->
+      <generator type="person">
+        <input into="name">
+          <datastore>employee_1_name</datastore>
+        </input>
+
+        <input into="email_address">
+          <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
+            <input into="name">
+              <datastore>employee_1_name</datastore>
+            </input>
+            <input into="domain">
+              <datastore>business_domain</datastore>
+            </input>
+          </generator>
+        </input>
+      </generator>
+
+      <!--Employee 2-->
+      <generator type="person">
+        <input into="name">
+          <datastore>employee_2_name</datastore>
+        </input>
+        <input into="email_address">
+          <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
+            <input into="name">
+              <datastore>employee_2_name</datastore>
+            </input>
+            <input into="domain">
+              <datastore>business_domain</datastore>
+            </input>
+          </generator>
+        </input>
+      </generator>
+    </input>
+
+    <!-- FEED GENERATED 'BUSINESS' DATA ABOVE INTO VULNERABILITY MODULES. -->
+
+    <service module_path="vulnerabilities/unix/webapp/parameterised_website">
+      <input into="business_name">
+        <datastore>business_name</datastore>
+      </input>
+      <input into="business_motto">
+        <datastore>business_motto</datastore>
+      </input>
+      <input into="manager_profile">
+        <datastore>manager</datastore>
+      </input>
+      <input into="business_address">
+        <datastore>business_address</datastore>
+      </input>
+      <input into="office_email">
+        <datastore>office_email</datastore>
+      </input>
+      <input into="industry">
+        <datastore>industry</datastore>
+      </input>
+      <input into="employees">
+        <datastore>employees</datastore>
+      </input>
+      <input into="product_name">
+        <datastore>product_name</datastore>
+      </input>
+    </service>
+
+    <network type="private_network" range="dhcp"/>
+  </system>
+
+</scenario>

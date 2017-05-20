@@ -8,6 +8,7 @@ class PersonHashBuilder < StringEncoder
   attr_accessor :phone_number
   attr_accessor :email_address
   attr_accessor :username
+  attr_accessor :password
 
   def initialize
     super
@@ -17,6 +18,7 @@ class PersonHashBuilder < StringEncoder
     self.phone_number = ''
     self.email_address = ''
     self.username = ''
+    self.password = ''
   end
 
   def encode_all
@@ -26,6 +28,7 @@ class PersonHashBuilder < StringEncoder
     person_hash['phone_number'] = self.phone_number
     person_hash['email_address'] = self.email_address
     person_hash['username'] = self.username
+    person_hash['password'] = self.password
 
     self.outputs << person_hash.to_json
   end
@@ -35,7 +38,8 @@ class PersonHashBuilder < StringEncoder
              ['--address', GetoptLong::REQUIRED_ARGUMENT],
              ['--phone_number', GetoptLong::REQUIRED_ARGUMENT],
              ['--email_address', GetoptLong::REQUIRED_ARGUMENT],
-             ['--username', GetoptLong::REQUIRED_ARGUMENT]]
+             ['--username', GetoptLong::REQUIRED_ARGUMENT],
+             ['--password', GetoptLong::REQUIRED_ARGUMENT]]
   end
 
   def process_options(opt, arg)
@@ -51,6 +55,8 @@ class PersonHashBuilder < StringEncoder
         self.email_address << arg;
       when '--username'
         self.username << arg;
+      when '--password'
+        self.password << arg;
     end
   end
 
@@ -59,7 +65,8 @@ class PersonHashBuilder < StringEncoder
     address: ' + self.address.to_s  + ',
     phone_number: ' + self.phone_number.to_s + ',
     email_address: ' + self.email_address.to_s + ',
-    username: ' + self.username.to_s
+    username: ' + self.username.to_s + ',
+    password: ' + self.password.to_s
   end
 end
 

@@ -9,7 +9,10 @@ class StrongPasswordGenerator < StringGenerator
   end
 
   def generate
-    self.outputs << SecureRandom.base64(15)
+    password = SecureRandom.base64(15)
+    password.tr!('/','', )
+    password.tr!('+', '' )
+    self.outputs << password.tr('=', '')
   end
 end
 

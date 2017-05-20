@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<scenario xmlns="http://www.github/cliffe/SecGen/scenario"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+
+  <system>
+    <system_name>online_store</system_name>
+    <base platform="linux"/>
+
+    <vulnerability module_path=".*onlinestore">
+      <input into="domain">
+        <value>leedsbeckett.ac.uk</value>
+      </input>
+      <input into="accounts">
+        <generator type="person">
+          <input into="name">
+            <value>Cliffe Schreuders</value>
+          </input>
+          <input into="username">
+            <value>C.Schreuders</value>
+          </input>
+        </generator>
+        <generator type="person">
+          <input into="name">
+            <value>Emlyn Butterfield</value>
+          </input>
+          <input into="username">
+            <value>E.Butterfield</value>
+          </input>
+        </generator>
+        <generator type="person">
+          <input into="name">
+            <value>Gary Roper</value>
+          </input>
+          <input into="username">
+            <value>G.Roper</value>
+          </input>
+        </generator>
+        <generator type="person">
+          <input into="name">
+            <value>Maurice Calvert</value>
+          </input>
+          <input into="username">
+            <value>M.Calvert</value>
+          </input>
+        </generator>
+        <generator type="person">
+          <input into="name">
+            <value>Thomas Shaw</value>
+          </input>
+          <input into="username">
+            <value>Thomas.Shaw</value>
+          </input>
+        </generator>
+      </input>
+    </vulnerability>
+
+    <network type="private_network" range="dhcp"/>
+  </system>
+
+</scenario>

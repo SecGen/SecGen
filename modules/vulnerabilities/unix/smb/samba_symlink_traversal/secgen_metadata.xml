@@ -10,12 +10,13 @@
     and the unix extensions = yes, wide links = yes and allow insecure wide links = yes settings. </description>
 
   <type>samba</type>
-  <privilege>user_rwx</privilege>
+  <privilege>user_rw</privilege>
   <access>remote</access>
   <platform>linux</platform>
 
   <read_fact>strings_to_leak</read_fact>
   <read_fact>leaked_filenames</read_fact>
+  <read_fact>images_to_leak</read_fact>
   <read_fact>share_name</read_fact>
   <read_fact>share_comment</read_fact>
   <read_fact>storage_directory</read_fact>
@@ -27,21 +28,15 @@
   <read_fact>business_domain</read_fact>
   <read_fact>person</read_fact>
 
-  <!--if an input is not specified in the scenario-->
+  <!-- drops 2 flags, one in the store and one in the root directory-->
   <default_input into="strings_to_leak">
-    <value>Plain text from the metadata default, destined for strings_to_leak...</value>
-    <encoder type="string_encoder">
-      <input into="strings_to_encode">
-        <!--encode the following strings-->
-        <value>Encoded text from the metadata default, destined for strings_to_leak...</value>
-        <value>More encoded text from the metadata default, destined for strings_to_leak...</value>
-      </input>
-    </encoder>
+    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>
   </default_input>
 
   <default_input into="leaked_filenames">
-    <generator module_path="generators/filenames/leaked_filename"/>
-    <generator module_path="generators/filenames/leaked_filename"/>
+    <generator type="filename_generator"/>
+    <generator type="filename_generator"/>
   </default_input>
 
   <default_input into="share_name">
@@ -53,7 +48,7 @@
   </default_input>
 
   <default_input into="storage_directory">
-    <value>/tmp</value>
+    <generator type="storage_directory_generator"/>
   </default_input>
 
   <default_input into="read_only_share">
