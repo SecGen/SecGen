@@ -1,5 +1,5 @@
 class proftpd {
-  require proftpd::install
-  require proftpd::configure
-  require proftpd::service
+  class { 'proftpd::install': }
+  class { 'proftpd::configure': } ~>
+  class { 'proftpd::service': }
 }

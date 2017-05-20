@@ -1,5 +1,6 @@
 <%  require 'json'
     $secgen_parameters = JSON.parse(@json_inputs)
+    $port = $secgen_parameters['port'].first
     $server_name = $secgen_parameters['server_name'].first
     $welcome_msg = $secgen_parameters['welcome_msg'].first
 
@@ -54,7 +55,7 @@ AccessGrantMsg			"<%=$welcome_msg%>
 # RequireValidShell		off
 
 # Port 21 is the standard FTP port.
-Port				21
+Port				<%=$port%>
 
 # In some cases you have to specify passive ports range to by-pass
 # firewall limitations. Ephemeral ports can be used for that, but

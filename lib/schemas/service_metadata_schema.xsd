@@ -31,14 +31,14 @@
         <xs:element name="type" type="xs:string" minOccurs="1" maxOccurs="unbounded"/>
         <xs:element name="platform" type="platformOptions" minOccurs="1" maxOccurs="1"/>
 
+        <!--I/O: a generator writes it's output to one fact & can also take inputs-->
+        <xs:element name="read_fact" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="default_input" type="InputElements" minOccurs="0" maxOccurs="unbounded" />
+
         <!--optional details-->
         <xs:element name="reference" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="software_name" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="software_license" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-
-        <!--I/O: a generator writes it's output to one fact & can also take inputs-->
-        <xs:element name="read_fact" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="default_input" type="InputElements" minOccurs="0" maxOccurs="unbounded" />
 
         <!-- cannot co-exist with a system matching ALL of the optionally specified values (can be repeated for OR)-->
         <xs:element name="conflict" minOccurs="0" maxOccurs="unbounded">

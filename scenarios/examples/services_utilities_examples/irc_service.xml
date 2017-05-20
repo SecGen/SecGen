@@ -10,6 +10,7 @@
 
     <service type="irc"/>
 
+    <network type="private_network" range="dhcp"/>
   </system>
 
 </scenario>

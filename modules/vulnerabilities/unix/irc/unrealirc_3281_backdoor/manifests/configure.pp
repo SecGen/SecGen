@@ -1,6 +1,7 @@
 class unrealirc_3281_backdoor::configure {
   $json_inputs = base64('decode', $::base64_inputs)
   $secgen_parameters = parsejson($json_inputs)
+  $port = $secgen_parameters['port'][0]
   $strings_to_leak = $secgen_parameters['strings_to_leak']
   $leaked_filenames = $secgen_parameters['leaked_filenames']
   $user = $secgen_parameters['user'][0]
@@ -27,6 +28,10 @@ class unrealirc_3281_backdoor::configure {
     ensure   => file,
     mode     => '0600',
     content  => template('unrealirc_3281_backdoor/unrealircd.conf.erb'),
+  }
+
+  exec { 'update_unreal_3281_port':
+    command => "/bin/echo 'listen *:$port;' > /var/lib/unreal/config/listen_default_6667.conf; service unreal restart",
   }
 
   # Update message of the day w/ param

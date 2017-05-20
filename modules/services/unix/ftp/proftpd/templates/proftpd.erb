@@ -1,3 +1,7 @@
+<%  require 'json'
+    $secgen_parameters = JSON.parse(@json_inputs)
+    $port = $secgen_parameters['port'].first
+%>
 #
 # /etc/proftpd/proftpd.conf -- This is a basic ProFTPD configuration file.
 # To really apply changes, reload proftpd after modifications, if
@@ -38,7 +42,7 @@ DenyFilter			\*.*/
 # RequireValidShell		off
 
 # Port 21 is the standard FTP port.
-Port				21
+Port				<%=$port%>
 
 # In some cases you have to specify passive ports range to by-pass
 # firewall limitations. Ephemeral ports can be used for that, but

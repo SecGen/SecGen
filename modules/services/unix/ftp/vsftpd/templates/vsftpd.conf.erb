@@ -1,3 +1,7 @@
+<%  require 'json'
+    $secgen_parameters = JSON.parse(@json_inputs)
+    $port = $secgen_parameters['port'].first
+%>
 # This file is managed by puppet
 #
 # The default compiled in settings are fairly paranoid. This sample file
@@ -32,6 +36,8 @@ listen_ipv6=<%= scope.lookupvar('vsftpd::real_listen_ipv6') %>
 # Listen only on following IP address
 listen_address=<%= scope.lookupvar('vsftpd::listen_address') %>
 <% end-%>
+# Listen port
+listen_port=<%=$port%>
 #
 ftpd_banner=<%= scope.lookupvar('vsftpd::ftpd_banner') %>
 write_enable=<%= scope.lookupvar('vsftpd::real_write_enable') %>
