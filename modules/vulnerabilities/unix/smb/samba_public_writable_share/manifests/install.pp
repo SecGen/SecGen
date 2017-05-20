@@ -15,22 +15,15 @@ class samba_public_writable_share::install {
 
   # Add store to .conf
   file { '/etc/samba/smb_pws.conf':
-    ensure => file,
-    content => template ('samba/smb_share.conf.erb')
+    ensure  => file,
+    content => template('samba/smb_share.conf.erb'),
+    notify  => Exec['concat_samba_conf_and_public_share']
   }
- concat { '/etc/samba/smb.conf':
-   ensure => present,
- }
- concat::fragment { 'smb-conf-base':
-   source => '/etc/samba/smb.conf',
-   target => '/etc/samba/smb.conf',
-   order => '01',
- }
- concat::fragment { 'smb-conf-public-share-definition':
-   source => '/etc/samba/smb_pws.conf',
-   target => '/etc/samba/smb.conf',
-   order => '02',
- }
+
+  # Append the public share
+  exec { 'concat_samba_conf_and_public_share':
+    command => "/bin/bash -c 'cat /etc/samba/smb_symlink.conf >> /etc/samba/smb.conf'"
+  }
 
   ::secgen_functions::leak_files { 'samba_public_writable_share-file-leak':
     storage_directory => $storage_directory,
