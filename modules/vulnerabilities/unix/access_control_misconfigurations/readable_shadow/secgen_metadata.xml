@@ -3,25 +3,18 @@
 <vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
-  <name>Writeable Shadow File</name>
-  <author>Lewis Ardern</author>
+  <name>Readable Shadow File</name>
+  <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>Changes permissions on shadow file to 777, open to account tampering to local users.
+  <description>Changes permissions on shadow file to 0622, reveals password hashes to local users.
     This is not a common misconfiguration, and not particularly subtle.</description>
 
-  <type>access_controls</type>
-  <privilege>root_rw</privilege>
+  <type>access_control_misconfiguration</type>
+  <privilege>root_r</privilege>
   <access>local</access>
   <platform>linux</platform>
 
-  <!--optional vulnerability details-->
-  <difficulty>medium</difficulty>
-
-  <cvss_base_score>6.6</cvss_base_score>
-  <cvss_vector>AV:L/AC:M/Au:S/C:C/I:C/A:C</cvss_vector>
-
-  <hint>An access control misconfiguration</hint>
-  <solution>Edit the shadow file to set a password for root</solution>
+  <hint>View the /etc/shadow file and try to crack a hash.</hint>
 
   <conflict>
     <name>Writeable Shadow File</name>
