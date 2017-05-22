@@ -1,4 +1,4 @@
-class writeable_shadow::config {
+class readable_shadow::config {
   file { '/etc/shadow':
     ensure  => present,
     mode    => '0622',

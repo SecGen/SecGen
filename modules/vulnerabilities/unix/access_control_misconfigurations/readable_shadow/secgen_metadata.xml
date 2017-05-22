@@ -14,10 +14,10 @@
   <access>local</access>
   <platform>linux</platform>
 
-  <hint>View the /etc/shadow file and try to crack a hash.</hint>
+  <hint>View the /etc/shadow file and try to crack an account hash.</hint>
 
   <conflict>
-    <name>Writeable Shadow File</name>
+    <name>Writable Shadow File</name>
     <author>Lewis Ardern</author>
   </conflict>
 </vulnerability>
