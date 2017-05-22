@@ -1,8 +1,20 @@
 define parameterised_accounts::account($username, $password, $super_user, $strings_to_leak, $leaked_filenames) {
-  ::accounts::user { $username:
-    shell      => '/bin/bash',
-    password   => pw_hash($password, 'SHA-512', 'mysalt'),
-    managehome => true,
+
+  # condition because ::accounts::user changes permissions on /etc/group so needs to run before vulns/writable_groups
+  if defined('writable_groups::config'){
+    include ::writable_groups::config
+    ::accounts::user { $username:
+      shell      => '/bin/bash',
+      password   => pw_hash($password, 'SHA-512', 'mysalt'),
+      managehome => true,
+      before     => File['/etc/group']
+    }
+  } else {
+    ::accounts::user { $username:
+      shell      => '/bin/bash',
+      password   => pw_hash($password, 'SHA-512', 'mysalt'),
+      managehome => true,
+    }
   }
 
   # sort groups if sudo add to conf
