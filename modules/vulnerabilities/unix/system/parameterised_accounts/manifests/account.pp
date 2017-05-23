@@ -1,20 +1,28 @@
 define parameterised_accounts::account($username, $password, $super_user, $strings_to_leak, $leaked_filenames) {
-
-  # condition because ::accounts::user changes permissions on /etc/group so needs to run before vulns/writable_groups
-  if defined('writable_groups::config'){
+  # ::accounts::user changes permissions on group, passwd, shadow etc. so needs to run before
+  if defined('writable_groups::config') {
     include ::writable_groups::config
-    ::accounts::user { $username:
-      shell      => '/bin/bash',
-      password   => pw_hash($password, 'SHA-512', 'mysalt'),
-      managehome => true,
-      before     => File['/etc/group']
-    }
-  } else {
-    ::accounts::user { $username:
-      shell      => '/bin/bash',
-      password   => pw_hash($password, 'SHA-512', 'mysalt'),
-      managehome => true,
-    }
+    $writable_groups = [File['/etc/group']]
+  } else { $writable_groups = [] }
+
+  if defined('writable_passwd::config') {
+    include ::writable_passwd::config
+    $writable_passwd = [File['/etc/passwd']]
+  } else { $writable_passwd = [] }
+
+  if defined('writable_shadow::config') {
+    include ::writable_shadow::config
+    $writable_shadow = [File['/etc/shadow']]
+  } else { $writable_shadow = [] }
+
+  $misconfigurations = concat($writable_groups, $writable_passwd, $writable_shadow)
+
+  # Add user account
+  ::accounts::user { $username:
+    shell      => '/bin/bash',
+    password   => pw_hash($password, 'SHA-512', 'mysalt'),
+    managehome => true,
+    before     => $misconfigurations,
   }
 
   # sort groups if sudo add to conf
