@@ -89,7 +89,7 @@
       </generator>
     </input>
 
-    <service module_path="vulnerabilities/unix/webapp/parameterised_website">
+    <service module_path="services/unix/http/parameterised_website">
       <input into="business_name">
         <datastore>business_name</datastore>
       </input>
@@ -162,7 +162,7 @@
     <base module_path=".*debian_puppet_32"/>
 
     <!-- Create accounts for the 3 employees -->
-    <vulnerability module_path=".*parameterised_accounts">
+    <utility module_path=".*parameterised_accounts">
       <input into="accounts">
         <generator type="account">
           <input into="username">
@@ -180,9 +180,9 @@
           </input>
         </generator>
       </input>
-    </vulnerability>
+    </utility>
 
-    <service module_path="vulnerabilities/unix/webapp/parameterised_website">
+    <service module_path="services/unix/http/parameterised_website">
       <input into="host_acceptable_use_policy">
         <value>true</value>
       </input>

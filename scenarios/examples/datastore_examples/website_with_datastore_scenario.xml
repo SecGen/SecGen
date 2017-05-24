@@ -120,7 +120,7 @@
 
     <!-- FEED GENERATED 'BUSINESS' DATA ABOVE INTO VULNERABILITY MODULES. -->
 
-    <service module_path="vulnerabilities/unix/webapp/parameterised_website">
+    <service module_path="services/unix/http/parameterised_website">
       <input into="business_name">
         <datastore>business_name</datastore>
       </input>
