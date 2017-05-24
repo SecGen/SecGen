@@ -5,8 +5,11 @@ class parameterised_website::install {
   # Parse out parameters
   $business_name = $secgen_parameters['business_name'][0]
   $business_motto = $secgen_parameters['business_motto'][0]
-  $manager_profile = $secgen_parameters['manager_profile'][0]
-  if $manager_profile != '' { $manager_profile = parsejson($manager_profile) }
+  if $secgen_parameters['manager_profile'][0] != '' {
+    $manager_profile =parsejson($secgen_parameters['manager_profile'][0])
+  } else {
+    $manager_profile = ''
+  }
   $business_address = $secgen_parameters['business_address'][0]
   $office_telephone = $secgen_parameters['office_telephone'][0]
   $office_email = $secgen_parameters['office_email'][0]
