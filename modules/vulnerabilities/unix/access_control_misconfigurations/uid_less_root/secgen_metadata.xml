@@ -3,7 +3,7 @@
 <vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
-  <name>Access control mis-configurations uid less</name>
+  <name>Access control mis-configurations suid less root</name>
   <author>Jason Keighley</author>
   <module_license>Apache v2</module_license>
   <description>Mis-configure files to enable root privileges</description>
