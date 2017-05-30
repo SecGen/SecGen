@@ -7,8 +7,8 @@
   <author>Thomas Shaw</author>
   <author>Puppet Labs</author>
   <module_license>Apache v2</module_license>
-  <description>Parameterised user account creation and modification. Adds an account with a random strength randomly
-    generated password by default.
+  <description>Parameterised user account creation and modification. Adds an account with a strong randomly generated password
+    by default.
   </description>
 
   <type>system</type>
@@ -21,13 +21,14 @@
 
   <default_input into="accounts">
     <generator type="account">
-      <input into="password">
-        <generator type="weak_password_generator"/>
+      <input into="username">
+        <generator module_path=".*random_username.*"/>
       </input>
-    </generator>
-    <generator type="account">
       <input into="password">
-        <generator type="password_generator"/>
+        <generator type="strong_password_generator"/>
+      </input>
+      <input into="super_user">
+        <value>false</value>
       </input>
     </generator>
   </default_input>

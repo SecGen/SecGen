@@ -13,7 +13,7 @@ class NameBasedUsernameGenerator < StringEncoder
 
   # Generate a username based on a random adjective and a random noun
   def encode_all
-    self.outputs << Faker::Internet.user_name(self.name, %w(nil _))
+    self.outputs << Faker::Internet.user_name(self.name, ['_',''])
   end
 
   def get_options_array
