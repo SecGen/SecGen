@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+  <name>DefCon Quals 2016 - amadhj</name>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>Reverse Engineering CTF Challenge from the Defcon 2016 CTF Qualifier.
+    Leak a binary file to the user (somehow... datastore == storage_directory?).
+    Provide an exposed service running the binary which has permissions to access the flag.
+  </description>
+
+  <type>ctf_challenge</type>
+  <type>reverse_engineering</type>
+  <privilege>none</privilege>
+  <access>local</access>
+  <platform>linux</platform>
+
+  <read_fact>account</read_fact>
+
+  <!--<requires>-->
+    <!--<type>update</type>-->
+  <!--</requires>-->
+  <!--<requires>-->
+    <!--<module_path>modules/utilities/unix/desktop/xfce</module_path>-->
+  <!--</requires>-->
+</vulnerability>
