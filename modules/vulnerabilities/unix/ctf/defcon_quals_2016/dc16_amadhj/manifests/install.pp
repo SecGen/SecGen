@@ -1,33 +1,51 @@
 class dc16_amadhj::install {
+  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_params = parsejson($json_inputs)
 
-  $base_directory = '/home/test'
+  $account = parsejson($secgen_params['account'][0])
+  $username = $account['username']
+  $flag = $secgen_params['flag'][0]
+  $binary_name = $secgen_params['binary_name'][0]
 
-  # Move Makefile and amadhj.c to box
-  file { "$base_directory/Makefile":
-    ensure => present,
-    source => 'puppet:///modules/dc16_amadhj/Makefile',
-    notify => File["$base_directory/amadhj.c"],
-  }
+  $base_directory = "/home/$username"
+  $compile_directory = "$base_directory/tmp"
+  $modules_source = "puppet:///modules/$module_name"
 
-  file { "$base_directory/amadhj.c":
-    ensure => present,
-    source => 'puppet:///modules/dc16_amadhj/amadhj.c',
-    notify => Exec['gcc_amadhj_binary'],
+  # Move contents of the module's files directory into compile directory
+  file { $compile_directory:
+    ensure  => directory,
+    recurse => true,
+    source => $modules_source,
+    notify => Exec['gcc_$binary_name_$compile_directory'],
   }
 
   # Build the binary with gcc
-  exec { 'gcc_amadhj_binary':
-    cwd => $base_directory,
-    command => '/usr/bin/make'
+  exec { 'gcc_$binary_name_$compile_directory':
+    cwd => $compile_directory,
+    command => "/usr/bin/make",
   }
 
-  # Drop the flag file on the box and set permissions  TODO: Replace with parameterised flag
+  # Move the compiled binary into the base_directory
+  file { "$base_directory/$binary_name":
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '4755',
+    source => "$compile_directory/$binary_name",
+    require => Exec['gcc_$binary_name_$compile_directory'],
+  }
+
+  # Drop the flag file on the box and set permissions
   file { "$base_directory/flag":
     ensure => present,
-    source => 'puppet:///modules/dc16_amadhj/flag',
-    notify => Exec['gcc_amadhj_binary'],
+    content => $flag,
+    mode => '0600',
+    require => Exec['gcc_$binary_name_$compile_directory'],
   }
 
-  # Remove Makefile and amadhj.c
+  # Remove compile directory
+  exec { "remove_$compile_directory":
+    command => "/bin/rm -rf $compile_directory",
+  }
 
 }

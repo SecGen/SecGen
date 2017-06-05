@@ -6,10 +6,7 @@
   <name>DefCon Quals 2016 - amadhj</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>Reverse Engineering CTF Challenge from the Defcon 2016 CTF Qualifier.
-    Leak a binary file to the user (somehow... datastore == storage_directory?).
-    Provide an exposed service running the binary which has permissions to access the flag.
-  </description>
+  <description>Binary Reverse Engineering CTF Challenge from the Defcon 2016 CTF Qualifier.</description>
 
   <type>ctf_challenge</type>
   <type>reverse_engineering</type>
@@ -17,12 +14,31 @@
   <access>local</access>
   <platform>linux</platform>
 
+  <!-- binary dropped in account's home directory by default. -->
+  <read_fact>binary_name</read_fact>
   <read_fact>account</read_fact>
+  <read_fact>flag</read_fact>
+  <read_fact>strings_to_leak</read_fact>
+  <!-- storage_directory: Blank by default. If supplied, store the files here. e.g. NFS or SMB storage location -->
+  <read_fact>storage_directory</read_fact>
 
-  <!--<requires>-->
-    <!--<type>update</type>-->
-  <!--</requires>-->
-  <!--<requires>-->
-    <!--<module_path>modules/utilities/unix/desktop/xfce</module_path>-->
-  <!--</requires>-->
+  <default_input into="binary_name">
+    <value>amadhj</value>
+  </default_input>
+  <default_input into="account">
+    <generator type="account">
+      <input into="username">
+        <value>test</value>
+      </input>
+      <input into="password">
+        <value>test</value>
+      </input>
+    </generator>
+  </default_input>
+  <default_input into="flag">
+    <generator type="flag_generator"/>
+  </default_input>
+  <default_input into="strings_to_leak">
+    <generator type="message_generator"/>
+  </default_input>
 </vulnerability>
