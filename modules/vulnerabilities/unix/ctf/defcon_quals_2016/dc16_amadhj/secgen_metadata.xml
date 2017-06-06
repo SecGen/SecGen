@@ -28,10 +28,17 @@
   <default_input into="account">
     <generator type="account">
       <input into="username">
-        <value>test</value>
+        <value>challenges</value>
       </input>
       <input into="password">
-        <value>test</value>
+        <value>password</value>
+      </input>
+      <input into="leaked_filenames">
+        <value>amadhj_instructons</value>
+      </input>
+      <!-- Blank $account['strings_to_leak'] as this module uses the read_fact level strings_to_leak -->
+      <input into="strings_to_leak">
+        <value/>
       </input>
     </generator>
   </default_input>
@@ -39,6 +46,11 @@
     <generator type="flag_generator"/>
   </default_input>
   <default_input into="strings_to_leak">
-    <generator type="message_generator"/>
+    <value>Reverse me and get the flag.</value>
   </default_input>
+
+  <requires>
+    <module_path>utilities/unix/system/accounts</module_path>
+  </requires>
+
 </vulnerability>

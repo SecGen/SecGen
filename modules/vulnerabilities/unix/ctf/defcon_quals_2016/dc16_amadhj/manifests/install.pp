@@ -1,51 +1,43 @@
 class dc16_amadhj::install {
   $json_inputs = base64('decode', $::base64_inputs)
   $secgen_params = parsejson($json_inputs)
-
   $account = parsejson($secgen_params['account'][0])
   $username = $account['username']
-  $flag = $secgen_params['flag'][0]
-  $binary_name = $secgen_params['binary_name'][0]
+  $leaked_filenames = $account['leaked_filenames']
+  $strings_to_leak = $secgen_params['strings_to_leak']
 
-  $base_directory = "/home/$username"
-  $compile_directory = "$base_directory/tmp"
-  $modules_source = "puppet:///modules/$module_name"
+  # Use either storage directory or account's home directory. storage_directory takes precedent
+  if $secgen_params['storage_directory'] {
+    $storage_directory = $secgen_params['storage_directory'][0]
+  } elsif $account {
+    $storage_directory = "/home/$username"
 
-  # Move contents of the module's files directory into compile directory
-  file { $compile_directory:
-    ensure  => directory,
-    recurse => true,
-    source => $modules_source,
-    notify => Exec['gcc_$binary_name_$compile_directory'],
+    ::accounts::user { $username:
+      shell      => '/bin/bash',
+      password   => pw_hash($account['password'], 'SHA-512', 'mysalt'),
+      managehome => true,
+      home_mode  => '0755',
+    }
+  } else {
+    err('dc16_amadhj::install: No storage_directory or account provided')
+    fail
   }
 
-  # Build the binary with gcc
-  exec { 'gcc_$binary_name_$compile_directory':
-    cwd => $compile_directory,
-    command => "/usr/bin/make",
+  ::secgen_functions::install_setuid_root_binary { 'defcon16_amadhj':
+    source_module_name     => $module_name,
+    gcc_output_binary_name => 'amadhj',
+    challenge_binary_name  => $secgen_params['binary_name'][0],
+    storage_directory      => $storage_directory,
+    flag                   => $secgen_params['flag'][0],
   }
 
-  # Move the compiled binary into the base_directory
-  file { "$base_directory/$binary_name":
-    ensure => present,
-    owner => 'root',
-    group => 'root',
-    mode => '4755',
-    source => "$compile_directory/$binary_name",
-    require => Exec['gcc_$binary_name_$compile_directory'],
-  }
-
-  # Drop the flag file on the box and set permissions
-  file { "$base_directory/flag":
-    ensure => present,
-    content => $flag,
-    mode => '0600',
-    require => Exec['gcc_$binary_name_$compile_directory'],
-  }
-
-  # Remove compile directory
-  exec { "remove_$compile_directory":
-    command => "/bin/rm -rf $compile_directory",
+  # Leak strings in a text file in the storage directory / home directory
+  ::secgen_functions::leak_files { "$username-file-leak":
+    storage_directory => $storage_directory,
+    leaked_filenames  => $leaked_filenames,
+    strings_to_leak   => $strings_to_leak,
+    owner             => $username,
+    leaked_from       => "accounts_$username",
   }
 
 }
