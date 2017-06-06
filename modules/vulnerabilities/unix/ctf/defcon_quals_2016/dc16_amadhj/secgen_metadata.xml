@@ -15,6 +15,7 @@
   <platform>linux</platform>
 
   <!-- binary dropped in account's home directory by default. -->
+  <read_fact>challenge_name</read_fact>
   <read_fact>binary_name</read_fact>
   <read_fact>account</read_fact>
   <read_fact>flag</read_fact>
@@ -22,6 +23,9 @@
   <!-- storage_directory: Blank by default. If supplied, store the files here. e.g. NFS or SMB storage location -->
   <read_fact>storage_directory</read_fact>
 
+  <default_input into="challenge_name">
+    <value>amadhj</value>
+  </default_input>
   <default_input into="binary_name">
     <value>amadhj</value>
   </default_input>
