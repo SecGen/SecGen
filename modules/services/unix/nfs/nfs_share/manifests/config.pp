@@ -1,4 +1,7 @@
 class nfs_share::config {
+  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_parameters = parsejson($json_inputs)
+  $storage_directory = $secgen_parameters['storage_directory'][0]
 
   package { ['nfs-kernel-server', 'nfs-common', 'portmap']:
       ensure => installed
@@ -8,7 +11,7 @@ class nfs_share::config {
     ensure => present,
   }
 
-  file { '/export_nfs':
+  file { $storage_directory:
     ensure => 'directory',
     owner  => 'root',
     group  => 'wheel',
