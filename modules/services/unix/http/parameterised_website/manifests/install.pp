@@ -26,7 +26,7 @@ class parameterised_website::install {
   $visible_tabs = $secgen_parameters['visible_tabs']
   $hidden_tabs = $secgen_parameters['hidden_tabs']
 
-  $docroot = '/var/www'
+  $docroot = '/var/www/parameterised_website'
 
   if $acceptable_use_policy {  # Use alternative intranet index.html template
     $index_template = 'parameterised_website/intranet_index.html.erb'
