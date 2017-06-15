@@ -27,9 +27,6 @@
 
   <!--Cannot co-exist with other installations-->
   <conflict>
-    <software_name>apache</software_name>
-  </conflict>
-  <conflict>
     <software_name>mysql</software_name>
   </conflict>
   <conflict>

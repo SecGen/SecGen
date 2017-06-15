@@ -32,6 +32,12 @@
   <read_fact>visible_tabs</read_fact>
   <read_fact>hidden_tabs</read_fact>
 
+  <read_fact>port</read_fact>
+
+  <default_input into="port">
+    <value>80</value>
+  </default_input>
+
   <default_input into="strings_to_leak">
     <generator type="flag_generator"/>
     <generator type="message_generator"/>
@@ -86,10 +92,6 @@
   <default_input into="host_acceptable_use_policy">
     <value>false</value>
   </default_input>
-
-  <conflict>
-    <type>webapp</type>
-  </conflict>
 
   <requires>
     <module_path>modules/services/unix/http/apache</module_path>

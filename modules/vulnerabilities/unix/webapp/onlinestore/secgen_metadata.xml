@@ -13,6 +13,7 @@
   <access>remote</access>
   <platform>linux</platform>
 
+  <read_fact>port</read_fact>
   <read_fact>strings_to_leak</read_fact>
   <read_fact>db_password</read_fact>
   <read_fact>accounts</read_fact>
@@ -21,6 +22,10 @@
   <read_fact>murderer_id</read_fact>
   <read_fact>murdered_on</read_fact>
   <read_fact>murdered_ids</read_fact>
+
+  <default_input into="port">
+    <value>80</value>
+  </default_input>
 
   <!--strings_to_leak contains the following flags: -->
   <default_input into="strings_to_leak">
@@ -125,10 +130,6 @@
     <value>2</value>
     <value>3</value>
   </default_input>
-
-  <conflict>
-    <type>webapp</type>
-  </conflict>
 
   <requires>
     <module_path>modules/services/unix/http/lamp</module_path>
