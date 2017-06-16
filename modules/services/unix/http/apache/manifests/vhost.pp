@@ -474,12 +474,18 @@ define apache::vhost(
       fail("Apache::Vhost[${name}]: Mixing IP and non-IP Listen directives is not possible; check the add_listen parameter of the apache::vhost define to disable this")
     }
     if $listen_addr_port and $ensure == 'present' {
-      ensure_resource('apache::listen', $listen_addr_port)
+      # SECGEN CHANGES:: DO NOT REVERT
+      apache::listen { $listen_addr_port:
+        port => $port,
+      }
     }
   }
   if ! $ip_based {
     if $ensure == 'present' and (versioncmp($apache_version, '2.4') < 0) {
-      ensure_resource('apache::namevirtualhost', $nvh_addr_port)
+      # SECGEN CHANGES:: DO NOT REVERT -- Enables multiple modules to run with separate ports
+      ::apache::namevirtualhost{$nvh_addr_port:
+        port => $port,
+      }
     }
   }
 
