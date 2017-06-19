@@ -30,7 +30,7 @@ class mail::init {
 
     exec { "remove_temp_files_$counter":
       command => "/bin/rm /var/mail/temp_file_*",
-      require => Exec["testing_multi-mail_concat_$counter"],
+      require => Exec["mail_concat_$counter"],
     }
   }
 }
