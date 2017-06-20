@@ -9,7 +9,6 @@
   <description>Converts Markdown to HTML using the redcarpet ruby gem.</description>
 
   <type>markdown_to_html_encoder</type>
-  <type>string_encoder</type>
   <platform>linux</platform>
   <platform>windows</platform>
   <reference>https://github.com/vmg/redcarpet</reference>
