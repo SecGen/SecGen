@@ -1,1 +1,1 @@
-include onlinestore::install
+require onlinestore

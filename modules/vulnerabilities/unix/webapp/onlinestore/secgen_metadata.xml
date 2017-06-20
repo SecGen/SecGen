@@ -132,7 +132,10 @@
   </default_input>
 
   <requires>
-    <module_path>modules/services/unix/http/lamp</module_path>
+    <module_path>modules/services/unix/http/apache</module_path>
+  </requires>
+  <requires>
+    <module_path>modules/services/unix/database/mysql</module_path>
   </requires>
 
 </vulnerability>

@@ -16,14 +16,10 @@ class onlinestore::install {
   $murdered_ids = $secgen_parameters['murdered_ids']
   $db_password = $secgen_parameters['db_password'][0]
 
-  $docroot = '/var/www'
+  $docroot = '/var/www/onlinestore'
   $db_username = 'csecvm'
 
   Exec { path => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'], }
-
-  package { ['mysql-client','php5-mysql']:
-    ensure => 'installed',
-  }
 
   file { "$docroot/index.html":
     ensure => absent,
