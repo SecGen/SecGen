@@ -9,6 +9,7 @@ class PersonHashBuilder < StringEncoder
   attr_accessor :email_address
   attr_accessor :username
   attr_accessor :password
+  attr_accessor :account
 
   def initialize
     super
@@ -19,6 +20,7 @@ class PersonHashBuilder < StringEncoder
     self.email_address = ''
     self.username = ''
     self.password = ''
+    self.account = []
   end
 
   def encode_all
@@ -27,8 +29,15 @@ class PersonHashBuilder < StringEncoder
     person_hash['address'] = self.address
     person_hash['phone_number'] = self.phone_number
     person_hash['email_address'] = self.email_address
-    person_hash['username'] = self.username
-    person_hash['password'] = self.password
+
+    if self.account != []
+      account = JSON.parse(self.account[0])
+      person_hash['username'] = account['username']
+      person_hash['password'] = account['password']
+    else
+      person_hash['username'] = self.username
+      person_hash['password'] = self.password
+    end
 
     self.outputs << person_hash.to_json
   end
@@ -39,7 +48,8 @@ class PersonHashBuilder < StringEncoder
              ['--phone_number', GetoptLong::REQUIRED_ARGUMENT],
              ['--email_address', GetoptLong::REQUIRED_ARGUMENT],
              ['--username', GetoptLong::REQUIRED_ARGUMENT],
-             ['--password', GetoptLong::REQUIRED_ARGUMENT]]
+             ['--password', GetoptLong::REQUIRED_ARGUMENT],
+             ['--account', GetoptLong::OPTIONAL_ARGUMENT]]
   end
 
   def process_options(opt, arg)
@@ -57,6 +67,8 @@ class PersonHashBuilder < StringEncoder
         self.username << arg;
       when '--password'
         self.password << arg;
+      when '--account'
+        self.account << arg;
     end
   end
 
@@ -66,7 +78,8 @@ class PersonHashBuilder < StringEncoder
     phone_number: ' + self.phone_number.to_s + ',
     email_address: ' + self.email_address.to_s + ',
     username: ' + self.username.to_s + ',
-    password: ' + self.password.to_s
+    password: ' + self.password.to_s + ',
+    account: ' + self.account.to_s
   end
 end
 
