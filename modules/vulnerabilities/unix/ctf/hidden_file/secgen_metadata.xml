@@ -48,6 +48,13 @@
     <generator type="password_generator"/>
   </default_input>
 
+  <hint>Try reading the man page for ls with 'man ls'. Linux hidden files have names which begin with a dot. e.g.
+    .file
+  </hint>
+  <solution>List all files in a directory including hidden files with 'ls -a [directory]'. Omit the [directory] to list
+    those in the current working directory.
+  </solution>
+
   <requires>
     <module_path>utilities/unix/system/accounts</module_path>
   </requires>

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
 <vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
   <name>Passwordless User Account</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
@@ -36,6 +36,14 @@
 
   <!--optional details-->
   <reference>https://forge.puppet.com/puppetlabs/accounts</reference>
+
+  <hint>Find the list of users on the server either through looking at the /etc/passwd file (use a tool like cat or
+    less), alternatively look in the /home/ directory (use the ls command to list the contents of a directory).
+  </hint>
+
+  <solution>Sometimes linux user accounts can have no password. 'ls /home/' and then switch user with 'su
+    account_name'
+  </solution>
 
   <requires>
     <module_path>utilities/unix/system/parameterised_accounts</module_path>

@@ -132,6 +132,16 @@
     <value>3</value>
   </default_input>
 
+  <hint>The authors of this website forgot to sanitise their database inputs!</hint>
+  <hint>The product page's filter form is vulnerable to SQL injection attacks.</hint>
+  <hint>SQL Injection tutorial: http://www.unixwiz.net/techtips/sql-injection.html</hint>
+  <hint>There are automated tools, such as sqlmap, that will probe database through the web application and retrieve the
+    data.
+  </hint>
+  <solution>You can dump the database with the following command: 'sqlmap --url=http://url:port/product?filter=* --dump' and
+    follow the instructions when prompted.
+  </solution>
+
   <requires>
     <module_path>modules/services/unix/http/apache</module_path>
   </requires>
