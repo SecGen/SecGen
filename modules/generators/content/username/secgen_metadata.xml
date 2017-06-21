@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 
 <generator xmlns="http://www.github/cliffe/SecGen/generator"
-               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
-  <name>Random Username Generator</name>
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
+  <name>Username Generator</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>Generates a random username, maximum 20 characters long, based on a random adjective and a noun.</description>
+  <description>Outputs a username. If a name is provided, craft a username based on this. Otherwise generates a random
+    username, maximum 20 characters long, based on a random adjective and a noun.
+  </description>
 
   <type>username_generator</type>
   <type>local_calculation</type>
@@ -15,6 +17,8 @@
 
   <reference>https://github.com/aaronbassett/Pass-phrase/adjectives.txt</reference>
   <reference>https://github.com/aaronbassett/Pass-phrase/nouns.txt</reference>
+
+  <read_fact>name</read_fact>
 
   <output_type>generated_username</output_type>
 
