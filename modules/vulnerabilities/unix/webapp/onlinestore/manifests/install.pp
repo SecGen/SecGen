@@ -12,7 +12,7 @@ class onlinestore::install {
   $domain = $secgen_parameters['domain'][0]
   $dealer_id = $secgen_parameters['dealer_id'][0]
   $murderer_id = $secgen_parameters['murderer_id'][0]
-  $murdered_on = $secgen_parameters['murdered_on'][0]
+  $murdered_on = $secgen_parameters['murdered_on']
   $murdered_ids = $secgen_parameters['murdered_ids']
   $db_password = $secgen_parameters['db_password'][0]
 

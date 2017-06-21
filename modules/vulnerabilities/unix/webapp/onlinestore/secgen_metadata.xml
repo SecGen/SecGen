@@ -124,6 +124,7 @@
 
   <default_input into="murdered_on">
     <value>2015-01-02 16:39:01</value>
+    <value>2016-11-12 07:29:15</value>
   </default_input>
 
   <default_input into="murdered_ids">
