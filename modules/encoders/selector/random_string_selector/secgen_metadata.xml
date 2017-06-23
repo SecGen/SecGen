@@ -14,6 +14,7 @@
   <platform>windows</platform>
 
   <read_fact>strings_to_encode</read_fact>
+  <read_fact>position</read_fact>
 
   <output_type>selected_string</output_type>
 </encoder>
