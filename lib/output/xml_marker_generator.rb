@@ -83,11 +83,12 @@ class XmlMarkerGenerator
         add_hint("The system is vulnerable to #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
         if search_module.attributes['hint']
           search_module.attributes['hint'].each_with_index { |hint, i|
-            add_hint(hint, "#{search_module.unique_id}hint#{i}", "big_hint", xml)
+            add_hint(clean_hint(hint), "#{search_module.unique_id}hint#{i}", "big_hint", xml)  # .gsub(/\s+/, ' ')
           }
         end
         if search_module.attributes['solution']
-          add_hint(search_module.attributes['solution'].first, "#{search_module.unique_id}solution", "big_hint", xml)
+          solution = search_module.attributes['solution'].first
+          add_hint(clean_hint(solution), "#{search_module.unique_id}solution", "big_hint", xml)
         end
         if search_module.attributes['msf_module']
           add_hint("Can be exploited using the Metasploit module: #{search_module.attributes['msf_module'].first}", "#{search_module.unique_id}msf_module", "big_hint", xml)
@@ -104,17 +105,23 @@ class XmlMarkerGenerator
           add_hint("The flag is encoded using a #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
         end
         if search_module.attributes['hint']
-          add_hint(search_module.attributes['hint'].first, "#{search_module.unique_id}hint", "big_hint", xml)
+          search_module.attributes['hint'].each_with_index { |hint, i|
+            add_hint(clean_hint(hint), "#{search_module.unique_id}hint#{i}", "big_hint", xml)
+          }
         end
         if search_module.attributes['solution']
-          add_hint(search_module.attributes['solution'].first, "#{search_module.unique_id}solution", "big_hint", xml)
+          solution = search_module.attributes['solution'].first
+          add_hint(clean_hint(solution), "#{search_module.unique_id}solution", "big_hint", xml)
         end
       when "generator"
         if search_module.attributes['hint']
-          add_hint(search_module.attributes['hint'].first, "#{search_module.unique_id}hint", "normal", xml)
+          search_module.attributes['hint'].each_with_index { |hint, i|
+            add_hint(clean_hint(hint), "#{search_module.unique_id}hint#{i}", "big_hint", xml)
+          }
         end
         if search_module.attributes['solution']
-          add_hint(search_module.attributes['solution'].first, "#{search_module.unique_id}solution", "big_hint", xml)
+          solution = search_module.attributes['solution'].first
+          add_hint(clean_hint(solution), "#{search_module.unique_id}solution", "big_hint", xml)
         end
     end
 
@@ -127,4 +134,8 @@ def add_hint(hint_text, hint_id, hint_type, xml)
     xml.hint_type(hint_type)
     xml.hint_id(hint_id)
   }
+end
+
+def clean_hint str
+  str.tr("\n",'').gsub(/\s+/, ' ')
 end
