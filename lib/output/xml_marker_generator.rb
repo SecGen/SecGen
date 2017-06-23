@@ -34,7 +34,7 @@ class XmlMarkerGenerator
 
               # start by finding a flag, and work the way back providing hints
               selected_module.output.each { |output_value|
-                if output_value.match("flag{")
+                if output_value.match(/^flag{.*$/)
                   xml.challenge{
                     xml.flag(output_value)
 
@@ -76,9 +76,16 @@ class XmlMarkerGenerator
           when "local"
             add_hint("A vulnerability that can only be accessed/exploited with local access. You need to first find a way in...", "#{search_module.unique_id}local", "normal", xml)
         end
-
-        add_hint("The system is vulnerable in terms of its #{search_module.attributes['type'].first}", "#{search_module.unique_id}firsttype", "big_hint", xml)
+        type = search_module.attributes['type'].first
+        unless type == 'system' or type == 'misc' or type == 'ctf' or type == 'local' or type == 'ctf_challenge'
+          add_hint("The system is vulnerable in terms of its #{search_module.attributes['type'].first}", "#{search_module.unique_id}firsttype", "big_hint", xml)
+        end
         add_hint("The system is vulnerable to #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
+        if search_module.attributes['hint']
+          search_module.attributes['hint'].each_with_index { |hint, i|
+            add_hint(hint, "#{search_module.unique_id}hint#{i}", "big_hint", xml)
+          }
+        end
         if search_module.attributes['solution']
           add_hint(search_module.attributes['solution'].first, "#{search_module.unique_id}solution", "big_hint", xml)
         end
