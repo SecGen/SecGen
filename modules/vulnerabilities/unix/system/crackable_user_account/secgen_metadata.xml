@@ -23,7 +23,7 @@
   <default_input into="accounts">
     <generator type="account">
       <input into="username">
-        <generator module_path=".*random_username.*"/>
+        <generator module_path=".*username.*"/>
       </input>
       <input into="password">
         <generator type=".*weak_password.*"/>
