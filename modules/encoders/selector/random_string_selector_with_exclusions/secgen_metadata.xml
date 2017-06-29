@@ -10,7 +10,6 @@
     exclusion list.
   </description>
 
-  <type>string_selector</type>
   <type>string_selector_with_exclusions</type>
   <platform>linux</platform>
   <platform>windows</platform>

@@ -199,7 +199,7 @@ INSERT INTO `users` VALUES
 <% position = (counter + 1).to_s
    account = JSON.parse(json_account)
    is_dealer = @dealer_id == position ? '1' : '0'
-   killed_on_date = @murdered_ids.include?(position) ? @murdered_on : 'NULL'
+   killed_on_date = @murdered_ids.include?(position) ? @murdered_on.shift : 'NULL'
    killed_by = @murdered_ids.include?(position) ? @murderer_id : 'NULL'
    line_end = position == @accounts.size.to_s ? ';' : ',' -%>
   <%="(#{counter+1},'#{account['username']}','#{account['name']}','#{account['password']}',#{is_dealer},'#{account['username']}@#{@domain}','#{killed_on_date}',#{killed_by})#{line_end}" %>

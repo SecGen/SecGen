@@ -14,7 +14,7 @@ class MailMessageGenerator < StringEncoder
 
   def initialize
     super
-    self.module_name = 'Lipsum Paragraph Generator'
+    self.module_name = 'Mail Message Generator'
     self.sender_user = ''
     self.recipient_user = ''
     self.sender_domain = ''

@@ -26,7 +26,13 @@ class parameterised_website::install {
   $visible_tabs = $secgen_parameters['visible_tabs']
   $hidden_tabs = $secgen_parameters['hidden_tabs']
 
-  $docroot = '/var/www'
+  $white_text = $secgen_parameters['white_text']
+
+  # Additional Pages
+  $additional_pages = $secgen_parameters['additional_pages']
+  $additional_page_filenames = $secgen_parameters['additional_page_filenames']
+
+  $docroot = '/var/www/parameterised_website'
 
   if $acceptable_use_policy {  # Use alternative intranet index.html template
     $index_template = 'parameterised_website/intranet_index.html.erb'
@@ -100,5 +106,16 @@ class parameterised_website::install {
     storage_directory => $docroot,
     images_to_leak => $images_to_leak,
     leaked_from => "parameterised_website",
+  }
+
+  $additional_page_pairs = zip($additional_pages, $additional_page_filenames)
+  $additional_page_pairs.each |$additional_page_pair|{
+    $additional_page_contents = $additional_page_pair[0]
+    $additional_page_filename = $additional_page_pair[1]
+
+    file { "$docroot/$additional_page_filename":
+      ensure  => file,
+      content => template('parameterised_website/page.html.erb'),
+    }
   }
 }

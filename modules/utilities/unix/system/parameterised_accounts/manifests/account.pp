@@ -33,6 +33,13 @@ define parameterised_accounts::account($username, $password, $super_user, $strin
     }
   }
 
+  if $password == '' {
+    exec { "remove_password_from_account_$username":
+      command => "/usr/bin/passwd -d $username",
+      require => Accounts::User[$username],
+    }
+  }
+
   # Leak strings in a text file in the users home directory
   ::secgen_functions::leak_files { "$username-file-leak":
     storage_directory => "/home/$username/",

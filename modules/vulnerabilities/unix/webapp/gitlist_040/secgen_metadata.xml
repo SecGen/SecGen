@@ -43,10 +43,6 @@
   <msf_module>exploit/linux/http/gitlist_exec</msf_module>
   <hint>Visit the webapp in a browser at: ip:80/gitlist </hint>
 
-  <conflict>
-    <type>webapp</type>
-  </conflict>
-
   <requires>
     <module_path>modules/services/unix/http/apache</module_path>
   </requires>

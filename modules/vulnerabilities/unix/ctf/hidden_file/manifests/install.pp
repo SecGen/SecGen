@@ -3,8 +3,8 @@ class hidden_file::install {
   $secgen_params = parsejson($json_inputs)
   $challenge_name = $secgen_params['challenge_name'][0]
   $account = parsejson($secgen_params['account'][0])
-  $leaked_filename = $account['leaked_filenames'][0]
-  $flag = $secgen_params['flag'][0]
+  $leaked_filename = $secgen_params['leaked_filenames'][0]
+  $strings_to_leak = $secgen_params['strings_to_leak']
 
   # Determine if storage_dir is used, if not use the account information
   if $secgen_params['storage_directory'] {
@@ -26,10 +26,10 @@ class hidden_file::install {
   file { $challenge_directory: ensure => directory }
 
   # Drop the hidden file in the challenge directory
-  ::secgen_functions::leak_file { "$challenge_name-hidden_file":
-    leaked_filename  => ".$leaked_filename",
+  ::secgen_functions::leak_files { "$challenge_name-hidden_file":
+    leaked_filenames  => [".$leaked_filename"],
     storage_directory => $challenge_directory,
-    strings_to_leak   => $flag,
+    strings_to_leak   => $strings_to_leak,
     leaked_from       => "$challenge_directory-hidden_file",
   }
 

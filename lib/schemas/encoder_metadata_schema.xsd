@@ -35,7 +35,7 @@
         <xs:element name="reference" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="software_name" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="software_license" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-        <xs:element name="hint" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="hint" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="solution" type="xs:string" minOccurs="0" maxOccurs="1"/>
 
         <!--I/O: an encoder writes it's output to one fact, and reads from one or more-->

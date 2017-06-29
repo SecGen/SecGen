@@ -13,6 +13,7 @@
   <access>remote</access>
   <platform>linux</platform>
 
+  <read_fact>port</read_fact>
   <read_fact>strings_to_leak</read_fact>
   <read_fact>db_password</read_fact>
   <read_fact>accounts</read_fact>
@@ -21,6 +22,10 @@
   <read_fact>murderer_id</read_fact>
   <read_fact>murdered_on</read_fact>
   <read_fact>murdered_ids</read_fact>
+
+  <default_input into="port">
+    <value>80</value>
+  </default_input>
 
   <!--strings_to_leak contains the following flags: -->
   <default_input into="strings_to_leak">
@@ -119,6 +124,7 @@
 
   <default_input into="murdered_on">
     <value>2015-01-02 16:39:01</value>
+    <value>2016-11-12 07:29:15</value>
   </default_input>
 
   <default_input into="murdered_ids">
@@ -126,12 +132,16 @@
     <value>3</value>
   </default_input>
 
-  <conflict>
-    <type>webapp</type>
-  </conflict>
+  <hint>The authors of this website forgot to sanitise their database inputs!</hint>
+  <hint>The product page's filter form is vulnerable to SQL injection attacks. SQL Injection tutorial: http://www.unixwiz.net/techtips/sql-injection.html</hint>
+  <hint>There are automated tools, such as sqlmap, that will probe database through the web application and retrieve the data. </hint>
+  <solution>You can dump the database with the following command: 'sqlmap --url=http://url:port/product?filter=* --dump' and follow the instructions when prompted.</solution>
 
   <requires>
-    <module_path>modules/services/unix/http/lamp</module_path>
+    <module_path>modules/services/unix/http/apache</module_path>
+  </requires>
+  <requires>
+    <module_path>modules/services/unix/database/mysql</module_path>
   </requires>
 
 </vulnerability>

@@ -15,18 +15,25 @@
           <h1><%= @business_name %></h1>
           <h2><%= @product_name %></h2>
           <p><%= @main_page_paragraph_content.join %></p>
-      <% end -%>
+    <% elsif @main_page_paragraph_content-%>
+          <p><%= @main_page_paragraph_content.join %></p>
+    <% end -%>
       <br/>
 
-      <% if @visible_tabs -%>
+      <% if @visible_tabs and @visible_tabs[0] != '' -%>
           <%= scope.function_template(['parameterised_website/subtemplates/tab_panel.html.erb']) %>
       <% end -%>
 
       <br/>
-      <% @images_to_leak.each_with_index{ |_, counter| -%>
+      <% @images_to_leak.each_with_index{ |img, counter| -%>
+          <% unless img == '' -%>
           <img src="image<%=counter + 1 %>.png" height="128" width="128">
+          <% end -%>
       <%} -%>
 
     </div>
   </div>
 </div>
+<% if @white_text -%>
+    <div id="white_text"><%= @white_text.join %></div>
+<% end -%>
