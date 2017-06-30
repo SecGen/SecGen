@@ -28,6 +28,14 @@
           </xs:simpleType>
         </xs:element>
         <xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="cpu_word_size" minOccurs="1" maxOccurs="1">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="32-bit"/>
+              <xs:enumeration value="64-bit"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
         <xs:element name="type" minOccurs="1" maxOccurs="unbounded">
           <xs:simpleType>
             <xs:restriction base="xs:string">

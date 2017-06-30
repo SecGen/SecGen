@@ -13,43 +13,37 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <% @systems.each do |system| %>
   config.vm.define "<%= system.name %>" do |<%= system.name %>|
     config.vm.provider :virtualbox do |vb|
-<%= if (@options.has_key? :gui_output)
-"      vb.gui = true"
-    else
-"      vb.gui = false
-      vb.customize ['modifyvm', :id, '--pae', 'on']
-      vb.customize ['modifyvm', :id, '--hwvirtex', 'on']
-      vb.customize ['modifyvm', :id, '--vtxvpid', 'off']"
-    end %>
-<%= if (@options.has_key? :nopae)
-      "      vb.customize ['modifyvm', :id, '--pae', 'off']"
-    else
-      "      vb.customize ['modifyvm', :id, '--pae', 'on']"
-    end %>
-
-<%= if (@options.has_key? :hwvirtex)
-      "      vb.customize ['modifyvm', :id, '--hwvirtex', 'on']"
-    else
-      "      vb.customize ['modifyvm', :id, '--hwvirtex', 'off']"
-    end %>
-
-<%= if (@options.has_key? :vtxvpid)
-      "      vb.customize ['modifyvm', :id, '--vtxvpid', 'on']"
-    else
-      "      vb.customize ['modifyvm', :id, '--vtxvpid', 'off']"
-    end %>
-
-<%= if (@options.has_key? :memory_per_vm)
-"      vb.memory = #{@options[:memory_per_vm]}"
-    elsif (@options.has_key? :total_memory)
-"      vb.memory = #{@options[:total_memory]}/#{@systems.length}"
-    end %>
-<%= if (@options.has_key? :max_cpu_cores)
-"      vb.cpus = #{@options[:max_cpu_cores]}"
-    end %>
-<%= if (@options.has_key? :max_cpu_usage)
-"      vb.customize ['modifyvm', :id, '--cpuexecutioncap', '#{@options[:max_cpu_usage]}']"
-    end %>
+    <% system.module_selections.each do |selected_module|
+      if selected_module.module_type == 'base'
+        @cpu_word_size = selected_module.attributes['cpu_word_size'].first.downcase
+      end
+    end -%>
+    <%= gui = (@options.has_key? :gui_output) ? 'true' : 'false'
+      "      vb.gui = #{gui}\n" -%>
+<%= no_pae = (@options.has_key? :nopae) ? 'off' : 'on'
+      "      vb.customize ['modifyvm', :id, '--pae', '#{no_pae}']\n" -%>
+<%= if @cpu_word_size == '32-bit'
+      if @options.has_key? :hwvirtex
+      "      vb.customize ['modifyvm', :id, '--hwvirtex', 'on']\n"
+      else
+      "      vb.customize ['modifyvm', :id, '--hwvirtex', 'off']\n"
+      end
+    elsif @cpu_word_size == '64-bit'
+      "      vb.customize ['modifyvm', :id, '--hwvirtex', 'on']\n"
+    end -%>
+<%= vtxpid = (@options.has_key? :vtxvpid) ? 'on' : 'off'
+      "      vb.customize ['modifyvm', :id, '--vtxvpid', '#{vtxpid}']\n"  -%>
+<%= if @options.has_key? :memory_per_vm
+      "      vb.memory = #{@options[:memory_per_vm]}\n"
+    elsif @options.has_key? :total_memory
+      "      vb.memory = #{@options[:total_memory]}/#{@systems.length}\n"
+    end -%>
+<%= if @options.has_key? :max_cpu_cores
+      "      vb.cpus = #{@options[:max_cpu_cores]}\n"
+    end -%>
+<%= if @options.has_key? :max_cpu_usage
+      "      vb.customize ['modifyvm', :id, '--cpuexecutioncap', '#{@options[:max_cpu_usage]}']\n"
+    end -%>
     end
 
     # SecGen datastore
@@ -64,11 +58,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     <%= system.name %>.vm.box = "<%= selected_module.module_path_name %>"
     <%= system.name %>.vm.box_url = "<%= selected_module.attributes['url'].first %>"
 
-    <% if (selected_module.attributes['platform'].first.downcase == 'windows') %>
-    config.vm.communicator = 'winrm'
-    config.vm.guest = :windows
-    config.vm.network :forwarded_port, guest: 3389, host: 3389
-    config.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
+    <% if selected_module.attributes['platform'].first.downcase == 'windows' %>
+    <%= system.name %>.vm.communicator = 'winrm'
+    <%= system.name %>.vm.guest = :windows
+    <%= system.name %>.vm.network :forwarded_port, guest: 3389, host: 3389
+    <%= system.name %>.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
     <% end %>
 
         <%   when 'network' -%>

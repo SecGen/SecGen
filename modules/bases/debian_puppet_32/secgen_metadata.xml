@@ -8,6 +8,7 @@
   <module_license>GPLv3</module_license>
   <description>Based on the Official Puppet Vagrant box. Debian 7.8 (wheezy) 32-bit (i386), Puppet 4.3.2 / Puppet Enterprise 2015.3.2 (agent).
     This is the primary base box used during development.</description>
+  <cpu_word_size>32-bit</cpu_word_size>
   <type>server</type>
   <type>cli</type>
 

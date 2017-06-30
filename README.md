@@ -26,6 +26,7 @@ You will need to install the following:
 - Vagrant: http://www.vagrantup.com/
 - Virtual Box: https://www.virtualbox.org/
 - Puppet: http://puppet.com/
+- Packer: https://www.packer.io/downloads.html  
 - ImageMagick: https://www.imagemagick.org/
 - And the required Ruby Gems (including Nokogiri and Librarian-puppet)
 
