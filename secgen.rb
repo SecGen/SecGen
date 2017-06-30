@@ -40,23 +40,6 @@ def usage
   exit
 end
 
-# Displays the current ForGen version number
-#
-# @author Jason Keighley
-# @see constants.rb
-# @return [Void]
-def display_version
-  @colour.help VERSION_NUMBER
-end
-
-# Delete all current project directories
-#
-# @author Jason Keighley
-# @return [Void]
-def delete_all_projects
-  FileUtils.rm_r(Dir.glob("#{PROJECTS_DIR}/*"))
-end
-
 # Builds the vagrant configuration file based on a scenario file
 # @return build_number [Integer] Current project's build number
 def build_config(scenario, out_dir, options)
@@ -162,11 +145,6 @@ end
 # Make forensic image helper methods \end
 #################################################
 
-# Make forensic image
-#
-# @author Jason Keighley
-# @param [Hash] options Main options hash containing all options for the running ForGen instance
-# @return [Hash] options Main options hash containing all options for the running ForGen instance
 def make_forensic_image(project_dir, image_output_location, image_type)
   drive_path = %x(VBoxManage list hdds | grep '#{project_dir.split('/').last}').sub(/\ALocation:\s*/, '').sub(/\n/, '')
   drive_name = drive_path.split('/').last
@@ -213,6 +191,14 @@ def list_projects
   end
 end
 
+# Delete all current project directories
+#
+# @author Jason Keighley
+# @return [Void]
+def delete_all_projects
+  FileUtils.rm_r(Dir.glob("#{PROJECTS_DIR}/*"))
+end
+
 # end of method declarations
 # start of program execution
 
@@ -234,7 +220,6 @@ opts = GetoptLong.new(
   [ '--total-memory', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-usage', GetoptLong::REQUIRED_ARGUMENT],
-  [ '--delete-vm-after-image-creation', GetoptLong::NO_ARGUMENT],
   [ '--forensic-image-type', GetoptLong::REQUIRED_ARGUMENT],
 )
 
@@ -286,10 +271,6 @@ opts.each do |opt, arg|
     when '--max-cpu-usage'
       Print.info "Max CPU usage set to #{arg}"
       options[:max_cpu_usage] = arg
-
-    when '--delete-vm-after-image-creation'
-      Print.info "Will delete the virtual machine after a forensic image has been generated"
-      options[:delete_vm_after_image_creation] = true
 
     when '--forensic-image-type'
       Print.info "Image output type set to #{arg}"
