@@ -13,12 +13,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <% @systems.each do |system| %>
   config.vm.define "<%= system.name %>" do |<%= system.name %>|
     config.vm.provider :virtualbox do |vb|
-    <% system.module_selections.each do |selected_module|
+<%  system.module_selections.each do |selected_module|
       if selected_module.module_type == 'base'
         @cpu_word_size = selected_module.attributes['cpu_word_size'].first.downcase
       end
     end -%>
-    <%= gui = (@options.has_key? :gui_output) ? 'true' : 'false'
+<%= gui = (@options.has_key? :gui_output) ? 'true' : 'false'
       "      vb.gui = #{gui}\n" -%>
 <%= no_pae = (@options.has_key? :nopae) ? 'off' : 'on'
       "      vb.customize ['modifyvm', :id, '--pae', '#{no_pae}']\n" -%>
