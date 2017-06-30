@@ -47,6 +47,38 @@ class ProjectFilesCreator
       template_based_file_write(PUPPET_TEMPLATE_FILE, pfile)
       Print.std 'Preparing puppet modules using librarian-puppet'
       GemExec.exe('librarian-puppet', path, 'install')
+
+      system.module_selections.each do |selected_module|
+
+        if selected_module.module_type == 'base'
+          url = selected_module.attributes['url'].first
+
+          unless url.nil? || url =~ /^http*/
+            Print.std "Checking to see if local basebox #{url.split('/').last} exists"
+            packerfile_path = "#{BASES_DIR}#{selected_module.attributes['packerfile_path'].first}"
+            autounattend_path = "#{BASES_DIR}#{selected_module.attributes['packerfile_path'].first.split('/').first}/Autounattend.xml.erb"
+
+            unless File.file? "#{VAGRANT_BASEBOX_STORAGE}/#{url}"
+              Print.std "Basebox #{url.split('/').last} not found, searching for packerfile"
+
+              if File.file? packerfile_path
+                Print.info "Would you like to use the packerfile to create the packerfile from the given url (y/n)"
+                (Print.info "Exiting as vagrant needs the basebox to continue"; exit) unless ['y','yes'].include?(STDIN.gets.chomp.downcase)
+
+                Print.std "Packerfile #{packerfile_path.split('/').last} found, building basebox #{url.split('/').last} via packer"
+                template_based_file_write(packerfile_path, packerfile_path.split(/.erb$/).first)
+                template_based_file_write(autounattend_path, autounattend_path.split(/.erb$/).first)
+                system "cd '#{packerfile_path.split(/\/[^\/]*.erb$/).first}' && packer build Packerfile && cd '#{ROOT_DIR}'"
+              else
+                Print.err "Packerfile not found, vagrant error may occur, please check the secgen metadata for the base module #{selected_module.name} for errors";
+              end
+            else
+              Print.std "Vagrant basebox #{url.split('/').last} exists"
+              selected_module.attributes['url'][0] = "#{VAGRANT_BASEBOX_STORAGE}/#{url}"
+            end
+          end
+        end
+      end
     end
 
     # Create environments/production/environment.conf - Required in Puppet 4+
