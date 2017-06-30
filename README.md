@@ -41,6 +41,12 @@ cd /home/user/bin/SecGen
 bundle install
 ```
 
+## Optional software requirements
+### EWF image creation
+To generate forensic images in the EWF image format FTK Imager command line is required.  
+Download link for FTK Imager command line: http://accessdata.com/product-download/  
+Note: The FTK Imager executable needs to be added to the PATH environment variable.
+
 ## Usage
 Basic usage:
 ```bash
@@ -728,7 +734,7 @@ It is possible to copy the project directory to any compatible system with Vagra
 - Lewis Ardern -- author of the first proof-of-concept release of SecGen
 - Connor Wilson
 
-Many thanks to everyone who have contributed to the project. The above list is not complete or exhaustive, please refer to the [GitHub history](https://github.com/cliffe/SecGen/graphs/contributors).
+Many thanks to everyone who has contributed to the project. The above list is not complete or exhaustive, please refer to the [GitHub history](https://github.com/cliffe/SecGen/graphs/contributors).
 
 This project is supported by a Higher Education Academy (HEA) learning and teaching in cyber security grant (2015-2017).
 
