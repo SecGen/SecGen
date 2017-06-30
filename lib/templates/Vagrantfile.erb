@@ -57,15 +57,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      when 'base' -%>
     <%= system.name %>.vm.box = "<%= selected_module.module_path_name %>"
     <%= system.name %>.vm.box_url = "<%= selected_module.attributes['url'].first %>"
-
     <% if selected_module.attributes['platform'].first.downcase == 'windows' %>
     <%= system.name %>.vm.communicator = 'winrm'
     <%= system.name %>.vm.guest = :windows
     <%= system.name %>.vm.network :forwarded_port, guest: 3389, host: 3389
     <%= system.name %>.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
     <% end %>
-
-        <%   when 'network' -%>
+<%   when 'network' -%>
 <%     if selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp" -%>
     <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp"
 <%     else -%>
@@ -77,7 +75,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%     # if there are facter variables to define
       if selected_module.received_inputs != {} -%>
       <% json_inputs = JSON.generate(selected_module.received_inputs) -%>
-      <%=module_name%>.facter = {
+<%=   module_name%>.facter = {
         "base64_inputs" => '<%= Base64.strict_encode64(json_inputs)%>'
       }
 <%    end -%>
@@ -90,7 +88,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 <%   end -%>
 <% end -%>
-
   end
 <% end %>
 end
