@@ -13,11 +13,4 @@
 		<network type="private_network" range="dhcp"/>
 	</system>
 
-	<system>
-		<system_name>linux_box</system_name>
-		<base platform="linux"/>
-
-		<network type="private_network" range="dhcp"/>
-	</system>
-
 </scenario>
