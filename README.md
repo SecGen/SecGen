@@ -33,7 +33,7 @@ You will need to install the following:
 ### On Ubuntu these commands will get you up and running
 Install all the required packages:
 ```bash
-sudo apt-get install ruby-dev zlib1g-dev liblzma-dev build-essential patch virtualbox ruby-bundler vagrant imagemagick libmagickwand-dev
+sudo apt-get install ruby-dev zlib1g-dev liblzma-dev build-essential patch virtualbox ruby-bundler vagrant imagemagick libmagickwand-dev exiftool
 ```
 
 Copy SecGen to a directory of your choosing, such as */home/user/bin/SecGen*, then:
