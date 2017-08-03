@@ -17,11 +17,16 @@
   <access>remote</access>
   <platform>linux</platform>
 
+  <read_fact>port</read_fact>
   <read_fact>strings_to_leak</read_fact>
   <read_fact>images_to_leak</read_fact>
   <read_fact>leaked_filenames</read_fact>
 
   <!-- [0] leaks flag to home directory, [1..n] leak messages to gitlist repository (visible through the webapp) -->
+  <default_input into="port">
+    <value>80</value>
+  </default_input>
+
   <default_input into="strings_to_leak">
     <generator type="flag_generator"/>
     <generator type="message_generator"/>
