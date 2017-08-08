@@ -13,20 +13,9 @@
 
   <read_fact>strings_to_leak</read_fact>
   <read_fact>images_to_leak</read_fact>
-  <read_fact>business_name</read_fact>
-  <read_fact>business_motto</read_fact>
-  <read_fact>manager_profile</read_fact>
-  <read_fact>business_address</read_fact>
-  <read_fact>office_telephone</read_fact>
-  <read_fact>office_email</read_fact>
-  <read_fact>industry</read_fact>
-  <read_fact>employees</read_fact>
-  <read_fact>product_name</read_fact>
+  <read_fact>organisation</read_fact>
   <read_fact>main_page_paragraph_content</read_fact>
-
   <read_fact>white_text</read_fact>
-
-  <!-- Additional pages + filenames -->
   <read_fact>additional_pages</read_fact>
   <read_fact>additional_page_filenames</read_fact>
 
@@ -54,41 +43,8 @@
     <generator type="image_generator"/>
   </default_input>
 
-  <default_input into="business_name">
-    <generator type="business_name"/>
-  </default_input>
-
-  <default_input into="business_motto">
-    <generator type="motto"/>
-  </default_input>
-
-  <default_input into="manager_profile">
-    <generator type="person"/>
-  </default_input>
-
-  <default_input into="business_address">
-    <generator type="address_generator"/>
-  </default_input>
-
-  <default_input into="office_telephone">
-    <generator type="phone_number"/>
-  </default_input>
-
-  <default_input into="office_email">
-    <generator type="email_address"/>
-  </default_input>
-
-  <default_input into="industry">
-    <generator type="industry_generator"/>
-  </default_input>
-
-  <default_input into="employees">
-    <generator type="person"/>
-    <generator type="person"/>
-  </default_input>
-
-  <default_input into="product_name">
-    <generator type="application_name"/>
+  <default_input into="organisation">
+    <generator type="organisation"/>
   </default_input>
 
   <default_input into="main_page_paragraph_content">

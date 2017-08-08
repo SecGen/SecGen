@@ -300,31 +300,7 @@
       </input>
 
       <!-- No business facts. -->
-      <input into="business_name">
-        <value/>
-      </input>
-      <input into="business_motto">
-        <value/>
-      </input>
-      <input into="manager_profile">
-        <value/>
-      </input>
-      <input into="business_address">
-        <value/>
-      </input>
-      <input into="office_telephone">
-        <value/>
-      </input>
-      <input into="office_email">
-        <value/>
-      </input>
-      <input into="industry">
-        <value/>
-      </input>
-      <input into="employees">
-        <value/>
-      </input>
-      <input into="product_name">
+      <input into="organisation">
         <value/>
       </input>
     </service>
