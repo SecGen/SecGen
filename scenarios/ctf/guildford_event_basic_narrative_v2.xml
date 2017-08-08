@@ -406,7 +406,7 @@
     <!-- Get onto user account 3!! -->
     <vulnerability module_path="modules/vulnerabilities/unix/system/ssh_leaked_keys">
       <input into="accounts">
-        <datastore access="2" access_json="['username']">accounts</datastore>
+        <datastore access="2">accounts</datastore>
       </input>
     </vulnerability>
 
