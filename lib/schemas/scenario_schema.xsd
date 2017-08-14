@@ -139,6 +139,8 @@
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute name="access" type="xs:string" default="next"/>
+        <xs:attribute name="access_element" type="xs:integer"/>
+        <xs:attribute name="access_json" type="xs:string"/>
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
