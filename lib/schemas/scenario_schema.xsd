@@ -57,6 +57,7 @@
     <xs:attribute name='author' type='xs:string'/>
     <xs:attribute name='module_license' type='xs:string'/>
     <xs:attribute name='description' type='xs:string'/>
+    <xs:attribute name='cpu_word_size' type='xs:string'/>
     <xs:attribute name='type' type='xs:string'/>
     <xs:attribute name='platform' type='xs:string'/>
     <xs:attribute name='distro' type='xs:string'/>
