@@ -171,6 +171,44 @@ class System
               raise 'failed'
             end
             if datastore_retrieved && datastore_retrieved != [nil]
+              # separate out the data if there's a 'access_json' call
+              datastore_access_json = datastore_variablename_and_access_type['access_json']
+
+              if datastore_access_json.size > 0
+                # use first element when selecting access_json unless access="" is specified
+                if datastore_access == 'all'
+                  datastore_access = 0
+                  Print.verbose "No element specified, e.g. access=\"0\", for access_json=\"#{datastore_access_json}\": using (0)"
+                end
+
+                # parse the datastore
+                parsed_datastore_element = JSON.parse(datastore_retrieved.first)
+
+                # Sanitise with whitelist of used characters: ' [ ]
+                access_json = datastore_access_json.gsub(/[^A-Za-z0-9\[\]'_]/, '')
+
+                # get data from access_json string
+                begin
+                  json_accessed_data = eval("parsed_datastore_element#{access_json}")
+                rescue NoMethodError, SyntaxError => err
+                  Print.err "Error fetching access_json (#{access_json}) from datastore (#{datastore_variablename}): #{err}"
+                  raise 'failed'
+                end
+                # convert hashes back to json
+                if json_accessed_data.is_a? Hash
+                  datastore_retrieved = json_accessed_data.to_json
+                elsif json_accessed_data.is_a? Array
+                  datastore_retrieved = []
+                  json_accessed_data.each do |data_element|
+                    if data_element.is_a? Hash
+                      data_element = data_element.to_json
+                    end
+                    datastore_retrieved << data_element
+                  end
+                else
+                  datastore_retrieved = json_accessed_data
+                end
+              end
               (received_inputs[input_into] ||=[]).push(*datastore_retrieved)
               Print.verbose "Adding (#{datastore_access}) #{datastore_variablename} to #{input_into}: #{datastore_retrieved}"
             else
