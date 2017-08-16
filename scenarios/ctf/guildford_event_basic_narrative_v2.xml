@@ -256,7 +256,7 @@
             <encoder type="caesar_cipher">
               <input into="strings_to_encode">
                 <value>Log into the server and check your mail.</value>
-                <value>Username:</value>
+                <value>Username: </value>
                 <datastore access="0" access_json="['username']">accounts</datastore>
                 <value>Password:</value>
                 <datastore access="0" access_json="['password']">accounts</datastore>

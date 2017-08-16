@@ -2,7 +2,10 @@ class parameterised_website::install {
   $json_inputs = base64('decode', $::base64_inputs)
   $secgen_parameters = parsejson($json_inputs)
 
-  $organisation = parsejson($secgen_parameters['organisation'][0])
+  $raw_org = $secgen_parameters['organisation'][0]
+  if $raw_org and $raw_org != '' {
+    $organisation = parsejson($raw_org)
+  }
 
   if $organisation and $organisation != '' {
     $business_name = $organisation['business_name']

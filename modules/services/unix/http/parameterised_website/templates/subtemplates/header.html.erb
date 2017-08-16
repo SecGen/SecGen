@@ -1,9 +1,10 @@
+<% $page_title = @business_name != '' ? "#{@business_name} - #{$current_page}" : $current_page -%>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title><%= @business_name + ' - '%><%= $current_page %></title>
+  <title><%= $page_title %></title>
 
   <!-- Default stylesheet -->
   <link rel="stylesheet" type="text/css" href="css/default.css"/>
