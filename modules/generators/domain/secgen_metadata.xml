@@ -20,5 +20,9 @@
   <!-- Convert a name into a randomly formatted domain. Works with business names too. e.g. thomas_shaw.org-->
   <read_fact>name</read_fact>
 
+  <default_input into="name">
+    <generator type="name_generator"/>
+  </default_input>
+
   <output_type>domain</output_type>
 </generator>

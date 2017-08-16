@@ -2,7 +2,7 @@
 require_relative '../../../../lib/objects/local_string_encoder.rb'
 require 'faker'
 
-class DomainEncoder < StringEncoder
+class DomainGenerator < StringEncoder
   attr_accessor :name
 
   def initialize
@@ -43,4 +43,4 @@ class DomainEncoder < StringEncoder
   end
 end
 
-DomainEncoder.new.run
+DomainGenerator.new.run
