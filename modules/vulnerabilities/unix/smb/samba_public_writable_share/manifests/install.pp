@@ -22,7 +22,7 @@ class samba_public_writable_share::install {
 
   # Append the public share
   exec { 'concat_samba_conf_and_public_share':
-    command => "/bin/bash -c 'cat /etc/samba/smb_symlink.conf >> /etc/samba/smb.conf'"
+    command => "/bin/bash -c 'cat /etc/samba/smb_pws.conf >> /etc/samba/smb.conf'"
   }
 
   ::secgen_functions::leak_files { 'samba_public_writable_share-file-leak':
