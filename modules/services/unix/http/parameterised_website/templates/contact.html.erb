@@ -26,10 +26,8 @@
         <p><%= @manager_profile['email_address'] %></p>
       </div>
 
-      <div id="employees">
         <h4>Employees</h4>
-        <% @employees.each do |employee|
-            employee = JSON.parse(employee) %>
+        <% @employees.each do |employee| -%>
             <p><strong><%= employee['name'] %></strong></p>
             <p><%= employee['phone_number'] %></p>
             <p><%= employee['email_address'] %></p>

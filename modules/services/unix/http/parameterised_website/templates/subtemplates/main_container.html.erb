@@ -25,12 +25,13 @@
       <% end -%>
 
       <br/>
-      <% @images_to_leak.each_with_index{ |img, counter| -%>
+      <% if @images_to_leak  -%>
+        <% @images_to_leak.each_with_index{ |img, counter| -%>
           <% unless img == '' -%>
           <img src="image<%=counter + 1 %>.png" height="128" width="128">
           <% end -%>
-      <%} -%>
-
+        <% } -%>
+      <% end -%>
     </div>
   </div>
 </div>

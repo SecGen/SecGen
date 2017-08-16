@@ -2,7 +2,7 @@ class parameterised_website::install {
   $json_inputs = base64('decode', $::base64_inputs)
   $secgen_parameters = parsejson($json_inputs)
 
-  $organisation = $secgen_parameters['organisation'][0]
+  $organisation = parsejson($secgen_parameters['organisation'][0])
 
   if $organisation and $organisation != '' {
     $business_name = $organisation['business_name']
@@ -11,7 +11,7 @@ class parameterised_website::install {
     $business_address = $organisation['business_address']
     $office_telephone = $organisation['office_telephone']
     $office_email = $organisation['office_email']
-    $industry = $organisation['industry'][0]
+    $industry = $organisation['industry']
     $product_name = $organisation['product_name']
     $employees = $organisation['employees']
   } else {
@@ -120,10 +120,12 @@ class parameterised_website::install {
     }
   }
 
-  ::secgen_functions::leak_files{ 'parameterised_website-image-leak':
-    storage_directory => $docroot,
-    images_to_leak => $images_to_leak,
-    leaked_from => "parameterised_website",
+  if $images_to_leak {
+    ::secgen_functions::leak_files{ 'parameterised_website-image-leak':
+      storage_directory => $docroot,
+      images_to_leak => $images_to_leak,
+      leaked_from => "parameterised_website",
+    }
   }
 
   if $additional_pages and $additional_page_filenames {
