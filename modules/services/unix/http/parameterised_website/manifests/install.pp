@@ -140,4 +140,24 @@ class parameterised_website::install {
       }
     }
   }
+
+  if $acceptable_use_policy {
+    # Apply template
+    file{ "$docroot/acceptable_use_policy.html":
+      ensure  => file,
+      content => template('parameterised_website/acceptable_use_page.html.erb')
+    }
+  }
+
+  # Security audit remit
+  if $security_audit {
+    $security_audit_remit = $security_audit[0]
+
+    # Apply template
+    file{ "$docroot/security_audit_remit.html":
+      ensure  => file,
+      content => template('parameterised_website/security_audit_remit_page.html.erb'),
+    }
+  }
+
 }
