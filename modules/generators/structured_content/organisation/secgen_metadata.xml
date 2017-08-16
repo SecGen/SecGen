@@ -17,6 +17,7 @@
   <read_fact>business_name</read_fact>
   <read_fact>business_motto</read_fact>
   <read_fact>business_address</read_fact>
+  <read_fact>domain</read_fact>
   <read_fact>office_telephone</read_fact>
   <read_fact>office_email</read_fact>
   <read_fact>industry</read_fact>
@@ -32,6 +33,9 @@
   </default_input>
   <default_input into="business_address">
     <generator type="address_generator"/>
+  </default_input>
+  <default_input into="domain">
+    <generator type="domain"/>
   </default_input>
   <default_input into="office_telephone">
     <generator type="phone_number"/>

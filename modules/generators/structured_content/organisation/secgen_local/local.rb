@@ -5,6 +5,7 @@ class OrganisationGenerator < StringEncoder
   attr_accessor :business_name
   attr_accessor :business_motto
   attr_accessor :business_address
+  attr_accessor :domain
   attr_accessor :office_telephone
   attr_accessor :office_email
   attr_accessor :industry
@@ -18,6 +19,7 @@ class OrganisationGenerator < StringEncoder
     self.business_name = ''
     self.business_motto = ''
     self.business_address = ''
+    self.domain = ''
     self.office_telephone = ''
     self.office_email = ''
     self.industry = ''
@@ -31,6 +33,7 @@ class OrganisationGenerator < StringEncoder
     organisation_hash['business_name'] = self.business_name
     organisation_hash['business_motto'] = self.business_motto
     organisation_hash['business_address'] = self.business_address
+    organisation_hash['domain'] = self.domain
     organisation_hash['office_telephone'] = self.office_telephone
     organisation_hash['office_email'] = self.office_email
     organisation_hash['industry'] = self.industry
@@ -45,6 +48,7 @@ class OrganisationGenerator < StringEncoder
     super + [['--business_name', GetoptLong::REQUIRED_ARGUMENT],
              ['--business_motto', GetoptLong::REQUIRED_ARGUMENT],
              ['--business_address', GetoptLong::REQUIRED_ARGUMENT],
+             ['--domain', GetoptLong::REQUIRED_ARGUMENT],
              ['--office_telephone', GetoptLong::REQUIRED_ARGUMENT],
              ['--office_email', GetoptLong::REQUIRED_ARGUMENT],
              ['--industry', GetoptLong::REQUIRED_ARGUMENT],
@@ -62,6 +66,8 @@ class OrganisationGenerator < StringEncoder
         self.business_motto << arg;
       when '--business_address'
         self.business_address << arg;
+      when '--domain'
+        self.domain << arg;
       when '--office_telephone'
         self.office_telephone << arg;
       when '--office_email'
@@ -81,6 +87,7 @@ class OrganisationGenerator < StringEncoder
     'business_name: ' + self.business_name.to_s + ',
     business_motto: ' + self.business_motto.to_s + ',
     business_address: ' + self.business_address.to_s + ',
+    domain: ' + self.domain.to_s + ',
     office_telephone: ' + self.office_telephone.to_s + ',
     office_email: ' + self.office_email.to_s + ',
     industry: ' + self.industry.to_s + ',
