@@ -11,6 +11,7 @@ class Print
   def self.purple(text); colorize(text, "\e[35m"); end
   def self.cyan(text); colorize(text, "\e[36m"); end
   def self.grey(text); colorize(text, "\e[37m"); end
+  def self.bright_yellow(text); colorize(text, "\e[93m"); end
   def self.bold(text); colorize(text, "\e[2m"); end
 
   def self.debug(msg)
@@ -31,6 +32,10 @@ class Print
 
   def self.std(msg)
     puts yellow(msg)
+  end
+
+  def self.warn(msg)
+    puts bright_yellow(msg)
   end
 
   # local encoders/generators write messages to stderr (stdout used to return values)
