@@ -4,33 +4,11 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-  <!-- Single system narrative-based CTF challenge.
-
-   1) Start by visiting ip:80 and recieving a message to decode (another flag in html source code comments too)
-   2) Log onto the box with the credentials found in 1. Read directions in mail discussing store at ip:1337.
-   3) Second, password-less, user account. Another mail between acc2 and acc3.
-   4) Third account using SSH Leaked Keys.
-   5) Onlinestore module - get at the database. Included utilities/sqlmap to help with this.
-
-  -->
+  <!-- Single system narrative-based CTF challenge. -->
 
   <system>
     <system_name>system</system_name>
     <base platform="linux"/>
-
-    <!-- DATASTORE SETUP START -->
-
-    <!-- Store domain and port -->
-
-    <input into_datastore="store_domain">
-      <value>dangerous_store.co.uk</value>
-    </input>
-
-    <input into_datastore="store_port">
-      <value>1337</value>
-    </input>
-
-    <!-- Create @account's for user1, user2 and user3-->
 
     <input into_datastore="accounts">
       <!-- [0]: Entry account -->
@@ -218,9 +196,7 @@
       </generator>
     </input>
 
-
-    <!-- DATASTORE SETUP END. -->
-
+    <!-- Scenario Modules -->
 
     <utility module_path=".*parameterised_accounts">
       <input into="accounts">
@@ -256,7 +232,7 @@
             <encoder type="caesar_cipher">
               <input into="strings_to_encode">
                 <value>Log into the server and check your mail.</value>
-                <value>Username: </value>
+                <value>Username:</value>
                 <datastore access="0" access_json="['username']">accounts</datastore>
                 <value>Password:</value>
                 <datastore access="0" access_json="['password']">accounts</datastore>
@@ -323,10 +299,15 @@
           <input into="content">
             <value>To whom this may concern,</value>
             <value>Now that you're on the server, we need your help with our investigation.</value>
-            <value>We've managed to hide this account on the server for you. Criminal activity has been taking place, particularly over port 1337.</value>
-            <value>Our initial examinations lead us to believe that the perpetrators use poor security practices.</value>
+            <value>We've managed to hide this account on the server for you. Criminal activity has been taking place,
+              particularly over port 1337.
+            </value>
+            <value>Our initial examinations lead us to believe that the perpetrators use poor security practices.
+            </value>
             <value>Find out if the suspects have user accounts on this server and see if you can break in.</value>
-            <value>We need all the evidence we can get. In the form of flags. The more you collect the stronger our case will be.</value>
+            <value>We need all the evidence we can get. In the form of flags. The more you collect the stronger our case
+              will be.
+            </value>
             <value>Godspeed,</value>
             <value>Detective Jones.</value>
           </input>
@@ -346,8 +327,8 @@
           <input into="sender_user">
             <datastore access="2" access_json="['username']">accounts</datastore>
           </input>
-          <input into="sender_domain">
-            <datastore>store_domain</datastore>
+          <input into="sender_domain" into_datastore="store_domain">
+            <value>dangerous_store.co.uk</value>
           </input>
           <input into="recipient_user">
             <datastore access="1" access_json="['username']">accounts</datastore>
@@ -412,7 +393,7 @@
 
     <vulnerability module_path=".*onlinestore.*">
       <input into="port">
-        <datastore>store_port</datastore>
+        <value>1337</value>
       </input>
       <input into="domain">
         <datastore>store_domain</datastore>
