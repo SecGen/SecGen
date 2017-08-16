@@ -10,7 +10,6 @@
 
   <type>mail_id</type>
   <type>mail_id_generator</type>
-  <type>text_paragraph</type>
   <type>local_calculation</type>
   <platform>linux</platform>
   <platform>windows</platform>
