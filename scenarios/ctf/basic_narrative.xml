@@ -8,7 +8,7 @@
 
   <system>
     <system_name>system</system_name>
-    <base platform="linux"/>
+    <base platform="linux" type="server"/>
 
     <input into_datastore="accounts">
       <!-- [0]: Entry account -->

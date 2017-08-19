@@ -5,7 +5,7 @@
 
   <system>
     <system_name>example_server</system_name>
-    <base platform="linux"/>
+    <base platform="linux" type="server"/>
 
     <!--select a vulnerability that takes leaked_filenames-->
     <vulnerability read_fact="leaked_filenames">

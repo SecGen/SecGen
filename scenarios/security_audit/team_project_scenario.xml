@@ -213,7 +213,7 @@
   <!-- Desktop Client on NIC2 -->
   <system>
     <system_name>desktop</system_name>
-    <base platform="linux"/>
+    <base platform="linux" type="server"/>
     <vulnerability module_path=".*xfce_lightdm_root_login"/>
     <utility module_path=".*iceweasel" />
     <network module_path=".*private_network_2"/>

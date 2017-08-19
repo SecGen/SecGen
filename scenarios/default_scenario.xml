@@ -7,7 +7,7 @@
 	<!-- an example remote storage system, with a remotely exploitable vulnerability that can then be escalated to root -->
 	<system>
 		<system_name>storage_server</system_name>
-		<base platform="linux"/>
+		<base platform="linux" type="server"/>
 
 		<vulnerability privilege="user_rwx" access="remote" />
 		<vulnerability privilege="root_rwx" access="local" />

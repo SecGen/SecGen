@@ -6,7 +6,7 @@
 
   <system>
     <system_name>irc_server</system_name>
-    <base platform="linux"/>
+    <base platform="linux" type="server"/>
 
     <service type="irc"/>
 

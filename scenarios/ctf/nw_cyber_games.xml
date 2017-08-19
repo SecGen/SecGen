@@ -7,7 +7,7 @@
 	<!--some basic decoding challenges-->
 	<system>
 		<system_name>nw_cyber_games</system_name>
-		<base platform="linux"/>
+		<base platform="linux" type="server"/>
 
 		<!-- comment describes using pseudo code (C#-like methods with named optional arguments) -->
 		<!-- vulnerability_nfs_share_leak(strings_to_leak: encoder_flag_generator() CONCAT encoder_ascii_reversible(strings_to_encode: encoder_flag_generator()) CONCAT ...) -->

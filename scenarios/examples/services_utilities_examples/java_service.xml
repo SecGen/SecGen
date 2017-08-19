@@ -7,7 +7,7 @@
 	<!-- A secure system running java -->
 	<system>
 		<system_name>system_with_java</system_name>
-		<base platform="linux"/>
+		<base platform="linux" type="server"/>
 
 		<utility module_path="modules/utilities/unix/languages/java"/>
 

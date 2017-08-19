@@ -8,7 +8,7 @@
 	<!--comments describe using pseudo code-->
 	<system>
 		<system_name>decode_me</system_name>
-		<base platform="linux"/>
+		<base platform="linux" type="server"/>
 
 		<!--  flag1 = encoder_flag_generator()   -->
 		<input into_datastore="flag1">
