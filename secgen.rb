@@ -104,8 +104,12 @@ end
 # @param project_dir
 def build_vms(project_dir)
   Print.info "Building project: #{project_dir}"
-  GemExec.exe('vagrant', project_dir, 'up')
-  Print.info 'VMs created.'
+  if GemExec.exe('vagrant', project_dir, 'up')
+    Print.info 'VMs created.'
+  else
+    Print.err 'Error creating VMs, Exiting SecGen.'
+    exit 1
+  end
 end
 
 # Make forensic image helper methods
