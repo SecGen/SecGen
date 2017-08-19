@@ -1,18 +1,13 @@
-<%  require 'json'
-    $secgen_parameters = JSON.parse(@json_inputs)
-    $port = $secgen_parameters['port'].first
-    $server_name = $secgen_parameters['server_name'].first
-    $welcome_msg = $secgen_parameters['welcome_msg'].first
+<%  $port = @secgen_parameters['port'].first
 
-    if $secgen_parameters['business_name']
-      $business_name = $secgen_parameters['business_name'].first
-      $welcome_msg = "Welcome to the #{$business_name} FTP server!"
+    if @organisation and @organisation != ''
+      $welcome_msg = "Welcome to the #{@organisation['business_name']} FTP server!"
+      $server_name = @organisation['domain']
+    else
+      $server_name = @secgen_parameters['server_name'].first
+      $welcome_msg = @secgen_parameters['welcome_msg'].first
     end
-
-    if $secgen_parameters['business_domain']
-      $server_name = $secgen_parameters['business_domain'].first
-    end
-%>
+-%>
 #
 # /etc/proftpd/proftpd.conf -- This is a basic ProFTPD configuration file.
 # To really apply changes, reload proftpd after modifications, if
