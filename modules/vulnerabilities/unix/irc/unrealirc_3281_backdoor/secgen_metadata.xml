@@ -26,10 +26,8 @@
   <read_fact>group</read_fact>
   <read_fact>motd</read_fact>
 
-  <!-- Team Project-style scenario selectors. No default and overrides other values if populated. -->
-  <read_fact>business_name</read_fact>
-  <read_fact>business_domain</read_fact>
-  <read_fact>person</read_fact>
+  <!-- No organisation by default, overrides other values if provided through scenario. -->
+  <read_fact>organisation</read_fact>
 
   <default_input into="strings_to_leak">
     <generator type="message_generator"/>

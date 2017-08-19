@@ -7,9 +7,11 @@ class unrealirc_3281_backdoor::configure {
   $user = $secgen_parameters['user'][0]
   $group = $secgen_parameters['group'][0]
   $user_home = "/home/$user"
+  $raw_org = $secgen_parameters['organisation']
 
-  if $secgen_parameters['business_name'] {
-    $business_name = $secgen_parameters['business_name'][0]
+  if $raw_org and $raw_org[0] and $raw_org[0] != '' {
+    $organisation = parsejson($raw_org[0])
+    $business_name = $organisation['business_name']
     $motd = "Welcome to the $business_name irc server!"
   }
   else{
