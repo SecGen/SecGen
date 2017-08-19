@@ -14,7 +14,7 @@ class GemExec
     version = '>= 0'
     begin
       gem_path = Gem.bin_path(gem_name, gem_name, version)
-      unless File.file?(filename)
+      unless File.file?(gem_path)
         raise 'Gem.bin_path returned a path that does not exist.'
       end
     rescue Exception => e
