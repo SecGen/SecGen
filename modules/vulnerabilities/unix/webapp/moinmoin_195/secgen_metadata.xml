@@ -23,9 +23,8 @@
   <read_fact>site_name</read_fact>
   <read_fact>default_page</read_fact>
 
-  <!-- Team project selectors -->
-  <read_fact>business_name</read_fact>
-  <read_fact>person</read_fact>
+  <!-- No organisation by default, overrides other values if provided through scenario. -->
+  <read_fact>organisation</read_fact>
 
   <default_input into="port">
     <value>80</value>
