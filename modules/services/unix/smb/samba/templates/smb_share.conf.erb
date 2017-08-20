@@ -5,12 +5,13 @@
   $storage_directory = $parsed_inputs['storage_directory'].first
   $raw_read_only_share = $parsed_inputs['read_only_share'].first
   $raw_guests_allowed = $parsed_inputs['guests_allowed'].first
-  $organisation = JSON.parse($parsed_inputs['organisation'][0])
   $read_only_share = $raw_read_only_share == 'true' ? 'yes' : 'no' # convert boolean to 'yes' or 'no'
   $guests_allowed = $raw_guests_allowed  == 'true' ? 'yes' : 'no'
 
   # structured_content/organisation overrides
-  if $organisation and $organisation != ''
+  $raw_org = $parsed_inputs['organisation']
+  if $raw_org and $raw_org[0] and $raw_org[0] != ''
+    $organisation = JSON.parse($raw_org[0])
     $domain = $organisation['domain']
     $share_name = $domain.split('.')[0] + '_public_share' # strip domain tld
     $share_comment =  $organisation['business_name'] + ' Public SMB Share'
