@@ -4,15 +4,57 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-  <!-- Single system narrative-based CTF challenge. -->
+  <!-- Single system narrative-based CTF challenge.
+
+   1) Start by visiting ip:80 and recieving a message to decode (another flag in html source code comments too)
+   2) Log onto the box with the credentials found in 1. Read directions in mail discussing store at ip:1337.
+   3) Second, password-less, user account. Another mail between acc2 and acc3.
+   4) Third account using SSH Leaked Keys.
+   5) Onlinestore module - get at the database. Included utilities/sqlmap to help with this.
+
+  -->
 
   <system>
     <system_name>system</system_name>
-    <base platform="linux" type="server"/>
+    <base platform="linux"/>
 
-    <input into_datastore="accounts">
-      <!-- [0]: Entry account -->
+    <!-- DATASTORE SETUP START -->
+
+    <!-- Store domain and port -->
+
+    <input into_datastore="store_domain">
+      <value>dangerous_store.co.uk</value>
+    </input>
+
+    <input into_datastore="store_port">
+      <value>1337</value>
+    </input>
+
+    <!-- Account Username and Passwords -->
+
+    <input into_datastore="1_username">
+      <generator type="username_generator"/>
+    </input>
+    <input into_datastore="1_password">
+      <generator type="password_generator"/>
+    </input>
+    <input into_datastore="2_username">
+      <generator type="username_generator"/>
+    </input>
+    <input into_datastore="3_username">
+      <generator type="username_generator"/>
+    </input>
+
+    <!-- Create @account's for user1, user2 and user3-->
+
+    <input into_datastore="1_account">
       <generator type="account">
+        <input into="username">
+          <datastore>1_username</datastore>
+        </input>
+        <input into="password">
+          <datastore>1_password</datastore>
+        </input>
         <input into="leaked_filenames">
           <value>missing_persons_report</value>
         </input>
@@ -24,9 +66,13 @@
           <value>If you find any more evidence, such as the name of a suspect, use the format flag{Firstname Lastname}</value>
         </input>
       </generator>
+    </input>
 
-      <!-- [1]: Passwordless account -->
+    <input into_datastore="2_account">
       <generator type="account">
+        <input into="username">
+          <datastore>2_username</datastore>
+        </input>
         <input into="password">
           <value/>
         </input>
@@ -34,36 +80,65 @@
           <generator type="flag_generator"/>
         </input>
       </generator>
+    </input>
 
-      <!-- [2]: Third account accessible through vulnerability exploitation -->
+    <input into_datastore="3_account">
       <generator type="account">
+        <input into="username">
+          <datastore>3_username</datastore>
+        </input>
         <input into="strings_to_leak">
           <value/>
         </input>
       </generator>
-
     </input>
 
     <!-- Create @person's for user2 and user3 and the 3 other store_person db entries -->
-    <input into_datastore="people">
-      <!-- [0]: User 2-->
+
+    <input into_datastore="2_person">
       <generator type="person">
         <input into="account">
-          <datastore access="1">accounts</datastore>
+          <datastore>2_account</datastore>
+        </input>
+        <input into="name" into_datastore="2_person_name">
+          <generator type="name_generator"/>
         </input>
       </generator>
-      <!-- [1]: User 3 -->
+    </input>
+
+    <input into_datastore="3_person">
       <generator type="person">
         <input into="account">
-          <datastore access="2">accounts</datastore>
+          <datastore>3_account</datastore>
+        </input>
+        <input into="name" into_datastore="3_person_name">
+          <generator type="name_generator"/>
         </input>
       </generator>
-      <!-- [2]: Store User 1 -->
-      <generator type="person"/>
-      <!-- [3]: Store User 2 -->
-      <generator type="person"/>
-      <!-- [4]: Store User 3 -->
-      <generator type="person"/>
+    </input>
+
+    <input into_datastore="1_store_person">
+      <generator type="person">
+        <input into="name" into_datastore="1_store_person_name">
+          <generator type="name_generator"/>
+        </input>
+      </generator>
+    </input>
+
+    <input into_datastore="2_store_person">
+      <generator type="person">
+        <input into="name" into_datastore="2_store_person_name">
+          <generator type="name_generator"/>
+        </input>
+      </generator>
+    </input>
+
+    <input into_datastore="3_store_person">
+      <generator type="person">
+        <input into="name" into_datastore="3_store_person_name">
+          <generator type="name_generator"/>
+        </input>
+      </generator>
     </input>
 
     <!-- Web Store data: dealer, murderer, victims and timestamps -->
@@ -89,14 +164,14 @@
       </encoder>
     </input>
 
-    <input into_datastore="murderer">
+    <input into_datastore="murderer_name">
       <encoder type="string_selector">
         <input into="strings_to_encode">
-          <datastore access="0">people</datastore>
-          <datastore access="1">people</datastore>
-          <datastore access="2">people</datastore>
-          <datastore access="3">people</datastore>
-          <datastore access="4">people</datastore>
+          <datastore>2_person_name</datastore>
+          <datastore>3_person_name</datastore>
+          <datastore>1_store_person_name</datastore>
+          <datastore>2_store_person_name</datastore>
+          <datastore>3_store_person_name</datastore>
         </input>
         <input into="position">
           <datastore>murderer_id</datastore>
@@ -104,7 +179,7 @@
       </encoder>
     </input>
 
-    <input into_datastore="murdered_ids">
+    <input into_datastore="1_murdered_id">
       <encoder type="string_selector_with_exclusions">
         <input into="exclusion_list">
           <datastore>murderer_id</datastore>
@@ -117,11 +192,14 @@
           <value>5</value>
         </input>
       </encoder>
+    </input>
+
+    <input into_datastore="2_murdered_id">
       <encoder type="string_selector_with_exclusions">
         <input into="exclusion_list">
           <datastore>murderer_id</datastore>
           <datastore>dealer_id</datastore>
-          <datastore>murdered_ids</datastore>
+          <datastore>1_murdered_id</datastore>
         </input>
         <input into="strings_to_encode">
           <value>2</value>
@@ -132,39 +210,45 @@
       </encoder>
     </input>
 
-    <input into_datastore="murdered_names">
+    <input into_datastore="1_murdered_name">
       <encoder type="string_selector">
         <input into="strings_to_encode">
-          <datastore access="0" access_json="['name']">people</datastore>
-          <datastore access="1" access_json="['name']">people</datastore>
-          <datastore access="2" access_json="['name']">people</datastore>
-          <datastore access="3" access_json="['name']">people</datastore>
-          <datastore access="4" access_json="['name']">people</datastore>
+          <datastore>2_person_name</datastore>
+          <datastore>3_person_name</datastore>
+          <datastore>1_store_person_name</datastore>
+          <datastore>2_store_person_name</datastore>
+          <datastore>3_store_person_name</datastore>
         </input>
         <input into="position">
-          <datastore access="0">murdered_ids</datastore>
-        </input>
-      </encoder>
-      <encoder type="string_selector">
-        <input into="strings_to_encode">
-          <datastore access="0" access_json="['name']">people</datastore>
-          <datastore access="1" access_json="['name']">people</datastore>
-          <datastore access="2" access_json="['name']">people</datastore>
-          <datastore access="3" access_json="['name']">people</datastore>
-          <datastore access="4" access_json="['name']">people</datastore>
-        </input>
-        <input into="position">
-          <datastore access="1">murdered_ids</datastore>
+          <datastore>1_murdered_id</datastore>
         </input>
       </encoder>
     </input>
 
-    <input into_datastore="murder_timestamps">
+    <input into_datastore="2_murdered_name">
+      <encoder type="string_selector">
+        <input into="strings_to_encode">
+          <datastore>2_person_name</datastore>
+          <datastore>3_person_name</datastore>
+          <datastore>1_store_person_name</datastore>
+          <datastore>2_store_person_name</datastore>
+          <datastore>3_store_person_name</datastore>
+        </input>
+        <input into="position">
+          <datastore>2_murdered_id</datastore>
+        </input>
+      </encoder>
+    </input>
+
+    <input into_datastore="1_murdered_timestamp">
       <generator type="date_generator">
         <input into="format">
           <value>mysql_datetime</value>
         </input>
       </generator>
+    </input>
+
+    <input into_datastore="2_murdered_timestamp">
       <generator type="date_generator">
         <input into="format">
           <value>mysql_datetime</value>
@@ -177,36 +261,38 @@
     <input into="murderer_flag">
       <generator type="concat_flag.*">
         <input into="strings_to_join">
-          <datastore access_json="['name']">murderer</datastore>
+          <datastore>murderer_name</datastore>
         </input>
       </generator>
     </input>
     <input into="murdered_flags">
       <generator type="concat_flag.*">
         <input into="strings_to_join">
-          <datastore access="0">murdered_names</datastore>
-          <datastore access="0">murder_timestamps</datastore>
+          <datastore>1_murdered_name</datastore>
+          <datastore>1_murdered_timestamp</datastore>
         </input>
       </generator>
       <generator type="concat_flag.*">
         <input into="strings_to_join">
-          <datastore access="1">murdered_names</datastore>
-          <datastore access="1">murder_timestamps</datastore>
+          <datastore>2_murdered_name</datastore>
+          <datastore>2_murdered_timestamp</datastore>
         </input>
       </generator>
     </input>
 
-    <!-- Scenario Modules -->
+
+    <!-- DATASTORE SETUP END. -->
+
 
     <utility module_path=".*parameterised_accounts">
       <input into="accounts">
-        <datastore access="0">accounts</datastore>
+        <datastore>1_account</datastore>
       </input>
     </utility>
 
     <vulnerability module_path=".*hidden_file">
       <input into="account">
-        <datastore access="0">accounts</datastore>
+        <datastore>1_account</datastore>
       </input>
       <input into="strings_to_leak">
         <generator type="flag_generator"/>
@@ -216,7 +302,7 @@
 
     <vulnerability module_path=".*passwordless_user_account.*">
       <input into="accounts">
-        <datastore access="1">accounts</datastore>
+        <datastore>2_account</datastore>
       </input>
     </vulnerability>
 
@@ -233,9 +319,9 @@
               <input into="strings_to_encode">
                 <value>Log into the server and check your mail.</value>
                 <value>Username:</value>
-                <datastore access="0" access_json="['username']">accounts</datastore>
+                <datastore>1_username</datastore>
                 <value>Password:</value>
-                <datastore access="0" access_json="['password']">accounts</datastore>
+                <datastore>1_password</datastore>
                 <value>Here's a flag for your efforts.</value>
                 <generator type="flag_generator"/>
               </input>
@@ -276,7 +362,31 @@
       </input>
 
       <!-- No business facts. -->
-      <input into="organisation">
+      <input into="business_name">
+        <value/>
+      </input>
+      <input into="business_motto">
+        <value/>
+      </input>
+      <input into="manager_profile">
+        <value/>
+      </input>
+      <input into="business_address">
+        <value/>
+      </input>
+      <input into="office_telephone">
+        <value/>
+      </input>
+      <input into="office_email">
+        <value/>
+      </input>
+      <input into="industry">
+        <value/>
+      </input>
+      <input into="employees">
+        <value/>
+      </input>
+      <input into="product_name">
         <value/>
       </input>
     </service>
@@ -291,7 +401,7 @@
             <value>police.gov.uk</value>
           </input>
           <input into="recipient_user">
-            <datastore access="0" access_json="['username']">accounts</datastore>
+            <datastore>1_username</datastore>
           </input>
           <input into="subject">
             <value>Investigation Information</value>
@@ -299,15 +409,10 @@
           <input into="content">
             <value>To whom this may concern,</value>
             <value>Now that you're on the server, we need your help with our investigation.</value>
-            <value>We've managed to hide this account on the server for you. Criminal activity has been taking place,
-              particularly over port 1337.
-            </value>
-            <value>Our initial examinations lead us to believe that the perpetrators use poor security practices.
-            </value>
+            <value>We've managed to hide this account on the server for you. Criminal activity has been taking place, particularly over port 1337.</value>
+            <value>Our initial examinations lead us to believe that the perpetrators use poor security practices.</value>
             <value>Find out if the suspects have user accounts on this server and see if you can break in.</value>
-            <value>We need all the evidence we can get. In the form of flags. The more you collect the stronger our case
-              will be.
-            </value>
+            <value>We need all the evidence we can get. In the form of flags. The more you collect the stronger our case will be.</value>
             <value>Godspeed,</value>
             <value>Detective Jones.</value>
           </input>
@@ -325,13 +430,13 @@
 
         <generator type="mail_message">
           <input into="sender_user">
-            <datastore access="2" access_json="['username']">accounts</datastore>
+            <datastore>3_username</datastore>
           </input>
-          <input into="sender_domain" into_datastore="store_domain">
-            <value>dangerous_store.co.uk</value>
+          <input into="sender_domain">
+            <datastore>store_domain</datastore>
           </input>
           <input into="recipient_user">
-            <datastore access="1" access_json="['username']">accounts</datastore>
+            <datastore>2_username</datastore>
           </input>
           <input into="subject">
             <value>New order required</value>
@@ -354,13 +459,14 @@
 
         <generator type="mail_message">
           <input into="sender_user">
-            <datastore access_json="['username']">murderer</datastore>
+            <!--<datastore>murderer_username</datastore>-->
+            <value>hitman</value>
           </input>
           <input into="sender_domain">
             <datastore>store_domain</datastore>
           </input>
           <input into="recipient_user">
-            <datastore access="2" access_json="['username']">accounts</datastore>
+            <datastore>3_username</datastore>
           </input>
           <input into="subject">
             <value>Offed the last one</value>
@@ -387,19 +493,23 @@
     <!-- Get onto user account 3!! -->
     <vulnerability module_path="modules/vulnerabilities/unix/system/ssh_leaked_keys">
       <input into="accounts">
-        <datastore access="2">accounts</datastore>
+        <datastore>3_account</datastore>
       </input>
     </vulnerability>
 
     <vulnerability module_path=".*onlinestore.*">
       <input into="port">
-        <value>1337</value>
+        <datastore>store_port</datastore>
       </input>
       <input into="domain">
         <datastore>store_domain</datastore>
       </input>
       <input into="accounts">
-        <datastore>people</datastore>
+        <datastore>2_person</datastore>
+        <datastore>3_person</datastore>
+        <datastore>1_store_person</datastore>
+        <datastore>2_store_person</datastore>
+        <datastore>3_store_person</datastore>
       </input>
       <input into="dealer_id">
         <datastore>dealer_id</datastore>
@@ -408,10 +518,12 @@
         <datastore>murderer_id</datastore>
       </input>
       <input into="murdered_on">
-        <datastore>murder_timestamps</datastore>
+        <datastore>1_murdered_timestamp</datastore>
+        <datastore>2_murdered_timestamp</datastore>
       </input>
       <input into="murdered_ids">
-        <datastore>murdered_ids</datastore>
+        <datastore>1_murdered_id</datastore>
+        <datastore>2_murdered_id</datastore>
       </input>
     </vulnerability>
 
