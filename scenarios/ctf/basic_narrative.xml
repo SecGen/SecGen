@@ -299,15 +299,10 @@
           <input into="content">
             <value>To whom this may concern,</value>
             <value>Now that you're on the server, we need your help with our investigation.</value>
-            <value>We've managed to hide this account on the server for you. Criminal activity has been taking place,
-              particularly over port 1337.
-            </value>
-            <value>Our initial examinations lead us to believe that the perpetrators use poor security practices.
-            </value>
+            <value>We've managed to hide this account on the server for you. Criminal activity has been taking place, particularly over port 1337.</value>
+            <value>Our initial examinations lead us to believe that the perpetrators use poor security practices.</value>
             <value>Find out if the suspects have user accounts on this server and see if you can break in.</value>
-            <value>We need all the evidence we can get. In the form of flags. The more you collect the stronger our case
-              will be.
-            </value>
+            <value>We need all the evidence we can get. In the form of flags. The more you collect the stronger our case will be.</value>
             <value>Godspeed,</value>
             <value>Detective Jones.</value>
           </input>
