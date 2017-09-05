@@ -40,7 +40,7 @@ class HideZipInImgChallenge < StringEncoder
   end
 
   def encoding_print_string
-    'base64_image: <selected_image>' + encoding_print_string +
+    'base64_image: <selected_image>' + print_string_padding +
     'zip_file: ' + self.zip_file.to_s
   end
 end

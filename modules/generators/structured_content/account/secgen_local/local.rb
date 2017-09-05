@@ -53,10 +53,10 @@ class AccountGenerator < StringEncoder
   end
 
   def encoding_print_string
-    'username: ' + self.username.to_s + encoding_print_string +
-    'password: ' + self.password.to_s  + encoding_print_string +
-    'super_user: ' + self.super_user.to_s + encoding_print_string +
-    'strings_to_leak: ' + self.strings_to_leak.to_s + encoding_print_string +
+    'username: ' + self.username.to_s + print_string_padding +
+    'password: ' + self.password.to_s  + print_string_padding +
+    'super_user: ' + self.super_user.to_s + print_string_padding +
+    'strings_to_leak: ' + self.strings_to_leak.to_s + print_string_padding +
     'leaked_filenames: ' + self.leaked_filenames.to_s
   end
 end
