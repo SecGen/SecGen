@@ -401,7 +401,7 @@ You can use datastores to store generate information for complex scenarios, such
 It is also possible to iterate through a datastore, and feed each value into separate modules. This is illustrated in:
 ```scenarios/examples/datastore_examples/iteration_and_element_access.xml```
 
-Some generators generate structured content in JSON format, for example the organisation type. It is possible to access a particular element of structured data from a datastore with the access_json using the ruby hash lookup format. In order to access a particular element from a datastore:
+Some generators generate structured content in JSON format, for example the organisation type. It is possible to access a particular element of structured data from a datastore with the access_json using the ruby hash lookup format. See the example scenario:
 ```scenarios/examples/datastore_examples/json_selection_example.xml```
 
 ## Modules
