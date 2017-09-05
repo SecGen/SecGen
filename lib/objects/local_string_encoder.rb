@@ -116,6 +116,10 @@ class StringEncoder
     self.strings_to_encode.to_s
   end
 
+  def print_string_padding
+    "\n" + (' ' * 11)
+  end
+
   def option_is_valid(opt_to_check)
     option_validity = false
     valid_options = get_options_array

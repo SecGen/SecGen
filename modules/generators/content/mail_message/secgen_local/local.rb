@@ -78,14 +78,14 @@ class MailMessageGenerator < StringEncoder
   end
 
   def encoding_print_string
-    'sender_user: ' + self.sender_user.to_s + '
-    recipient_user:' + self.recipient_user.to_s + '
-    sender_domain:' + self.sender_domain.to_s + '
-    recipient_domain:' + self.recipient_domain.to_s + '
-    sent_datetime:' + self.sent_datetime.to_s + '
-    subject:' + self.subject.to_s + '
-    content:' + self.content.to_s + '
-    id:' + self.id.to_s
+    'sender_user: ' + self.sender_user.to_s + encoding_print_string +
+    'recipient_user:' + self.recipient_user.to_s + encoding_print_string +
+    'sender_domain:' + self.sender_domain.to_s + encoding_print_string +
+    'recipient_domain:' + self.recipient_domain.to_s + encoding_print_string +
+    'sent_datetime:' + self.sent_datetime.to_s + encoding_print_string +
+    'subject:' + self.subject.to_s + encoding_print_string +
+    'content:' + self.content.to_s + encoding_print_string +
+    'id:' + self.id.to_s
   end
 
 end

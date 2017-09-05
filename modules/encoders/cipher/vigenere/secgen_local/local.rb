@@ -48,8 +48,8 @@ class VigenereCipher < StringEncoder
   end
 
   def encoding_print_string
-    'strings_to_encode: ' + self.strings_to_encode.to_s + ',
-    encryption_key: ' + self.encryption_key.to_s
+    'strings_to_encode: ' + self.strings_to_encode.to_s + print_string_padding +
+    'encryption_key: ' + self.encryption_key.to_s
   end
 end
 

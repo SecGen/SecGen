@@ -17,9 +17,11 @@ class FilenameGenerator < StringEncoder
   def encode_all
     file_name = self.file_name
     extension = self.extension
+    leaked_filenames = []
 
     if file_name.empty?
       file_name = nil
+      leaked_filenames = %w(top_secret_information secrets hush_hush private_stuff restricted classified confidential)
     end
     if extension.empty?
       extension = nil
@@ -29,8 +31,7 @@ class FilenameGenerator < StringEncoder
       extension = ''
     end
 
-    leaked_filenames = %w(top_secret_information secrets hush_hush private_stuff restricted classified confidential)
-    15.times{ leaked_filenames << Faker::File.file_name('', file_name, extension, '').chomp('.') }
+    15.times { leaked_filenames << Faker::File.file_name('', file_name, extension, '').chomp('.') }
 
     output = leaked_filenames.sample
 
@@ -53,12 +54,20 @@ class FilenameGenerator < StringEncoder
   end
 
   def encoding_print_string
+    string = ''
     if self.file_name.empty? && self.extension.empty?
-      'no args'
+      string = 'No args'
     else
-      'file_name: ' + self.file_name.to_s + ',
-    extension: ' + self.extension.to_s
+      if self.file_name.length > 0 && self.extension.length > 0
+        string += 'file_name: ' + self.file_name.to_s + print_string_padding +
+                  'extension: ' + self.extension.to_s
+      elsif self.file_name.length > 0
+        string += 'file_name: ' + self.file_name.to_s
+      else
+        string += 'extension: ' + self.extension.to_s
+      end
     end
+    string
   end
 end
 

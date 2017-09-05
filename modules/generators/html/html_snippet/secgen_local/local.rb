@@ -43,8 +43,8 @@ class HTMLSnippetGenerator < StringEncoder
 
 
   def encoding_print_string
-    'heading: ' + self.heading.to_s + '
-     paragraphs: ' +self.paragraphs.to_s
+    'heading: ' + self.heading.to_s + print_string_padding +
+    'paragraphs: ' +self.paragraphs.to_s
   end
 end
 

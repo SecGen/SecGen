@@ -28,8 +28,8 @@ class RandomSelectorExclusions < StringEncoder
   end
 
   def encoding_print_string
-    'strings_to_encode: ' + self.strings_to_encode.to_s + ',
-    exclusion_list: ' + self.exclusion_list.to_s
+    'strings_to_encode: ' + self.strings_to_encode.to_s + print_string_padding +
+    'exclusion_list: ' + self.exclusion_list.to_s
   end
 
 end

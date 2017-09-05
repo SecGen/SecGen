@@ -83,9 +83,9 @@ class HexEncodedDiffChallenge < StringEncoder
   end
 
   def encoding_print_string
-    'random_data: ' + self.random_data.to_s + '
-        line_length: ' + self.line_length.to_s + '
-        strings_to_leak: ' + self.strings_to_leak.to_s
+    'random_data: ' + self.random_data.to_s + encoding_print_string +
+    'line_length: ' + self.line_length.to_s + encoding_print_string +
+    'strings_to_leak: ' + self.strings_to_leak.to_s
   end
 end
 

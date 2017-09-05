@@ -54,8 +54,8 @@ class DateGenerator < StringEncoder
   end
 
   def encoding_print_string
-    'format: ' + self.format.to_s + '
-     date: ' + self.date.to_s
+    'format: ' + self.format.to_s + print_string_padding +
+    'date: ' + self.date.to_s
   end
 end
 

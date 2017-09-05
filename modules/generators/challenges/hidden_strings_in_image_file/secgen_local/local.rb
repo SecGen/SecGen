@@ -39,8 +39,8 @@ class HideStringsInImgChallenge < StringEncoder
   end
 
   def encoding_print_string
-    'base64_image: <selected_image>
-     strings_to_leak: ' + self.strings_to_leak.to_s
+    'base64_image: <selected_image>' + encoding_print_string +
+    'strings_to_leak: ' + self.strings_to_leak.to_s
   end
 end
 

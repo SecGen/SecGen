@@ -6,7 +6,7 @@ class RandomSelectorEncoder < StringEncoder
   def initialize
     super
     self.module_name = 'Random String Selector'
-    self.position = ''
+    self.position = 'test'
   end
 
   def encode_all
@@ -33,8 +33,11 @@ class RandomSelectorEncoder < StringEncoder
   end
 
   def encoding_print_string
-    'strings_to_encode: ' + self.strings_to_encode.to_s + '
-    position: ' + self.position.to_s
+    string = "strings_to_encode: #{self.strings_to_encode.to_s}"
+    if self.position.to_s.length > 0
+     string += print_string_padding + "position: #{self.position.to_s}"
+    end
+     string
   end
 
 end

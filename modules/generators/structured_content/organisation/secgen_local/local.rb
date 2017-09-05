@@ -84,16 +84,16 @@ class OrganisationGenerator < StringEncoder
   end
 
   def encoding_print_string
-    'business_name: ' + self.business_name.to_s + ',
-    business_motto: ' + self.business_motto.to_s + ',
-    business_address: ' + self.business_address.to_s + ',
-    domain: ' + self.domain.to_s + ',
-    office_telephone: ' + self.office_telephone.to_s + ',
-    office_email: ' + self.office_email.to_s + ',
-    industry: ' + self.industry.to_s + ',
-    manager: ' + self.manager.to_s + ',
-    employees: ' + self.employees.to_s + ',
-    product_name: ' + self.product_name.to_s
+    'business_name: ' + self.business_name.to_s + encoding_print_string +
+    'business_motto: ' + self.business_motto.to_s + encoding_print_string +
+    'business_address: ' + self.business_address.to_s + encoding_print_string +
+    'domain: ' + self.domain.to_s + encoding_print_string +
+    'office_telephone: ' + self.office_telephone.to_s + encoding_print_string +
+    'office_email: ' + self.office_email.to_s + encoding_print_string +
+    'industry: ' + self.industry.to_s + encoding_print_string +
+    'manager: ' + self.manager.to_s + encoding_print_string +
+    'employees: ' + self.employees.to_s + encoding_print_string +
+    'product_name: ' + self.product_name.to_s
   end
 end
 

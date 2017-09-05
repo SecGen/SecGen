@@ -36,8 +36,8 @@ class HexGenerator < StringEncoder
   end
 
   def encoding_print_string
-    'line_length: ' + self.line_length.to_s + ',
-    number_of_lines: ' + self.number_of_lines.to_s
+    'line_length: ' + self.line_length.to_s + print_string_padding +
+    'number_of_lines: ' + self.number_of_lines.to_s
   end
 end
 

@@ -73,13 +73,13 @@ class PersonHashBuilder < StringEncoder
   end
 
   def encoding_print_string
-    'name: ' + self.name.to_s + ',
-    address: ' + self.address.to_s  + ',
-    phone_number: ' + self.phone_number.to_s + ',
-    email_address: ' + self.email_address.to_s + ',
-    username: ' + self.username.to_s + ',
-    password: ' + self.password.to_s + ',
-    account: ' + self.account.to_s
+    'name: ' + self.name.to_s + print_string_padding +
+    'address: ' + self.address.to_s  + print_string_padding +
+    'phone_number: ' + self.phone_number.to_s + print_string_padding +
+    'email_address: ' + self.email_address.to_s + print_string_padding +
+    'username: ' + self.username.to_s + print_string_padding +
+    'password: ' + self.password.to_s + print_string_padding +
+    'account: ' + self.account.to_s
   end
 end
 

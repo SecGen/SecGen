@@ -58,9 +58,9 @@ class ZipFileGenerator < StringEncoder
   end
 
   def encoding_print_string
-    'file_name: ' + self.file_name.to_s +
-        'file_contents: ' + self.strings_to_leak.to_s +
-        'password: ' + self.password.to_s
+    'file_name: ' + self.file_name.to_s + print_string_padding +
+    'file_contents: ' + self.strings_to_leak.to_s + print_string_padding +
+    'password: ' + self.password.to_s
   end
 end
 
