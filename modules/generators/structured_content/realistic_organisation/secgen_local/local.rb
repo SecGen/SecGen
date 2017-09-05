@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 require 'json'
 require_relative '../../../../../lib/objects/local_string_encoder.rb'
-class OrganisationGenerator < StringEncoder
+class RealOrganisationGenerator < StringEncoder
   attr_accessor :business_name
   attr_accessor :business_motto
   attr_accessor :business_address
@@ -12,10 +12,11 @@ class OrganisationGenerator < StringEncoder
   attr_accessor :manager
   attr_accessor :employees
   attr_accessor :product_name
+  attr_accessor :filler_char
 
   def initialize
     super
-    self.module_name = 'Organisation Generator'
+    self.module_name = 'Realistic Organisation Generator'
     self.business_name = ''
     self.business_motto = ''
     self.business_address = ''
@@ -26,9 +27,27 @@ class OrganisationGenerator < StringEncoder
     self.manager = {}
     self.employees = []
     self.product_name = ''
+    self.filler_char = %w(_ -).sample
   end
 
   def encode_all
+    # Business name becomes a domain
+    self.domain = build_domain(self.business_name)
+
+    # office_email replaces domain with business_name domain
+    office_email_base = %w(info office enquiries business contracts admin sales mail reception contact support).sample
+    self.office_email = build_email(office_email_base, self.domain)
+
+    # Update manager email address
+    self.manager['username'] = strip_special_characters(self.manager['name'])
+    self.manager['email_address'] = build_email(self.manager['username'], self.domain)
+
+    # Update employee usernames and email addresses
+    self.employees.each do |employee|
+      employee['username'] = strip_special_characters(employee['name'])
+      employee['email_address'] = build_email(employee['username'], self.domain)
+    end
+
     organisation_hash = {}
     organisation_hash['business_name'] = self.business_name
     organisation_hash['business_motto'] = self.business_motto
@@ -42,6 +61,21 @@ class OrganisationGenerator < StringEncoder
     organisation_hash['product_name'] = self.product_name
 
     self.outputs << organisation_hash.to_json
+  end
+
+  def strip_special_characters(arg)
+    formatted_arg = arg.downcase.tr(' ', self.filler_char)
+    formatted_arg.gsub(/[^0-9a-z\s_-]/i, '')
+  end
+
+  def build_domain(name)
+    formatted_name = strip_special_characters(name)
+    tld = %w(org com net co.uk).sample
+    "#{formatted_name}.#{tld}"
+  end
+
+  def build_email(name, domain)
+    "#{name}@#{domain}"
   end
 
   def get_options_array
@@ -97,4 +131,4 @@ class OrganisationGenerator < StringEncoder
   end
 end
 
-OrganisationGenerator.new.run
+RealOrganisationGenerator.new.run

@@ -3,12 +3,13 @@
 <generator xmlns="http://www.github/cliffe/SecGen/generator"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
-  <name>Organisation Generator</name>
+  <name>Random Organisation Generator</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>Organisation Generator. Wrappers individually generated facts to create an organisation.</description>
+  <description>Random Organisation Generator. Wrappers individually generated facts to create an organisation.</description>
 
   <type>organisation</type>
+  <type>random_organisation</type>
 
   <platform>linux</platform>
   <platform>unix</platform>
