@@ -102,10 +102,13 @@ end
 
 # Builds the vm via the vagrant file in the project dir
 # @param project_dir
-def build_vms(project_dir)
+def build_vms(project_dir, shutdown)
   Print.info "Building project: #{project_dir}"
   if GemExec.exe('vagrant', project_dir, 'up')
     Print.info 'VMs created.'
+    if shutdown
+      GemExec.exe('vagrant', project_dir, 'halt')
+    end
   else
     Print.err 'Error creating VMs, Exiting SecGen.'
     exit 1
@@ -174,11 +177,16 @@ end
 # Runs methods to run and configure a new vm from the configuration file
 def run(scenario, project_dir, options)
   build_config(scenario, project_dir, options)
-  build_vms(project_dir)
+  build_vms(project_dir, options[:shutdown])
 end
 
 def default_project_dir
   "#{PROJECTS_DIR}/SecGen#{Time.new.strftime("%Y%m%d_%H%M")}"
+end
+
+
+def project_dir(prefix)
+  "#{PROJECTS_DIR}/#{prefix}_SecGen#{Time.new.strftime("%Y%m%d_%H%M")}"
 end
 
 def list_scenarios
@@ -216,6 +224,7 @@ opts = GetoptLong.new(
   [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
   [ '--project', '-p', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--scenario', '-s', GetoptLong::REQUIRED_ARGUMENT ],
+  [ '--prefix', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--gui-output', '-g', GetoptLong::NO_ARGUMENT],
   [ '--nopae', GetoptLong::NO_ARGUMENT],
   [ '--hwvirtex', GetoptLong::NO_ARGUMENT],
@@ -224,6 +233,7 @@ opts = GetoptLong.new(
   [ '--total-memory', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-usage', GetoptLong::REQUIRED_ARGUMENT],
+  [ '--shutdown', GetoptLong::NO_ARGUMENT],
   [ '--forensic-image-type', GetoptLong::REQUIRED_ARGUMENT],
 )
 
@@ -241,6 +251,8 @@ opts.each do |opt, arg|
       scenario = arg;
     when '--project'
       project_dir = arg;
+    when '--prefix'
+      project_dir = project_dir(arg)
 
     # Additional options
     when '--gui-output'
@@ -275,6 +287,9 @@ opts.each do |opt, arg|
     when '--max-cpu-usage'
       Print.info "Max CPU usage set to #{arg}"
       options[:max_cpu_usage] = arg
+    when '--shutdown'
+      Print.info 'Shutdown VMs after provisioning'
+      options[:shutdown] = true
 
     when '--forensic-image-type'
       Print.info "Image output type set to #{arg}"
@@ -304,7 +319,7 @@ case ARGV[0]
     build_config(scenario, project_dir, options)
   when 'build-vms', 'v'
     if project_dir
-      build_vms(project_dir)
+      build_vms(project_dir, options[:shutdown])
     else
       Print.err 'Please specify project directory to read'
       usage
@@ -315,12 +330,12 @@ case ARGV[0]
     image_type = options.has_key?(:forensic_image_type)?options[:forensic_image_type]:'raw';
 
     if project_dir
-      build_vms(project_dir)
+      build_vms(project_dir, options[:shutdown])
       make_forensic_image(project_dir, nil, image_type)
     else
       project_dir = default_project_dir unless project_dir
       build_config(scenario, project_dir, options)
-      build_vms(project_dir)
+      build_vms(project_dir, options[:shutdown])
       make_forensic_image(project_dir, nil, image_type)
     end
 

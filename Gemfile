@@ -13,6 +13,7 @@ gem 'rmagick'
 gem 'sshkey'
 gem 'zipruby'
 gem 'credy'
+gem 'pg'
 
 #development only gems go here
 group :test, :development do
