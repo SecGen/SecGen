@@ -217,12 +217,17 @@ def select_all_todo
 end
 
 def select_id(id)
-  @db_conn.exec_params("SELECT * FROM queue where id = '#{id}';").first
+  statement = "select_id_#{id}"
+  @db_conn.prepare(statement, 'SELECT * FROM queue where id = $1;')
+  @db_conn.exec_prepared(statement, [id]).first
 end
 
 def update_status(job_id, status)
   status_enum = {:todo => 'todo', :running => 'running', :success => 'success', :error => 'error'}
-  @db_conn.exec_params("UPDATE queue SET status = '#{status_enum[status]}' WHERE id = #{job_id}")
+
+  statement = "update_status_#{job_id}_#{status}"
+  @db_conn.prepare(statement, 'UPDATE queue SET status = $1 WHERE id = $2')
+  @db_conn.exec_prepared(statement,[status_enum[status], job_id])
 end
 
 def delete_all
@@ -238,7 +243,9 @@ end
 
 def delete_id(id)
   Print.info "Deleting job_id: #{id}"
-  @db_conn.exec_params("DELETE FROM queue where id = '#{id}';")
+  statement = "delete_job_id_#{id}"
+  @db_conn.prepare(statement, 'DELETE FROM queue where id = $1')
+  @db_conn.exec_prepared(statement, [id])
 end
 
 Print.std '~'*47
