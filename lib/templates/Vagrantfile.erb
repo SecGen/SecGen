@@ -11,6 +11,14 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <% @systems.each do |system| %>
+    <%  system.module_selections.each do |selected_module|
+      if selected_module.module_type == 'base'
+        @cpu_word_size = selected_module.attributes['cpu_word_size'].first.downcase
+        if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)
+          @ovirt_base_template = selected_module.attributes['ovirt_template'].first
+        end
+      end
+    end -%>
   config.vm.define "<%= system.name %>" do |<%= system.name %>|
 <% if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
     #oVirt provider begin
@@ -27,12 +35,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 "    ovirt.cluster = '#{@options[:ovirtcluster]}'"
         else
 "    ovirt.cluster = 'DEFAULT_OVIRT_CLUSTER'"
-        end %>
-    <%= if false # TODO
-"    ovirt.template = '#{true}'" # TODO
-        else
-"    ovirt.template = 'DEFAULT_OVIRT_TEMPLATE'"
-        end %>
+        end
+"    ovirt.template = '#{@ovirt_base_template}'" %>
         ovirt.insecure = true
         ovirt.debug = true
     end
@@ -82,15 +86,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%= selected_module.to_s_comment -%>
 <%   case selected_module.module_type
      when 'base' -%>
-    <% if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
-    <% if (@options.has_key? :ovirtvmname) %>
+    <% if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>   # TODO
+    <% if (@options.has_key? :ovirtvmname) %>  # TODO
     <% vmnum = vmnum + 1 %>
-    <%= system.name %>.vm.hostname = '<%= "#{@options[:ovirtvmname]}#{vmnum}" %>'
+    <%= system.name %>.vm.hostname = '<%= "#{@options[:ovirtvmname]}#{vmnum}" %>'  #TODO
     <% else %>
-    <%= system.name %>.vm.hostname = '<%= "SecGen-oVirt-VM-#{Time.new.strftime("%Y%m%d-%H%M")}" %>'
+    <%= system.name %>.vm.hostname = '<%= "SecGen-oVirt-VM-#{Time.new.strftime("%Y%m%d-%H%M")}" %>'  # TODO
     <% end %>
-    <%= system.name %>.vm.box = 'ovirt4'
-    <%= system.name %>.vm.box_url = 'https://github.com/myoung34/vagrant-ovirt4/blob/master/example_box/dummy.box?raw=true'
+    <%= system.name %>.vm.box = 'ovirt4' # TODO
+    <%= system.name %>.vm.box_url = ''   # TODO
     <% else %>
     <%= system.name %>.vm.box = "<%= selected_module.module_path_name %>"
     <%= system.name %>.vm.box_url = "<%= selected_module.attributes['url'].first %>"
