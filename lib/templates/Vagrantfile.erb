@@ -28,8 +28,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         else
 "    ovirt.cluster = 'DEFAULT_OVIRT_CLUSTER'"
         end %>
-    <%= if(@options.has_key? :ovirttemplate)
-"    ovirt.template = '#{@options[:ovirttemplate]}'"
+    <%= if false # TODO
+"    ovirt.template = '#{true}'" # TODO
         else
 "    ovirt.template = 'DEFAULT_OVIRT_TEMPLATE'"
         end %>

@@ -20,4 +20,6 @@
   <reference>https://atlas.hashicorp.com/puppetlabs</reference>
   <software_license>various</software_license>
 
+  <ovirt_template>debian_server</ovirt_template>
+
 </base>
