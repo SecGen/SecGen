@@ -251,6 +251,19 @@ Print.std 'SecGen - Creates virtualised security scenarios'
 Print.std '            Licensed GPLv3 2014-17'
 Print.std '~'*47
 
+# Add read-options from config file (needs handling before options parsed by GetoptLong)
+if ARGV.include? '--read-options'
+  index = ARGV.find_index('--read-options')
+  conf_path = ARGV[index + 1]
+
+  # remove --read-options and conf_path
+  ARGV.delete_at(index)
+  ARGV.delete_at(index)
+
+  conf_data = File.read(conf_path).split(' ')
+  ARGV.unshift(*conf_data)
+end
+
 # Get command line arguments
 opts = GetoptLong.new(
   [ '--help', '-h', GetoptLong::NO_ARGUMENT ],
