@@ -23,6 +23,9 @@
           <value>Enter their names in the format flag{Firstname Lastname YYYY-MM-DD HH:MM:SS}</value>
           <value>If you find any more evidence, such as the name of a suspect, use the format flag{Firstname Lastname}</value>
         </input>
+        <input into="password">
+          <generator type="^((?!strong_password_generator).)*$"/>
+        </input>
       </generator>
 
       <!-- [1]: Passwordless account -->
@@ -233,12 +236,20 @@
             <encoder type="caesar_cipher">
               <input into="strings_to_encode">
                 <value>Log into the server and check your mail.</value>
-                <value>Username:</value>
-                <datastore access="0" access_json="['username']">accounts</datastore>
-                <value>Password:</value>
-                <datastore access="0" access_json="['password']">accounts</datastore>
                 <value>Here's a flag for your efforts.</value>
                 <generator type="flag_generator"/>
+                <generator type="concat_paragraph">
+                  <input into="data">
+                    <value>Username:</value>
+                    <datastore access="0" access_json="['username']">accounts</datastore>
+                  </input>
+                </generator>
+                <generator type="concat_paragraph">
+                  <input into="data">
+                    <value>Password:</value>
+                    <datastore access="0" access_json="['password']">accounts</datastore>
+                  </input>
+                </generator>
               </input>
             </encoder>
           </input>
