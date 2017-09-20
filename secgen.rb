@@ -25,7 +25,7 @@ def usage
    --hwvirtex: enable HW virtex support
    --vtxvpid: enable VTX support
    --shutdown: shutdown vms after provisioning
-   --network_ranges: override network ranges within the scenario, use a comma-separated list
+   --network-ranges: override network ranges within the scenario, use a comma-separated list
    --forensic-image-type [image type]: Forensic image format of generated image (raw, ewf)
 
    OVIRT OPTIONS:
