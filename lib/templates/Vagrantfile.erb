@@ -6,7 +6,7 @@
 # Based on <%= @scenario %>
 <% require 'json'
    require 'base64' -%>
-<% vmnum = 0 %>
+<% prefix = @options[:prefix] + '_' -%>
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -26,15 +26,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     <%=
 "    ovirt.username = '#{@options[:ovirtuser]}'
         ovirt.password = '#{@options[:ovirtpass]}'" %>
-    <%= if(@options.has_key? :ovirturl)
+    <%= if @options.has_key? :ovirturl
 "    ovirt.url = '#{@options[:ovirturl]}'"
-        else
-"    ovirt.url = 'DEFAULT_API_URL'"
         end %>
-    <%= if(@options.has_key? :ovirtcluster)
+    <%= if @options.has_key? :ovirtcluster
 "    ovirt.cluster = '#{@options[:ovirtcluster]}'"
-        else
-"    ovirt.cluster = 'DEFAULT_OVIRT_CLUSTER'"
         end
 "    ovirt.template = '#{@ovirt_base_template}'" %>
         ovirt.insecure = true
@@ -87,12 +83,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%   case selected_module.module_type
      when 'base' -%>
     <% if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>   # TODO
-    <% if (@options.has_key? :ovirtvmname) %>  # TODO
-    <% vmnum = vmnum + 1 %>
-    <%= system.name %>.vm.hostname = '<%= "#{@options[:ovirtvmname]}#{vmnum}" %>'  #TODO
-    <% else %>
-    <%= system.name %>.vm.hostname = '<%= "SecGen-oVirt-VM-#{Time.new.strftime("%Y%m%d-%H%M")}" %>'  # TODO
-    <% end %>
+    <%= system.name %>.vm.hostname = '<%= "#{prefix}SecGen-#{selected_module.attributes['system_name']}_#{Time.new.strftime("%Y%m%d-%H%M")}" %>'
     <%= system.name %>.vm.box = 'ovirt4' # TODO
     <%= system.name %>.vm.box_url = ''   # TODO
     <% else %>
@@ -109,8 +100,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%     if selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp" -%>
   <%       if (@options.has_key? :ovirtnetwork) && (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)  %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
-  <%       elsif (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
-      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__network_name => 'DEFAULT_NETWORK_NAME'
   <%       else %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp"
   <%       end %>

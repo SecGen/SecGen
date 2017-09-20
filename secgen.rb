@@ -27,11 +27,12 @@ def usage
    --shutdown: shutdown vms after provisioning
    --network-ranges: override network ranges within the scenario, use a comma-separated list
    --forensic-image-type [image type]: Forensic image format of generated image (raw, ewf)
+   --read-options [conf path]: Reads options stored in file as arguments
+
 
    OVIRT OPTIONS:
    --ovirtuser [ovirt_username]         (REQUIRED)
    --ovirtpass [ovirt_password]         (REQUIRED)
-   --ovirt-vmname [ovirt_vm_name]       (OPTIONAL)
    --ovirt-url [ovirt_api_url]          (OPTIONAL)
    --ovirt-cluster [ovirt_cluster]      (OPTIONAL)
    --ovirt-network [ovirt_network_name] (OPTIONAL)
@@ -281,7 +282,6 @@ opts = GetoptLong.new(
   [ '--shutdown', GetoptLong::NO_ARGUMENT],
   [ '--network-ranges', GetoptLong::REQUIRED_ARGUMENT],
   [ '--forensic-image-type', GetoptLong::REQUIRED_ARGUMENT],
-  [ '--ovirt-vmname', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--ovirtuser', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--ovirtpass', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--ovirt-url', GetoptLong::REQUIRED_ARGUMENT ],
@@ -304,6 +304,7 @@ opts.each do |opt, arg|
     when '--project'
       project_dir = arg;
     when '--prefix'
+      options[:prefix] = arg
       project_dir = project_dir(arg)
 
     # Additional options
@@ -349,9 +350,6 @@ opts.each do |opt, arg|
       Print.info "Image output type set to #{arg}"
       options[:forensic_image_type] = arg
 
-    when '--ovirt-vmname'
-      Print.info "Ovirt VM Name : #{arg}"
-      options[:ovirtvmname] = arg
     when '--ovirtuser'
       Print.info "Ovirt Username : #{arg}"
       options[:ovirtuser] = arg
