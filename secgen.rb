@@ -24,6 +24,8 @@ def usage
    --nopae: disable PAE support
    --hwvirtex: enable HW virtex support
    --vtxvpid: enable VTX support
+   --shutdown: shutdown vms after provisioning
+   --network_ranges: override network ranges within the scenario, use a comma-separated list
    --forensic-image-type [image type]: Forensic image format of generated image (raw, ewf)
 
    OVIRT OPTIONS:
@@ -32,7 +34,6 @@ def usage
    --ovirt-vmname [ovirt_vm_name]       (OPTIONAL)
    --ovirt-url [ovirt_api_url]          (OPTIONAL)
    --ovirt-cluster [ovirt_cluster]      (OPTIONAL)
-   --ovirt-ip [ovirt_static_ip]         (OPTIONAL)
    --ovirt-network [ovirt_network_name] (OPTIONAL)
 
    COMMANDS:
@@ -99,6 +100,8 @@ def build_config(scenario, out_dir, options)
     system.module_selections = system.resolve_module_selection(all_available_modules)
     system
   }
+
+  validate_network_ranges(systems, options)
 
   Print.info "Creating project: #{out_dir}..."
   # create's vagrant file / report a starts the vagrant installation'
@@ -220,6 +223,26 @@ def delete_all_projects
   FileUtils.rm_r(Dir.glob("#{PROJECTS_DIR}/*"))
 end
 
+# Ensure enough ranges are provided with --network-ranges
+def validate_network_ranges(systems, options)
+  if options.has_key? :ip_ranges
+    scenario_networks = []
+    systems.each { |sys| scenario_networks << sys.get_networks }
+    scenario_networks.flatten!
+
+    # Remove dhcp networks
+    scenario_networks.delete_if { |network| network.attributes['range'][0] == 'dhcp' }
+
+    # Remove non-unique network ranges
+    scenario_networks = Hash[*scenario_networks.map { |network| [network.attributes['range'], network] }.flatten].values
+
+    if options[:ip_ranges].size < scenario_networks.size
+      Print.err("Fatal: Not enough ranges were provided with --network-ranges. Provided: #{options[:ip_ranges].size} Required: #{scenario_networks.size}")
+      exit
+    end
+  end
+end
+
 # end of method declarations
 # start of program execution
 
@@ -243,13 +266,13 @@ opts = GetoptLong.new(
   [ '--max-cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-usage', GetoptLong::REQUIRED_ARGUMENT],
   [ '--shutdown', GetoptLong::NO_ARGUMENT],
+  [ '--network-ranges', GetoptLong::REQUIRED_ARGUMENT],
   [ '--forensic-image-type', GetoptLong::REQUIRED_ARGUMENT],
   [ '--ovirt-vmname', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--ovirtuser', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--ovirtpass', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--ovirt-url', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--ovirt-cluster', GetoptLong::REQUIRED_ARGUMENT ],
-  [ '--ovirt-ip', GetoptLong::REQUIRED_ARGUMENT ],
   [ '--ovirt-network', GetoptLong::REQUIRED_ARGUMENT ],
 )
 
@@ -306,7 +329,9 @@ opts.each do |opt, arg|
     when '--shutdown'
       Print.info 'Shutdown VMs after provisioning'
       options[:shutdown] = true
-
+    when '--network-ranges'
+      Print.info 'Overriding Network Ranges'
+      options[:ip_ranges] = arg.split(',')
     when '--forensic-image-type'
       Print.info "Image output type set to #{arg}"
       options[:forensic_image_type] = arg
@@ -326,9 +351,6 @@ opts.each do |opt, arg|
     when '--ovirt-cluster'
       Print.info "Ovirt Cluster : #{arg}"
       options[:ovirtcluster] = arg
-    when '--ovirt-ip'
-      Print.info "Ovirt Static IP : #{arg}"
-      options[:ovirtip] = arg
     when '--ovirt-network'
       Print.info "Ovirt Network Name : #{arg}"
       options[:ovirtnetwork] = arg

@@ -115,13 +115,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp"
   <%       end %>
 <%     else -%>
-      <%       if (@options.has_key? :ovirtip) && (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)  %>
-          <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => '<%= "#{@options[:ovirtip]}" %>'
-      <%       elsif (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
-          <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module.attributes['range'].first)%>"
-      <%       else %>
-          <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module.attributes['range'].first)%>"
-      <%       end %>
+  <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module.attributes['range'].first)%>"
+  <%       else %>
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module.attributes['range'].first)%>"
+  <%       end %>
 <%     end -%>
 <%   when 'vulnerability', 'service', 'utility', 'build' -%>
 <%     module_name = selected_module.module_path_name -%>

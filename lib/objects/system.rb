@@ -8,6 +8,7 @@ class System
   attr_accessor :module_selectors # (filters)
   attr_accessor :module_selections # (after resolution)
   attr_accessor :num_actioned_module_conflicts
+  attr_accessor :system_networks
 
   # Initalizes System object
   # @param [Object] name of the system
@@ -19,6 +20,7 @@ class System
     self.module_selectors = module_selectors
     self.module_selections = []
     self.num_actioned_module_conflicts = 0
+    self.system_networks = []
   end
 
   # selects from the available modules, based on the selection filters that have been specified
@@ -376,4 +378,14 @@ class System
     modules_to_add
   end
 
+  def get_networks
+    if (self.system_networks = [])  # assign the networks
+      self.module_selections.each do |mod|
+        if mod.module_type == 'network'
+          self.system_networks << mod
+        end
+      end
+    end
+    self.system_networks
+  end
 end

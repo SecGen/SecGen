@@ -11,6 +11,7 @@ class ProjectFilesCreator
   @systems
   @currently_processing_system
   @scenario_networks
+  @option_range_map
 
 # @param [Object] systems list of systems that have been defined and randomised
 # @param [Object] out_dir the directory that the project output should be stored into
@@ -27,7 +28,8 @@ class ProjectFilesCreator
     @scenario = scenario
     @time = Time.new.to_s
     @options = options
-    @scenario_networks = Hash.new { |h, k| h[k] = 0 }
+    @scenario_networks = Hash.new { |h, k| h[k] = 1 }
+    @option_range_map = {}
   end
 
 # Generate all relevant files for the project
@@ -138,11 +140,25 @@ class ProjectFilesCreator
   end
 
 # Resolves the network based on the scenario and ip_range.
-  def resolve_network(ip_range)
-    # increment @scenario_networks{ip_range=>counter}
-    if @scenario_networks[ip_range] == 0
-      @scenario_networks[ip_range] = 1
+  def resolve_network(scenario_ip_range)
+    # if we have options[:ip_ranges] we want to use those instead of the ip_range argument.
+    # Store the mappings of scenario_ip_ranges => @options[:ip_range]  in @option_range_map
+    if @options.has_key? :ip_ranges
+      # Have we seen this scenario_ip_range before? If so, use the value we've assigned
+      if @option_range_map.has_key? scenario_ip_range
+        ip_range = @option_range_map[scenario_ip_range]
+      else
+        # Remove options_ips that have already been used
+        options_ips = @options[:ip_ranges]
+        options_ips.delete_if { |ip| @option_range_map.has_value? ip }
+        @option_range_map[scenario_ip_range] = options_ips.first
+        ip_range = options_ips.first
+      end
+    else
+      ip_range = scenario_ip_range
     end
+
+    # increment @scenario_networks{ip_range=>counter}
     @scenario_networks[ip_range] += 1
 
     # Split the range up and replace the last octet with the counter value
