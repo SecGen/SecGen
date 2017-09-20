@@ -1,4 +1,4 @@
-define secgen_functions::leak_file($leaked_filename, $storage_directory, $strings_to_leak, $owner = 'root', $group = 'root', $mode = '0777', $leaked_from = '' ) {
+define secgen_functions::leak_file($leaked_filename, $storage_directory, $strings_to_leak, $owner = 'root', $group = 'root', $mode = '0660', $leaked_from = '' ) {
   if ($leaked_filename != ''){
     $path_to_leak = "$storage_directory/$leaked_filename"
 

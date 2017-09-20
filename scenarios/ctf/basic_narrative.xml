@@ -24,7 +24,7 @@
           <value>If you find any more evidence, such as the name of a suspect, use the format flag{Firstname Lastname}</value>
         </input>
         <input into="password">
-          <generator type="^((?!strong_password_generator).)*$"/>
+          <generator type="medium_password_generator"/>
         </input>
       </generator>
 

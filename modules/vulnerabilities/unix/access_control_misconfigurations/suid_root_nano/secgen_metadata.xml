@@ -9,7 +9,7 @@
   <description>Mis-configure nano file permissions to run with root privileges</description>
 
   <type>access_control_misconfiguration</type>
-  <privilege>user_rw</privilege>
+  <privilege>root_rw</privilege>
   <access>local</access>
   <platform>unix</platform>
 

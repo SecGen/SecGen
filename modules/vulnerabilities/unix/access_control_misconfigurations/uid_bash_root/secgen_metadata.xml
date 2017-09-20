@@ -9,7 +9,7 @@
   <description>Mis-configure /bin/bash with 4777 (suid, rwxrwxrwx) to enable root privileges</description>
 
   <type>access_control_mis-configurations</type>
-  <privilege>user_rw</privilege>
+  <privilege>root_rw</privilege>
   <access>local</access>
   <platform>unix</platform>
 
