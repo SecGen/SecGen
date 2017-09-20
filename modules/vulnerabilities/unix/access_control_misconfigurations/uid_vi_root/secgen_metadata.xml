@@ -13,16 +13,8 @@
   <access>local</access>
   <platform>unix</platform>
 
-  <!--optional vulnerability details-->
-  <!--optional breadcrumb (info that is leaked and required to exploit)-->
-  <!--<breadcrumb></breadcrumb>-->
   <!--optional hints-->
   <hint>Text editor permission misconfiguration</hint>
   <solution>Vi text editor running as user root</solution>
-  <!--Cannot co-exist with other installations-->
 
-  <!-- Requires vi to run, already installed on debian systems -->
-  <!--<requires>-->
-    <!--<name>vi</name>-->
-  <!--</requires>-->
 </vulnerability>

@@ -45,11 +45,7 @@
   <software_name>nfsd</software_name>
   <software_license>GPLv2</software_license>
 
-  <!--optional breadcrumb (info that is leaked and required to exploit)-->
-  <!--<breadcrumb></breadcrumb>-->
-
   <!--optional hints-->
-  <!--<msf_module></msf_module>-->
   <hint>A filesharing misconfiguration</hint>
   <solution>NFS can be mounted to access files</solution>
 

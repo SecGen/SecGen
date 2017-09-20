@@ -45,11 +45,7 @@
   <software_name>vsftpd</software_name>
   <software_license>GPLv2</software_license>
 
-  <!--optional breadcrumb (info that is leaked and required to exploit)-->
-  <!--<breadcrumb></breadcrumb>-->
-
   <!--optional hints-->
-  <!--<msf_module></msf_module>-->
   <hint>A backdoor in a service</hint>
   <solution>Remotely exploitable backdoor in the FTP service</solution>
 

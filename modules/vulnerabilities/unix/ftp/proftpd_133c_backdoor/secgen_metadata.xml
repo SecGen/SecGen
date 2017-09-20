@@ -50,9 +50,6 @@
   <software_name>proftpd</software_name>
   <software_license>GPL</software_license>
 
-  <!--optional breadcrumb (info that is leaked and required to exploit)-->
-  <!--<breadcrumb></breadcrumb>-->
-
   <!--optional hints-->
   <!--<msf_module>exploits/unix/ftp/proftpd_133c_backdoor.rb</msf_module>-->
   <hint>A backdoor in a service</hint>

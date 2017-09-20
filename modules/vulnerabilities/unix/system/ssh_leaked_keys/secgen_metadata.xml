@@ -47,4 +47,8 @@
     <module_path>utilities/unix/system/accounts</module_path>
   </requires>
 
+  <!--to exploit the attacker needs user write access-->
+  <requires>
+    <privilege>user_rw</privilege>
+  </requires>
 </vulnerability>
