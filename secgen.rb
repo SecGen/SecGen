@@ -18,24 +18,24 @@ def usage
               (defaults to #{SCENARIO_XML})
    --project [output dir], -p [output dir]: Directory for the generated project
               (output will default to #{default_project_dir})
-
+   --shutdown: Shutdown vms after provisioning
+   --network-ranges: Override network ranges within the scenario, use a comma-separated list
+   --forensic-image-type [image type]: Forensic image format of generated image (raw, ewf)
+   --read-options [conf path]: Reads options stored in file as arguments (see example.conf)
    --help, -h: Shows this usage information
-   --gui-output', '-g' gui output
+
+   VIRTUALBOX OPTIONS:
+   --gui-output', '-g': gui output
    --nopae: disable PAE support
    --hwvirtex: enable HW virtex support
    --vtxvpid: enable VTX support
-   --shutdown: shutdown vms after provisioning
-   --network-ranges: override network ranges within the scenario, use a comma-separated list
-   --forensic-image-type [image type]: Forensic image format of generated image (raw, ewf)
-   --read-options [conf path]: Reads options stored in file as arguments
-
 
    OVIRT OPTIONS:
-   --ovirtuser [ovirt_username]         (REQUIRED)
-   --ovirtpass [ovirt_password]         (REQUIRED)
-   --ovirt-url [ovirt_api_url]          (OPTIONAL)
-   --ovirt-cluster [ovirt_cluster]      (OPTIONAL)
-   --ovirt-network [ovirt_network_name] (OPTIONAL)
+   --ovirtuser [ovirt_username]
+   --ovirtpass [ovirt_password]
+   --ovirt-url [ovirt_api_url]
+   --ovirt-cluster [ovirt_cluster]
+   --ovirt-network [ovirt_network_name]
 
    COMMANDS:
    run, r: Builds project and then builds the VMs

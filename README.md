@@ -67,13 +67,35 @@ SecGen accepts arguments to change the way that it behaves, the currently implem
               (defaults to scenarios/default_scenario.xml)
    --project [output dir], -p [output dir]: directory for the generated project
               (output will default to projects/SecGen_DATEandTIME)
-   --help, -h: shows this usage information
+   --shutdown: Shutdown vms after provisioning
+   --network-ranges: Override network ranges within the scenario, use a comma-separated list
+   --forensic-image-type [image type]: Forensic image format of generated image (raw, ewf)
+   --read-options [conf path]: Reads options stored in file as arguments (see example.conf)
+   --help, -h: Shows this usage information
 
+   VIRTUALBOX OPTIONS:
+   --gui-output', '-g': gui output
+   --nopae: disable PAE support
+   --hwvirtex: enable HW virtex support
+   --vtxvpid: enable VTX support
+
+   OVIRT OPTIONS:
+   --ovirtuser [ovirt_username]         
+   --ovirtpass [ovirt_password]         
+   --ovirt-url [ovirt_api_url]          
+   --ovirt-cluster [ovirt_cluster]      
+   --ovirt-network [ovirt_network_name] 
+   
    COMMANDS:
    run, r: builds project and then builds the VMs
    build-project, p: builds project (vagrant and puppet config), but does not build VMs
    build-vms, v: builds VMs from a previously generated project
               (use in combination with --project [dir])
+   create-forensic-image [/project/dir], v [project #]: Builds forensic images from a previously generated project
+                         (can be used in combination with --project [dir])
+   list-scenarios: Lists all scenarios that can be used with the --scenario option
+   list-projects: Lists all projects that can be used with the --project option
+   delete-all-projects: Deletes all current projects in the projects directory
 
 ```
 
