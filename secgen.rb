@@ -428,14 +428,3 @@ case ARGV[0]
     usage
     exit
 end
-
-
-# oVirt Virtualization platform (Usage)
-#################################################
-#
-# @author Gajendra Ravichandran
-# 
-# set DEFAULT Value in lib/templates/Vagrantfile.erb or use command argument
-# ovirt-api-url  : set DEFAULT_URL (Line 36) 
-# ovirt-cluster  : set DEFAULT_CLUSTER (Line 41)
-# ovirt-network  : set DEFAULT_NETWORK (Line 121)
