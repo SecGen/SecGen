@@ -24,6 +24,8 @@ def usage
    [add]
    --instances [integer n]: Number of instances of the scenario to create with default project naming format
    --instances [prefix,prefix, ...]: Alternatively supply a comma separated list of strings to prefix to project output
+   --randomise-ips [integer n ](optional): Randomises the IP range 10.X.X.0, unique for all instances,
+                                           requires the number of unique static network tags in the scenario.xml
    ---: Delimiter, anything after this will be passed to secgen.rb as an argument.
    Example: `ruby batch_secgen.rb add --instances here,are,some,prefixes --- -s scenarios/default_scenario.xml run`
 
@@ -50,13 +52,14 @@ def misc_opts
 end
 
 def get_add_opts
-  add_options = misc_opts + [['--instances', '-i', GetoptLong::REQUIRED_ARGUMENT]]
+  add_options = misc_opts + [['--instances', '-i', GetoptLong::REQUIRED_ARGUMENT],
+                             ['--randomise-ips', GetoptLong::REQUIRED_ARGUMENT]]
   options = parse_opts(GetoptLong.new(*add_options))
-  if options[:instances] == ''
+  if options.has_key? :instances
+    options
+  else
     Print.err 'Error: The add command requires an argument.'
     usage
-  else
-    options
   end
 end
 
@@ -93,6 +96,8 @@ def parse_opts(opts)
         options[:max_threads] = arg
       when '--id'
         options[:id] = arg
+      when '--randomise-ips'
+        options[:random_ips] = arg.to_i
       when '--all'
         options[:all] = true
       else
@@ -111,12 +116,14 @@ def add(options)
   if (instances.to_i.to_s == instances) and instances.to_i > 1
     instances.to_i.times do |count|
       instance_args = "--prefix batch_job_#{(count+1).to_s} " + @secgen_args
+      instance_args = generate_range_arg(options) + instance_args
       insert_row(count.to_s, instance_args)
     end
   elsif instances.include?(',')
     named_prefixes = instances.split(',')
     named_prefixes.each_with_index do |named_prefix, count|
       instance_secgen_args = "--prefix #{named_prefix} " + @secgen_args
+      instance_secgen_args = generate_range_arg(options) + instance_secgen_args
       insert_row(count.to_s, instance_secgen_args)
     end
   else
@@ -246,6 +253,29 @@ def delete_id(id)
   statement = "delete_job_id_#{id}"
   @db_conn.prepare(statement, 'DELETE FROM queue where id = $1')
   @db_conn.exec_prepared(statement, [id])
+end
+
+def generate_range_arg(options)
+  range_arg = ''
+  if options.has_key? :random_ips
+    network_ranges = []
+    scenario_networks_qty = options[:random_ips]
+    scenario_networks_qty.times {
+      range = generate_range
+      # Check for uniqueness
+      while network_ranges.include?(range)
+        range = generate_range
+      end
+      network_ranges << range
+    }
+    random_ip_string = network_ranges.join(',')
+    range_arg = "--network-ranges #{random_ip_string} "
+  end
+  range_arg
+end
+
+def generate_range
+  "10.#{rand(255)}.#{rand(255)}.0"
 end
 
 Print.std '~'*47
