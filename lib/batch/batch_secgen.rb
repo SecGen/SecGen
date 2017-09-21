@@ -283,7 +283,7 @@ Print.std 'SecGen Batch - Batch VM Generation Service'
 Print.std '~'*47
 
 # Connect to database
-@db_conn = PG::Connection.open(:dbname => 'secgen_batch')
+@db_conn = PG::Connection.open(:dbname => 'batch_secgen')
 
 # Capture SecGen options
 delimiter_index = ARGV.find_index('---')
