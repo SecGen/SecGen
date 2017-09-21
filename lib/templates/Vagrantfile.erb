@@ -11,7 +11,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <% @systems.each do |system| %>
-    <%  system.module_selections.each do |selected_module|
+<%  system.module_selections.each do |selected_module|
       if selected_module.module_type == 'base'
         @cpu_word_size = selected_module.attributes['cpu_word_size'].first.downcase
         if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)
@@ -22,7 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "<%= system.name %>" do |<%= system.name %>|
 <% if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
     #oVirt provider begin
-    config.vm.provider :ovirt4 do |ovirt|
+    <%= system.name %>.vm.provider :ovirt4 do |ovirt|
     <%=
 "    ovirt.username = '#{@options[:ovirtuser]}'
         ovirt.password = '#{@options[:ovirtpass]}'" %>
@@ -31,9 +31,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         end %>
     <%= if @options.has_key? :ovirtcluster
 "    ovirt.cluster = '#{@options[:ovirtcluster]}'"
-        end
+        end %>
+    <%=
 "    ovirt.template = '#{@ovirt_base_template}'" %>
+        ovirt.console = 'vnc'
         ovirt.insecure = true
+        ovirt.filtered_api = true
         ovirt.debug = true
     end
     # oVirt provider end
@@ -83,9 +86,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%   case selected_module.module_type
      when 'base' -%>
     <% if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>   # TODO
-    <%= system.name %>.vm.hostname = '<%= "#{prefix}SecGen-#{selected_module.attributes['system_name']}_#{Time.new.strftime("%Y%m%d-%H%M")}" %>'
-    <%= system.name %>.vm.box = 'ovirt4' # TODO
-    <%= system.name %>.vm.box_url = ''   # TODO
+    <%= system.name %>.vm.hostname = '<%= "#{prefix}SecGen-#{system.name.tr('_', '-')}-#{Time.new.strftime("%Y%m%d-%H%M")}" %>'
+    <%= system.name %>.vm.box = 'ovirt4'
+    <%= system.name %>.vm.box_url = 'https://github.com/myoung34/vagrant-ovirt4/blob/master/example_box/dummy.box?raw=true'
     <% else %>
     <%= system.name %>.vm.box = "<%= selected_module.module_path_name %>"
     <%= system.name %>.vm.box_url = "<%= selected_module.attributes['url'].first %>"
@@ -99,13 +102,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%   when 'network' -%>
 <%     if selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp" -%>
   <%       if (@options.has_key? :ovirtnetwork) && (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)  %>
-      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
   <%       else %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp"
   <%       end %>
 <%     else -%>
   <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
-      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module.attributes['range'].first)%>"
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module.attributes['range'].first)%>", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
   <%       else %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module.attributes['range'].first)%>"
   <%       end %>
@@ -129,6 +132,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 <%   end -%>
 <% end -%>
+
+<%  # Adds line that stops cloud-init from attempting to grab meta-data as eth0 is overwritten with provided networks.
+    # TODO: Remove when mutli-network vagrant-plugin issue is resolved
+    if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) -%>
+      <%= system.name %>.vm.provision 'shell', inline: "echo 'datasource list: [ None ] '> /etc/cloud/cloud.cfg.d/90_dpkg.cfg"
+<%  end -%>
   end
 <% end %>
 end
