@@ -6,7 +6,7 @@
 # Based on <%= @scenario %>
 <% require 'json'
    require 'base64' -%>
-<% prefix = @options[:prefix] + '_' -%>
+<% prefix = @options[:prefix] ? @options[:prefix] + '_' : ''-%>
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
