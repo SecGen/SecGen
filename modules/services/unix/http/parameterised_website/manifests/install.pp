@@ -1,6 +1,5 @@
 class parameterised_website::install {
-  $json_inputs = base64('decode', $::base64_inputs)
-  $secgen_parameters = parsejson($json_inputs)
+  $secgen_parameters = secgen_functions::get_parameters($::base64_inputs_file)
 
   $raw_org = $secgen_parameters['organisation'][0]
   if $raw_org and $raw_org != '' {
@@ -160,6 +159,7 @@ class parameterised_website::install {
     file{ "$docroot/security_audit_remit.html":
       ensure  => file,
       content => template('parameterised_website/security_audit_remit_page.html.erb'),
+
     }
   }
 

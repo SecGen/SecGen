@@ -249,7 +249,9 @@ class System
           end
         end
         # execute calculation script and format output to an array of Base64 strings
-        outputs = `ruby #{selected.local_calc_file} #{args_string}`.chomp
+        command = "ruby #{selected.local_calc_file} #{args_string}"
+        Print.verbose "Running: #{command}"
+        outputs = `#{command}`.chomp
         output_array = outputs.split("\n")
         selected.output = output_array.map { |o| Base64.strict_decode64 o }
       end

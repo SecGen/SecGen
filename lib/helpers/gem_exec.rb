@@ -8,8 +8,8 @@ class GemExec
   # @param [Object] gem_name -- such as 'vagrant', 'puppet', 'librarian-puppet'
   # @param [Object] working_dir -- the location for output
   # @param [Object] argument -- the command to send 'init', 'install'
-  def self.exe(gem_name, working_dir, argument)
-    Print.std "Loading #{gem_name} (#{argument}) in #{working_dir}"
+  def self.exe(gem_name, working_dir, arguments)
+    Print.std "Loading #{gem_name} (#{arguments}) in #{working_dir}"
 
     version = '>= 0'
     begin
@@ -37,7 +37,7 @@ class GemExec
 
     Dir.chdir(working_dir)
 
-    system gem_path, argument
+    system "#{gem_path} #{arguments}"
 
   end
 end

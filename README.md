@@ -3,9 +3,10 @@
 ## Summary
 SecGen creates vulnerable virtual machines so students can learn security penetration testing techniques. 
 
-Boxes like Metasploitable2 are always the same, this project uses Vagrant, Puppet, and Ruby to quickly create randomly vulnerable virtual machines that can be used for learning or for hosting CTF events. 
+Boxes like Metasploitable2 are always the same, this project uses Vagrant, Puppet, and Ruby to create randomly vulnerable virtual machines that can be used for learning or for hosting CTF events. 
 
-[The latest version is available at: http://github.com/cliffe/SecGen/](http://github.com/cliffe/SecGen/) 
+[The latest version is available at: http://github.com/cliffe/SecGen/](http://github.com/cliffe/SecGen/)
+
 ## Introduction
 Computer security students benefit from engaging in hacking challenges. Practical lab work and pre-configured hacking challenges are common practice both in security education and also as a pastime for security-minded individuals. Competitive hacking challenges, such as capture the flag (CTF) competitions have become a mainstay at industry conferences and are the focus of large online communities. Virtual machines (VMs) provide an effective way of sharing targets for hacking, and can be designed in order to test the skills of the attacker. Websites such as Vulnhub host pre-configured hacking challenge VMs and are a valuable resource for those learning and advancing their skills in computer security. However, developing these hacking challenges is time consuming, and once created, essentially static. That is, once the challenge has been "solved" there is no remaining challenge for the student, and if the challenge is created for a competition or assessment, the challenge cannot be reused without risking plagiarism, and collusion. 
 
@@ -22,31 +23,37 @@ SecGen contains modules, which install various software packages. Each SecGen mo
 SecGen is developed and tested on Ubuntu Linux. In theory, SecGen should run on Mac or Windows, if you have all the required software installed.
 
 You will need to install the following:
--  Ruby (development): https://www.ruby-lang.org/en/
+- Ruby (development): https://www.ruby-lang.org/en/
 - Vagrant: http://www.vagrantup.com/
 - Virtual Box: https://www.virtualbox.org/
 - Puppet: http://puppet.com/
-- Packer: https://www.packer.io/downloads.html  
+- Packer: https://www.packer.io/
 - ImageMagick: https://www.imagemagick.org/
 - And the required Ruby Gems (including Nokogiri and Librarian-puppet)
 
 ### On Ubuntu these commands will get you up and running
 Install all the required packages:
 ```bash
-sudo apt-get install ruby-dev zlib1g-dev liblzma-dev build-essential patch virtualbox ruby-bundler vagrant imagemagick libmagickwand-dev exiftool libpq-dev
+# install a recent version of vagrant
+wget https://releases.hashicorp.com/vagrant/1.9.8/vagrant_1.9.8_x86_64.deb
+sudo apt install ./vagrant_1.9.8_x86_64.deb
+# install other required packages via repos
+sudo apt-get install ruby-dev zlib1g-dev liblzma-dev build-essential patch virtualbox ruby-bundler imagemagick libmagickwand-dev exiftool libpq-dev
 ```
 
-Copy SecGen to a directory of your choosing, such as */home/user/bin/SecGen*, then:
+Copy SecGen to a directory of your choosing, such as */home/user/bin/SecGen*
+
+Then install gems:
 ```bash
 cd /home/user/bin/SecGen
 bundle install
 ```
 
-## Optional software requirements
-### EWF image creation
-To generate forensic images in the EWF image format FTK Imager command line is required.  
-Download link for FTK Imager command line: http://accessdata.com/product-download/  
-Note: The FTK Imager executable needs to be added to the PATH environment variable.
+### Optional software requirements
+To save yourself some time you can enable caching of downloaded packages. Simply install vagrant-cachier:
+```bash
+vagrant plugin install vagrant-cachier
+```
 
 ## Usage
 Basic usage:

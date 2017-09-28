@@ -5,8 +5,10 @@
 # <%= @time %>
 # Based on <%= @scenario %>
 <% require 'json'
-   require 'base64' -%>
+   require 'base64'
+   require 'securerandom' -%>
 <% prefix = @options[:prefix] ? @options[:prefix] + '_' : ''-%>
+
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -90,6 +92,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end -%>
     end
 <% end %>
+
+    # Optimise package caching (re-use downloaded .deb, ruby gems, etc)
+#    if Vagrant.has_plugin?("vagrant-cachier")
+      # Configure cached packages to be shared between instances of the same base box.
+      # More info on http://fgrehm.viewdocs.io/vagrant-cachier/usage
+#      config.cache.scope = :box
+#    end
+
     # SecGen datastore
     # <%= JSON.generate($datastore) %>
 
@@ -115,11 +125,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     <% end %>
 <%   when 'network' -%>
 <%     if selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp" -%>
+<<<<<<< HEAD
   <%       if (@options.has_key? :ovirtnetwork) && (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)  %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
   <%       else %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp"
   <%       end %>
+=======
+    <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", auto_config: false
+>>>>>>> IRI_labs
 <%     else -%>
   <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module.attributes['range'].first)%>", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
@@ -132,9 +146,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     <%= system.name %>.vm.provision "puppet" do | <%=module_name%> |
 <%     # if there are facter variables to define
       if selected_module.received_inputs != {} -%>
-      <% json_inputs = JSON.generate(selected_module.received_inputs) -%>
+      <% json_inputs = JSON.generate(selected_module.received_inputs)
+         b64_json_inputs = Base64.strict_encode64(json_inputs)
+         # save the inputs in a randomly named file in the
+         #   project out directory of the secgen_functions module
+         rand = SecureRandom.hex().to_s
+         dir = "#{@out_dir}/puppet/#{system.name}/modules/secgen_functions/files/json_inputs"
+         FileUtils.mkdir_p(dir) unless File.exists?(dir)
+         Print.verbose "Writing #{selected_module.module_path_name} input to: #{dir}/#{rand}"
+         File.write("#{dir}/#{rand}", b64_json_inputs)
+      -%>
 <%=   module_name%>.facter = {
-        "base64_inputs" => '<%= Base64.strict_encode64(json_inputs)%>'
+        "base64_inputs_file" => '<%= rand %>',
       }
 <%    end -%>
       <%=module_name%>.module_path = "<%="puppet/#{system.name}/modules"%>"

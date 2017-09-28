@@ -110,6 +110,14 @@ describe 'apache', :type => :class do
       it { is_expected.to contain_file("/etc/apache2/apache2.conf").with_content %r{^AllowEncodedSlashes nodecode$} }
     end
 
+    context "when specifying fileETag behaviour" do
+      let :params do
+        { :file_e_tag => 'None' }
+      end
+
+      it { is_expected.to contain_file("/etc/apache2/apache2.conf").with_content %r{^FileETag None$} }
+    end
+
     context "when specifying default character set" do
       let :params do
         { :default_charset => 'none' }
@@ -554,12 +562,6 @@ describe 'apache', :type => :class do
         it { is_expected.not_to contain_class('apache::mod::itk') }
         it { is_expected.not_to contain_class('apache::mod::peruser') }
         it { is_expected.not_to contain_class('apache::mod::prefork') }
-      end
-      context "when declaring mpm_module => breakme" do
-        let :params do
-          { :mpm_module => 'breakme' }
-        end
-        it { expect { catalogue }.to raise_error Puppet::Error, /does not match/ }
       end
     end
 

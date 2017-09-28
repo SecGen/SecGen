@@ -41,6 +41,7 @@
             <xs:restriction base="xs:string">
               <xs:enumeration value="server"/>
               <xs:enumeration value="desktop"/>
+              <xs:enumeration value="attack"/>
               <xs:enumeration value="cli"/>
             </xs:restriction>
           </xs:simpleType>

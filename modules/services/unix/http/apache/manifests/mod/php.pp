@@ -1,14 +1,15 @@
 class apache::mod::php (
-  $package_name   = undef,
-  $package_ensure = 'present',
-  $path           = undef,
-  $extensions     = ['.php'],
-  $content        = undef,
-  $template       = 'apache/mod/php.conf.erb',
-  $source         = undef,
-  $root_group     = $::apache::params::root_group,
-  $php_version    = $::apache::params::php_version,
+  $package_name     = undef,
+  $package_ensure   = 'present',
+  $path             = undef,
+  Array $extensions = ['.php'],
+  $content          = undef,
+  $template         = 'apache/mod/php.conf.erb',
+  $source           = undef,
+  $root_group       = $::apache::params::root_group,
+  $php_version      = $::apache::params::php_version,
 ) inherits apache::params {
+
   include ::apache
   $mod = "php${php_version}"
 
@@ -21,7 +22,6 @@ class apache::mod::php (
   else {
     fail('apache::mod::php requires apache::mod::prefork or apache::mod::itk; please enable mpm_module => \'prefork\' or mpm_module => \'itk\' on Class[\'apache\']')
   }
-  validate_array($extensions)
 
   if $source and ($content or $template != 'apache/mod/php.conf.erb') {
     warning('source and content or template parameters are provided. source parameter will be used')
@@ -38,7 +38,7 @@ class apache::mod::php (
   }
 
   # Determine if we have a package
-  $mod_packages = $::apache::params::mod_packages
+  $mod_packages = $::apache::mod_packages
   if $package_name {
     $_package_name = $package_name
   } elsif has_key($mod_packages, $mod) { # 2.6 compatibility hack

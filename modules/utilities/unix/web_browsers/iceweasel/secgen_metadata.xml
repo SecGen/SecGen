@@ -14,6 +14,22 @@
   <software_name>Iceweasel Web Browser</software_name>
   <software_license>GPL</software_license>
 
+  <read_fact>accounts</read_fact>
+  <read_fact>autostart</read_fact>
+  <read_fact>start_page</read_fact>
+
+  <default_input into="accounts">
+    <generator type="account"/>
+  </default_input>
+
+  <default_input into="autostart">
+    <value>true</value>
+  </default_input>
+
+  <default_input into="start_page">
+    <value>leedsbeckett.ac.uk/csi</value>
+  </default_input>
+
   <requires>
     <type>update</type>
   </requires>
