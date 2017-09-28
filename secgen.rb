@@ -18,10 +18,13 @@ def usage
               (defaults to #{SCENARIO_XML})
    --project [output dir], -p [output dir]: Directory for the generated project
               (output will default to #{default_project_dir})
-   --shutdown: Shutdown vms after provisioning
+   --shutdown: Shutdown VMs after provisioning (vagrant halt)
    --network-ranges: Override network ranges within the scenario, use a comma-separated list
    --forensic-image-type [image type]: Forensic image format of generated image (raw, ewf)
    --read-options [conf path]: Reads options stored in file as arguments (see example.conf)
+   --memory-per-vm: Allocate generated VMs memory in MB (e.g. --memory-per-vm 1024)
+   --total-memory: Allocate total VM memory for the scenario, split evenly across all VMs.
+   --cpu-cores: Number of virtual CPUs for generated VMs
    --help, -h: Shows this usage information
 
    VIRTUALBOX OPTIONS:
@@ -29,6 +32,8 @@ def usage
    --nopae: disable PAE support
    --hwvirtex: enable HW virtex support
    --vtxvpid: enable VTX support
+   --max-cpu-usage [1-100]: controls how much cpu time a virtual CPU can use
+                            (e.g. 50 implies a single virtual CPU can use up to 50% of a single host CPU)
 
    OVIRT OPTIONS:
    --ovirtuser [ovirt_username]
@@ -277,7 +282,7 @@ opts = GetoptLong.new(
   [ '--vtxvpid', GetoptLong::NO_ARGUMENT],
   [ '--memory-per-vm', GetoptLong::REQUIRED_ARGUMENT],
   [ '--total-memory', GetoptLong::REQUIRED_ARGUMENT],
-  [ '--max-cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
+  [ '--cpu-cores', GetoptLong::REQUIRED_ARGUMENT],
   [ '--max-cpu-usage', GetoptLong::REQUIRED_ARGUMENT],
   [ '--shutdown', GetoptLong::NO_ARGUMENT],
   [ '--network-ranges', GetoptLong::REQUIRED_ARGUMENT],
@@ -334,9 +339,9 @@ opts.each do |opt, arg|
         Print.info "Total memory to be used set to #{arg}"
         options[:total_memory] = arg
       end
-    when '--max-cpu-cores'
+    when '--cpu-cores'
       Print.info "Number of cpus to be used set to #{arg}"
-      options[:max_cpu_cores] = arg
+      options[:cpu_cores] = arg
     when '--max-cpu-usage'
       Print.info "Max CPU usage set to #{arg}"
       options[:max_cpu_usage] = arg
