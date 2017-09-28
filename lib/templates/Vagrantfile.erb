@@ -86,7 +86,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%   case selected_module.module_type
      when 'base' -%>
     <% if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>   # TODO
-    <%= system.name %>.vm.hostname = '<%= "#{prefix}SecGen-#{system.name.tr('_', '-')}-#{Time.new.strftime("%Y%m%d-%H%M")}" %>'
+    <%= system.name %>.vm.hostname = '<%= "#{prefix}SecGen-#{system.name}-#{Time.new.strftime("%Y%m%d-%H%M")}".tr('_', '-') %>'
     <%= system.name %>.vm.box = 'ovirt4'
     <%= system.name %>.vm.box_url = 'https://github.com/myoung34/vagrant-ovirt4/blob/master/example_box/dummy.box?raw=true'
     <% else %>
