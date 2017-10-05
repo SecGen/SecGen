@@ -7,7 +7,7 @@
 <% require 'json'
    require 'base64'
    require 'securerandom' -%>
-<% scenario_name = @scenario.split('/').last.split('.').first
+<% scenario_name = @scenario.split('/').last.split('.').first + '-'
    prefix = @options[:prefix] ? (@options[:prefix] + '-' + scenario_name) : ('SecGen-' + scenario_name) -%>
 
 VAGRANTFILE_API_VERSION = "2"
