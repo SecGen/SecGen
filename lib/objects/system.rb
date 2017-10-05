@@ -9,18 +9,20 @@ class System
   attr_accessor :module_selections # (after resolution)
   attr_accessor :num_actioned_module_conflicts
   attr_accessor :system_networks
+  attr_accessor :network_ranges  # populated when provided via command line options
 
   # Initalizes System object
   # @param [Object] name of the system
   # @param [Object] attributes such as base box selection
   # @param [Object] module_selectors these are modules that define filters for selecting the actual modules to use
-  def initialize(name, attributes, module_selectors)
+  def initialize(name, attributes, module_selectors, network_ranges)
     self.name = name
     self.attributes = attributes
     self.module_selectors = module_selectors
     self.module_selections = []
     self.num_actioned_module_conflicts = 0
     self.system_networks = []
+    self.network_ranges = network_ranges
   end
 
   # selects from the available modules, based on the selection filters that have been specified
@@ -105,6 +107,10 @@ class System
       Print.verbose "Filtering to remove non-unique #{$datastore[write_module_path_to_datastore]} ~= (n=#{search_list.size})"
     end
 
+    # check if we have a network range
+    if self.network_ranges != nil && ($datastore['network'] == nil or $datastore['network'].empty?)
+      $datastore['network_override'] = network_ranges
+    end
 
     if search_list.length == 0
       raise 'failed'

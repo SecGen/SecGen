@@ -63,7 +63,7 @@ def build_config(scenario, out_dir, options)
   Print.info 'Reading configuration file for virtual machines you want to create...'
   # read the scenario file describing the systems, which contain vulnerabilities, services, etc
   # this returns an array/hashes structure
-  systems = SystemReader.read_scenario(scenario)
+  systems = SystemReader.read_scenario(scenario, options[:ip_ranges])
   Print.std "#{systems.size} system(s) specified"
 
   Print.info 'Reading available base modules...'
@@ -132,14 +132,31 @@ def build_vms(project_dir, options)
   if options.has_key? :reload
     command = '--provision reload'
   end
-  if GemExec.exe('vagrant', project_dir, "#{command} #{system}")
-    Print.info 'VMs created.'
-    if options[:shutdown]
-      GemExec.exe('vagrant', project_dir, 'halt')
+
+  retry_count = (options[:ovirtuser] and options[:ovirtpass]) ? 5 : 0
+  successful_creation = false
+
+  while retry_count and !successful_creation
+    if GemExec.exe('vagrant', project_dir, "#{command} #{system}")
+      Print.info 'VMs created.'
+      successful_creation = true
+      if options[:shutdown]
+        Print.info 'Shutting down VMs.'
+        if options[:ovirtuser] and options[:ovirtpass]
+          sleep(30)
+        end
+        GemExec.exe('vagrant', project_dir, 'halt')
+      end
+    else
+      if retry_count > 0
+        Print.err 'Error creating VMs, retrying...'
+        GemExec.exe('vagrant', project_dir, 'halt')
+      else
+        Print.err 'Error creating VMs, exiting SecGen.'
+        exit 1
+      end
     end
-  else
-    Print.err 'Error creating VMs, Exiting SecGen.'
-    exit 1
+    retry_count -= 1
   end
 end
 
@@ -149,7 +166,7 @@ end
 #
 # @author Jason Keighley
 # @return [Void]
-def create_ewf_image(drive_path ,image_output_location)
+def create_ewf_image(drive_path, image_output_location)
   ## Make E01 image
   Print.info "Creating E01 image with path #{image_output_location}.E01"
   Print.info 'This may take a while:'

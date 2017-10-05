@@ -23,7 +23,8 @@ class WordGenerator < StringGenerator
   end
 
   def generate
-    self.outputs << File.readlines("#{WORDLISTS_DIR}/#{self.wordlist.sample.chomp}").sample.chomp
+    word = File.readlines("#{WORDLISTS_DIR}/#{self.wordlist.sample.chomp}").sample.chomp
+    self.outputs << word.gsub(/[^\w]/, '')
   end
 end
 

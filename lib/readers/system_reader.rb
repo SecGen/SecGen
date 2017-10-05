@@ -10,7 +10,7 @@ class SystemReader
   # This includes module filters, which are module objects that contain filters for selecting
   # from the actual modules that are available
   # @return [Array] Array containing Systems objects
-  def self.read_scenario(scenario_file)
+  def self.read_scenario(scenario_file, network_ranges)
     systems = []
     Print.verbose "Reading scenario file: #{scenario_file}"
     doc, xsd = nil
@@ -37,6 +37,17 @@ class SystemReader
 
     # remove xml namespaces for ease of processing
     doc.remove_namespaces!
+
+    # hack for networks -- TODO: Remove me ASAP DO NOT MERGE TO MASTER
+    ranges = []
+    network_ranges.each { |range|
+      doc.xpath('/scenario/system').size.times { |count|
+        range_array = range.split('.')
+        range_array[-1] = count+2
+        ranges << range_array.join('.')
+      }
+    }
+    network_ranges = ranges
 
     doc.xpath('/scenario/system').each_with_index do |system_node, system_index|
       module_selectors = []
@@ -146,7 +157,7 @@ class SystemReader
         end
 
       end
-      systems << System.new(system_name, system_attributes, module_selectors)
+      systems << System.new(system_name, system_attributes, module_selectors, network_ranges)
     end
 
     return systems
