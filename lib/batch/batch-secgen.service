@@ -3,11 +3,13 @@ Description=Batch Processing Service (SecGen Project)
 After=postgresql.service
 
 [Service]
-ExecStart=/usr/bin/ruby /opt/secgen/lib/batch/batch_secgen.rb
+ExecStart=/usr/bin/ruby /home/secgen/SecGen/lib/batch/batch_secgen.rb start
 ExecReload=/bin/kill -HUP $MAINPID
 KillMode=process
-WorkingDirectory=/opt/secgen
+WorkingDirectory=/home/secgen/SecGen/
 Restart=always
+User=secgen
+Group=secgen
 
 [Install]
 WantedBy=multi-user.target
