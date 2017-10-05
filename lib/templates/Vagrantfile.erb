@@ -52,7 +52,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%=     if @options.has_key? :cpu_cores
 "        ovirt.cpu_cores = #{@options[:cpu_cores]}\n"
         end -%>
-        ovirt.console = 'SPICE'
+        ovirt.console = 'spice'
         ovirt.insecure = true
         ovirt.filtered_api = true
         ovirt.debug = true
