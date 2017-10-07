@@ -19,8 +19,9 @@ def usage
    COMMANDS:
    add, a: Adds a job to the queue
    start: Starts the service, works through the job queue
-   list: Lists the current entries in the job queue
+   reset: Resets jobs in the table to 'todo' status based on option
    delete: Delete job(s) from the queue table
+   list: Lists the current entries in the job queue
 
    OPTIONS:
    [add]
@@ -34,13 +35,17 @@ def usage
    [start]
    --max_threads [integer n] (optional): Maximum number of worker threads, defaults to 1
 
-   [list]
-   --id [integer n] (optional): List the entry for a specific Job ID
-   --all: List all jobs in the queue table
+   [reset]
+   --running: Reset all 'running' jobs to 'todo'
+   --failed / --error: Reset all failed (i.e. status => 'error') jobs to 'todo'
 
    [delete]
    --id [integer n]: Delete the entry for a specific Job ID
    --all: Delete all jobs from the queue table
+
+   [list]
+   --id [integer n] (optional): List the entry for a specific Job ID
+   --all: List all jobs in the queue table
 
    [misc]
    --help, -h: Shows this usage information
@@ -76,12 +81,25 @@ def get_list_opts
   parse_opts(GetoptLong.new(*list_options))
 end
 
+def get_reset_opts
+  list_options = misc_opts + [['--running', GetoptLong::NO_ARGUMENT],
+                              ['--failed', '--error' ,GetoptLong::NO_ARGUMENT]]
+
+  options = parse_opts(GetoptLong.new(*list_options))
+  if !options[:running] and !options[:failed]
+    Print.err 'Error: The reset command requires an argument.'
+    usage
+  else
+    options
+  end
+end
+
 def get_delete_opts
   delete_options = misc_opts + [['--id', GetoptLong::REQUIRED_ARGUMENT],
                                 ['--all', GetoptLong::OPTIONAL_ARGUMENT],
                                 ['--failed', GetoptLong::OPTIONAL_ARGUMENT]]
   options = parse_opts(GetoptLong.new(*delete_options))
-  if options[:id] == '' and options[:all] == false and options[:failed] == false
+  if options[:id] == '' and !options[:all] and !options[:failed]
     Print.err 'Error: The delete command requires an argument.'
     usage
   else
@@ -103,6 +121,8 @@ def parse_opts(opts)
         options[:random_ips] = arg.to_i
       when '--all'
         options[:all] = true
+      when '--running'
+        options[:running] = true
       when '--failed'
         options[:failed] = true
       else
@@ -218,6 +238,17 @@ def list(options)
 
 end
 
+# reset jobs in batch to status => 'todo'
+def reset(options)
+  if options[:running]
+    update_all_by_status(:running, :todo)
+  end
+  if options[:failed]
+    update_all_by_status(:error, :todo)
+  end
+end
+
+
 def delete(options)
   if options[:id] != ''
     delete_id(options[:id])
@@ -262,6 +293,14 @@ def update_status(job_id, status)
   statement = "update_status_#{job_id}_#{status}"
   @db_conn.prepare(statement, 'UPDATE queue SET status = $1 WHERE id = $2')
   @db_conn.exec_prepared(statement,[status_enum[status], job_id])
+end
+
+def update_all_by_status(from_status, to_status)
+  status_enum = {:todo => 'todo', :running => 'running', :success => 'success', :error => 'error'}
+
+  statement = "mass_update_status_#{from_status}_#{to_status}"
+  @db_conn.prepare(statement, 'UPDATE queue SET status = $1 WHERE status = $2')
+  @db_conn.exec_prepared(statement,[status_enum[to_status], status_enum[from_status]])
 end
 
 def delete_failed
@@ -375,6 +414,8 @@ case ARGV[0]
     start(get_start_opts)
   when 'list'
     list(get_list_opts)
+  when 'reset'
+    reset(get_reset_opts)
   when 'delete'
     delete(get_delete_opts)
   else
