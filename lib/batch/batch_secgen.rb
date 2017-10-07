@@ -82,11 +82,12 @@ def get_list_opts
 end
 
 def get_reset_opts
-  list_options = misc_opts + [['--running', GetoptLong::NO_ARGUMENT],
+  list_options = misc_opts + [['--all', GetoptLong::NO_ARGUMENT],
+                              ['--running', GetoptLong::NO_ARGUMENT],
                               ['--failed', '--error' ,GetoptLong::NO_ARGUMENT]]
 
   options = parse_opts(GetoptLong.new(*list_options))
-  if !options[:running] and !options[:failed]
+  if !options[:running] and !options[:failed] and !options[:all]
     Print.err 'Error: The reset command requires an argument.'
     usage
   else
@@ -240,6 +241,9 @@ end
 
 # reset jobs in batch to status => 'todo'
 def reset(options)
+  if options[:all]
+    update_all_to_status(:todo)
+  end
   if options[:running]
     update_all_by_status(:running, :todo)
   end
@@ -301,6 +305,14 @@ def update_all_by_status(from_status, to_status)
   statement = "mass_update_status_#{from_status}_#{to_status}"
   @db_conn.prepare(statement, 'UPDATE queue SET status = $1 WHERE status = $2')
   @db_conn.exec_prepared(statement,[status_enum[to_status], status_enum[from_status]])
+end
+
+def update_all_to_status(to_status)
+  status_enum = {:todo => 'todo', :running => 'running', :success => 'success', :error => 'error'}
+
+  statement = "mass_update_to_status_#{to_status}"
+  @db_conn.prepare(statement, 'UPDATE queue SET status = $1')
+  @db_conn.exec_prepared(statement,[status_enum[to_status]])
 end
 
 def delete_failed
