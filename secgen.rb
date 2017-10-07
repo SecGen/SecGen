@@ -150,6 +150,7 @@ def build_vms(project_dir, options)
     else
       if retry_count > 0
         Print.err 'Error creating VMs, retrying...'
+	command += ' --provision' unless command.include? ' --provision'
 	sleep(10)
       else
         Print.err 'Error creating VMs, exiting SecGen.'
