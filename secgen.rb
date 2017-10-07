@@ -150,7 +150,7 @@ def build_vms(project_dir, options)
     else
       if retry_count > 0
         Print.err 'Error creating VMs, retrying...'
-        GemExec.exe('vagrant', project_dir, 'halt')
+	sleep(10)
       else
         Print.err 'Error creating VMs, exiting SecGen.'
         exit 1
