@@ -193,7 +193,7 @@ Diner's Club	3000 0000 0000 04</value>
 
 		<utility module_path=".*hackerbot">
 			<input into="hackerbot_configs">
-				<generator module_path=".*integrity_protection">
+				<generator module_path=".*integrity_detection">
 					<input into="accounts">
 						<datastore>accounts</datastore>
 					</input>
