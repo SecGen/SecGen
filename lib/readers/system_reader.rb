@@ -40,14 +40,16 @@ class SystemReader
 
     # hack for networks -- TODO: Remove me ASAP DO NOT MERGE TO MASTER
     ranges = []
-    network_ranges.each { |range|
-      doc.xpath('/scenario/system').size.times { |count|
-        range_array = range.split('.')
-        range_array[-1] = count+2
-        ranges << range_array.join('.')
+    if network_ranges
+      network_ranges.each { |range|
+        doc.xpath('/scenario/system').size.times { |count|
+          range_array = range.split('.')
+          range_array[-1] = count+2
+          ranges << range_array.join('.')
+        }
       }
-    }
-    network_ranges = ranges
+      network_ranges = ranges
+    end
 
     doc.xpath('/scenario/system').each_with_index do |system_node, system_index|
       module_selectors = []
