@@ -133,7 +133,7 @@ def build_vms(project_dir, options)
     command = '--provision reload'
   end
 
-  retry_count = (options[:ovirtuser] and options[:ovirtpass]) ? 5 : 0
+  retry_count = (options[:ovirtuser] and options[:ovirtpass]) ? 10 : 0
   successful_creation = false
 
   while retry_count and !successful_creation
@@ -149,8 +149,13 @@ def build_vms(project_dir, options)
       end
     else
       if retry_count > 0
-        Print.err 'Error creating VMs, retrying...'
-        command += ' --provision' unless command.include? ' --provision'
+        Print.err 'Error creating VMs, destroying VMs and retrying...'
+	if GemExec.exe('vagrant', project_dir, 'destroy')
+		Print.info 'VMs destroyed'
+	else
+		Print.err 'Failed to destroy VMs. Exiting.'
+		exit 1
+	end
         sleep(10)
       else
         Print.err 'Error creating VMs, exiting SecGen.'
