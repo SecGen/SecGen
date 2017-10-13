@@ -152,6 +152,7 @@ def build_vms(project_dir, options)
       if retry_count > 0
         # Identify which VMs failed
         stderr = vagrant_output[:stderr]
+	puts stderr
         split = stderr.split('==>')
         failures = []
         split.each do |line|
@@ -161,7 +162,7 @@ def build_vms(project_dir, options)
           end
         end
         failures = failures.uniq
-
+	
         Print.err 'Error creating VMs [' + failures.join(',') + '] destroying VMs and retrying...'
         failures.each do |failed_vm|
           destroy = 'destroy ' + failed_vm

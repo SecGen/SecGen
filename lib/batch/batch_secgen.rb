@@ -109,7 +109,7 @@ def get_delete_opts
 end
 
 def parse_opts(opts)
-  options = {:instances => '', :max_threads => 3, :id => '', :all => false}
+  options = {:instances => '', :max_threads => 6, :id => '', :all => false}
   opts.each do |opt, arg|
     case opt
       when '--instances'
