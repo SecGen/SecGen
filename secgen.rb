@@ -152,21 +152,28 @@ def build_vms(project_dir, options)
       if retry_count > 0
         # Identify which VMs failed
         stderr = vagrant_output[:stderr]
-        failed_vm = stderr[/\n==>(.*?): An error occurred/, 1]
-        destroy = 'destroy'
-        if failed_vm
-          destroy += " #{failed_vm}"
+        split = stderr.split('==>')
+        failures = []
+        split.each do |line|
+          if line.include? ': An error occurred'
+            failed_vm = line.split(':').first
+            failures << failed_vm
+          end
         end
+        failures = failures.uniq
 
-        Print.err 'Error creating VMs, destroying VMs and retrying...'
-        destroy_output = GemExec.exe('vagrant', project_dir, destroy)
-        if destroy_output[:status].success?
-          Print.info "vagrant #{destroy} completed successfully."
-        else
-          Print.err 'Failed to destroy VMs. Exiting.'
-          exit 1
+        Print.err 'Error creating VMs [' + failures.join(',') + '] destroying VMs and retrying...'
+        failures.each do |failed_vm|
+          destroy = 'destroy ' + failed_vm
+          destroy_output = GemExec.exe('vagrant', project_dir, destroy)
+          if destroy_output[:status].success?
+            Print.info "vagrant #{destroy} completed successfully."
+          else
+            Print.err "Failed to destroy #{failed_vm}. Exiting."
+            exit 1
+          end
+          sleep(10)
         end
-        sleep(10)
       else
         Print.err 'Error creating VMs, exiting SecGen.'
         exit 1
