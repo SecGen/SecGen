@@ -179,7 +179,7 @@
 	</system>
 
 	<system>
-		<system_name>hackerbot_server</system_name>
+		<system_name>hb_server</system_name>
 		<base distro="Kali" name="MSF"/>
 
 		<service type="ircd"/>

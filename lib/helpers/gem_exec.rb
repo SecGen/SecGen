@@ -37,8 +37,8 @@ class GemExec
     end
 
     Dir.chdir(working_dir)
-    stdout, stderr, exit_code = Open3.capture3("#{gem_path} #{arguments}")
-    {:stdout => stdout, :stderr => stderr, :exit_code => exit_code}
+    stdout, stderr, status = Open3.capture3("#{gem_path} #{arguments}")
+    {:stdout => stdout, :stderr => stderr, :status => status}
 
   end
 end

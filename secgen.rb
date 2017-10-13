@@ -138,7 +138,7 @@ def build_vms(project_dir, options)
 
   while retry_count and !successful_creation
     vagrant_output = GemExec.exe('vagrant', project_dir, "#{command} #{system}")
-    if !vagrant_output[:exit_code]  # zero exit code (success)
+    if vagrant_output[:status].success?  # zero exit code (success)
       Print.info 'VMs created.'
       successful_creation = true
       if options[:shutdown]
@@ -160,7 +160,7 @@ def build_vms(project_dir, options)
 
         Print.err 'Error creating VMs, destroying VMs and retrying...'
         destroy_output = GemExec.exe('vagrant', project_dir, destroy)
-        if !destroy_output[:exit_code]
+        if destroy_output[:status].success?
           Print.info "vagrant #{destroy} completed successfully."
         else
           Print.err 'Failed to destroy VMs. Exiting.'
