@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'open3'
 
 class GemExec
 
@@ -36,8 +37,8 @@ class GemExec
     end
 
     Dir.chdir(working_dir)
-
-    system "#{gem_path} #{arguments}"
+    stdout, stderr, exit_code = Open3.capture3("#{gem_path} #{arguments}")
+    {:stdout => stdout, :stderr => stderr, :exit_code => exit_code}
 
   end
 end
