@@ -118,7 +118,7 @@ sudo hashdeep -r -a -k /home/<%= $main_user %>/hashes/etc_hashdeep_hashes /etc
 After, run it again, this time asking for more details, since the default message does not provide any information as to why an audit has failed:
 
 ```bash
-sudo hashdeep -rakvv /tmp/etc_hashdeep_hashes /etc
+sudo hashdeep -ravv /etc/ -k /home/<%= $main_user %>/etc_hashdeep_hashes
 ```
 
 Consult the man page for information about what each of the above flags do.
