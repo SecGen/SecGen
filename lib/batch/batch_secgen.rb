@@ -368,9 +368,9 @@ def generate_range_arg(options)
       @ranges_in_table = []
 
       # Promt to see if we're excluding ranges in the table
-      Print.info 'Do you want to exclude ranges in the database from your random IP generation? [y/N]'
+      Print.info 'Do you want to exclude ranges in the database from your random IP generation? [Y/n]'
       input = STDIN.gets.chomp
-      if input == 'Y' or input == 'y'
+      if input = '' or input == 'Y' or input == 'y'
         table_entries = select_all
         table_entries.each { |job|
           @ranges_in_table += secgen_arg_network_ranges(job['secgen_args'])
