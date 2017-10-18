@@ -63,7 +63,7 @@ def build_config(scenario, out_dir, options)
   Print.info 'Reading configuration file for virtual machines you want to create...'
   # read the scenario file describing the systems, which contain vulnerabilities, services, etc
   # this returns an array/hashes structure
-  systems = SystemReader.read_scenario(scenario, options[:ip_ranges])
+  systems = SystemReader.read_scenario(scenario)
   Print.std "#{systems.size} system(s) specified"
 
   Print.info 'Reading available base modules...'
@@ -104,11 +104,9 @@ def build_config(scenario, out_dir, options)
       all_available_services + all_available_utilities + all_available_generators + all_available_encoders + all_available_networks
   # update systems with module selections
   systems.map! {|system|
-    system.module_selections = system.resolve_module_selection(all_available_modules)
+    system.module_selections = system.resolve_module_selection(all_available_modules, options)
     system
   }
-
-  validate_network_ranges(systems, options)
 
   Print.info "Creating project: #{out_dir}..."
   # create's vagrant file / report a starts the vagrant installation'
@@ -278,26 +276,6 @@ end
 # @return [Void]
 def delete_all_projects
   FileUtils.rm_r(Dir.glob("#{PROJECTS_DIR}/*"))
-end
-
-# Ensure enough ranges are provided with --network-ranges
-def validate_network_ranges(systems, options)
-  if options.has_key? :ip_ranges
-    scenario_networks = []
-    systems.each { |sys| scenario_networks << sys.get_networks }
-    scenario_networks.flatten!
-
-    # Remove dhcp networks
-    scenario_networks.delete_if { |network| network.attributes['range'][0] == 'dhcp' }
-
-    # Remove non-unique network ranges
-    scenario_networks = Hash[*scenario_networks.map { |network| [network.attributes['range'], network] }.flatten].values
-
-    if options[:ip_ranges].size < scenario_networks.size
-      Print.err("Fatal: Not enough ranges were provided with --network-ranges. Provided: #{options[:ip_ranges].size} Required: #{scenario_networks.size}")
-      exit
-    end
-  end
 end
 
 # end of method declarations

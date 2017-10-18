@@ -9,27 +9,81 @@ class System
   attr_accessor :module_selections # (after resolution)
   attr_accessor :num_actioned_module_conflicts
   attr_accessor :system_networks
-  attr_accessor :network_ranges  # populated when provided via command line options
+  attr_accessor :options #(command line options hash)
 
   # Initalizes System object
   # @param [Object] name of the system
   # @param [Object] attributes such as base box selection
   # @param [Object] module_selectors these are modules that define filters for selecting the actual modules to use
-  def initialize(name, attributes, module_selectors, network_ranges)
+  def initialize(name, attributes, module_selectors)
     self.name = name
     self.attributes = attributes
     self.module_selectors = module_selectors
     self.module_selections = []
     self.num_actioned_module_conflicts = 0
     self.system_networks = []
-    self.network_ranges = network_ranges
+    self.options = {}
   end
 
   # selects from the available modules, based on the selection filters that have been specified
   # @param [Object] available_modules all available modules (vulnerabilities, services, bases)
+  # @param [Object] opts command line options hash
   # @return [Object] the list of selected modules
-  def resolve_module_selection(available_modules)
+  def resolve_module_selection(available_modules, opts)
+    @options = opts
     retry_count = 0
+
+    # Replace $IP_addresses with options ip_ranges if required
+    begin
+      if @options[:ip_ranges] and $datastore['IP_addresses'] and !$datastore['replaced_ranges']
+        unused_opts_ranges = @options[:ip_ranges].clone
+        option_range_map = {} # k = ds_range, v = opts_range
+        new_ip_addresses = []
+
+        # Iterate over the DS IPs
+        $datastore['IP_addresses'].each do |ds_ip_address|
+          # Split the IP into ['X.X.X', 'Y']
+          split_ip = ds_ip_address.split('.')
+          ds_ip_array = [split_ip[0..2].join('.'), split_ip[3]]
+          ds_range = ds_ip_array[0] + '.0'
+          # Check if we have encountered first 3 octets before i.e. look in option_range_map for key(ds_range)
+          if option_range_map.has_key? ds_range
+            # if we have, grab that value (opts_range)
+            opts_range = option_range_map[ds_range]
+            # replace first 3 in ds_ip with first 3 in opts_range
+            split_opts_range = opts_range.split('.')
+            split_opts_range[3] = ds_ip_array[1]
+            new_ds_ip = split_opts_range.join('.')
+            # save in $datastore['IP_addresses']
+            new_ip_addresses << new_ds_ip
+          else #(if we haven't seen the first 3 octets before)
+            # grab the first range that we haven't used yet from unused_opts_ranges with .shift (also removes the range)
+            opts_range = unused_opts_ranges.shift
+            # store the range mapping in option_range_map (ds_range => opts_range)
+            option_range_map[ds_range] = opts_range
+            # split the opts_range and replace last octet with last octet of ds_ip_address
+            split_opts_range = opts_range.split('.')
+            split_opts_range[3] = ds_ip_array[1]
+            new_ds_ip = split_opts_range.join('.')
+            # save in $datastore['IP_addresses']
+            new_ip_addresses << new_ds_ip
+          end
+        end
+        $datastore['IP_addresses'] = new_ip_addresses
+        $datastore['replaced_ranges'] = true
+      end
+    rescue NoMethodError
+      required_ranges = []
+      $datastore['IP_addresses'].each { |ip_address|
+        split_range = ip_address.split('.')
+        split_range[3] = 0
+        required_ranges << split_range.join('.')
+      }
+      required_ranges.uniq!
+      Print.err("Fatal: Not enough ranges were provided with --network-ranges. Provided: #{options[:ip_ranges].size} Required: #{required_ranges.uniq.size}")
+      exit
+    end
+
     begin
 
       selected_modules = []
@@ -88,28 +142,23 @@ class System
 
     # filter to those that satisfy the attribute filters
     # select based on selected type, access, cve...
-    search_list.delete_if{|module_for_possible_exclusion|
+    search_list.delete_if { |module_for_possible_exclusion|
       !module_for_possible_exclusion.matches_attributes_requirement(required_attributes)
     }
     Print.verbose "Filtered to modules matching: #{required_attributes.inspect} ~= (n=#{search_list.size})"
 
     # remove non-options due to conflicts
-    search_list.delete_if{|module_for_possible_exclusion|
+    search_list.delete_if { |module_for_possible_exclusion|
       check_conflicts_with_list(module_for_possible_exclusion, previously_selected_modules)
     }
 
     # check if modules need to be unique
     # write_module_path_to_datastore
     if write_module_path_to_datastore != nil && $datastore[write_module_path_to_datastore] != nil
-      search_list.delete_if{|module_for_possible_exclusion|
+      search_list.delete_if { |module_for_possible_exclusion|
         ($datastore[write_module_path_to_datastore] ||=[]).include? module_for_possible_exclusion.module_path
       }
       Print.verbose "Filtering to remove non-unique #{$datastore[write_module_path_to_datastore]} ~= (n=#{search_list.size})"
-    end
-
-    # check if we have a network range
-    if self.network_ranges != nil && ($datastore['network'] == nil or $datastore['network'].empty?)
-      $datastore['network_override'] = network_ranges
     end
 
     if search_list.length == 0
@@ -327,7 +376,7 @@ class System
             if /^.*defaultinput/ =~ def_unique_id
               def_unique_id = def_unique_id.gsub(/^.*defaultinput/, selected.unique_id)
             end
-            
+
             default_modules_to_add.concat select_modules(module_to_add.module_type, module_to_add.attributes, available_modules, previously_selected_modules + default_modules_to_add, def_unique_id, module_to_add.write_output_variable, def_write_to, module_to_add.received_inputs, module_to_add.default_inputs_literals, module_to_add.write_to_datastore, module_to_add.received_datastores, module_to_add.write_module_path_to_datastore)
           end
         end
@@ -387,7 +436,7 @@ class System
   end
 
   def get_networks
-    if (self.system_networks = [])  # assign the networks
+    if (self.system_networks = []) # assign the networks
       self.module_selections.each do |mod|
         if mod.module_type == 'network'
           self.system_networks << mod

@@ -11,4 +11,6 @@
   <type>private_network</type>
   <range>172.17.0.0</range>
 
+  <read_fact>IP_address</read_fact>
+
 </network>

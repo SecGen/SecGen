@@ -39,13 +39,13 @@ class ProjectFilesCreator
     if File.exists? "#{@out_dir}/Vagrantfile" or File.exists? "#{@out_dir}/puppet"
       dest_dir = "#{@out_dir}/MOVED_#{Time.new.strftime("%Y%m%d_%H%M")}"
       Print.warn "Project already built to this directory -- moving last build to: #{dest_dir}"
-      Dir.glob( "#{@out_dir}/**/*" ).select { |f| File.file?( f ) }.each do |f|
+      Dir.glob("#{@out_dir}/**/*").select { |f| File.file?(f) }.each do |f|
         dest = "#{dest_dir}/#{f}"
-        FileUtils.mkdir_p( File.dirname( dest ) )
+        FileUtils.mkdir_p(File.dirname(dest))
         if f =~ /\.vagrant/
-          FileUtils.cp( f, dest )
+          FileUtils.cp(f, dest)
         else
-          FileUtils.mv( f, dest )
+          FileUtils.mv(f, dest)
         end
       end
     end
@@ -80,7 +80,7 @@ class ProjectFilesCreator
 
               if File.file? packerfile_path
                 Print.info "Would you like to use the packerfile to create the packerfile from the given url (y/n)"
-                (Print.info "Exiting as vagrant needs the basebox to continue"; exit) unless ['y','yes'].include?(STDIN.gets.chomp.downcase)
+                (Print.info "Exiting as vagrant needs the basebox to continue"; exit) unless ['y', 'yes'].include?(STDIN.gets.chomp.downcase)
 
                 Print.std "Packerfile #{packerfile_path.split('/').last} found, building basebox #{url.split('/').last} via packer"
                 template_based_file_write(packerfile_path, packerfile_path.split(/.erb$/).first)
@@ -156,10 +156,16 @@ class ProjectFilesCreator
   end
 
 # Resolves the network based on the scenario and ip_range.
-  def resolve_network(scenario_ip_range)
+  def resolve_network(network_module)
+    current_network = network_module
+    scenario_ip_range = network_module.attributes['range'].first
+
+    # Use datastore IP_address if we have them
+    if current_network.received_inputs.include? 'IP_address'
+      ip_address = current_network.received_inputs['IP_address'].first
+    elsif @options.has_key? :ip_ranges
     # if we have options[:ip_ranges] we want to use those instead of the ip_range argument.
     # Store the mappings of scenario_ip_ranges => @options[:ip_range]  in @option_range_map
-    if @options.has_key? :ip_ranges
       # Have we seen this scenario_ip_range before? If so, use the value we've assigned
       if @option_range_map.has_key? scenario_ip_range
         ip_range = @option_range_map[scenario_ip_range]
@@ -170,10 +176,14 @@ class ProjectFilesCreator
         @option_range_map[scenario_ip_range] = options_ips.first
         ip_range = options_ips.first
       end
+      ip_address = get_ip_from_range(ip_range)
     else
-      ip_range = scenario_ip_range
+      ip_address = get_ip_from_range(scenario_ip_range)
     end
+    ip_address
+  end
 
+  def get_ip_from_range(ip_range)
     # increment @scenario_networks{ip_range=>counter}
     @scenario_networks[ip_range] += 1
 
