@@ -109,7 +109,7 @@ def get_delete_opts
 end
 
 def parse_opts(opts)
-  options = {:instances => '', :max_threads => 6, :id => '', :all => false}
+  options = {:instances => '', :max_threads => 1, :id => '', :all => false}
   opts.each do |opt, arg|
     case opt
       when '--instances'
@@ -139,21 +139,19 @@ end
 def add(options)
   # Handle --instances
   instances = options[:instances]
-  if (instances.to_i.to_s == instances) and instances.to_i > 1
+  if (instances.to_i.to_s == instances) and instances.to_i >= 1
     instances.to_i.times do |count|
       instance_args = "--prefix batch_job_#{(count+1).to_s} " + @secgen_args
       instance_args = generate_range_arg(options) + instance_args
       insert_row(count.to_s, instance_args)
     end
-  elsif instances.include?(',')
+  elsif instances.size > 0
     named_prefixes = instances.split(',')
     named_prefixes.each_with_index do |named_prefix, count|
       instance_secgen_args = "--prefix #{named_prefix} " + @secgen_args
       instance_secgen_args = generate_range_arg(options) + instance_secgen_args
       insert_row(count.to_s, instance_secgen_args)
     end
-  else
-    insert_row('batch_job_1', @secgen_args)
   end
 end
 
@@ -370,7 +368,7 @@ def generate_range_arg(options)
       # Promt to see if we're excluding ranges in the table
       Print.info 'Do you want to exclude ranges in the database from your random IP generation? [Y/n]'
       input = STDIN.gets.chomp
-      if input = '' or input == 'Y' or input == 'y'
+      if input == '' or input == 'Y' or input == 'y'
         table_entries = select_all
         table_entries.each { |job|
           @ranges_in_table += secgen_arg_network_ranges(job['secgen_args'])
