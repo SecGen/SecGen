@@ -134,14 +134,12 @@ Diner's Club	3000 0000 0000 04</value>
 				<value>true</value>
 			</input>
 			<input into="start_page">
-				<!--<value>http://172.16.0.3</value>-->
 				<datastore access="1">IP_addresses</datastore>
 			</input>
 		</utility>
 
 		<utility module_path=".*pidgin">
 			<input into="server_ip">
-				<!--<value>http://172.16.0.3</value>-->
 				<datastore access="1">IP_addresses</datastore>
 			</input>
 			<input into="accounts">

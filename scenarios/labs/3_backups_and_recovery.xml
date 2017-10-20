@@ -135,7 +135,6 @@
 				<value>true</value>
 			</input>
 			<input into="start_page">
-				<!--<value>http://172.16.0.4</value>-->
 				<datastore access="2">IP_addresses</datastore>
 			</input>
 		</utility>
