@@ -5,4 +5,5 @@ unusedcode
 mount
 log
 .directory
-batch/
+batch/failed
+batch/successful
