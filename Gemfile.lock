@@ -45,6 +45,7 @@ GEM
     nori (2.6.0)
     pg (0.21.0)
     pkg-config (1.1.7)
+    process_helper (0.1.1)
     puppet (4.5.1)
       CFPropertyList (~> 2.2.6)
       facter (> 2.0, < 4)
@@ -87,6 +88,7 @@ DEPENDENCIES
   nokogiri
   nori
   pg
+  process_helper
   programr!
   puppet
   rake

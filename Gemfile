@@ -17,6 +17,7 @@ gem 'pg'
 gem 'cinch'
 gem 'nori'
 gem 'programr', :git => "git://github.com/robertjwhitney/programr.git"
+gem 'process_helper'
 
 #development only gems go here
 group :test, :development do

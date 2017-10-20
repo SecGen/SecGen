@@ -136,7 +136,7 @@ def build_vms(project_dir, options)
 
   while retry_count and !successful_creation
     vagrant_output = GemExec.exe('vagrant', project_dir, "#{command} #{system}")
-    if vagrant_output[:status].success?  # zero exit code (success)
+    if vagrant_output[:status] == 0
       Print.info 'VMs created.'
       successful_creation = true
       if options[:shutdown]
@@ -149,9 +149,7 @@ def build_vms(project_dir, options)
     else
       if retry_count > 0
         # Identify which VMs failed
-        stderr = vagrant_output[:stderr]
-	      puts stderr
-        split = stderr.split('==>')
+        split = vagrant_output[:output].split('==>')
         failures = []
         split.each do |line|
           if line.include? ': An error occurred'

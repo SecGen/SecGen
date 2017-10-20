@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'open3'
+require 'process_helper'
 
 class GemExec
 
@@ -37,8 +37,13 @@ class GemExec
     end
 
     Dir.chdir(working_dir)
-    stdout, stderr, status = Open3.capture3("#{gem_path} #{arguments}")
-    {:stdout => stdout, :stderr => stderr, :status => status}
-
+    output_hash = {:output => '', :status => 0}
+    begin
+      output_hash[:output] = ProcessHelper.process("#{gem_path} #{arguments}")
+    rescue Exception => ex
+      output_hash[:output] = ex.to_s.split('Command output: ')[1]
+      output_hash[:status] = 1
+    end
+    output_hash
   end
 end
