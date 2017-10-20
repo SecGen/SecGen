@@ -49,12 +49,6 @@ cd /home/user/bin/SecGen
 bundle install
 ```
 
-### Optional software requirements
-To save yourself some time you can enable caching of downloaded packages. Simply install vagrant-cachier:
-```bash
-vagrant plugin install vagrant-cachier
-```
-
 ## Usage
 Basic usage:
 ```bash

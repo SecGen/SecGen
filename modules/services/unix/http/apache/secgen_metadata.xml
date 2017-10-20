@@ -3,7 +3,8 @@
 <service xmlns="http://www.github/cliffe/SecGen/service"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
-  <name>Apache HTTP Server</name>
+  <name>Apache HTTP Server - Kali Compatible</name>
+  <author>Z. Cliffe Schreuders</author>
   <author>Connor Wilson</author>
   <author>Puppet Labs</author>
   <module_license>Apache v2</module_license>
@@ -21,6 +22,9 @@
   <!--Cannot co-exist with other apache installations-->
   <conflict>
     <software_name>apache</software_name>
+  </conflict>
+  <conflict>
+    <name>Wheezy</name>
   </conflict>
   <requires>
     <type>update</type>

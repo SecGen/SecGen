@@ -296,73 +296,76 @@ def read_bots (irc_server_ip_address)
             current = check_output_conditions(bot_name, bots, current, pre_output, m)
 
           end
-
+          
           # use bot-wide method for obtaining shell, unless specified per-attack
           if bots[bot_name]['attacks'][current].key?('get_shell')
             shell_cmd = bots[bot_name]['attacks'][current]['get_shell'].clone
           else
             shell_cmd = bots[bot_name]['get_shell'].clone
           end
+          
+          if shell_cmd != "false"
+            # substitute special variables
+            shell_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
+            # add a ; to ensure it is run via bash
+            shell_cmd << ';'
+            Print.debug shell_cmd
 
-          # substitute special variables
-          shell_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
-          # add a ; to ensure it is run via bash
-          shell_cmd << ';'
-          Print.debug shell_cmd
+            Open3.popen2e(shell_cmd) do |stdin, stdout_err|
+                # check whether we have shell by echoing "shelltest"
+                # sleep(1)
+                stdin.puts "echo shelltest\n"
+                sleep(3)
 
-          Open3.popen2e(shell_cmd) do |stdin, stdout_err|
-            # check whether we have shell by echoing "shelltest"
-            # sleep(1)
-            stdin.puts "echo shelltest\n"
-            sleep(3)
+                # non-blocking read from buffer
+                lines = ''
+                begin
+                while ch = stdout_err.read_nonblock(1)
+                    lines << ch
+                end
+                rescue # continue consuming until input blocks
+                end
+                bots[bot_name]['attacks'][current]['get_shell_command_output'] = lines
 
-            # non-blocking read from buffer
-            lines = ''
-            begin
-              while ch = stdout_err.read_nonblock(1)
-                lines << ch
+                Print.debug lines
+                if lines =~ /shelltest/i
+                m.reply bots[bot_name]['messages']['got_shell'].sample
+
+                post_cmd = bots[bot_name]['attacks'][current]['post_command']
+                if post_cmd
+                    post_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
+                    stdin.puts "#{post_cmd}\n"
+                end
+
+                # sleep(1)
+                stdin.close # no more input, end the program
+                lines = stdout_err.read.chomp()
+                bots[bot_name]['attacks'][current]['post_command_output'] = lines
+
+                unless bots[bot_name]['attacks'][current].key?('suppress_command_output_feedback')
+                    m.reply "FYI: #{lines}"
+                end
+                Print.debug lines
+
+                current = check_output_conditions(bot_name, bots, current, lines, m)
+
+                else
+                Print.debug("Shell failed...")
+                # shell fail message will use the default message, unless specified for the attack
+                if bots[bot_name]['attacks'][current].key?('shell_fail_message')
+                    m.reply bots[bot_name]['attacks'][current]['shell_fail_message']
+                else
+                    m.reply bots[bot_name]['messages']['shell_fail_message']
+                end
+                # under specific situations reveal the error message to the user
+                if lines =~ /command not found/
+                    m.reply "Looks like there is some software missing: #{lines}"
+                end
               end
-            rescue # continue consuming until input blocks
+                
             end
-            bots[bot_name]['attacks'][current]['get_shell_command_output'] = lines
-
-            Print.debug lines
-            if lines =~ /shelltest/i
-              m.reply bots[bot_name]['messages']['got_shell'].sample
-
-              post_cmd = bots[bot_name]['attacks'][current]['post_command']
-              if post_cmd
-                post_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
-                stdin.puts "#{post_cmd}\n"
-              end
-
-              # sleep(1)
-              stdin.close # no more input, end the program
-              lines = stdout_err.read.chomp()
-              bots[bot_name]['attacks'][current]['post_command_output'] = lines
-
-              unless bots[bot_name]['attacks'][current].key?('suppress_command_output_feedback')
-                m.reply "FYI: #{lines}"
-              end
-              Print.debug lines
-
-              current = check_output_conditions(bot_name, bots, current, lines, m)
-
-            else
-              Print.debug("Shell failed...")
-              # shell fail message will use the default message, unless specified for the attack
-              if bots[bot_name]['attacks'][current].key?('shell_fail_message')
-                m.reply bots[bot_name]['attacks'][current]['shell_fail_message']
-              else
-                m.reply bots[bot_name]['messages']['shell_fail_message']
-              end
-              # under specific situations reveal the error message to the user
-              if lines =~ /command not found/
-                m.reply "Looks like there is some software missing: #{lines}"
-              end
-            end
-            
           end
+
           m.reply bots[bot_name]['messages']['repeat'].sample
         end
 

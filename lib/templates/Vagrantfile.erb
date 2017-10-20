@@ -93,13 +93,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 <% end %>
 
-    # Optimise package caching (re-use downloaded .deb, ruby gems, etc)
-#    if Vagrant.has_plugin?("vagrant-cachier")
-      # Configure cached packages to be shared between instances of the same base box.
-      # More info on http://fgrehm.viewdocs.io/vagrant-cachier/usage
-#      config.cache.scope = :box
-#    end
-
     # SecGen datastore
     # <%= JSON.generate($datastore) %>
 
@@ -125,15 +118,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     <% end %>
 <%   when 'network' -%>
 <%     if selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp" -%>
-<<<<<<< HEAD
   <%       if (@options.has_key? :ovirtnetwork) && (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)  %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
   <%       else %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp"
   <%       end %>
-=======
-    <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", auto_config: false
->>>>>>> IRI_labs
 <%     else -%>
   <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module.attributes['range'].first)%>", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'

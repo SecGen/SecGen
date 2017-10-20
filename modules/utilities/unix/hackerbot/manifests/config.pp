@@ -10,8 +10,7 @@ class hackerbot::config{
   $secgen_parameters['hackerbot_configs'].each |$counter, $config_pair| {
     $parsed_pair = parsejson($config_pair)
 
-    # TODO: testing colour printing
-    notice("\e[35mCreating bot config")
+    notice("Creating bot config")
     $xmlfilename = "bot_$counter.xml"
 
     file { "/opt/hackerbot/config/$xmlfilename":

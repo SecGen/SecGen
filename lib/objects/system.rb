@@ -252,6 +252,11 @@ class System
         command = "ruby #{selected.local_calc_file} #{args_string}"
         Print.verbose "Running: #{command}"
         outputs = `#{command}`.chomp
+        unless $?.success?
+          Print.err "Module failed to run (#{command})"
+          # TODO: this works, but subsequent attempts at resolving the scenario always fail ("Error can't add no data...")
+          raise 'failed'
+        end
         output_array = outputs.split("\n")
         selected.output = output_array.map { |o| Base64.strict_decode64 o }
       end
