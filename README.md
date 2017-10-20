@@ -433,6 +433,9 @@ It is also possible to iterate through a datastore, and feed each value into sep
 Some generators generate structured content in JSON format, for example the organisation type. It is possible to access a particular element of structured data from a datastore with the access_json using the ruby hash lookup format. See the example scenario:
 ```scenarios/examples/datastore_examples/json_selection_example.xml```
 
+Some scenarios require VMs IP addresses to be used as parameters for other modules in the scenario. If this is the case, you should use the 'IP_addresses' datastore to store the IPs for all VMs in the scenario and use the access functionality to pass them into network modules.For example:
+```scenarios/examples/datastore_examples/network_ip_datastore_example.xml```  
+
 ## Modules
 SecGen is designed to be easily extendable with modules that define vulnerabilities and other kinds of software, configuration, and content changes. 
 
