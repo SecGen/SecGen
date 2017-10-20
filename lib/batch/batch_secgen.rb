@@ -250,7 +250,6 @@ def reset(options)
   end
 end
 
-
 def delete(options)
   if options[:id] != ''
     delete_id(options[:id])
@@ -365,7 +364,7 @@ def generate_range_arg(options)
     if @ranges_in_table == nil
       @ranges_in_table = []
 
-      # Promt to see if we're excluding ranges in the table
+      # Prompt to see if we're excluding ranges in the table
       Print.info 'Do you want to exclude ranges in the database from your random IP generation? [Y/n]'
       input = STDIN.gets.chomp
       if input == '' or input == 'Y' or input == 'y'

@@ -1,6 +1,16 @@
 # Batch Processing with SecGen
 
-TODO: Write a brief introduction
+Generating multiple VMs in a batch is now possible through the use of batch_secgen, a ruby script which uses postgresql 
+as a job queue to mass-create VMs with SecGen. 
+
+There are helper commands available to add jobs, list jobs in the table, remove jobs, and reset the status of jobs from 'running' or 'error' to 'todo'.  
+
+When adding multiple jobs to the queue, it is possible to prefix the VM names with unique strings. 
+The example below demonstrates adding 3 copies of the flawed_fortress scenario, which results in the VM names being prefixed with 'tom_', 'cliffe_', and 'aimee_'. 
+
+```
+ruby batch_secgen.rb add --instances tom,cliffe,aimee --- -s scenarios/ctf/flawed_fortress_1.xml r
+```
 
 ## Initialise the Database
 

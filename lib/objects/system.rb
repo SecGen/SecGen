@@ -8,7 +8,6 @@ class System
   attr_accessor :module_selectors # (filters)
   attr_accessor :module_selections # (after resolution)
   attr_accessor :num_actioned_module_conflicts
-  attr_accessor :system_networks
   attr_accessor :options #(command line options hash)
 
   # Initalizes System object
@@ -21,22 +20,19 @@ class System
     self.module_selectors = module_selectors
     self.module_selections = []
     self.num_actioned_module_conflicts = 0
-    self.system_networks = []
-    self.options = {}
   end
 
   # selects from the available modules, based on the selection filters that have been specified
   # @param [Object] available_modules all available modules (vulnerabilities, services, bases)
-  # @param [Object] opts command line options hash
+  # @param [Object] options command line options hash
   # @return [Object] the list of selected modules
-  def resolve_module_selection(available_modules, opts)
-    @options = opts
+  def resolve_module_selection(available_modules, options)
     retry_count = 0
 
     # Replace $IP_addresses with options ip_ranges if required
     begin
-      if @options[:ip_ranges] and $datastore['IP_addresses'] and !$datastore['replaced_ranges']
-        unused_opts_ranges = @options[:ip_ranges].clone
+      if options[:ip_ranges] and $datastore['IP_addresses'] and !$datastore['replaced_ranges']
+        unused_opts_ranges = options[:ip_ranges].clone
         option_range_map = {} # k = ds_range, v = opts_range
         new_ip_addresses = []
 
@@ -142,24 +138,25 @@ class System
 
     # filter to those that satisfy the attribute filters
     # select based on selected type, access, cve...
-    search_list.delete_if { |module_for_possible_exclusion|
+    search_list.delete_if{|module_for_possible_exclusion|
       !module_for_possible_exclusion.matches_attributes_requirement(required_attributes)
     }
     Print.verbose "Filtered to modules matching: #{required_attributes.inspect} ~= (n=#{search_list.size})"
 
     # remove non-options due to conflicts
-    search_list.delete_if { |module_for_possible_exclusion|
+    search_list.delete_if{|module_for_possible_exclusion|
       check_conflicts_with_list(module_for_possible_exclusion, previously_selected_modules)
     }
 
     # check if modules need to be unique
     # write_module_path_to_datastore
     if write_module_path_to_datastore != nil && $datastore[write_module_path_to_datastore] != nil
-      search_list.delete_if { |module_for_possible_exclusion|
+      search_list.delete_if{|module_for_possible_exclusion|
         ($datastore[write_module_path_to_datastore] ||=[]).include? module_for_possible_exclusion.module_path
       }
       Print.verbose "Filtering to remove non-unique #{$datastore[write_module_path_to_datastore]} ~= (n=#{search_list.size})"
     end
+
 
     if search_list.length == 0
       raise 'failed'
@@ -435,14 +432,4 @@ class System
     modules_to_add
   end
 
-  def get_networks
-    if (self.system_networks = []) # assign the networks
-      self.module_selections.each do |mod|
-        if mod.module_type == 'network'
-          self.system_networks << mod
-        end
-      end
-    end
-    self.system_networks
-  end
 end

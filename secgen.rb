@@ -188,7 +188,7 @@ end
 #
 # @author Jason Keighley
 # @return [Void]
-def create_ewf_image(drive_path, image_output_location)
+def create_ewf_image(drive_path ,image_output_location)
   ## Make E01 image
   Print.info "Creating E01 image with path #{image_output_location}.E01"
   Print.info 'This may take a while:'
