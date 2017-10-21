@@ -163,7 +163,7 @@ def build_vms(project_dir, options)
         failures.each do |failed_vm|
           destroy = 'destroy ' + failed_vm
           destroy_output = GemExec.exe('vagrant', project_dir, destroy)
-          if destroy_output[:status].success?
+          if destroy_output[:status] == 0
             Print.info "vagrant #{destroy} completed successfully."
           else
             Print.err "Failed to destroy #{failed_vm}. Exiting."
