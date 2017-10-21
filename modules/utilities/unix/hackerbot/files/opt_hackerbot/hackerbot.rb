@@ -45,6 +45,8 @@ def check_output_conditions(bot_name, bots, current, lines, m)
         m.reply bots[bot_name]['messages']['say_answer']
         bots[bot_name]['current_quiz'] = 0
       end
+      # stop processing conditions, once we meet one
+      break
     end
   end
   unless condition_met
@@ -192,11 +194,16 @@ def read_bots (irc_server_ip_address)
           end
 
           if quiz != nil
-            correct_answer = quiz['answer'].
-                gsub(/{{post_command_output}}/, bots[bot_name]['attacks'][current]['post_command_output']).
-                gsub(/{{shell_command_output_first_line}}/, bots[bot_name]['attacks'][current]['get_shell_command_output'].split("\n").first).
-                gsub(/{{pre_shell_command_output_first_line}}/, bots[bot_name]['attacks'][current]['get_shell_command_output'].split("\n").first)
-
+            correct_answer = quiz['answer']
+            if bots[bot_name]['attacks'][current].key?('post_command_output')
+              correct_answer.gsub!(/{{post_command_output}}/, (bots[bot_name]['attacks'][current]['post_command_output']||''))
+            end
+            if bots[bot_name]['attacks'][current].key?('get_shell_command_output')
+              correct_answer.gsub!(/{{shell_command_output_first_line}}/, (bots[bot_name]['attacks'][current]['get_shell_command_output']||'').split("\n").first)
+            end
+            if bots[bot_name]['attacks'][current].key?('get_shell_command_output')
+              correct_answer.gsub!(/{{pre_shell_command_output_first_line}}/, (bots[bot_name]['attacks'][current]['get_shell_command_output']||'').split("\n").first)
+            end
 
             if answer.match(correct_answer)
               m.reply bots[bot_name]['messages']['correct_answer']
@@ -296,73 +303,114 @@ def read_bots (irc_server_ip_address)
             current = check_output_conditions(bot_name, bots, current, pre_output, m)
 
           end
-
+          
           # use bot-wide method for obtaining shell, unless specified per-attack
           if bots[bot_name]['attacks'][current].key?('get_shell')
             shell_cmd = bots[bot_name]['attacks'][current]['get_shell'].clone
           else
             shell_cmd = bots[bot_name]['get_shell'].clone
           end
+          
+          if shell_cmd != "false"
+            # substitute special variables
+            shell_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
+            # add a ; to ensure it is run via bash
+            shell_cmd << ';'
+            Print.debug shell_cmd
 
-          # substitute special variables
-          shell_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
-          # add a ; to ensure it is run via bash
-          shell_cmd << ';'
-          Print.debug shell_cmd
+            Open3.popen2e(shell_cmd) do |stdin, stdout_err, wait_thr|
+              # check whether we have shell by echoing "shelltest"
+              got_shell = false
+              lines = ''
+              post_lines = ''
+              i = 0
+              while i < 60 and not got_shell # retry for a while
+                i += 1
+                Print.debug i.to_s
+                stdin.puts "echo shelltest\n"
+                sleep(5)
 
-          Open3.popen2e(shell_cmd) do |stdin, stdout_err|
-            # check whether we have shell by echoing "shelltest"
-            # sleep(1)
-            stdin.puts "echo shelltest\n"
-            sleep(3)
+                # non-blocking read from buffer
+                begin
+                  while ch = stdout_err.read_nonblock(1)
+                    lines << ch
+                  end
+                rescue # continue consuming until input blocks
+                end
+                bots[bot_name]['attacks'][current]['get_shell_command_output'] = lines
 
-            # non-blocking read from buffer
-            lines = ''
-            begin
-              while ch = stdout_err.read_nonblock(1)
-                lines << ch
+                Print.debug lines
+                if lines =~ /shelltest/i
+                  got_shell = true
+                  Print.debug 'Got shell!'
+                else
+                  Print.debug 'Still trying to get shell...'
+                  m.reply '...'
+                end
               end
-            rescue # continue consuming until input blocks
-            end
-            bots[bot_name]['attacks'][current]['get_shell_command_output'] = lines
+              Print.debug got_shell.to_s
 
-            Print.debug lines
-            if lines =~ /shelltest/i
-              m.reply bots[bot_name]['messages']['got_shell'].sample
+              if got_shell
+                m.reply bots[bot_name]['messages']['got_shell'].sample
 
-              post_cmd = bots[bot_name]['attacks'][current]['post_command']
-              if post_cmd
-                post_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
-                stdin.puts "#{post_cmd}\n"
-              end
+                post_cmd = bots[bot_name]['attacks'][current]['post_command']
+                if post_cmd
+                  Print.debug post_cmd
+                  post_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
+                  stdin.puts "#{post_cmd}\n"
+                end
 
-              # sleep(1)
-              stdin.close # no more input, end the program
-              lines = stdout_err.read.chomp()
-              bots[bot_name]['attacks'][current]['post_command_output'] = lines
+                sleep(3)
+                # non-blocking read from buffer
+                begin
+                  while ch = stdout_err.read_nonblock(1)
+                    post_lines << ch
+                  end
+                rescue # continue consuming until input blocks
+                end
+                begin
+                  Timeout.timeout(5) do # timeout 10 sec
+                    stdin.close # no more input, end the program
+                    post_lines = stdout_err.read.chomp()
+                  end
+                rescue Timeout::Error
+                  Process.kill("KILL", wait_thr.pid)
 
-              unless bots[bot_name]['attacks'][current].key?('suppress_command_output_feedback')
-                m.reply "FYI: #{lines}"
-              end
-              Print.debug lines
+                  begin
+                    while ch = stdout_err.read_nonblock(1)
+                      post_lines << ch
+                    end
+                  rescue # continue consuming until input blocks
+                  end
 
-              current = check_output_conditions(bot_name, bots, current, lines, m)
+                end
 
-            else
-              Print.debug("Shell failed...")
-              # shell fail message will use the default message, unless specified for the attack
-              if bots[bot_name]['attacks'][current].key?('shell_fail_message')
-                m.reply bots[bot_name]['attacks'][current]['shell_fail_message']
+                bots[bot_name]['attacks'][current]['post_command_output'] = post_lines
+
+                unless bots[bot_name]['attacks'][current].key?('suppress_command_output_feedback')
+                    m.reply "FYI: #{post_lines}"
+                end
+                Print.debug post_lines
+
+                current = check_output_conditions(bot_name, bots, current, post_lines, m)
+
               else
-                m.reply bots[bot_name]['messages']['shell_fail_message']
+                Print.debug("Shell failed...")
+                # shell fail message will use the default message, unless specified for the attack
+                if bots[bot_name]['attacks'][current].key?('shell_fail_message')
+                    m.reply bots[bot_name]['attacks'][current]['shell_fail_message']
+                else
+                    m.reply bots[bot_name]['messages']['shell_fail_message']
+                end
+                # under specific situations reveal the error message to the user
+                if lines =~ /command not found/
+                    m.reply "Looks like there is some software missing: #{lines}"
+                end
               end
-              # under specific situations reveal the error message to the user
-              if lines =~ /command not found/
-                m.reply "Looks like there is some software missing: #{lines}"
-              end
+                
             end
-            
           end
+
           m.reply bots[bot_name]['messages']['repeat'].sample
         end
 

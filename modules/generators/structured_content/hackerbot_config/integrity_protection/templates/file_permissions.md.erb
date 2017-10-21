@@ -63,10 +63,10 @@ You can't.
 You can remove the ability of **everyone else** changing the content. ==Run:==
 
 ```bash
-chmod u+w,o-rw /home/<%= $main_user %>/example
+chmod u+w,go-rw /home/<%= $main_user %>/example
 ```
 > u+w: user who owns the file, add write access
-> o-rw: others, remove read and write access
+> go-rw: group and others, remove read and write access
 
 
 You can view the file permissions with:
