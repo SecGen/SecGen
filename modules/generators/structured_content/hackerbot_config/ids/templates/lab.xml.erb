@@ -176,7 +176,7 @@ I'm about to attack your system, use Snort to detect the method of attack.
 		<get_shell>false</get_shell>
 		<post_command></post_command>
 
-		<prompt>#3 Your webserver is about to be scanned/attacked. Make sure you are using Snort to monitor your network... This make take a while (a few minutes) please be patient.</prompt>
+		<prompt>#3 Your webserver is about to be scanned/attacked. Make sure you are using Snort to monitor your network...</prompt>
 
 		<condition>
 			<output_matches>0</output_matches>
@@ -221,8 +221,8 @@ I'm about to attack your system, use Snort to detect the method of attack.
 		</else_condition>
 
 		<quiz>
-			<question>What user did the attacker get access to?</question>
-			<answer>^distccd</answer>
+			<question>What vulnerable software was exploited?</question>
+			<answer>distcc</answer>
 			<correct_answer_response>:) <%= $flags.pop %></correct_answer_response>
 			<trigger_next_attack />
 		</quiz>
@@ -249,8 +249,8 @@ I'm about to attack your system, use Snort to detect the method of attack.
 		</else_condition>
 
 		<quiz>
-			<question>Was that a scan or an attack?</question>
-			<answer>^scan$</answer>
+			<question>What kind of scan was that?</question>
+			<answer>^Xmas$</answer>
 			<correct_answer_response>:) <%= $flags.pop %></correct_answer_response>
 			<trigger_next_attack />
 		</quiz>
