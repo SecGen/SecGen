@@ -39,7 +39,7 @@ class GemExec
     Dir.chdir(working_dir)
     output_hash = {:output => '', :status => 0}
     begin
-      output_hash[:output] = ProcessHelper.process("#{gem_path} #{arguments}")
+      output_hash[:output] = ProcessHelper.process("#{gem_path} #{arguments}", {:timeout => (60*40)})
     rescue Exception => ex
       output_hash[:output] = ex.to_s.split('Command output: ')[1]
       output_hash[:status] = 1
