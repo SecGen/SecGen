@@ -50,32 +50,34 @@ There are lots more options that can make rules more precise and efficient. For 
 
 Lets create a basic rule that detects any web traffic on port 80.
 
-**On your IDS server:**
-
 ```bash
-echo 'alert tcp any any -> any 80  (msg: "Web traffic detected - ASDFGH"; sid:1000002; rev:1;)' >> /etc/snort/rules/my.rules
+echo "alert tcp any any -> any 80  (msg: "Web traffic detected - RANDOM"; sid:1000002; rev:1;)" >> /etc/snort/rules/my.rules
 
-service snort restart
+systemctl restart snort
 ```
-**From your desktop VM**, browse to a website, and confirm the rule worked to generate an alert containing "ASDFGH". Note that Hackerbot will require you to include particular text within the alerts of the rules you write.
+Browse to a website, and confirm the rule worked to generate an alert containing RANDOM.
 
-==Don't forget to reload Snort every time you add or modify a rule!==
 
 # TODO RANDOM
 # HACKERBOT ATTACKS
 
 Add a rule to detect any attempt to connect to a Telnet server, the output message must include "- RANDOM". Connections to a Telnet server could be a security issue, since logging into a networked computer using Telnet is known to be insecure because traffic is not encrypted. Don't forget to reload Snort!
 
-#TODO SecGen module to install telnetd
+
 
 
 
 Once you have saved your rule and reloaded Snort, test this rule by using Telnet. Rather than starting an actual Telnet server (unless you want to do so), you can simulate this by using Netcat to listen on the Telnet port, then connect with Telnet from the desktop VM.
+
 On a terminal on the Kali Linux VM:
+
 ```bash
 netcat -l -p 23
 ```
+
 Leaving that running, and on a terminal on the openSUSE VM:
+
+
 ```bash
 telnet localhost
 ```

@@ -3,11 +3,11 @@
 <generator xmlns="http://www.github/cliffe/SecGen/generator"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
-  <name>Hackerbot config for a IDS lab</name>
+  <name>Hackerbot config for a IDS rules lab</name>
   <author>Z. Cliffe Schreuders</author>
   <module_license>GPLv3</module_license>
-  <description>Generates a config file for a hackerbot for a backups lab.
-    Topics covered: .</description>
+  <description>Generates a config file for a hackerbot for a IDS lab.
+    Topics covered: Writing Snort rules.</description>
 
   <type>hackerbot_config</type>
   <platform>linux</platform>
@@ -31,6 +31,10 @@
 
   <!--TODO: less flags-->
   <default_input into="flags">
+    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>
     <generator type="flag_generator"/>
     <generator type="flag_generator"/>
     <generator type="flag_generator"/>
