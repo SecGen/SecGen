@@ -9,8 +9,8 @@ class IDS < HackerbotConfigGenerator
 
   def initialize
     super
-    self.module_name = 'Hackerbot Config Generator IDS'
-    self.title = 'IDS'
+    self.module_name = 'Hackerbot Config Generator HvHB1'
+    self.title = 'HvHB1'
 
     self.local_dir = File.expand_path('../../',__FILE__)
     self.templates_path = "#{self.local_dir}/templates/"

@@ -134,13 +134,13 @@
 				<value>true</value>
 			</input>
 			<input into="start_page">
-				<value>http://172.16.0.5</value>
+				<value>http://172.16.0.4</value>
 			</input>
 		</utility>
 
 		<utility module_path=".*pidgin">
 			<input into="server_ip">
-				<value>172.16.0.5</value>
+				<value>172.16.0.4</value>
 			</input>
 			<input into="accounts">
 				<datastore access="0">accounts</datastore>
