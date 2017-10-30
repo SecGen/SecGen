@@ -57,9 +57,11 @@ echo 'alert tcp any any -> any 80  (msg: "Web traffic detected - ASDFGH"; sid:10
 
 service snort restart
 ```
+
+==**Don't forget to reload Snort every time you add or modify a rule!**==
+
 **From your desktop VM**, browse to a website, and confirm the rule worked to generate an alert containing "ASDFGH". Note that Hackerbot will require you to include particular text within the alerts of the rules you write.
 
-==Don't forget to reload Snort every time you add or modify a rule!==
 
 # TODO RANDOM
 # HACKERBOT ATTACKS

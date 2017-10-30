@@ -53,9 +53,9 @@ Lets create a basic rule that detects any web traffic on port 80.
 ```bash
 echo "alert tcp any any -> any 80  (msg: "Web traffic detected - RANDOM"; sid:1000002; rev:1;)" >> /etc/snort/rules/my.rules
 
-systemctl restart snort
+sudo service snort restart
 ```
-Browse to a website, and confirm the rule worked to generate an alert containing RANDOM.
+Browse to a website, and confirm the rule worked to generate an alert containing the text 'RANDOM'.
 
 
 # TODO RANDOM
