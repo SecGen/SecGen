@@ -39,14 +39,17 @@ class GemExec
     Dir.chdir(working_dir)
     output_hash = {:output => '', :status => 0, :exception => nil}
     begin
-      output_hash[:output] = ProcessHelper.process("#{gem_path} #{arguments}", {:timeout => (30),
+      output_hash[:output] = ProcessHelper.process("#{gem_path} #{arguments}", {:pty => true, :timeout => (30),
                                                                                 include_output_in_exception: true})
     rescue Exception => ex
       output_hash[:status] = 1
       output_hash[:exception] = ex
       if ex.class == ProcessHelper::UnexpectedExitStatusError
         output_hash[:output] = ex.to_s.split('Command output: ')[1]
+        Print.err 'Non-zero exit status...'
       elsif ex.class == ProcessHelper::TimeoutError
+        Print.err 'Timeout: Killing process...'
+        sleep(30)
         output_hash[:output] = ex.to_s.split('Command output prior to timeout: ')[1]
       else
         output_hash[:output] = nil

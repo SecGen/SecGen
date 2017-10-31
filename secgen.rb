@@ -162,7 +162,7 @@ def build_vms(project_dir, options)
 
           Print.err 'Error creating VMs [' + failures.join(',') + '] destroying VMs and retrying...'
           failures.each do |failed_vm|
-            destroy = 'destroy ' + failed_vm
+            destroy = 'destroy ' + failed_vm + ' -f'
             destroy_output = GemExec.exe('vagrant', project_dir, destroy)
             if destroy_output[:status] == 0
               Print.info "vagrant #{destroy} completed successfully."
@@ -174,11 +174,11 @@ def build_vms(project_dir, options)
           end
         else
           Print.err 'Vagrant up timeout, destroying VMs and retrying...'
-          GemExec.exe('vagrant', project_dir, 'destroy')
+          GemExec.exe('vagrant', project_dir, 'destroy -f')
         end
       else
         Print.err 'Error provisioning VMs, destroying VMs and exiting SecGen.'
-        GemExec.exe('vagrant', project_dir, 'destroy')
+        GemExec.exe('vagrant', project_dir, 'destroy -f')
         exit 1
       end
     end
