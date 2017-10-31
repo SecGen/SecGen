@@ -149,7 +149,7 @@ def build_vms(project_dir, options)
     else
       if retry_count > 0
         # Identify which VMs failed
-        if vagrant_output[:output] != nil
+        if vagrant_output[:exception].type == ProcessHelper::UnexpectedExitStatusError
           split = vagrant_output[:output].split('==>')
           failures = []
           split.each do |line|
@@ -177,7 +177,8 @@ def build_vms(project_dir, options)
           GemExec.exe('vagrant', project_dir, 'destroy')
         end
       else
-        Print.err 'Error creating VMs, exiting SecGen.'
+        Print.err 'Error provisioning VMs, destroying VMs and exiting SecGen.'
+        GemExec.exe('vagrant', project_dir, 'destroy')
         exit 1
       end
     end
