@@ -44,9 +44,9 @@ class GemExec
     rescue Exception => ex
       output_hash[:status] = 1
       output_hash[:exception] = ex
-      if ex.type == ProcessHelper::UnexpectedExitStatusError
+      if ex.class == ProcessHelper::UnexpectedExitStatusError
         output_hash[:output] = ex.to_s.split('Command output: ')[1]
-      elsif ex.type == ProcessHelper::TimeoutError
+      elsif ex.class == ProcessHelper::TimeoutError
         output_hash[:output] = ex.to_s.split('Command output prior to timeout: ')[1]
       else
         output_hash[:output] = nil
