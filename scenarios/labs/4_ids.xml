@@ -199,7 +199,8 @@
 		<!--TODO: FIXME ftp modules are currently broken-->
 		<!--<service module_path=".*vsftpd"/>-->
 
-		<service type="httpd"/>
+		<!--TODO: Fix the apache module -->
+		<service module_path=".*lamp.*"/>
 
 		<!--<service module_path="services/unix/http/parameterised_website">
 			<input into="organisation">
