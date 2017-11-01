@@ -46,7 +46,7 @@ Tcpdump can format the output in various ways, showing various levels of detail.
 ```bash
 sudo tcpdump -A  -i eth1
 ```
-> This shows the packet **content** without the information about the source and destination. Note that this content will contain binary data that can be difficult understand.
+> This shows the packet **content** without the information about the source and destination. 
 
 When you ==access a web page in a browser on the desktop VM== (go ahead... ==reload this labsheet== webpage), Tcpdump will display the content, so long as the traffic is not SSL encrypted (for example, so long as the URL doesn't start with http**s**://). Depending on the webserver and browser, the content may be compressed (but not encrypted) to save bandwidth.
 

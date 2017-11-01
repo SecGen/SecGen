@@ -99,7 +99,7 @@
 	</messages>
 
 	<tutorial_info>
-		<title>Backing Up and Recovering from Disaster: SSH/SCP, Deltas, and Rsync</title>
+		<title>IDS</title>
 		<tutorial><%= ERB.new(File.read self.templates_path + 'intro.md.erb').result(self.get_binding) %></tutorial>
 		<footer>
 <%= File.read self.templates_path + 'resources.md.erb' %>
@@ -176,7 +176,7 @@ I'm about to attack your system, use Snort to detect the method of attack.
 		<get_shell>false</get_shell>
 		<post_command></post_command>
 
-		<prompt>#3 Your webserver is about to be scanned/attacked. Make sure you are using Snort to monitor your network... This make take a while (a few minutes) please be patient.</prompt>
+		<prompt>#3 Your webserver is about to be scanned/attacked. Make sure you are using Snort to monitor your network...</prompt>
 
 		<condition>
 			<output_matches>0</output_matches>
@@ -221,8 +221,8 @@ I'm about to attack your system, use Snort to detect the method of attack.
 		</else_condition>
 
 		<quiz>
-			<question>What user did the attacker get access to?</question>
-			<answer>^distccd</answer>
+			<question>What vulnerable software was exploited?</question>
+			<answer>distcc</answer>
 			<correct_answer_response>:) <%= $flags.pop %></correct_answer_response>
 			<trigger_next_attack />
 		</quiz>
@@ -230,7 +230,7 @@ I'm about to attack your system, use Snort to detect the method of attack.
 
 	<attack>
 		<pre_shell>nmap -sX <%= $web_server_ip %> > /dev/null; echo $? </pre_shell>
-		<shell>false</shell>
+		<get_shell>false</get_shell>
 		<post_command></post_command>
 
 		<prompt>#5 Your webserver is about to be scanned/attacked. Make sure you are using Snort to monitor your network...</prompt>
@@ -249,17 +249,16 @@ I'm about to attack your system, use Snort to detect the method of attack.
 		</else_condition>
 
 		<quiz>
-			<question>Was that a scan or an attack?</question>
-			<answer>^scan$</answer>
+			<question>What kind of scan was that?</question>
+			<answer>^Xmas$</answer>
 			<correct_answer_response>:) <%= $flags.pop %></correct_answer_response>
 			<trigger_next_attack />
 		</quiz>
 
-		<tutorial><%= ERB.new(File.read self.templates_path + 'snort.md.erb').result(self.get_binding) %></tutorial>
 	</attack>
 
 	<attack>
-		<shell>msfconsole -x "use exploit/unix/misc/distcc_exec; set RHOST <%= $web_server_ip %>; exploit"</shell>
+		<get_shell>msfconsole -x "use exploit/unix/misc/distcc_exec; set RHOST <%= $web_server_ip %>; exploit"</get_shell>
 		<post_command>whoami > /dev/null; echo "<%= $flags.pop %>" > /dev/null; echo 'Find the flag! (in the network traffic)'</post_command>
 
 		<prompt>#6 Your webserver is about to be scanned/attacked. Use Tcpdump and/or Wireshark to view the behaviour of the attacker. There is a flag to be found over the wire. </prompt>
