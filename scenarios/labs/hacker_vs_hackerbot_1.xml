@@ -22,8 +22,8 @@
 						</input>
 					</generator>
 				</input>
-				<input into="password">
-					<value>tiaspbiqe2r</value>
+				<input into="password" into_datastore="desktop_login_password">
+					<generator type="strong_password_generator"/>
 				</input>
 				<input into="super_user">
 					<value>true</value>
@@ -65,7 +65,7 @@
 					</generator>
 				</input>
 				<input into="password">
-					<value>test</value>
+					<generator type="strong_password_generator"/>
 				</input>
 				<input into="super_user">
 					<value>false</value>
@@ -112,9 +112,6 @@
 		</utility>
 
 		<utility module_path=".*kde_minimal">
-			<input into="autologin_user">
-				<datastore access="0" access_json="['username']">accounts</datastore>
-			</input>
 			<input into="accounts">
 				<datastore>accounts</datastore>
 			</input>
