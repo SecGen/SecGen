@@ -172,7 +172,7 @@ def build_vms(project_dir, options)
             end
             sleep(10)
           end
-        else
+        else   # TODO:  elsif vagrant_output[:exception].type == ProcessHelper::TimeoutError   >destroy individually broken vms as above?
           Print.err 'Vagrant up timeout, destroying VMs and retrying...'
           GemExec.exe('vagrant', project_dir, 'destroy -f')
         end

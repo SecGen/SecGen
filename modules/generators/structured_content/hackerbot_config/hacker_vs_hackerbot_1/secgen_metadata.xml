@@ -3,11 +3,10 @@
 <generator xmlns="http://www.github/cliffe/SecGen/generator"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
-  <name>Hackerbot config for a IDS lab</name>
+  <name>Hackerbot config for a test covering the first few hackerbot labs</name>
   <author>Z. Cliffe Schreuders</author>
   <module_license>GPLv3</module_license>
-  <description>Generates a config file for a hackerbot for a backups lab.
-    Topics covered: .</description>
+  <description>Generates a config file for a hackerbot for a lab test..</description>
 
   <type>hackerbot_config</type>
   <platform>linux</platform>
@@ -15,7 +14,7 @@
   <read_fact>accounts</read_fact>
   <read_fact>flags</read_fact>
   <read_fact>root_password</read_fact>
-  <read_fact>web_server_ip</read_fact>
+  <read_fact>backup_server_ip</read_fact>
   <read_fact>ids_server_ip</read_fact>
   <read_fact>hackerbot_server_ip</read_fact>
 
@@ -31,6 +30,9 @@
 
   <!--TODO: less flags-->
   <default_input into="flags">
+    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>
     <generator type="flag_generator"/>
     <generator type="flag_generator"/>
     <generator type="flag_generator"/>

@@ -34,6 +34,9 @@ def check_output_conditions(bot_name, bots, current, lines, m)
 
           sleep(1)
           # prompt for current hack
+          if bots[bot_name]['messages'].key?('show_attack_numbers')
+            m.reply "** ##{current + 1} **"
+          end
           m.reply bots[bot_name]['attacks'][current]['prompt']
         else
           m.reply bots[bot_name]['messages']['last_attack'].sample
@@ -130,6 +133,9 @@ def read_bots (irc_server_ip_address)
           current = bots[bot_name]['current_attack']
 
           # prompt for the first attack
+          if bots[bot_name]['messages'].key?('show_attack_numbers')
+            m.reply "** ##{current + 1} **"
+          end
           m.reply bots[bot_name]['attacks'][current]['prompt']
           m.reply bots[bot_name]['messages']['say_ready'].sample
         end
@@ -148,6 +154,9 @@ def read_bots (irc_server_ip_address)
             current = bots[bot_name]['current_attack']
 
             # prompt for current hack
+            if bots[bot_name]['messages'].key?('show_attack_numbers')
+              m.reply "** ##{current + 1} **"
+            end
             m.reply bots[bot_name]['attacks'][current]['prompt']
             m.reply bots[bot_name]['messages']['say_ready'].sample
           else
@@ -169,6 +178,9 @@ def read_bots (irc_server_ip_address)
             current = bots[bot_name]['current_attack']
 
             # prompt for current hack
+            if bots[bot_name]['messages'].key?('show_attack_numbers')
+              m.reply "** ##{current + 1} **"
+            end
             m.reply bots[bot_name]['attacks'][current]['prompt']
             m.reply bots[bot_name]['messages']['say_ready'].sample
           else
@@ -204,6 +216,7 @@ def read_bots (irc_server_ip_address)
             if bots[bot_name]['attacks'][current].key?('get_shell_command_output')
               correct_answer.gsub!(/{{pre_shell_command_output_first_line}}/, (bots[bot_name]['attacks'][current]['get_shell_command_output']||'').split("\n").first)
             end
+            correct_answer.chomp!
 
             if answer.match(correct_answer)
               m.reply bots[bot_name]['messages']['correct_answer']
@@ -218,6 +231,9 @@ def read_bots (irc_server_ip_address)
 
                   sleep(1)
                   # prompt for current hack
+                  if bots[bot_name]['messages'].key?('show_attack_numbers')
+                    m.reply "** ##{current + 1} **"
+                  end
                   m.reply bots[bot_name]['attacks'][current]['prompt']
                   m.reply bots[bot_name]['messages']['say_ready'].sample
                 else
@@ -369,9 +385,9 @@ def read_bots (irc_server_ip_address)
                 rescue # continue consuming until input blocks
                 end
                 begin
-                  Timeout.timeout(5) do # timeout 10 sec
+                  Timeout.timeout(15) do # timeout 10 sec
                     stdin.close # no more input, end the program
-                    post_lines = stdout_err.read.chomp()
+                    post_lines << stdout_err.read.chomp()
                   end
                 rescue Timeout::Error
                   Process.kill("KILL", wait_thr.pid)
