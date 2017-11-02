@@ -149,7 +149,7 @@ def build_vms(project_dir, options)
     else
       if retry_count > 0
         # Identify which VMs failed
-        if vagrant_output[:exception].type == ProcessHelper::UnexpectedExitStatusError
+        if vagrant_output[:exception].class == ProcessHelper::UnexpectedExitStatusError
           split = vagrant_output[:output].split('==>')
           failures = []
           split.each do |line|
