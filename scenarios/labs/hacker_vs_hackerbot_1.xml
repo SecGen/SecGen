@@ -8,10 +8,6 @@
 		<system_name>desktop</system_name>
 		<base distro="Debian 7.8" type="desktop" name="KDE"/>
 
-		<input into_datastore="organisation">
-			<generator type="organisation"/>
-		</input>
-
 		<!--generate two accounts, YOU and someone else-->
 		<input into_datastore="accounts">
 			<generator type="account">
@@ -120,6 +116,7 @@
 			</input>
 		</utility>
 		<utility module_path=".*handy_cli_tools"/>
+		<utility module_path=".*hash_tools"/>
 		<utility module_path=".*nmap"/>
 		<utility module_path=".*wireshark"/>
 
