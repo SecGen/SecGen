@@ -11,30 +11,39 @@ class OVirtFunctions
   # @param [String] destroy_output_log -- logfile from vagrant destroy process which contains loose VMs
   # @param [String] options -- command-line opts, used for building oVirt connection
   def self.remove_uncreated_vms(destroy_output_log, options, scenario)
-
-    # Build an ovirt connection
-    ovirt_connection = get_ovirt_connection(options)
-
-    # Determine the oVirt name of the uncreated VMs and Build the oVirt VM names
-    ovirt_vm_names = build_ovirt_names(scenario, options[:prefix], get_uncreated_vms(destroy_output_log))
-    ovirt_vm_names.each do |vm_name|
-      # Find the oVirt VM objects
-      vms = vms_service(ovirt_connection).list(search: "name=#{vm_name}")
-
-      # Shut down and remove the VMs
-      vms.each do |vm|
-        begin
-          Timeout.timeout(60*5) do
-            while vm_exists(ovirt_connection, vm)
-              shutdown_vm(ovirt_connection, vm)
-              remove_vm(ovirt_connection, vm)
+    retry_count = 0
+    max_retries = 5
+    while retry_count <= max_retries
+      begin
+        # Build an ovirt connection
+        ovirt_connection = get_ovirt_connection(options)
+        # Determine the oVirt name of the uncreated VMs and Build the oVirt VM names
+        ovirt_vm_names = build_ovirt_names(scenario, options[:prefix], get_uncreated_vms(destroy_output_log))
+        ovirt_vm_names.each do |vm_name|
+          # Find the oVirt VM objects
+          vms = vms_service(ovirt_connection).list(search: "name=#{vm_name}")
+          # Shut down and remove the VMs
+          vms.each do |vm|
+            begin
+              Timeout.timeout(60*5) do
+                while vm_exists(ovirt_connection, vm)
+                  shutdown_vm(ovirt_connection, vm)
+                  remove_vm(ovirt_connection, vm)
+                end
+                Print.info 'Successfully removed VM: ' + vm.name + ' -- ID: ' + vm.id
+              end
+            rescue Timeout::Error
+              Print.err "Error: Removal of #{vm.name} timed-out. (ID: #{vm.id})"
+              next
             end
-            Print.info 'Successfully removed VM: ' + vm.name + ' -- ID: ' + vm.id
           end
-        rescue Timeout::Error
-          Print.err "Error: Removal of #{vm.name} timed-out. (ID: #{vm.id})"
-          next
         end
+      rescue OvirtSDK4::Error => ex
+        if retry_count < max_retries
+          Print.err 'Error: Retrying... #' + (retry_count + 1).to_s + ' of #' + max_retries.to_s
+        end
+        retry_count += 1
+        puts ex
       end
     end
   end
