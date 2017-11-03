@@ -43,6 +43,8 @@ GEM
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
     nori (2.6.0)
+    ovirt-engine-sdk (4.1.8)
+      json
     pg (0.21.0)
     pkg-config (1.1.7)
     process_helper (0.1.1)
@@ -87,6 +89,7 @@ DEPENDENCIES
   minitest
   nokogiri
   nori
+  ovirt-engine-sdk
   pg
   process_helper
   programr!

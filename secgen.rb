@@ -4,6 +4,7 @@ require 'fileutils'
 require_relative 'lib/helpers/constants.rb'
 require_relative 'lib/helpers/print.rb'
 require_relative 'lib/helpers/gem_exec.rb'
+require_relative 'lib/helpers/ovirt.rb'
 require_relative 'lib/readers/system_reader.rb'
 require_relative 'lib/readers/module_reader.rb'
 require_relative 'lib/output/project_files_creator.rb'
@@ -119,7 +120,7 @@ end
 
 # Builds the vm via the vagrant file in the project dir
 # @param project_dir
-def build_vms(project_dir, options)
+def build_vms(scenario, project_dir, options)
 
   Print.info "Building project: #{project_dir}"
   system = ''
@@ -165,7 +166,11 @@ def build_vms(project_dir, options)
             destroy = 'destroy ' + failed_vm + ' -f'
             destroy_output = GemExec.exe('vagrant', project_dir, destroy)
             if destroy_output[:status] == 0
-              Print.info "vagrant #{destroy} completed successfully."
+              if !destroy_output[:output].include? 'VM is not created. Please run `vagrant up` first.'
+                Print.info "vagrant #{destroy} completed successfully."
+              else
+                OVirtFunctions::remove_uncreated_vms(destroy_output[:output], options, scenario)
+              end
             else
               Print.err "Failed to destroy #{failed_vm}. Exiting."
               exit 1
@@ -248,7 +253,7 @@ end
 # Runs methods to run and configure a new vm from the configuration file
 def run(scenario, project_dir, options)
   build_config(scenario, project_dir, options)
-  build_vms(project_dir, options)
+  build_vms(scenario, project_dir, options)
 end
 
 def default_project_dir
