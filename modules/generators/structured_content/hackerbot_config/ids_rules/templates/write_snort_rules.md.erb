@@ -42,13 +42,21 @@ And bringing all this together a Snort rule could read:
 
 This rule looks at packets destined for 192.168.0.1 on the pop3 Email port (110), and sends an alert if the content contains the "user" command (which is used to log on to check email). Note that this rule is imperfect as it is, since it is case sensitive.
 
-There are lots more options that can make rules more precise and efficient. For example, making them case insensitive, or starting to search content after an offset. Feel free to do some reading, to help you to create better IDS rules.
+Add the rule, and reload Snort:
+
+```bash
+echo "alert tcp any any -> 192.168.0.1 110 (msg: "Email login attempt"; content: "user"; classtype:attempted-user; sid:1000001; rev:1;)" >> /etc/snort/rules/my.rules
+
+sudo service snort restart
+```
+
+# TODO add instructions to test this email rule
+
+There are many more options that can make rules more precise and efficient. For example, making them case insensitive, or starting to search content after an offset. Feel free to do some reading, to help you to create better IDS rules.
 
 ==Figure out how the rule could be improved to be case insensitive.==
 
-==Browse the existing rules in `/etc/snort/rules` and figure out how at least two of them work.==
-
-Lets create a basic rule that detects any web traffic on port 80.
+Lets create a basic rule that detects any traffic on port 80 (web). ==Load this rule into Snort:==
 
 ```bash
 echo "alert tcp any any -> any 80  (msg: "Web traffic detected - RANDOM"; sid:1000002; rev:1;)" >> /etc/snort/rules/my.rules
@@ -56,9 +64,14 @@ echo "alert tcp any any -> any 80  (msg: "Web traffic detected - RANDOM"; sid:10
 sudo service snort restart
 ```
 Browse to a website, and confirm the rule worked to generate an alert containing the text 'RANDOM'.
+> Hackerbot will require you to include specific messages in your rules.
+
+==LabBook Question: Browse the existing rules in `/etc/snort/rules` and describe how one of the existing rules works.==
 
 
-# TODO RANDOM
+# TODO list common protocols and the ports they use
+
+
 # HACKERBOT ATTACKS
 
 Add a rule to detect any attempt to connect to a Telnet server, the output message must include "- RANDOM". Connections to a Telnet server could be a security issue, since logging into a networked computer using Telnet is known to be insecure because traffic is not encrypted. Don't forget to reload Snort!
