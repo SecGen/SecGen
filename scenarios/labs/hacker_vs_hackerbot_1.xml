@@ -126,6 +126,7 @@
 			</input>
 		</utility>
 		<utility module_path=".*handy_cli_tools"/>
+		<utility module_path=".*hash_tools"/>
 		<utility module_path=".*nmap"/>
 		<utility module_path=".*wireshark"/>
 

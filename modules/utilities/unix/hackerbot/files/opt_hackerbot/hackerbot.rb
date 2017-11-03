@@ -311,6 +311,7 @@ def read_bots (irc_server_ip_address)
 
           if bots[bot_name]['attacks'][current].key?('pre_shell')
             pre_shell_cmd = bots[bot_name]['attacks'][current]['pre_shell'].clone
+            pre_shell_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
             pre_output = `#{pre_shell_cmd}`
             unless bots[bot_name]['attacks'][current].key?('suppress_command_output_feedback')
               m.reply "FYI: #{pre_output}"
