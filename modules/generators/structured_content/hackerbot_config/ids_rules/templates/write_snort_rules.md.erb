@@ -1,6 +1,51 @@
+## Networking concepts (potentially revision)
+### The Internet protocol suite
+Modern network traffic (such as the Internet) typically uses the Internet protocol suite set of communications protocols. 
+
+The Internet protocol suite has four abstraction layers:
+
+> * **The application layer** is the scope within which applications create user data and communicate this data to other applications on another or the same host. The applications, or processes, make use of the services provided by the underlying, lower layers, especially the Transport Layer which provides reliable or unreliable pipes to other processes. The communications partners are characterized by the application architecture, such as the client-server model and peer-to-peer networking. This is the layer in which all higher level protocols, such as SMTP, FTP, SSH, HTTP, operate. Processes are addressed via ports which essentially represent services.
+> * **The transport layer** performs host-to-host communications on either the same or different hosts and on either the local network or remote networks separated by routers. It provides a channel for the communication needs of applications. UDP is the basic transport layer protocol, providing an unreliable datagram service. The Transmission Control Protocol provides flow-control, connection establishment, and reliable transmission of data.
+> * **The internet layer** has the task of exchanging datagrams across network boundaries. It provides a uniform networking interface that hides the actual topology (layout) of the underlying network connections. It is therefore also referred to as the layer that establishes internetworking, indeed, it defines and establishes the Internet. This layer defines the addressing and routing structures used for the TCP/IP protocol suite. The primary protocol in this scope is the Internet Protocol, which defines IP addresses. Its function in routing is to transport datagrams to the next IP router that has the connectivity to a network closer to the final data destination.
+> * **The link layer** defines the networking methods within the scope of the local network link on which hosts communicate without intervening routers. This layer includes the protocols used to describe the local network topology and the interfaces needed to effect transmission of Internet layer datagrams to next-neighbor hosts.
+> - (https://en.wikipedia.org/wiki/Internet_protocol_suite#Abstraction_layers)
+
+### Common services and (application layer) protocols
+In order to make sense of network traffic, it is important to be aware of common protocols and port numbers.
+
+| tcp/udp | Port(s) | Service |
+|---------|---------|---------|
+| tcp     | 20/21   | File Transfer Protocol (FTP) (RFC 959) |
+| tcp     | 22      | Secure Shell (SSH) (RFC 4250-4256) |
+| tcp     | 23      | Telnet (RFC 854) |
+| tcp     | 25      | Simple Mail Transfer Protocol (SMTP) (RFC 5321) |
+| tcp/udp | 53      | Domain Name System (DNS) (RFC 1034-1035) |
+| udp     | 69      | Trivial File Transfer Protocol (TFTP) (RFC 1350) |
+| tcp     | 80      | Hypertext Transfer Protocol (HTTP) (RFC 2616) |
+| tcp     | 110     | Post Office Protocol (POP) version 3 (RFC 1939) |
+| tcp/udp | 137/138/139 | NetBIOS (RFC 1001-1002) |
+| tcp     | 143     | Internet Message Access Protocol (IMAP) (RFC 3501) |
+| tcp/udp | 161/162 | Simple Network Management Protocol (SNMP) (RFC 1901-1908, 3411-3418) |
+| tcp/udp | 389     | Lightweight Directory Access Protocol (LDAP) (RFC 4510) |
+| tcp     | 443     | Hypertext Transfer Protocol over SSL/TLS (HTTPS) (RFC 2818) |
+| tcp/udp | 636     | Lightweight Directory Access Protocol over TLS/SSL (LDAPS) (RFC 4513) |
+| tcp     | 989/990 | FTP over TLS/SSL (RFC 4217) |
+| tcp     | 6660-6669 | Internet Relay Chat (IRC) |
+
+Please ensure you understand what each are used for. If you are not aware of what these protocols are, do some online reading. 
+> This may be a useful resource: http://www.pearsonitcertification.com/articles/article.aspx?p=1868080
+
+Keep in mind that in recent years more and more network based functionality is moving to be hosted via Web protocols (HTTP and HTTPS).
+
+### Using Wireshark
+
+Note that in Wireshark you can view individual packets, including IP and TCP headers. Wireshark also has support for viewing TCP streams, so that you can view the traffic at the application layer as it is sent between the two computers (such as, client and server). Simply right-click on a TCP entry and select "Follow -- TCP Stream".
+
+# TODO START Wireshark and follow stream on web browse
+
 ## Writing your own Snort rules
 
-Snort is predominantly designed as a signature-based IDS. Snort monitors the network for matches to rules that indicate activity that should trigger an alert. You have now seen Snort detect a few types of activity, and have added a rule to detect ICMP packets. Next you will apply more complicated rules, and create your own.
+Snort is predominantly designed as a signature-based IDS. Snort monitors the network for matches to rules that indicate activity that should trigger an alert. You have now seen Snort detect a few types of activity. Next you will apply more complicated rules, and create your own.
 
 You may find external reference guides to writing Snort rules helpful. See the resources section below, and Google may come in handy.
 
