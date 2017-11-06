@@ -47,8 +47,8 @@ def usage
    [list]
    --all (default): List all jobs in the queue table
    --id [integer n] (optional): List the entry for a specific Job ID
-   --running (optional): List jobs with status 'running'
    --todo (optional): List jobs with status 'todo'
+   --running (optional): List jobs with status 'running'
    --success (optional): List jobs with status 'success'
    --failed / --error (optional): List jobs with status 'error'
 
@@ -131,14 +131,14 @@ def parse_opts(opts)
         options[:random_ips] = arg.to_i
       when '--all'
         options[:all] = true
+      when '--todo'
+        options[:todo] = true
       when '--running'
         options[:running] = true
       when '--success'
         options[:success] = true
       when '--failed'
         options[:failed] = true
-      when '--todo'
-        options[:todo] = true
       else
         Print.err 'Invalid argument'
         exit(false)
@@ -251,14 +251,14 @@ def list(options)
   db_conn = PG::Connection.open(:dbname => 'batch_secgen')
   if options[:id]
     items = [select_id(db_conn, @prepared_statements, options[:id])]
-  elsif options[:running]
-    items = select_status(db_conn, @prepared_statements, :running)
-  elsif options[:failed]
-    items = select_status(db_conn, @prepared_statements, :failed)
   elsif options[:todo]
     items = select_status(db_conn, @prepared_statements, :todo)
+  elsif options[:running]
+    items = select_status(db_conn, @prepared_statements, :running)
   elsif options[:success]
     items = select_status(db_conn, @prepared_statements, :success)
+  elsif options[:failed]
+    items = select_status(db_conn, @prepared_statements, :failed)
   else #all
     items = select_all(db_conn)
   end
