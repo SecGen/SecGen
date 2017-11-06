@@ -45,8 +45,11 @@ def usage
    --all: Delete all jobs from the queue table
 
    [list]
+   --all (default): List all jobs in the queue table
    --id [integer n] (optional): List the entry for a specific Job ID
-   --all: List all jobs in the queue table
+   --running (optional): List jobs with status 'running'
+   --todo (optional): List jobs with status 'todo'
+   --failed / --error (optional): List jobs with status 'error'
 
    [misc]
    --help, -h: Shows this usage information
