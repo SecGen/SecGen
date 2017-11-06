@@ -49,6 +49,7 @@ def usage
    --id [integer n] (optional): List the entry for a specific Job ID
    --running (optional): List jobs with status 'running'
    --todo (optional): List jobs with status 'todo'
+   --success (optional): List jobs with status 'success'
    --failed / --error (optional): List jobs with status 'error'
 
    [misc]
@@ -84,6 +85,7 @@ def get_list_opts
                               ['--all', GetoptLong::OPTIONAL_ARGUMENT],
                               ['--todo', GetoptLong::NO_ARGUMENT],
                               ['--running', GetoptLong::NO_ARGUMENT],
+                              ['--success', GetoptLong::NO_ARGUMENT],
                               ['--failed', '--error', GetoptLong::NO_ARGUMENT]]
   parse_opts(GetoptLong.new(*list_options))
 end
@@ -131,6 +133,8 @@ def parse_opts(opts)
         options[:all] = true
       when '--running'
         options[:running] = true
+      when '--success'
+        options[:success] = true
       when '--failed'
         options[:failed] = true
       when '--todo'
@@ -253,6 +257,8 @@ def list(options)
     items = select_status(db_conn, @prepared_statements, :failed)
   elsif options[:todo]
     items = select_status(db_conn, @prepared_statements, :todo)
+  elsif options[:success]
+    items = select_status(db_conn, @prepared_statements, :success)
   else #all
     items = select_all(db_conn)
   end
