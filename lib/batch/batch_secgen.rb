@@ -7,7 +7,6 @@ require_relative '../helpers/print.rb'
 require_relative '../helpers/constants.rb'
 
 # Globals
-@db_conn = nil
 @secgen_args = ''
 @ranges_in_table = nil
 
@@ -137,22 +136,25 @@ end
 # Command Functions
 
 def add(options)
+  db_conn = PG::Connection.open(:dbname => 'batch_secgen')
+
   # Handle --instances
   instances = options[:instances]
   if (instances.to_i.to_s == instances) and instances.to_i >= 1
     instances.to_i.times do |count|
       instance_args = "--prefix batch_job_#{(count+1).to_s} " + @secgen_args
-      instance_args = generate_range_arg(options) + instance_args
-      insert_row(count.to_s, instance_args)
+      instance_args = generate_range_arg(db_conn, options) + instance_args
+      insert_row(db_conn, count.to_s, instance_args)
     end
   elsif instances.size > 0
     named_prefixes = instances.split(',')
     named_prefixes.each_with_index do |named_prefix, count|
       instance_secgen_args = "--prefix #{named_prefix} " + @secgen_args
-      instance_secgen_args = generate_range_arg(options) + instance_secgen_args
-      insert_row(count.to_s, instance_secgen_args)
+      instance_secgen_args = generate_range_arg(db_conn, options) + instance_secgen_args
+      insert_row(db_conn, count.to_s, instance_secgen_args)
     end
   end
+  db_conn.finish
 end
 
 def start(options)
@@ -166,12 +168,14 @@ def start(options)
 
   # Start the service and call secgen.rb
   current_threads = []
+  outer_loop_db_conn = PG::Connection.open(:dbname => 'batch_secgen')
   while true
-    if (get_jobs.size > 0) and (current_threads.size < options[:max_threads].to_i)
+    if (get_jobs(outer_loop_db_conn).size > 0) and (current_threads.size < options[:max_threads].to_i)
       current_threads << Thread.new {
-        current_job = get_jobs[0]
+        db_conn = PG::Connection.open(:dbname => 'batch_secgen')
+        current_job = get_jobs(db_conn)[0]
         job_id = current_job['id']
-        update_status(job_id, :running)
+        update_status(db_conn, job_id, :running)
         secgen_args = current_job['secgen_args']
 
         # execute secgen
@@ -181,11 +185,11 @@ def start(options)
 
         # Update job status and back-up paths
         if status.exitstatus == 0
-          update_status(job_id, :success)
+          update_status(db_conn, job_id, :success)
           log_prefix = ''
           backup_path = 'batch/successful/'
         else
-          update_status(job_id, :error)
+          update_status(db_conn, job_id, :error)
           log_prefix = 'ERROR_'
           backup_path = 'batch/failed/'
         end
@@ -215,6 +219,8 @@ def start(options)
           Print.err("Fatal error on job #{job_id}: SecGen crashed before project creation.")
           Print.err('Check your scenario file.')
         end
+
+        db_conn.finish
       }
       sleep(1)
     else
@@ -226,119 +232,124 @@ def start(options)
 end
 
 def list(options)
+  db_conn = PG::Connection.open(:dbname => 'batch_secgen')
   if options[:id] == ''
-    items = select_all
+    items = select_all(db_conn)
     items.each do |row|
       Print.info row
     end
   else
-    Print.info select_id(options[:id])
+    Print.info select_id(db_conn, options[:id])
   end
-
+  db_conn.finish
 end
 
 # reset jobs in batch to status => 'todo'
 def reset(options)
+  db_conn = PG::Connection.open(:dbname => 'batch_secgen')
   if options[:all]
-    update_all_to_status(:todo)
+    update_all_to_status(db_conn, :todo)
   end
   if options[:running]
-    update_all_by_status(:running, :todo)
+    update_all_by_status(db_conn, :running, :todo)
   end
   if options[:failed]
-    update_all_by_status(:error, :todo)
+    update_all_by_status(db_conn, :error, :todo)
   end
+  db_conn.finish
 end
 
 def delete(options)
+  db_conn = PG::Connection.open(:dbname => 'batch_secgen')
   if options[:id] != ''
-    delete_id(options[:id])
+    delete_id(db_conn, options[:id])
   elsif options[:failed]
-    delete_failed
+    delete_failed(db_conn)
   elsif options[:all]
-    delete_all
+    delete_all(db_conn)
   end
-end
-
-def get_jobs
-  select_all_todo.to_a
+  db_conn.finish
 end
 
 # Database interactions
-def insert_row(statement_id, secgen_args)
+def insert_row(db_conn, statement_id, secgen_args)
   statement = "insert_row_#{statement_id}"
   # Add --shutdown and strip trailing whitespace
   secgen_args = '--shutdown ' + secgen_args.strip
   Print.info "Adding to queue: '#{statement}' '#{secgen_args}' 'todo'"
-  @db_conn.prepare(statement, 'insert into queue (secgen_args, status) values ($1, $2)')
-  @db_conn.exec_prepared(statement, [secgen_args, 'todo'])
+  db_conn.prepare(statement, 'insert into queue (secgen_args, status) values ($1, $2)')
+  db_conn.exec_prepared(statement, [secgen_args, 'todo'])
 end
 
-def select_all
-  @db_conn.exec_params('SELECT * FROM queue;')
+def select_all(db_conn)
+  db_conn.exec_params('SELECT * FROM queue;')
 end
 
-def select_all_todo
-  @db_conn.exec_params("SELECT * FROM queue where status = 'todo';")
+def select_all_todo(db_conn)
+  db_conn.exec_params("SELECT * FROM queue where status = 'todo';")
 end
 
-def select_id(id)
+def select_id(db_conn, id)
   statement = "select_id_#{id}"
-  @db_conn.prepare(statement, 'SELECT * FROM queue where id = $1;')
-  @db_conn.exec_prepared(statement, [id]).first
+  db_conn.prepare(statement, 'SELECT * FROM queue where id = $1;')
+  db_conn.exec_prepared(statement, [id]).first
 end
 
-def update_status(job_id, status)
+def update_status(db_conn, job_id, status)
   status_enum = {:todo => 'todo', :running => 'running', :success => 'success', :error => 'error'}
 
   statement = "update_status_#{job_id}_#{status}"
-  @db_conn.prepare(statement, 'UPDATE queue SET status = $1 WHERE id = $2')
-  @db_conn.exec_prepared(statement,[status_enum[status], job_id])
+  db_conn.prepare(statement, 'UPDATE queue SET status = $1 WHERE id = $2')
+  db_conn.exec_prepared(statement, [status_enum[status], job_id])
 end
 
-def update_all_by_status(from_status, to_status)
+def update_all_by_status(db_conn, from_status, to_status)
   status_enum = {:todo => 'todo', :running => 'running', :success => 'success', :error => 'error'}
 
   statement = "mass_update_status_#{from_status}_#{to_status}"
-  @db_conn.prepare(statement, 'UPDATE queue SET status = $1 WHERE status = $2')
-  @db_conn.exec_prepared(statement,[status_enum[to_status], status_enum[from_status]])
+  db_conn.prepare(statement, 'UPDATE queue SET status = $1 WHERE status = $2')
+  db_conn.exec_prepared(statement, [status_enum[to_status], status_enum[from_status]])
 end
 
-def update_all_to_status(to_status)
+def update_all_to_status(db_conn, to_status)
   status_enum = {:todo => 'todo', :running => 'running', :success => 'success', :error => 'error'}
 
   statement = "mass_update_to_status_#{to_status}"
-  @db_conn.prepare(statement, 'UPDATE queue SET status = $1')
-  @db_conn.exec_prepared(statement,[status_enum[to_status]])
+  db_conn.prepare(statement, 'UPDATE queue SET status = $1')
+  db_conn.exec_prepared(statement, [status_enum[to_status]])
 end
 
-def delete_failed
+def delete_failed(db_conn)
   Print.info 'Are you sure you want to DELETE failed jobs from the queue table? [y/N]'
   input = STDIN.gets.chomp
   if input == 'Y' or input == 'y'
     Print.info "'Deleting all jobs with status == 'error' from Queue table"
-    @db_conn.exec_params("DELETE FROM queue WHERE status = 'error';")
+    db_conn.exec_params("DELETE FROM queue WHERE status = 'error';")
   else
     exit
   end
 end
 
-def delete_all
+def delete_all(db_conn)
   Print.info 'Are you sure you want to DELETE all jobs from the queue table? [y/N]'
   input = STDIN.gets.chomp
   if input == 'Y' or input == 'y'
     Print.info 'Deleting all jobs from Queue table'
-    @db_conn.exec_params('DELETE FROM queue;')
+    db_conn.exec_params('DELETE FROM queue;')
   else
     exit
   end
 end
 
-def delete_id(id)
+def delete_id(db_conn, id)
   Print.info "Deleting job_id: #{id}"
   statement = "delete_job_id_#{id}"
-  @db_conn.prepare(statement, 'DELETE FROM queue where id = $1')
-  @db_conn.exec_prepared(statement, [id])
+  db_conn.prepare(statement, 'DELETE FROM queue where id = $1')
+  db_conn.exec_prepared(statement, [id])
+end
+
+def get_jobs(db_conn)
+  select_all_todo(db_conn).to_a
 end
 
 def secgen_arg_network_ranges(secgen_args)
@@ -356,7 +367,7 @@ def secgen_arg_network_ranges(secgen_args)
   ranges_in_arg
 end
 
-def generate_range_arg(options)
+def generate_range_arg(db_conn, options)
   range_arg = ''
   if options.has_key? :random_ips
 
@@ -368,7 +379,7 @@ def generate_range_arg(options)
       Print.info 'Do you want to exclude ranges in the database from your random IP generation? [Y/n]'
       input = STDIN.gets.chomp
       if input == '' or input == 'Y' or input == 'y'
-        table_entries = select_all
+        table_entries = select_all(db_conn)
         table_entries.each { |job|
           @ranges_in_table += secgen_arg_network_ranges(job['secgen_args'])
         }
@@ -401,7 +412,7 @@ Print.std 'SecGen Batch - Batch VM Generation Service'
 Print.std '~'*47
 
 # Connect to database
-@db_conn = PG::Connection.open(:dbname => 'batch_secgen')
+# @db_conn = PG::Connection.open(:dbname => 'batch_secgen')
 
 # Capture SecGen options
 delimiter_index = ARGV.find_index('---')
