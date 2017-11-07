@@ -185,6 +185,8 @@
 		<!--<service module_path=".*vsftpd"/>-->
 
 		<service type="httpd"/>
+		
+		<service type="pop3"/>
 
 		<service module_path="services/unix/http/parameterised_website">
 			<input into="organisation">
