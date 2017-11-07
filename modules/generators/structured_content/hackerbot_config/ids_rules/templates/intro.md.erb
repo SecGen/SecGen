@@ -43,8 +43,10 @@ sudo vi /etc/snort/snort.conf
 
 > ":wq" to write changes and quit)
 
-==Add the following line:==
+==Add the following lines:==
 `output alert_fast`
+
+`include $RULE_PATH/my.rules`
 
 ==Change Snort's interface== to eth1 (or as you identified earlier), and set the local network to your IP address range (or "any"):
 
