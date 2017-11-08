@@ -191,7 +191,7 @@ def read_bots (irc_server_ip_address)
 
         on :message, /^(the answer is|answer):? .+$/i do |m|
           answer = m.message.chomp().split[1].to_i - 1
-          answer = m.message.chomp().match(/(the answer is|answer):? (.+)$/i)[2]
+          answer = m.message.chomp().match(/(?:the )?answer(?: is)?:? (.+)$/i)[1]
 
           # current_quiz = bots[bot_name]['current_quiz']
           current = bots[bot_name]['current_attack']
@@ -242,7 +242,7 @@ def read_bots (irc_server_ip_address)
               end
 
             else
-              m.reply bots[bot_name]['messages']['incorrect_answer']
+              m.reply "#{bots[bot_name]['messages']['incorrect_answer']} (#{answer})"
             end
           else
             m.reply bots[bot_name]['messages']['no_quiz']
