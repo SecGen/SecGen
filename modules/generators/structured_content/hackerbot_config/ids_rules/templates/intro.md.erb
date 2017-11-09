@@ -7,7 +7,7 @@
 
 - hackerbot_server (leave it running, you don't log into this)
 - ids_server (IP address: <%= $ids_server_ip %>)
-- web_server (IP address: <%= $web_server_ip %>)
+- web_server (IP address: <%= $web_server_ip %>, leave it running, you don't log into this)
 - desktop
 
 All of these VMs need to be running to complete the lab.
@@ -34,6 +34,8 @@ Work through the below exercises, completing the Hackerbot challenges as noted.
 ---
 ## Getting Snort up and running
 
+**On the ids_server VM:**
+
 ==Change Snort's output== to something more readable:
 
 ```bash
@@ -47,6 +49,18 @@ sudo vi /etc/snort/snort.conf
 `output alert_fast`
 
 `include $RULE_PATH/my.rules`
+
+==Create a new rules file:==
+
+```bash
+sudo touch /etc/snort/rules/my.rules
+```
+
+Let us edit the rules file without sudo:
+
+```bash
+sudo chown <%= $main_user %> /etc/snort/rules/my.rules
+```
 
 ==Change Snort's interface== to eth1 (or as you identified earlier), and set the local network to your IP address range (or "any"):
 
@@ -65,9 +79,4 @@ sudo service snort start
 
 Snort should now be running, monitoring network traffic for activity.
 
-It can be helpful to monitor network traffic while writing IDS rules. Start Wireshark:
-
-```bash
-kdesudo wireshark &
-```
-> For this exercise you can ignore the warnings about running Wireshark as root, or read online to learn to use setcap to grant Wireshark more specific privileges.
+It can be helpful to monitor network traffic while writing IDS rules. You can start Wireshark with `kdesudo wireshark &`

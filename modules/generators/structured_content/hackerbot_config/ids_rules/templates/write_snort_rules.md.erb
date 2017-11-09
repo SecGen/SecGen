@@ -4,10 +4,10 @@ Modern network traffic (such as the Internet) typically uses the Internet protoc
 
 The Internet protocol suite has four abstraction layers:
 
-> * *"**The application layer** is the scope within which applications create user data and communicate this data to other applications on another or the same host. The applications, or processes, make use of the services provided by the underlying, lower layers, especially the Transport Layer which provides reliable or unreliable pipes to other processes. The communications partners are characterized by the application architecture, such as the client-server model and peer-to-peer networking. This is the layer in which all higher level protocols, such as SMTP, FTP, SSH, HTTP, operate. Processes are addressed via ports which essentially represent services.*
-> * ***The transport layer** performs host-to-host communications on either the same or different hosts and on either the local network or remote networks separated by routers. It provides a channel for the communication needs of applications. UDP is the basic transport layer protocol, providing an unreliable datagram service. The Transmission Control Protocol provides flow-control, connection establishment, and reliable transmission of data.*
-> * ***The internet layer** has the task of exchanging datagrams across network boundaries. It provides a uniform networking interface that hides the actual topology (layout) of the underlying network connections. It is therefore also referred to as the layer that establishes internetworking, indeed, it defines and establishes the Internet. This layer defines the addressing and routing structures used for the TCP/IP protocol suite. The primary protocol in this scope is the Internet Protocol, which defines IP addresses. Its function in routing is to transport datagrams to the next IP router that has the connectivity to a network closer to the final data destination.*
-> * ***The link layer** defines the networking methods within the scope of the local network link on which hosts communicate without intervening routers. This layer includes the protocols used to describe the local network topology and the interfaces needed to effect transmission of Internet layer datagrams to next-neighbor hosts.*" 
+> * "**The application layer** is the scope within which applications create user data and communicate this data to other applications on another or the same host. The applications, or processes, make use of the services provided by the underlying, lower layers, especially the Transport Layer which provides reliable or unreliable pipes to other processes. The communications partners are characterized by the application architecture, such as the client-server model and peer-to-peer networking. This is the layer in which all higher level protocols, such as SMTP, FTP, SSH, HTTP, operate. Processes are addressed via ports which essentially represent services.
+> * **The transport layer** performs host-to-host communications on either the same or different hosts and on either the local network or remote networks separated by routers. It provides a channel for the communication needs of applications. UDP is the basic transport layer protocol, providing an unreliable datagram service. The Transmission Control Protocol provides flow-control, connection establishment, and reliable transmission of data.
+> * **The internet layer** has the task of exchanging datagrams across network boundaries. It provides a uniform networking interface that hides the actual topology (layout) of the underlying network connections. It is therefore also referred to as the layer that establishes internetworking, indeed, it defines and establishes the Internet. This layer defines the addressing and routing structures used for the TCP/IP protocol suite. The primary protocol in this scope is the Internet Protocol, which defines IP addresses. Its function in routing is to transport datagrams to the next IP router that has the connectivity to a network closer to the final data destination.
+> * **The link layer** defines the networking methods within the scope of the local network link on which hosts communicate without intervening routers. This layer includes the protocols used to describe the local network topology and the interfaces needed to effect transmission of Internet layer datagrams to next-neighbor hosts." 
 (https://en.wikipedia.org/wiki/Internet_protocol_suite#Abstraction_layers)
 
 ### Common services and (application layer) protocols
@@ -48,13 +48,14 @@ Note that in Wireshark you can view individual packets, including IP and TCP hea
 ```bash
 kdesudo wireshark &
 ```
+> For this exercise you can ignore the warnings about running Wireshark as root, or read online to learn to use setcap to grant Wireshark more specific privileges.
 
 Start capturing, listening to the interface with IP address <%= $ids_server_ip %>.
 > If you are not sure, list the interfaces with `ifconfig` or `ip a s`
 
 **On the desktop VM:**
 
-While Wireshark is listening, ==access a web page from Firefox == browse to ==[*http://<%= $web_server_ip %>*](http://<%= $web_server_ip %>)== (In a new tab.)
+While Wireshark is listening, ==access a web page from Firefox, browse to [*http://<%= $web_server_ip %>*](http://<%= $web_server_ip %>)== (In a new tab.)
 
 **On the ids_server VM:**
 
@@ -114,12 +115,6 @@ And bringing all this together a Snort rule could read:
 > `alert tcp any any -> <%= $web_server_ip %> 80 (msg: "Website access <%= $random_string %>"; content: "GET"; sid:1000001; rev:1;)`
 
 **On the ids_server VM:**
-
-Let us edit the rules file:
-
-```bash
-chown <%= $main_user %> $RULE_PATH/my.rules
-```
 
 Add the rule, and reload Snort:
 
