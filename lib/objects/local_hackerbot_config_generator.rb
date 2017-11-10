@@ -95,7 +95,7 @@ class HackerbotConfigGenerator < StringGenerator
 
     lab_sheet_markdown = generate_lab_sheet(xml_config)
 
-    redcarpet = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(prettify:true, hard_wrap: true, with_toc_data: true), footnotes: true, fenced_code_blocks: true, no_intra_emphasis: true, autolink: true, highlight: true, lax_spacing: true)
+    redcarpet = Redcarpet::Markdown.new(Redcarpet::Render::HTML.new(prettify:true, hard_wrap: true, with_toc_data: true), footnotes: true, fenced_code_blocks: true, no_intra_emphasis: true, autolink: true, highlight: true, lax_spacing: true, tables: true)
     self.html_rendered = redcarpet.render(lab_sheet_markdown).force_encoding('UTF-8')
     redcarpet_toc = Redcarpet::Markdown.new(Redcarpet::Render::HTML_TOC.new())
     self.html_TOC_rendered = redcarpet_toc.render(lab_sheet_markdown).force_encoding('UTF-8')
