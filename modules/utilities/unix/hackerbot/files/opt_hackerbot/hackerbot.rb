@@ -10,11 +10,11 @@ require 'thwait'
 def check_output_conditions(bot_name, bots, current, lines, m)
   condition_met = false
   bots[bot_name]['attacks'][current]['condition'].each do |condition|
-    if !condition_met && condition.key?('output_matches') && lines =~ /#{condition['output_matches']}/
+    if !condition_met && condition.key?('output_matches') && lines =~ /#{condition['output_matches']}/m
       condition_met = true
       m.reply "#{condition['message']}"
     end
-    if !condition_met && condition.key?('output_not_matches') && lines !~ /#{condition['output_not_matches']}/
+    if !condition_met && condition.key?('output_not_matches') && lines !~ /#{condition['output_not_matches']}/m
       condition_met = true
       m.reply "#{condition['message']}"
     end
@@ -218,7 +218,7 @@ def read_bots (irc_server_ip_address)
             end
             correct_answer.chomp!
 
-            if answer.match(correct_answer)
+            if answer.match(/#{correct_answer}/i)
               m.reply bots[bot_name]['messages']['correct_answer']
               m.reply quiz['correct_answer_response']
 
