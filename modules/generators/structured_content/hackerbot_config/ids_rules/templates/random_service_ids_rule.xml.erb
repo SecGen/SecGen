@@ -6,7 +6,7 @@
 		<get_shell>false</get_shell>
 		<post_command></post_command>
 
-		<prompt>Create a Snort rule that detects any TCP connection attempt to <%= $rand_service1 %> (just the connection attempt, does not require content inspection). The alert must include the message "<%= $rand_alert3 %>".</prompt>
+		<prompt>Create a Snort rule that detects any TCP connection attempt to <%= $rand_service1 %> (just the connection attempt, does not require content inspection) on <%= $web_server_ip %>. The alert must include the message "<%= $rand_alert3 %>".</prompt>
 
 		<condition>
 			<output_matches>^--1</output_matches>
