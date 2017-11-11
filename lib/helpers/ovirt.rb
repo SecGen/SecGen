@@ -115,7 +115,7 @@ class OVirtFunctions
     if options[:ovirtuser] and options[:ovirtpass] and options[:ovirturl]
       conn_attr = {}
       conn_attr[:url] = options[:ovirturl]
-      conn_attr[:username] = "#{options[:ovirtuser]}@aet.leedsbeckett.ac.uk"
+      conn_attr[:username] = options[:ovirtuser]
       conn_attr[:password] = options[:ovirtpass]
       conn_attr[:debug] = true
       conn_attr[:insecure] = true
