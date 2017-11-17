@@ -29,7 +29,6 @@
     </generator>
   </default_input>
 
-  <!--TODO: less flags-->
   <default_input into="flags">
     <generator type="flag_generator"/>
     <generator type="flag_generator"/>
