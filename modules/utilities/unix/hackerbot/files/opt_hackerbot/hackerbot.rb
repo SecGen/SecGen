@@ -310,8 +310,9 @@ def read_bots (irc_server_ip_address)
           current = bots[bot_name]['current_attack']
 
           if bots[bot_name]['attacks'][current].key?('pre_shell')
-            pre_shell_cmd = bots[bot_name]['attacks'][current]['pre_shell'].clone
+            pre_shell_cmd = bots[bot_name]['attacks'][current]['pre_shell'].to_s.clone
             pre_shell_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
+
             pre_output = `#{pre_shell_cmd}`
             unless bots[bot_name]['attacks'][current].key?('suppress_command_output_feedback')
               m.reply "FYI: #{pre_output}"
@@ -323,12 +324,12 @@ def read_bots (irc_server_ip_address)
           
           # use bot-wide method for obtaining shell, unless specified per-attack
           if bots[bot_name]['attacks'][current].key?('get_shell')
-            shell_cmd = bots[bot_name]['attacks'][current]['get_shell'].clone
+            shell_cmd = bots[bot_name]['attacks'][current]['get_shell'].to_s.clone
           else
             shell_cmd = bots[bot_name]['get_shell'].clone
           end
           
-          if shell_cmd != "false"
+          if shell_cmd != 'false'
             # substitute special variables
             shell_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
             # add a ; to ensure it is run via bash
