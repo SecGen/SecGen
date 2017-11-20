@@ -745,6 +745,8 @@ If you start SecGen with the "build-project" (or "p") command it creates the abo
 
 It is possible to copy the project directory to any compatible system with Vagrant, and simply run "vagrant up" to create the VMs.
 
+The default root password for the base-boxes is 'puppet', but this may be modified by SecGen depending on the scenario used.
+
 ## Roadmap
 - **More modules!** Including more CTF-style modules.
 - Windows baseboxes and vulnerabilities.

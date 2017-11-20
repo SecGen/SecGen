@@ -11,6 +11,7 @@
   <type>http</type>
   <platform>linux</platform>
 
+  <!-- Strings are leaked in index.html source code comments -->
   <read_fact>strings_to_leak</read_fact>
   <read_fact>images_to_leak</read_fact>
   <read_fact>organisation</read_fact>
@@ -34,7 +35,7 @@
   </default_input>
 
   <default_input into="strings_to_leak">
-    <generator type="flag_generator"/>
+    <generator type="message_generator"/>
     <generator type="message_generator"/>
   </default_input>
 
