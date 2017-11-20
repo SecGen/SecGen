@@ -768,3 +768,10 @@ This project is supported by a Higher Education Academy (HEA) learning and teach
 We encourage contributions to the project, please see the wiki for guidance on how to contribute.
 
 Briefly, please fork from http://github.com/cliffe/SecGen/, create a branch, make and commit your changes, then create a pull request.
+
+## Resources
+Paper: [Z.C. Schreuders, T. Shaw, M. Shan-A-Khuda, G. Ravichandran, J. Keighley, M. Ordean, “Security Scenario Generator (SecGen): A Framework for Generating Randomly Vulnerable Rich-scenario VMs for Learning Computer Security and Hosting CTF Events,” USENIX Workshop on Advances in Security Education (ASE'17), Vancouver, BC, Canada. USENIX Association, 2017.](https://www.usenix.org/conference/ase17/workshop-program/presentation/schreuders) (This paper provides a good overview of SecGen.)
+
+Paper: [Z.C. Schreuders, and L. Ardern, "Generating randomised virtualised scenarios for ethical hacking and computer security education: SecGen implementation and deployment," in The first UK Workshop on Cybersecurity Training & Education (Vibrant Workshop 2015) Liverpool, UK, 2015.](http://z.cliffe.schreuders.org/publications/VibrantWorkshop2015%20-%20Generating%20randomised%20virtualised%20scenarios%20for%20ethical%20hacking%20and%20computer%20security%20education%20%28SecGen%29.pdf) (This paper describes the first prototype.)
+
+Podcast interview: [Purple Squad Security Episode 011 – Security Scenario Generator with Dr. Z. Cliffe Schreuders](https://purplesquadsec.com/podcast/episode-011-security-scenario-generator-dr-z-cliffe-schreuders/) 
