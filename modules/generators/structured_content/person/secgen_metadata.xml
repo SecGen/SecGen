@@ -41,6 +41,12 @@
   <default_input into="password">
     <generator type="password_generator"/>
   </default_input>
+  <default_input into="credit_card">
+    <generator type="credit_card_generator"/>
+  </default_input>
+  <default_input into="national_insurance_number">
+    <generator type="national_insurance_number_generator"/>
+  </default_input>
 
   <output_type>person</output_type>
 </generator>
