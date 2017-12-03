@@ -429,6 +429,21 @@ def read_bots (irc_server_ip_address)
             end
           end
 
+
+          if bots[bot_name]['attacks'][current].key?('post_shell')
+            post_shell_cmd = bots[bot_name]['attacks'][current]['post_shell'].to_s.clone
+            post_shell_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
+
+            post_output = `#{post_shell_cmd}`
+            unless bots[bot_name]['attacks'][current].key?('suppress_command_output_feedback')
+              m.reply "FYI: #{post_output}"
+            end
+            # bots[bot_name]['attacks'][current]['get_shell_command_output'] = post_output
+            current = check_output_conditions(bot_name, bots, current, post_output, m)
+
+          end
+
+
           m.reply bots[bot_name]['messages']['repeat'].sample
         end
 

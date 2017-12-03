@@ -27,14 +27,14 @@ def usage
    --total-memory: Allocate total VM memory for the scenario, split evenly across all VMs.
    --cpu-cores: Number of virtual CPUs for generated VMs
    --help, -h: Shows this usage information
-   --system, -y [system_name]: only build this system_name from the scenario
+   --system, -y [system_name]: Only build this system_name from the scenario
 
    VIRTUALBOX OPTIONS:
-   --gui-output, -g gui output
-   --nopae: disable PAE support
-   --hwvirtex: enable HW virtex support
-   --vtxvpid: enable VTX support
-   --max-cpu-usage [1-100]: controls how much cpu time a virtual CPU can use
+   --gui-output, -g: Show the running VM (not headless)
+   --nopae: Disable PAE support
+   --hwvirtex: Enable HW virtex support
+   --vtxvpid: Enable VTX support
+   --max-cpu-usage [1-100]: Controls how much cpu time a virtual CPU can use
                             (e.g. 50 implies a single virtual CPU can use up to 50% of a single host CPU)
 
    OVIRT OPTIONS:
