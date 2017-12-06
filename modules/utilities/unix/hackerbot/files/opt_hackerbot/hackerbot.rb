@@ -425,7 +425,9 @@ def read_bots (irc_server_ip_address)
                     m.reply "Looks like there is some software missing: #{lines}"
                 end
               end
-                
+
+              # ensure the process is not left running
+              Process.kill("KILL", wait_thr.pid)
             end
           end
 
