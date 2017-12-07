@@ -392,7 +392,7 @@ def read_bots (irc_server_ip_address)
                     post_lines << stdout_err.read.chomp()
                   end
                 rescue Timeout::Error
-                  Process.kill("KILL", wait_thr.pid)
+                  wait_thr.kill
 
                   begin
                     while ch = stdout_err.read_nonblock(1)
@@ -426,8 +426,9 @@ def read_bots (irc_server_ip_address)
                 end
               end
 
-              # ensure the process is not left running
-              Process.kill("KILL", wait_thr.pid)
+              # ensure any child processes are not left running (without this msfconsole is left running)
+              `kill -9 $(ps -o pid --no-headers --ppid #{wait_thr.pid})`
+              wait_thr.kill
             end
           end
 
