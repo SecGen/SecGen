@@ -9,7 +9,8 @@
 
 	Start as kali, scan the web_server, find distcc, exploit using Armitage/MSF
 	Leaked username and password for log into desktop gui
-	Desktop contains clients under main user, and another (sudo to access).
+	Desktop contains sensitive list of clients under main user's home directory,
+	and another user also has a list of clients (sudo to access).
 	-->
 	<system>
 		<system_name>desktop</system_name>

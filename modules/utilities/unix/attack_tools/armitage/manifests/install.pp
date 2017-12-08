@@ -1,5 +1,5 @@
-class metasploit_framework::install{
-  package { ['metasploit-framework']:
+class armitage::install{
+  package { ['armitage']:
     ensure => 'installed',
   }
 }

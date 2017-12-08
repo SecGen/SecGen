@@ -1,1 +1,1 @@
-include metasploit_framework::install
+include armitage::install
