@@ -17,7 +17,4 @@
   <requires>
     <type>update</type>
   </requires>
-  <requires>
-    <module_path>.*metasploit_framework</type>
-  </requires>
 </utility>
