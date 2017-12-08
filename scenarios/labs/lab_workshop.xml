@@ -188,7 +188,7 @@
 			</input>
 		</utility>
 
-		<vulnerability module_path=".*distcc_exec">
+		<vulnerability module_path=".*proftpd_133c_backdoor">
 			<input into="strings_to_leak">
 				<datastore>desktop_username</datastore>
 				<datastore>desktop_password</datastore>
