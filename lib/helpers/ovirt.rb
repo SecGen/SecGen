@@ -1,7 +1,7 @@
 require 'timeout'
 require 'rubygems'
 require 'process_helper'
-# require 'ovirt-engine-sdk'
+require 'ovirt-engine-sdk'
 require_relative './print.rb'
 
 class OVirtFunctions
