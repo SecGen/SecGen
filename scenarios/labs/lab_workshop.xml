@@ -208,7 +208,7 @@
 
 		<network type="private_network" >
 			<input into="IP_address">
-				<datastore access="2">IP_addresses</datastore>
+				<datastore access="1">IP_addresses</datastore>
 			</input>
 		</network>
 	</system>
