@@ -182,13 +182,13 @@
 		<system_name>web_server</system_name>
 		<base platform="linux" distro="Debian 7.8" name="Server"/>
 
-		<utility module_path=".*parameterised_accounts">
-			<input into="accounts">
-				<datastore>accounts</datastore>
-			</input>
-		</utility>
+		<!--<utility module_path=".*parameterised_accounts">-->
+			<!--<input into="accounts">-->
+				<!--<datastore>accounts</datastore>-->
+			<!--</input>-->
+		<!--</utility>-->
 
-		<vulnerability module_path=".*proftpd_133c_backdoor">
+		<vulnerability module_path=".*unrealirc_3281_backdoor">
 			<input into="strings_to_leak">
 				<datastore>desktop_username</datastore>
 				<datastore>desktop_password</datastore>
