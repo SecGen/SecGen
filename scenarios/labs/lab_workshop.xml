@@ -193,6 +193,11 @@
 				<datastore>desktop_username</datastore>
 				<datastore>desktop_password</datastore>
 			</input>
+			<input into="leaked_filenames">
+				<value>desktop_username</value>
+				<value>desktop_password</value>
+			</input>
+
 		</vulnerability>
 
 		<service module_path="services/unix/http/parameterised_website">
