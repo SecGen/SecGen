@@ -288,7 +288,7 @@
 
 		<utility module_path=".*hackerbot">
 			<input into="hackerbot_configs">
-				<generator module_path=".*hacker_vs_hackerbot_1">
+				<generator module_path=".*hacker_vs_hackerbot_2">
 					<input into="accounts">
 						<datastore>accounts</datastore>
 					</input>
