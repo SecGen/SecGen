@@ -4,6 +4,8 @@ require_relative '../../../../../../lib/objects/local_hackerbot_config_generator
 class IDS < HackerbotConfigGenerator
 
   attr_accessor :backup_server_ip
+  attr_accessor :ids_server_ip
+  attr_accessor :web_server_ip
   attr_accessor :desktop_ip
   attr_accessor :hackerbot_server_ip
 
@@ -18,6 +20,8 @@ class IDS < HackerbotConfigGenerator
     self.html_template_path = "#{self.local_dir}/templates/labsheet.html.erb"
 
     self.backup_server_ip = []
+    self.web_server_ip = []
+    self.ids_server_ip = []
     self.desktop_ip = []
     self.hackerbot_server_ip = []
   end
@@ -25,6 +29,8 @@ class IDS < HackerbotConfigGenerator
   def get_options_array
     super + [['--backup_server_ip', GetoptLong::REQUIRED_ARGUMENT],
              ['--desktop_ip', GetoptLong::REQUIRED_ARGUMENT],
+             ['--ids_server_ip', GetoptLong::REQUIRED_ARGUMENT],
+             ['--web_server_ip', GetoptLong::REQUIRED_ARGUMENT],
              ['--hackerbot_server_ip', GetoptLong::REQUIRED_ARGUMENT]]
   end
 
@@ -33,6 +39,10 @@ class IDS < HackerbotConfigGenerator
     case opt
       when '--backup_server_ip'
         self.backup_server_ip << arg;
+      when '--ids_server_ip'
+        self.ids_server_ip << arg;
+      when '--web_server_ip'
+        self.web_server_ip << arg;
       when '--desktop_ip'
         self.desktop_ip << arg;
       when '--hackerbot_server_ip'
