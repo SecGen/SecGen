@@ -1,5 +1,5 @@
 	<attack>
-<% $rand1 = SecureRandom.hex(2)-%>
+<% $rand1 = SecureRandom.hex(2) %>
 		<pre_shell>curl -v -H 'Something-worth-noting: <%= $rand1 %>:<%= $flags.pop %>' <%= $web_server_ip %> > /dev/null; echo $? </pre_shell>
 		<get_shell>false</get_shell>
 		<post_command></post_command>
