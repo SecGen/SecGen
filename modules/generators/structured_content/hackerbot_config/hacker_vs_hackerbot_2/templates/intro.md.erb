@@ -1,4 +1,16 @@
-# Hacker vs Hackerbot 1
+# Hacker vs Hackerbot 2
+
+## Troubleshooting with oVirt during the test
+
+In the unlikely event you experience technical issues with our infrastructure during the test, please keep the following in mind.
+
+* If your Snort alert file fills with "BAD TRAFFIC" alerts, let us know asap and we can fix that for you by changing the network interface type.
+
+* If copy and paste stops working, simply copy your flags to a text file rather than the submission site, and let us know when you finish the test so we can help you submit these before you leave.
+
+* If a VM looses its IP addresses (particularly the IDS server), simply run `sudo ifconfig eth1 *IP_ADDRESS*`, where `*IP_ADDRESS*` is the expected IP address (listed in the section below).
+
+* If you experience any technical issues, which you believe to be outside your control, let us know before you leave the room. However, keep in mind we won't point you in the right direction of the answers during the test.
 
 ## Getting started
 ### VMs in this lab
@@ -6,7 +18,6 @@
 ==Start these VMs== (if you haven't already):
 
 - hackerbot_server (leave it running, you don't log into this)
-- backup_server (IP address: <%= $backup_server_ip %>)
 - ids_server (IP address: <%= $ids_server_ip %>)
 - web_server (IP address: <%= $web_server_ip %>)
 - desktop
@@ -105,5 +116,4 @@ sudo service snort start
 
 Snort should now be running, monitoring network traffic for activity.
 
-It can be helpful to monitor network traffic while writing IDS rules. You can start Wireshark with `kdesudo wireshark &`
-
+### Good luck!

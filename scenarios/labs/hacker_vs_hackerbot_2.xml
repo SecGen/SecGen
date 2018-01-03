@@ -138,7 +138,6 @@
 		<utility module_path=".*handy_cli_tools"/>
 		<utility module_path=".*hash_tools"/>
 		<utility module_path=".*nmap"/>
-		<utility module_path=".*wireshark"/>
 
 		<utility module_path=".*iceweasel">
 			<input into="accounts">
@@ -148,13 +147,13 @@
 				<value>true</value>
 			</input>
 			<input into="start_page">
-				<datastore access="2">IP_addresses</datastore>
+				<datastore access="3">IP_addresses</datastore>
 			</input>
 		</utility>
 
 		<utility module_path=".*pidgin">
 			<input into="server_ip">
-				<datastore access="2">IP_addresses</datastore>
+				<datastore access="3">IP_addresses</datastore>
 			</input>
 			<input into="accounts">
 				<datastore access="0">accounts</datastore>

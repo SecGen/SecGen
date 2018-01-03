@@ -12,7 +12,7 @@
 		<post_shell>sshpass -p <%= $root_password %> scp -prv -oStrictHostKeyChecking=no root@<%= $ids_server_ip %>:/var/log/snort/alert /tmp/snort_alert_after; echo --$?; diff -n /tmp/snort_alert_before /tmp/snort_alert_after | tail -n 5 | grep <%= $rand_alert2 %> >/dev/null; echo triggered:$?; sshpass -p <%= $root_password %> scp -prv -oStrictHostKeyChecking=no root@<%= $ids_server_ip %>:/etc/snort/rules/my.rules /tmp/snort_rules; echo rules:$?; grep '^alert.*msg:".*<%= $rand_alert2 %>.*".*pcre:"' /tmp/snort_rules >/dev/null; echo good_rule:$? </post_shell>
 		<suppress_command_output_feedback />
 
-		<prompt>Update your rule so that it also matches the fake_clients file. Use REGEXP so that your rule doesn't include any of the actual data. You have a copy in <%= $sensitive_files_location %>fake_clients.csv Use one or more Snort rules to detect unencrypted transport of either of the files. The alert must include the message "<%= $rand_alert2 %>".</prompt>
+		<prompt>You need to monitor your sensitive list of clients. The file contains credit card details and national insurance numbers. You have a copy in <%= $sensitive_files_location %>clients.csv and another in fake_clients.csv Create a rule that matches either file. Use REGEXP so that your rule doesn't include any of the actual data. Use one or more Snort rules to detect unencrypted transport of either of the files. The alert must include the message "<%= $rand_alert2 %>".</prompt>
 
 		<condition>
 			<output_matches>good_rule:1</output_matches>
