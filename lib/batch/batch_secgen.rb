@@ -210,31 +210,34 @@ def start(options)
           backup_path = 'batch/failed/'
         end
 
-        # Get project data from stderr
+        # Get project data from SecGen output
+        project_id = project_path = 'unknown'
         stderr_project_split = stdout.split('Creating project: ')
         if stderr_project_split.size > 1
           project_path = stderr_project_split[1].split('...')[0]
           project_id = project_path.split('projects/')[1]
-
-          # Log output
-          log_name = "#{log_prefix}#{project_id}"
-          log_path = "log/#{log_name}"
-          log = File.new(log_path, 'w')
-          log.write("SecGen project path::: #{project_path}\n\n\n")
-          log.write("SecGen arguments::: #{secgen_args}\n\n\n")
-          log.write("SecGen output::: \n\n\n")
-          log.write(stdout)
-          log.write("\n\n\nGenerator local output::: \n\n\n")
-          log.write(stderr)
-          log.close
-
-          # Back up project and log file
-          FileUtils.cp_r(project_path, backup_path)
-          FileUtils.cp(log_path, (backup_path + project_id + '/' + log_name))
         else
+          project_id = "job_#{job_id}"
+          Print.err(stderr)
           Print.err("Fatal error on job #{job_id}: SecGen crashed before project creation.")
           Print.err('Check your scenario file.')
         end
+
+        # Log output
+        log_name = "#{log_prefix}#{project_id}"
+        log_path = "log/#{log_name}"
+        log = File.new(log_path, 'w')
+        log.write("SecGen project path::: #{project_path}\n\n\n")
+        log.write("SecGen arguments::: #{secgen_args}\n\n\n")
+        log.write("SecGen output (stdout)::: \n\n\n")
+        log.write(stdout)
+        log.write("\n\n\nGenerator local output and errors (stderr)::: \n\n\n")
+        log.write(stderr)
+        log.close
+
+        # Back up project and log file
+        FileUtils.cp_r(project_path, backup_path)
+        FileUtils.cp(log_path, (backup_path + project_id + '/' + log_name))
 
         db_conn.finish
       }
