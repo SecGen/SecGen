@@ -67,6 +67,9 @@ def read_bots (irc_server_ip_address)
 
     begin
       doc = Nokogiri::XML(File.read(file))
+      if doc.errors.any?
+        Print.err doc.errors
+      end
     rescue
       Print.err "Failed to read hackerbot file (#{file})"
       print "Failed to read hackerbot file (#{file})"
