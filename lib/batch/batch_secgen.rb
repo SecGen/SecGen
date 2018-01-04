@@ -420,15 +420,11 @@ def generate_range_arg(db_conn, options)
     if @ranges_in_table == nil
       @ranges_in_table = []
 
-      # Prompt to see if we're excluding ranges in the table
-      Print.info 'Do you want to exclude ranges in the database from your random IP generation? [Y/n]'
-      input = STDIN.gets.chomp
-      if input == '' or input == 'Y' or input == 'y'
-        table_entries = select_all(db_conn)
-        table_entries.each { |job|
-          @ranges_in_table += secgen_arg_network_ranges(job['secgen_args'])
-        }
-      end
+      # Exclude IP ranges previously selected, stored in the table
+      table_entries = select_all(db_conn)
+      table_entries.each { |job|
+        @ranges_in_table += secgen_arg_network_ranges(job['secgen_args'])
+      }
     end
 
     generated_network_ranges = []
