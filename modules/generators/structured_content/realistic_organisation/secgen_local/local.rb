@@ -28,7 +28,7 @@ class RealOrganisationGenerator < StringEncoder
     self.manager = {}
     self.employees = []
     self.product_name = ''
-    self.intro_paragraph = ''
+    self.intro_paragraph = []
     self.filler_char = %w(_ -).sample
   end
 

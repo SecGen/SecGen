@@ -17,6 +17,7 @@ class parameterised_website::install {
     $industry = $organisation['industry']
     $product_name = $organisation['product_name']
     $employees = $organisation['employees']
+    $intro_paragraph = $organisation['intro_paragraph']
   } else {
     $business_name = ''
     $business_motto = ''
@@ -27,10 +28,10 @@ class parameterised_website::install {
     $industry = ''
     $product_name = ''
     $employees = []
+    $intro_paragraph = []
   }
 
   $strings_to_leak = $secgen_parameters['strings_to_leak']
-  $main_page_paragraph_content = $secgen_parameters['main_page_paragraph_content']
   $images_to_leak = $secgen_parameters['images_to_leak']
 
   $security_audit = $secgen_parameters['security_audit']
@@ -40,6 +41,12 @@ class parameterised_website::install {
   $hidden_tabs = $secgen_parameters['hidden_tabs']
 
   $white_text = $secgen_parameters['white_text']
+
+  if $intro_paragraph != '' {
+    $main_page_paragraph_content = $intro_paragraph
+  } else {
+    $main_page_paragraph_content = $secgen_parameters['main_page_paragraph_content']
+  }
 
   # Additional Pages
   $additional_pages = $secgen_parameters['additional_pages']

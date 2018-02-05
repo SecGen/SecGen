@@ -27,7 +27,7 @@ class RandomOrganisationGenerator < StringEncoder
     self.manager = {}
     self.employees = []
     self.product_name = ''
-    self.intro_paragraph = ''
+    self.intro_paragraph = []
   end
 
   def encode_all
