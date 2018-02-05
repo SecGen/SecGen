@@ -11,15 +11,23 @@ class RandomSelectorEncoder < StringEncoder
     self.position = ''
   end
 
+  # @return [Array[string]] containing selected string from file
   def encode_all
-    file_lines = File.readlines("#{ROOT_DIR}/#{file_path}")
+    selected_string = ''
 
-    selected_string = if !position.nil? && (position != '')
-                        file_lines[position.to_i - 1]
-                      else
-                        file_lines.sample
-                      end
-    outputs << selected_string
+    unless file_path.include? '..'
+      path = "#{ROOT_DIR}/#{file_path}"
+
+      file_lines = File.readlines(path)
+
+      selected_string = if !position.nil? && (position != '')
+                          file_lines[position.to_i - 1]
+                        else
+                          file_lines.sample
+                        end
+    end
+
+    outputs << selected_string.chomp
   end
 
   def process_options(opt, arg)
