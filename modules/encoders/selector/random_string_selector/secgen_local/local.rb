@@ -6,7 +6,7 @@ class RandomSelectorEncoder < StringEncoder
   def initialize
     super
     self.module_name = 'Random String Selector'
-    self.position = 'test'
+    self.position = ''
   end
 
   def encode_all

@@ -254,7 +254,7 @@ end
 
 Print.std '~'*47
 Print.std 'SecGen - Creates virtualised security scenarios'
-Print.std '            Licensed GPLv3 2014-17'
+Print.std '            Licensed GPLv3 2014-18'
 Print.std '~'*47
 
 # Add read-options from config file (needs handling before options parsed by GetoptLong)

@@ -4,3 +4,5 @@ unusedcode
 .idea
 mount
 log
+batch/failed/
+batch/successful/
