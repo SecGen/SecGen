@@ -85,6 +85,13 @@ class parameterised_website::install {
     require => File["$docroot/css"],
   }
 
+  # Apply randomly selected CSS template
+  file { "$docroot/css/randomly_selected.css":
+    ensure => file,
+    content => template('parameterised_website/default.css.erb'),
+    require => File["$docroot/css"],
+  }
+
   # Apply index page template
   file { "$docroot/index.html":
     ensure  => file,
