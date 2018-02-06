@@ -11,10 +11,9 @@
 
     <service module_path=".*parameterised_website.*" read_fact="organisation">
       <input into="organisation">
-        <generator type="organisation"/>
         <encoder type="line_selector">
           <input into="file_path">
-            <value>lib/resources/structured_content/json_organisations</value>
+            <value>lib/resources/structured_content/organisations/json_organisations</value>
           </input>
         </encoder>
       </input>

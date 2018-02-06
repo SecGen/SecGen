@@ -14,10 +14,14 @@
       <% elsif @manager_profile != '' or @employees[0] != '' or @business_address != ''-%>
           <h1><%= @business_name %></h1>
           <p class="lead"><%= @product_name %></p>
-          <p><%= @main_page_paragraph_content.join %></p>
+          <% @main_page_paragraph_content.each do |pg| -%>
+             <p><%= pg %></p>
+          <% end -%>
     <% elsif @main_page_paragraph_content-%>
-          <p><%= @main_page_paragraph_content.join %></p>
-    <% end -%>
+        <% @main_page_paragraph_content.each do |pg| -%>
+          <p> <%= pg %></p>
+        <% end -%>
+      <% end -%>
       <br/>
 
       <% if @visible_tabs and @visible_tabs[0] != '' -%>

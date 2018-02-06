@@ -2,6 +2,7 @@ class parameterised_website::install {
   $json_inputs = base64('decode', $::base64_inputs)
   $secgen_parameters = parsejson($json_inputs)
 
+  $theme = $secgen_parameters['theme'][0]
   $raw_org = $secgen_parameters['organisation'][0]
   if $raw_org and $raw_org != '' {
     $organisation = parsejson($raw_org)
@@ -177,10 +178,15 @@ class parameterised_website::install {
     }
   }
 
-  file { "$docroot/themes/":
-    ensure => directory,
-    recurse => true,
-    source => 'puppet:///modules/parameterised_website/themes',
+  notice ("Theme path: $docroot/themes/$theme")
+  notice ("Theme path: $docroot/themes/$theme")
+  notice ("Theme path: $docroot/themes/$theme")
+  notice ("Theme path: $docroot/themes/$theme")
+  # Error with $theme in source => when trying to get specific filename ???
+
+  file { "$docroot/themes/$theme":
+    ensure => file,
+    source => "puppet:///modules/parameterised_website/themes/$theme",
     require => File[$docroot],
   }
 
