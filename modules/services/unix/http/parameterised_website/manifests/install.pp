@@ -177,4 +177,11 @@ class parameterised_website::install {
     }
   }
 
+  file { "$docroot/themes/":
+    ensure => directory,
+    recurse => true,
+    source => 'puppet:///modules/parameterised_website/themes',
+    require => File[$docroot],
+  }
+
 }

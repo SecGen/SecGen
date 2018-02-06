@@ -13,7 +13,7 @@
       <% # Externally input / default style -%>
       <% elsif @manager_profile != '' or @employees[0] != '' or @business_address != ''-%>
           <h1><%= @business_name %></h1>
-          <h2><%= @product_name %></h2>
+          <p class="lead"><%= @product_name %></p>
           <p><%= @main_page_paragraph_content.join %></p>
     <% elsif @main_page_paragraph_content-%>
           <p><%= @main_page_paragraph_content.join %></p>
