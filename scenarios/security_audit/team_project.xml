@@ -157,6 +157,7 @@
     <base platform="linux" type="server"/>
     <vulnerability module_path=".*xfce_lightdm_root_login"/>
     <utility module_path=".*iceweasel" />
+    <utility module_path=".*handy_cli_tools"/>
     <network type="private_network">
       <input into="IP_address">
         <datastore access="next">IP_addresses</datastore>
@@ -169,8 +170,6 @@
   <system>
     <system_name>attack_vm</system_name>
     <base distro="Kali" name="MSF"/>
-
-    <service type="ircd"/>
 
     <utility module_path=".*metasploit_framework"/>
     <utility module_path=".*handy_cli_tools"/>
