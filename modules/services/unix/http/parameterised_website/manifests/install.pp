@@ -86,11 +86,11 @@ class parameterised_website::install {
     require => File["$docroot/css"],
   }
 
-  # Apply randomly selected CSS template
-  file { "$docroot/css/randomly_selected.css":
+  # Add randomly selected CSS theme
+  file { "$docroot/css/$theme":
     ensure => file,
-    content => template('parameterised_website/default.css.erb'),
-    require => File["$docroot/css"],
+    source => "puppet:///modules/parameterised_website/themes/$theme",
+    require => File[$docroot],
   }
 
   # Apply index page template
@@ -176,18 +176,6 @@ class parameterised_website::install {
       ensure  => file,
       content => template('parameterised_website/security_audit_remit_page.html.erb'),
     }
-  }
-
-  notice ("Theme path: $docroot/themes/$theme")
-  notice ("Theme path: $docroot/themes/$theme")
-  notice ("Theme path: $docroot/themes/$theme")
-  notice ("Theme path: $docroot/themes/$theme")
-  # Error with $theme in source => when trying to get specific filename ???
-
-  file { "$docroot/themes/$theme":
-    ensure => file,
-    source => "puppet:///modules/parameterised_website/themes/$theme",
-    require => File[$docroot],
   }
 
 }
