@@ -24,11 +24,13 @@
             <% if @acceptable_use_policy -%>
             <p>Find the Acceptable Use Policy <a href="acceptable_use_policy.html">here</a>.</p>
             <% end -%>
-        <% end -%>
+      <% # Default style -%>
+      <% else -%>
         <% @main_page_paragraph_content.each do |pg| -%>
             <p> <%= pg %></p>
         <% end -%>
         <br/>
+      <% end -%>
 
         <% if @visible_tabs and @visible_tabs[0] != '' -%>
             <%= scope.function_template(['parameterised_website/subtemplates/tab_panel.html.erb']) %>

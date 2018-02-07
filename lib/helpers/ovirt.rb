@@ -1,6 +1,7 @@
 require 'timeout'
 require 'rubygems'
 require 'process_helper'
+require 'ovirtsdk4'
 require_relative './print.rb'
 
 class OVirtFunctions

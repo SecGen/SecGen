@@ -53,7 +53,7 @@ Replace 'username' within the lib/batch/batch_secgen.sql dump with your database
 Import the modified SQL file
 
 ```
-psql -U secgen batch_secgen < lib/batch/batch_secgen.sql
+psql -U <username> batch_secgen < lib/batch/batch_secgen.sql
 ```
  
 ## Using secgen-batch.rb 
@@ -101,6 +101,3 @@ Install the lib/batch/batch-secgen.service systemd service file.
 sudo systemctl enable /absolute/path/to/SecGen/lib/batch/batch-secgen.service
 service batch-secgen start
 ```
-
-TODO: Add support for passing --max_threads to the service as an environment variable. 
-      For now, change line 112's max_threads => 1.

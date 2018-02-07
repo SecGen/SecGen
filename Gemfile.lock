@@ -1,8 +1,8 @@
 GIT
-  remote: git://github.com/robertjwhitney/programr.git
-  revision: f6e821f494983f6fdcca62e31e458a1e85f25400
+  remote: http://github.com/robertjwhitney/programr.git
+  revision: 9885f3870407f57c3e2ca1fe644ed10573629ca6
   specs:
-    programr (0.0.1)
+    programr (0.0.2)
 
 GEM
   remote: https://rubygems.org/
@@ -105,4 +105,4 @@ DEPENDENCIES
   zipruby
 
 BUNDLED WITH
-   1.14.3
+   1.15.4

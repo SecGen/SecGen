@@ -16,7 +16,7 @@ gem 'credy'
 gem 'pg'
 gem 'cinch'
 gem 'nori'
-gem 'programr', :git => "git://github.com/robertjwhitney/programr.git"
+gem 'programr', :git => "http://github.com/robertjwhitney/programr.git"
 gem 'process_helper'
 gem 'ovirt-engine-sdk'
 

@@ -5,130 +5,139 @@
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
   <!-- Web Server on NIC1 and NIC2 -->
-  <system>
-    <system_name>web_server</system_name>
-    <base module_path=".*debian_puppet_32"/>
+  <!--<system>-->
+    <!--<system_name>web_server</system_name>-->
+    <!--<base module_path=".*debian_puppet_32"/>-->
 
-    <service module_path="services/unix/http/parameterised_website">
-      <input into="organisation" into_datastore="organisation">
-        <generator type="organisation">
-          <input into="business_name" into_datastore="business_name">
-            <generator type="business_name"/>
-          </input>
+    <!--<service module_path="services/unix/http/parameterised_website">-->
+      <!--<input into="organisation" into_datastore="organisation">-->
+        <!--<generator type="organisation">-->
+          <!--<input into="business_name" into_datastore="business_name">-->
+            <!--<generator type="business_name"/>-->
+          <!--</input>-->
 
-          <input into="domain" into_datastore="business_domain">
-            <generator type="domain">
-              <input into="name">
-                <datastore>business_name</datastore>
-              </input>
-            </generator>
-          </input>
+          <!--<input into="domain" into_datastore="business_domain">-->
+            <!--<generator type="domain">-->
+              <!--<input into="name">-->
+                <!--<datastore>business_name</datastore>-->
+              <!--</input>-->
+            <!--</generator>-->
+          <!--</input>-->
 
-          <input into="manager">
-            <generator type="person">
-              <input into="name" into_datastore="manager_name">
-                <generator type="name_generator"/>
-              </input>
-              <input into="email_address">
-                <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
-                  <input into="name">
-                    <datastore>manager_name</datastore>
-                  </input>
-                  <input into="domain">
-                    <datastore>business_domain</datastore>
-                  </input>
-                </generator>
-              </input>
-            </generator>
-          </input>
+          <!--<input into="manager">-->
+            <!--<generator type="person">-->
+              <!--<input into="name" into_datastore="manager_name">-->
+                <!--<generator type="name_generator"/>-->
+              <!--</input>-->
+              <!--<input into="email_address">-->
+                <!--<generator type="business_email">  &lt;!&ndash; e.g. contact@business.co.uk &ndash;&gt;-->
+                  <!--<input into="name">-->
+                    <!--<datastore>manager_name</datastore>-->
+                  <!--</input>-->
+                  <!--<input into="domain">-->
+                    <!--<datastore>business_domain</datastore>-->
+                  <!--</input>-->
+                <!--</generator>-->
+              <!--</input>-->
+            <!--</generator>-->
+          <!--</input>-->
 
-          <input into="office_email">
-            <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
-              <input into="name">
-                <value>contact</value>
-              </input>
-              <input into="domain">
-                <datastore>business_domain</datastore>
-              </input>
-            </generator>
-          </input>
+          <!--<input into="office_email">-->
+            <!--<generator type="business_email">  &lt;!&ndash; e.g. contact@business.co.uk &ndash;&gt;-->
+              <!--<input into="name">-->
+                <!--<value>contact</value>-->
+              <!--</input>-->
+              <!--<input into="domain">-->
+                <!--<datastore>business_domain</datastore>-->
+              <!--</input>-->
+            <!--</generator>-->
+          <!--</input>-->
 
-          <input into="employees">
-            <!--Employee 1-->
-            <generator type="person">
-              <input into="name" into_datastore="employee_1_name">
-                <generator type="name_generator"/>
-              </input>
+          <!--<input into="employees">-->
+            <!--&lt;!&ndash;Employee 1&ndash;&gt;-->
+            <!--<generator type="person">-->
+              <!--<input into="name" into_datastore="employee_1_name">-->
+                <!--<generator type="name_generator"/>-->
+              <!--</input>-->
 
-              <input into="email_address">
-                <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
-                  <input into="name">
-                    <datastore>employee_1_name</datastore>
-                  </input>
-                  <input into="domain">
-                    <datastore>business_domain</datastore>
-                  </input>
-                </generator>
-              </input>
-            </generator>
+              <!--<input into="email_address">-->
+                <!--<generator type="business_email">  &lt;!&ndash; e.g. contact@business.co.uk &ndash;&gt;-->
+                  <!--<input into="name">-->
+                    <!--<datastore>employee_1_name</datastore>-->
+                  <!--</input>-->
+                  <!--<input into="domain">-->
+                    <!--<datastore>business_domain</datastore>-->
+                  <!--</input>-->
+                <!--</generator>-->
+              <!--</input>-->
+            <!--</generator>-->
 
-            <!--Employee 2-->
-            <generator type="person">
-              <input into="name" into_datastore="employee_2_name">
-                <generator type="name_generator"/>
-              </input>
-              <input into="email_address">
-                <generator type="business_email">  <!-- e.g. contact@business.co.uk -->
-                  <input into="name">
-                    <datastore>employee_2_name</datastore>
-                  </input>
-                  <input into="domain">
-                    <datastore>business_domain</datastore>
-                  </input>
-                </generator>
-              </input>
-            </generator>
-          </input>
-        </generator>
-      </input>
-    </service>
+            <!--&lt;!&ndash;Employee 2&ndash;&gt;-->
+            <!--<generator type="person">-->
+              <!--<input into="name" into_datastore="employee_2_name">-->
+                <!--<generator type="name_generator"/>-->
+              <!--</input>-->
+              <!--<input into="email_address">-->
+                <!--<generator type="business_email">  &lt;!&ndash; e.g. contact@business.co.uk &ndash;&gt;-->
+                  <!--<input into="name">-->
+                    <!--<datastore>employee_2_name</datastore>-->
+                  <!--</input>-->
+                  <!--<input into="domain">-->
+                    <!--<datastore>business_domain</datastore>-->
+                  <!--</input>-->
+                <!--</generator>-->
+              <!--</input>-->
+            <!--</generator>-->
+          <!--</input>-->
+        <!--</generator>-->
+      <!--</input>-->
+    <!--</service>-->
 
-    <vulnerability privilege="user_rwx" access="remote" type="^((?!webapp).)*$">
-      <input into="business_domain">
-        <datastore access_json="['domain']">organisation</datastore>
-      </input>
-      <input into="business_name">
-        <datastore access_json="['business_name']">organisation</datastore>
-      </input>
-      <input into="person">
-        <datastore access_json="['manager']">organisation</datastore>
-      </input>
-    </vulnerability>
-    <vulnerability privilege="root_rwx" access="local">
-      <input into="business_domain">
-        <datastore access_json="['domain']">organisation</datastore>
-      </input>
-      <input into="business_name">
-        <datastore access_json="['business_name']">organisation</datastore>
-      </input>
-      <input into="person">
-        <datastore access_json="['manager']">organisation</datastore>
-      </input>
-    </vulnerability>
+    <!--<vulnerability privilege="user_rwx" access="remote" type="^((?!webapp).)*$">-->
+      <!--<input into="business_domain">-->
+        <!--<datastore access_json="['domain']">organisation</datastore>-->
+      <!--</input>-->
+      <!--<input into="business_name">-->
+        <!--<datastore access_json="['business_name']">organisation</datastore>-->
+      <!--</input>-->
+      <!--<input into="person">-->
+        <!--<datastore access_json="['manager']">organisation</datastore>-->
+      <!--</input>-->
+    <!--</vulnerability>-->
+    <!--<vulnerability privilege="root_rwx" access="local">-->
+      <!--<input into="business_domain">-->
+        <!--<datastore access_json="['domain']">organisation</datastore>-->
+      <!--</input>-->
+      <!--<input into="business_name">-->
+        <!--<datastore access_json="['business_name']">organisation</datastore>-->
+      <!--</input>-->
+      <!--<input into="person">-->
+        <!--<datastore access_json="['manager']">organisation</datastore>-->
+      <!--</input>-->
+    <!--</vulnerability>-->
 
-    <build type="cleanup">
-      <input into="root_password">
-        <generator type="password_generator"/>
-      </input>
-    </build>
+    <!--<build type="cleanup">-->
+      <!--<input into="root_password">-->
+        <!--<generator type="password_generator"/>-->
+      <!--</input>-->
+    <!--</build>-->
 
-    <network module_path=".*private_network_1"/>
-  </system>
+    <!--<network module_path=".*private_network_1"/>-->
+  <!--</system>-->
 
   <!-- Intranet Server on NIC 2 -->
   <system>
     <system_name>intranet_server</system_name>
     <base module_path=".*debian_puppet_32"/>
+
+    <input into="organisation" into_datastore="organisation">
+      <encoder type="line_selector">
+        <input into="file_path">
+          <value>lib/resources/structured_content/organisations/json_organisations</value>
+        </input>
+      </encoder>
+    </input>
+
 
     <!-- Web server hosting acceptable use policy and security audit remit -->
     <service module_path="services/unix/http/parameterised_website">
@@ -140,7 +149,7 @@
           <input into="strings_to_encode">
             <generator module_path=".*security_audit_remit">
               <input into="business_name">
-                <datastore>business_name</datastore>
+                <datastore access_json="['business_name']">organisation</datastore>
               </input>
             </generator>
           </input>
@@ -172,33 +181,33 @@
       </input>
     </utility>
 
-    <service/>
-    <service/>
-    <service/>
+    <!--<service/>-->
+    <!--<service/>-->
+    <!--<service/>-->
 
-    <vulnerability access="remote" type="^((?!webapp).)*$">
-      <input into="business_domain">
-        <datastore access_json="['domain']">organisation</datastore>
-      </input>
-      <input into="business_name">
-        <datastore access_json="['business_name']">organisation</datastore>
-      </input>
-      <input into="person">
-        <datastore access_json="['manager']">organisation</datastore>
-      </input>
-    </vulnerability>
+    <!--<vulnerability access="remote" type="^((?!webapp).)*$">-->
+      <!--<input into="business_domain">-->
+        <!--<datastore access_json="['domain']">organisation</datastore>-->
+      <!--</input>-->
+      <!--<input into="business_name">-->
+        <!--<datastore access_json="['business_name']">organisation</datastore>-->
+      <!--</input>-->
+      <!--<input into="person">-->
+        <!--<datastore access_json="['manager']">organisation</datastore>-->
+      <!--</input>-->
+    <!--</vulnerability>-->
 
-    <vulnerability type="^((?!webapp).)*$">
-      <input into="business_domain">
-        <datastore access_json="['domain']">organisation</datastore>
-      </input>
-      <input into="business_name">
-        <datastore access_json="['business_name']">organisation</datastore>
-      </input>
-      <input into="person">
-        <datastore access_json="['manager']">organisation</datastore>
-      </input>
-    </vulnerability>
+    <!--<vulnerability type="^((?!webapp).)*$">-->
+      <!--<input into="business_domain">-->
+        <!--<datastore access_json="['domain']">organisation</datastore>-->
+      <!--</input>-->
+      <!--<input into="business_name">-->
+        <!--<datastore access_json="['business_name']">organisation</datastore>-->
+      <!--</input>-->
+      <!--<input into="person">-->
+        <!--<datastore access_json="['manager']">organisation</datastore>-->
+      <!--</input>-->
+    <!--</vulnerability>-->
 
     <build type="cleanup">
       <input into="root_password">
@@ -209,14 +218,14 @@
     <network module_path=".*private_network_1"/>
   </system>
 
-  <!-- Desktop Client on NIC2 -->
-  <system>
-    <system_name>desktop</system_name>
-    <base platform="linux" type="server"/>
-    <vulnerability module_path=".*xfce_lightdm_root_login"/>
-    <utility module_path=".*iceweasel" />
-    <network module_path=".*private_network_1"/>
-  </system>
+  <!--&lt;!&ndash; Desktop Client on NIC2 &ndash;&gt;-->
+  <!--<system>-->
+    <!--<system_name>desktop</system_name>-->
+    <!--<base platform="linux" type="server"/>-->
+    <!--<vulnerability module_path=".*xfce_lightdm_root_login"/>-->
+    <!--<utility module_path=".*iceweasel" />-->
+    <!--<network module_path=".*private_network_1"/>-->
+  <!--</system>-->
 
   <!-- TODO: Attacker Kali on NIC1-->
   <!-- Handle this outside of the scenario.-->
