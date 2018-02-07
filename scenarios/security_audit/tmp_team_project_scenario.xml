@@ -16,7 +16,6 @@
       <value>172.10.0.4</value>
     </input>
 
-
     <service module_path="services/unix/http/parameterised_website">
       <input into="organisation" into_datastore="organisation">
         <encoder type="line_selector">
@@ -168,7 +167,7 @@
 
   <!-- TODO: Attacker Kali on NIC1-->
   <system>
-    <system_name>hackerbot_server</system_name>
+    <system_name>attack_vm</system_name>
     <base distro="Kali" name="MSF"/>
 
     <service type="ircd"/>
