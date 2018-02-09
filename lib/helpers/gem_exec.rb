@@ -39,6 +39,7 @@ class GemExec
     Dir.chdir(working_dir)
     output_hash = {:output => '', :status => 0, :exception => nil}
     begin
+      # Times out after 30 minutes, (TODO: make this configurable)
       output_hash[:output] = ProcessHelper.process("#{gem_path} #{arguments}", {:pty => true, :timeout => (60 * 30),
                                                                                 include_output_in_exception: true})
     rescue Exception => ex
