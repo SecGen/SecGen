@@ -138,8 +138,10 @@
   <solution>You can dump the database with the following command: 'sqlmap --url=http://url:port/product?filter=* --dump' and follow the instructions when prompted.</solution>
 
   <requires>
-    <module_path>modules/services/unix/http/apache</module_path>
+    <module_path>.*apache</module_path>
+    <type>httpd</type>
   </requires>
+
   <requires>
     <module_path>modules/services/unix/database/mysql</module_path>
   </requires>

@@ -15,7 +15,9 @@
   <software_license>Apache v2</software_license>
 
   <requires>
-    <module_path>modules/services/unix/http/apache</module_path>
+    <module_path>.*apache</module_path>
+    <type>httpd</type>
   </requires>
+
 
 </service>
