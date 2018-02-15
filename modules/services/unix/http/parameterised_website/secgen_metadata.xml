@@ -56,6 +56,10 @@
     <generator type="website_theme"/>
   </default_input>
 
+  <conflict>
+    <module_path>.*parameterised_website</module_path>
+  </conflict>
+
   <requires>
     <module_path>.*apache</module_path>
     <type>httpd</type>
