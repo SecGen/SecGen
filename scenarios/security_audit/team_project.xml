@@ -24,6 +24,9 @@
           </input>
         </encoder>
       </input>
+      <input into="theme" into_datastore="theme">
+        <generator type="website_theme"/>
+      </input>
     </service>
 
     <vulnerability privilege="user_rwx" access="remote" type="^((?!webapp).)*$">
@@ -87,6 +90,9 @@
       <input into="organisation">
         <datastore>organisation</datastore>
       </input>
+      <input into="theme">
+        <datastore>theme</datastore>
+      </input>
     </service>
 
     <!-- Create accounts for the 3 employees -->
@@ -107,10 +113,14 @@
             <datastore access_json="['employees'][1]['username']">organisation</datastore>
           </input>
         </generator>
+        <generator type="account">
+          <input into="username">
+            <datastore access_json="['employees'][2]['username']">organisation</datastore>
+          </input>
+        </generator>
       </input>
     </utility>
 
-    <service/>
     <service/>
     <service/>
 
@@ -155,8 +165,19 @@
   <system>
     <system_name>desktop</system_name>
     <base platform="linux" type="server"/>
+
+    <utility module_path=".*parameterised_accounts">
+      <input into="accounts">
+         <datastore access_json="['manager']">organisation</datastore>
+      </input>
+    </utility>
+
     <vulnerability module_path=".*xfce_lightdm_root_login"/>
-    <utility module_path=".*iceweasel" />
+    <utility module_path=".*iceweasel" >
+    <input into="accounts">
+      <datastore access_json="['manager']">organisation</datastore>
+    </input>
+    </utility>
     <utility module_path=".*handy_cli_tools"/>
     <network type="private_network">
       <input into="IP_address">
@@ -166,21 +187,14 @@
 
   </system>
 
-  <!-- TODO: Attacker Kali on NIC1-->
   <system>
     <system_name>attack_vm</system_name>
     <base distro="Kali" name="MSF"/>
-
-    <utility module_path=".*metasploit_framework"/>
-    <utility module_path=".*handy_cli_tools"/>
-    <utility module_path=".*nmap"/>
-
     <network type="private_network">
       <input into="IP_address">
         <datastore access="next">IP_addresses</datastore>
       </input>
     </network>
-
   </system>
 
 </scenario>
