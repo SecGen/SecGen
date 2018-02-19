@@ -132,6 +132,7 @@ def build_vms(scenario, project_dir, options)
     command = '--provision reload'
   end
 
+  # if deploying to ovirt, when things fail to build, set the retry_count
   retry_count = (options[:ovirtuser] and options[:ovirtpass]) ? 10 : 0
   successful_creation = false
 
@@ -151,18 +152,31 @@ def build_vms(scenario, project_dir, options)
       if retry_count > 0
         # Identify which VMs failed
         if vagrant_output[:exception].class == ProcessHelper::UnexpectedExitStatusError
-          split = vagrant_output[:output].split('==>')
-          failures = []
+          split = vagrant_output[:output].split('==> ')
+          failures_to_destroy = []
           split.each do |line|
-            if line.include? ': An error occurred'
-              failed_vm = line.split(':').first
-              failures << failed_vm
+            if match = line.match(/^([-a-zA-Z_0-9]+):[^:]+An error occured/i)
+              vm_to_destroy = match.captures[0]
+              failures_to_destroy << vm_to_destroy
+            elsif match = line.match(/^([-a-zA-Z_0-9]+):[^:]+Error:/i)
+              vm_to_destroy = match.captures[0]
+              failures_to_destroy << vm_to_destroy
+            elsif match = line.match(/^([-a-zA-Z_0-9]+):[^:]+VM is not created/i)
+              vm_not_to_destroy = match.captures[0]
+              Print.err "Not going to destroy #{vm_not_to_destroy}, since it does not exist"
+              failures_to_destroy.delete_if {|x| x == vm_not_to_destroy }
+              # TODO: not sure if there is a need to remove_uncreated_vms() here too? (I don't think so?)
             end
           end
-          failures = failures.uniq
+          
+          failures_to_destroy = failures_to_destroy.uniq
 
-          Print.err 'Error creating VMs [' + failures.join(',') + '] destroying VMs and retrying...'
-          failures.each do |failed_vm|
+          if failures_to_destroy.size == 0
+            Print.err 'Failed. Not retrying. Please refer to the error above.'
+            exit 1
+          end
+          Print.err 'Error creating VMs [' + failures_to_destroy.join(',') + '] destroying VMs and retrying...'
+          failures_to_destroy.each do |failed_vm|
             destroy = 'destroy ' + failed_vm + ' -f'
             destroy_output = GemExec.exe('vagrant', project_dir, destroy)
             if destroy_output[:status] == 0

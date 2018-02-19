@@ -27,6 +27,7 @@
     <value>80</value>
   </default_input>
 
+  <!-- TODO: These flags should be passed into another parameter, since strings_to_leak may end up having only 1 flag passed in -->
   <!--strings_to_leak contains the following flags: -->
   <default_input into="strings_to_leak">
     <generator type="flag_generator"/> <!-- [0]: db_flag -->
@@ -143,7 +144,7 @@
   </requires>
 
   <requires>
-    <module_path>modules/services/unix/database/mysql</module_path>
+    <module_path>.*/mysql</module_path>
   </requires>
 
 </vulnerability>
