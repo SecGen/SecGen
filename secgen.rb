@@ -455,7 +455,7 @@ case ARGV[0]
     build_config(scenario, project_dir, options)
   when 'build-vms', 'v'
     if project_dir
-      build_vms(project_dir, options[:shutdown])
+      build_vms(scenario, project_dir, options)
     else
       Print.err 'Please specify project directory to read'
       usage
@@ -466,12 +466,12 @@ case ARGV[0]
     image_type = options.has_key?(:forensic_image_type) ? options[:forensic_image_type] : 'raw';
 
     if project_dir
-      build_vms(project_dir, options[:shutdown])
+      build_vms(scenario, project_dir, options)
       make_forensic_image(project_dir, nil, image_type)
     else
       project_dir = default_project_dir unless project_dir
       build_config(scenario, project_dir, options)
-      build_vms(project_dir, options[:shutdown])
+      build_vms(scenario, project_dir, options)
       make_forensic_image(project_dir, nil, image_type)
     end
 
