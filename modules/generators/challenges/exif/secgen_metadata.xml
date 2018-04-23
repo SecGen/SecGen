@@ -3,10 +3,10 @@
 <generator xmlns="http://www.github/cliffe/SecGen/generator"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
-  <name>Exif</name>
+  <name>Image ith Modified EXIF Metadata</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>TODO</description>
+  <description>Modifies an image's EXIF metadata to leak a string.</description>
 
   <type>modified_exif</type>
   <type>image_generator</type>
@@ -14,6 +14,10 @@
   <type>local_calculation</type>
   <platform>linux</platform>
   <platform>windows</platform>
+
+  <hint>Use a tool to extract the metadata e.g. exiftool (http://www.sno.phy.queensu.ca/~phil/exiftool/) or
+    http://exifdata.com/
+  </hint>
 
   <read_fact>base64_image</read_fact>
   <read_fact>strings_to_leak</read_fact>

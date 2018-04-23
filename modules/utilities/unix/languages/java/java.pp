@@ -1,3 +1,1 @@
-class { 'java':
-  distribution => 'jre',
-}
+class { 'java': }

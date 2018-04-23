@@ -105,10 +105,13 @@ class SystemReader
           if access == ''
             access = 'all'
           end
+          access_json = input_value.xpath('@access_json').to_s
           variable = input_value.xpath('../@into').to_s
           value = input_value.text
           Print.verbose "  -- datastore: #{variable} = #{value}"
-          (module_selector.received_datastores[variable] ||= []).push('variablename' => value, 'access' => access)
+          (module_selector.received_datastores[variable] ||= []).push('variablename'   => value,
+                                                                      'access'         => access,
+                                                                      'access_json'    => access_json)
         end
 
         module_node.xpath('@*').each do |attr|

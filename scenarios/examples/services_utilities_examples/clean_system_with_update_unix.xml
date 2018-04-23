@@ -7,7 +7,7 @@
   <!-- an example of a clean and updated linux system -->
   <system>
     <system_name>clean_system_with_update</system_name>
-    <base platform="linux"/>
+    <base platform="linux" type="server"/>
 
     <utility module_path="modules/utilities/unix/update/unix_update"/>
 

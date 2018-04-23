@@ -1,10 +1,11 @@
 class moinmoin_195::config {
-  $json_inputs = base64('decode', $::base64_inputs)
-  $secgen_parameters = parsejson($json_inputs)
+  $secgen_parameters = secgen_functions::get_parameters($::base64_inputs_file)
   $images_to_leak = $secgen_parameters['images_to_leak']
+  $raw_org = $secgen_parameters['organisation']
 
-  if $secgen_parameters['business_name'] {
-    $raw_default_page = regsubst($secgen_parameters['business_name'][0], ',', '', 'G')  # Remove commas from co. names
+  if $raw_org and $raw_org[0] and $raw_org[0] != '' {
+    $organisation = parsejson($raw_org[0])
+    $raw_default_page = regsubst($organisation['business_name'], ',', '', 'G')  # Remove commas from co. names
   } else{
     $raw_default_page = $secgen_parameters['default_page'][0]
   }

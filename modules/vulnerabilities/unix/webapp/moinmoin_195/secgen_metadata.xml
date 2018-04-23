@@ -17,14 +17,18 @@
   <access>remote</access>
   <platform>linux</platform>
 
+  <read_fact>port</read_fact>
   <read_fact>strings_to_leak</read_fact>
   <read_fact>images_to_leak</read_fact>
   <read_fact>site_name</read_fact>
   <read_fact>default_page</read_fact>
 
-  <!-- Team project selectors -->
-  <read_fact>business_name</read_fact>
-  <read_fact>person</read_fact>
+  <!-- No organisation by default, overrides other values if provided through scenario. -->
+  <read_fact>organisation</read_fact>
+
+  <default_input into="port">
+    <value>80</value>
+  </default_input>
 
   <default_input into="strings_to_leak">
     <value>This is some leaked data.</value>
@@ -63,12 +67,10 @@
     Path traversal found in AttachFile module.
   </solution>
 
-  <conflict>
-    <type>webapp</type>
-  </conflict>
-
   <requires>
-    <module_path>services/unix/http/apache</module_path>
+    <module_path>.*apache</module_path>
+    <type>httpd</type>
   </requires>
+
 
 </vulnerability>

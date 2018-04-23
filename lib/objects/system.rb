@@ -8,6 +8,7 @@ class System
   attr_accessor :module_selectors # (filters)
   attr_accessor :module_selections # (after resolution)
   attr_accessor :num_actioned_module_conflicts
+  attr_accessor :options #(command line options hash)
 
   # Initalizes System object
   # @param [Object] name of the system
@@ -23,9 +24,62 @@ class System
 
   # selects from the available modules, based on the selection filters that have been specified
   # @param [Object] available_modules all available modules (vulnerabilities, services, bases)
+  # @param [Object] options command line options hash
   # @return [Object] the list of selected modules
-  def resolve_module_selection(available_modules)
+  def resolve_module_selection(available_modules, options)
     retry_count = 0
+
+    # Replace $IP_addresses with options ip_ranges if required
+    begin
+      if options[:ip_ranges] and $datastore['IP_addresses'] and !$datastore['replaced_ranges']
+        unused_opts_ranges = options[:ip_ranges].clone
+        option_range_map = {} # k = ds_range, v = opts_range
+        new_ip_addresses = []
+
+        # Iterate over the DS IPs
+        $datastore['IP_addresses'].each do |ds_ip_address|
+          # Split the IP into ['X.X.X', 'Y']
+          split_ip = ds_ip_address.split('.')
+          ds_ip_array = [split_ip[0..2].join('.'), split_ip[3]]
+          ds_range = ds_ip_array[0] + '.0'
+          # Check if we have encountered first 3 octets before i.e. look in option_range_map for key(ds_range)
+          if option_range_map.has_key? ds_range
+            # if we have, grab that value (opts_range)
+            opts_range = option_range_map[ds_range]
+            # replace first 3 in ds_ip with first 3 in opts_range
+            split_opts_range = opts_range.split('.')
+            split_opts_range[3] = ds_ip_array[1]
+            new_ds_ip = split_opts_range.join('.')
+            # save in $datastore['IP_addresses']
+            new_ip_addresses << new_ds_ip
+          else #(if we haven't seen the first 3 octets before)
+            # grab the first range that we haven't used yet from unused_opts_ranges with .shift (also removes the range)
+            opts_range = unused_opts_ranges.shift
+            # store the range mapping in option_range_map (ds_range => opts_range)
+            option_range_map[ds_range] = opts_range
+            # split the opts_range and replace last octet with last octet of ds_ip_address
+            split_opts_range = opts_range.split('.')
+            split_opts_range[3] = ds_ip_array[1]
+            new_ds_ip = split_opts_range.join('.')
+            # save in $datastore['IP_addresses']
+            new_ip_addresses << new_ds_ip
+          end
+        end
+        $datastore['IP_addresses'] = new_ip_addresses
+        $datastore['replaced_ranges'] = true
+      end
+    rescue NoMethodError
+      required_ranges = []
+      $datastore['IP_addresses'].each { |ip_address|
+        split_range = ip_address.split('.')
+        split_range[3] = 0
+        required_ranges << split_range.join('.')
+      }
+      required_ranges.uniq!
+      Print.err("Fatal: Not enough ranges were provided with --network-ranges. Provided: #{options[:ip_ranges].size} Required: #{required_ranges.uniq.size}")
+      exit
+    end
+
     begin
 
       selected_modules = []
@@ -171,6 +225,44 @@ class System
               raise 'failed'
             end
             if datastore_retrieved && datastore_retrieved != [nil]
+              # separate out the data if there's a 'access_json' call
+              datastore_access_json = datastore_variablename_and_access_type['access_json']
+
+              if datastore_access_json.size > 0
+                # use first element when selecting access_json unless access="" is specified
+                if datastore_access == 'all'
+                  datastore_access = 0
+                  Print.verbose "No element specified, e.g. access=\"0\", for access_json=\"#{datastore_access_json}\": using (0)"
+                end
+
+                # parse the datastore
+                parsed_datastore_element = JSON.parse(datastore_retrieved.first)
+
+                # Sanitise with whitelist of used characters: ' [ ]
+                access_json = datastore_access_json.gsub(/[^A-Za-z0-9\[\]'_]/, '')
+
+                # get data from access_json string
+                begin
+                  json_accessed_data = eval("parsed_datastore_element#{access_json}")
+                rescue NoMethodError, SyntaxError => err
+                  Print.err "Error fetching access_json (#{access_json}) from datastore (#{datastore_variablename}): #{err}"
+                  raise 'failed'
+                end
+                # convert hashes back to json
+                if json_accessed_data.is_a? Hash
+                  datastore_retrieved = json_accessed_data.to_json
+                elsif json_accessed_data.is_a? Array
+                  datastore_retrieved = []
+                  json_accessed_data.each do |data_element|
+                    if data_element.is_a? Hash
+                      data_element = data_element.to_json
+                    end
+                    datastore_retrieved << data_element
+                  end
+                else
+                  datastore_retrieved = json_accessed_data
+                end
+              end
               (received_inputs[input_into] ||=[]).push(*datastore_retrieved)
               Print.verbose "Adding (#{datastore_access}) #{datastore_variablename} to #{input_into}: #{datastore_retrieved}"
             else
@@ -209,7 +301,14 @@ class System
           end
         end
         # execute calculation script and format output to an array of Base64 strings
-        outputs = `ruby #{selected.local_calc_file} #{args_string}`.chomp
+        command = "ruby #{selected.local_calc_file} #{args_string}"
+        Print.verbose "Running: #{command}"
+        outputs = `#{command}`.chomp
+        unless $?.success?
+          Print.err "Module failed to run (#{command})"
+          # TODO: this works, but subsequent attempts at resolving the scenario always fail ("Error can't add no data...")
+          raise 'failed'
+        end
         output_array = outputs.split("\n")
         selected.output = output_array.map { |o| Base64.strict_decode64 o }
       end
@@ -279,7 +378,7 @@ class System
             if /^.*defaultinput/ =~ def_unique_id
               def_unique_id = def_unique_id.gsub(/^.*defaultinput/, selected.unique_id)
             end
-            
+
             default_modules_to_add.concat select_modules(module_to_add.module_type, module_to_add.attributes, available_modules, previously_selected_modules + default_modules_to_add, def_unique_id, module_to_add.write_output_variable, def_write_to, module_to_add.received_inputs, module_to_add.default_inputs_literals, module_to_add.write_to_datastore, module_to_add.received_datastores, module_to_add.write_module_path_to_datastore)
           end
         end

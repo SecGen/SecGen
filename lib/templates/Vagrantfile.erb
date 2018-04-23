@@ -5,50 +5,100 @@
 # <%= @time %>
 # Based on <%= @scenario %>
 <% require 'json'
-   require 'base64' -%>
+   require 'base64'
+   require 'securerandom' -%>
+<% scenario_name = @scenario.split('/').last.split('.').first + '-'
+   prefix = @options[:prefix] ? (@options[:prefix] + '-' + scenario_name) : ('SecGen-' + scenario_name) -%>
 
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <% @systems.each do |system| %>
+<%  system.module_selections.each do |selected_module|
+      if selected_module.module_type == 'base'
+        @base_type = selected_module.attributes['type']
+        @ovirt_template = selected_module.attributes['ovirt_template']
+        @cpu_word_size = selected_module.attributes['cpu_word_size'].first.downcase
+        if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)
+          @ovirt_base_template = selected_module.attributes['ovirt_template'].first
+        end
+      end
+    end -%>
   config.vm.define "<%= system.name %>" do |<%= system.name %>|
-    config.vm.provider :virtualbox do |vb|
-<%= if (@options.has_key? :gui_output)
-"      vb.gui = true
-"
-    else
-"      vb.gui = false
-"
-    end -%>
-<%= if (@options.has_key? :nopae)
-"      vb.customize ['modifyvm', :id, '--pae', 'off']"
-    else
-"      vb.customize ['modifyvm', :id, '--pae', 'on']"
-    end -%>
-
-<%= if (@options.has_key? :hwvirtex)
-"      vb.customize ['modifyvm', :id, '--hwvirtex', 'on']"
-    else
-"      vb.customize ['modifyvm', :id, '--hwvirtex', 'off']"
-    end -%>
-
-<%= if (@options.has_key? :vtxvpid)
-"      vb.customize ['modifyvm', :id, '--vtxvpid', 'on']"
-    else
-"      vb.customize ['modifyvm', :id, '--vtxvpid', 'off']"
-    end -%>
-<%= if (@options.has_key? :memory_per_vm)
-"      vb.memory = #{@options[:memory_per_vm]}"
-    elsif (@options.has_key? :total_memory)
-"      vb.memory = #{@options[:total_memory]}/#{@systems.length}"
-    end -%>
-<%= if (@options.has_key? :max_cpu_cores)
-"      vb.cpus = #{@options[:max_cpu_cores]}"
-    end -%>
-<%= if (@options.has_key? :max_cpu_usage)
-"      vb.customize ['modifyvm', :id, '--cpuexecutioncap', '#{@options[:max_cpu_usage]}']"
-    end %>
+<% if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
+    #oVirt provider begin
+    <%= system.name %>.vm.provider :ovirt4 do |ovirt|
+<%=
+"        ovirt.username = '#{@options[:ovirtuser]}'
+            ovirt.password = '#{@options[:ovirtpass]}'" %>
+<%= if @options.has_key? :ovirturl
+"        ovirt.url = '#{@options[:ovirturl]}'"
+        end %>
+<%=     if @options.has_key? :ovirtcluster
+"        ovirt.cluster = '#{@options[:ovirtcluster]}'"
+        end %>
+<%=
+"        ovirt.template = '#{@ovirt_base_template}'" %>
+<%=     if @options.has_key? :memory_per_vm
+"        ovirt.memory_size = '#{@options[:memory_per_vm]} MB'\n"
+        elsif @options.has_key? :total_memory
+"        ovirt.memory_size = '#{(@options[:total_memory].to_i / @systems.length.to_i)} MB'\n"
+        elsif @base_type.include? 'desktop'
+"        ovirt.memory_size = '2048 MB'
+            ovirt.memory_guaranteed = '512 MB'\n"
+        else
+"        ovirt.memory_size = '512 MB'\n"
+        end -%>
+<%=     if @options.has_key? :cpu_cores
+"        ovirt.cpu_cores = #{@options[:cpu_cores]}\n"
+        end -%>
+        ovirt.console = 'spice'
+        ovirt.insecure = true
+        ovirt.filtered_api = true
+        ovirt.debug = true
     end
+    # oVirt provider end
+<%
+  else %>
+    config.vm.provider :virtualbox do |vb|
+<%  system.module_selections.each do |selected_module|
+      if selected_module.module_type == 'base'
+        @cpu_word_size = selected_module.attributes['cpu_word_size'].first.downcase
+      end
+    end -%>
+<%= gui = (@options.has_key? :gui_output) ? 'true' : 'false'
+      "      vb.gui = #{gui}\n" -%>
+<%= no_pae = (@options.has_key? :nopae) ? 'off' : 'on'
+      "      vb.customize ['modifyvm', :id, '--pae', '#{no_pae}']\n" -%>
+<%= if @cpu_word_size == '32-bit'
+      if @options.has_key? :hwvirtex
+      "      vb.customize ['modifyvm', :id, '--hwvirtex', 'on']\n"
+      else
+      "      vb.customize ['modifyvm', :id, '--hwvirtex', 'off']\n"
+      end
+    elsif @cpu_word_size == '64-bit'
+      "      vb.customize ['modifyvm', :id, '--hwvirtex', 'on']\n"
+    end -%>
+<%= vtxpid = (@options.has_key? :vtxvpid) ? 'on' : 'off'
+      "      vb.customize ['modifyvm', :id, '--vtxvpid', '#{vtxpid}']\n"  -%>
+<%= if @options.has_key? :memory_per_vm
+      "      vb.memory = #{@options[:memory_per_vm]}\n"
+    elsif @options.has_key? :total_memory
+      "      vb.memory = #{@options[:total_memory]}/#{@systems.length}\n"
+    end -%>
+<%= if @options.has_key? :cpu_cores
+      "      vb.cpus = #{@options[:cpu_cores]}\n"
+    end -%>
+<%= if @options.has_key? :max_cpu_usage
+      "      vb.customize ['modifyvm', :id, '--cpuexecutioncap', '#{@options[:max_cpu_usage]}']\n"
+    end -%>
+    end
+<% end %>
+    <%  # Adds line that stops cloud-init from attempting to grab meta-data as eth0 is overwritten with provided networks.
+        # TODO: Remove when mutli-network vagrant-plugin issue is resolved
+        if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) -%>
+        <%= system.name %>.vm.provision 'shell', inline: "echo 'datasource_list: [ None ] '> /etc/cloud/cloud.cfg.d/90_dpkg.cfg"
+    <%  end -%>
 
     # SecGen datastore
     # <%= JSON.generate($datastore) %>
@@ -57,24 +107,66 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <% system.module_selections.each do |selected_module| -%>
 
 <%= selected_module.to_s_comment -%>
+<% if selected_module.module_type == 'network' and selected_module.received_inputs.include? 'IP_address' %>
+<%= '    # This module has a datastore entry for IP_address, using that instead of the default.' -%>
+<% elsif selected_module.module_type == 'network' and @options.has_key? :ip_ranges -%>
+<%= '    # This module has a command line ip_range, using that instead of the default.'  -%>
+<% end -%>
 <%   case selected_module.module_type
      when 'base' -%>
+    <% if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>   # TODO
+    <%= system.name %>.vm.hostname = '<%= "#{prefix}#{system.name}".tr('_', '-') %>'
+    <%= system.name %>.vm.box = 'ovirt4'
+    <%= system.name %>.vm.box_url = 'https://github.com/myoung34/vagrant-ovirt4/blob/master/example_box/dummy.box?raw=true'
+    <% else %>
     <%= system.name %>.vm.box = "<%= selected_module.module_path_name %>"
     <%= system.name %>.vm.box_url = "<%= selected_module.attributes['url'].first %>"
+    <% end %>
+    <% if selected_module.attributes['platform'].first.downcase == 'windows' %>
+    <%= system.name %>.vm.communicator = 'winrm'
+    <%= system.name %>.vm.guest = :windows
+    <%= system.name %>.vm.network :forwarded_port, guest: 3389, host: 3389
+    <%= system.name %>.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
+    <% end %>
 <%   when 'network' -%>
-<%     if selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp" -%>
-    <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp"
+<%     if (selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp") and (!selected_module.received_inputs.include? 'IP_address' and !@options[:ip_ranges])-%>
+  <%       if (@options.has_key? :ovirtnetwork) && (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)  %>
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
+  <%       else %>
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", auto_config: false
+  <%       end %>
 <%     else -%>
-    <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module.attributes['range'].first)%>"
+  <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
+  <%         if @ovirt_template and @ovirt_template.include? 'kali_linux_msf' %>
+      <%= system.name %>.vm.provision 'shell', inline: "echo \"auto lo\niface lo inet loopback\n\nauto eth0\niface eth0 inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
+      <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
+  <%         elsif @ovirt_template and @ovirt_template.include? 'debian_desktop_kde' %>
+      <%= system.name %>.vm.provision 'shell', inline: "echo \"\nauto eth1\niface eth1 inet static\n\taddress <%= resolve_network(selected_module)%>\" >> /etc/network/interfaces"
+      <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
+  <%         else %>
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module)%>", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
+  <%         end %>
+  <%       else %>
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module)%>"
+  <%       end %>
 <%     end -%>
 <%   when 'vulnerability', 'service', 'utility', 'build' -%>
 <%     module_name = selected_module.module_path_name -%>
     <%= system.name %>.vm.provision "puppet" do | <%=module_name%> |
 <%     # if there are facter variables to define
       if selected_module.received_inputs != {} -%>
-      <% json_inputs = JSON.generate(selected_module.received_inputs) -%>
-      <%=module_name%>.facter = {
-        "base64_inputs" => '<%= Base64.strict_encode64(json_inputs)%>'
+      <% json_inputs = JSON.generate(selected_module.received_inputs)
+         b64_json_inputs = Base64.strict_encode64(json_inputs)
+         # save the inputs in a randomly named file in the
+         #   project out directory of the secgen_functions module
+         rand = SecureRandom.hex().to_s
+         dir = "#{@out_dir}/puppet/#{system.name}/modules/secgen_functions/files/json_inputs"
+         FileUtils.mkdir_p(dir) unless File.exists?(dir)
+         Print.verbose "Writing #{selected_module.module_path_name} input to: #{dir}/#{rand}"
+         File.write("#{dir}/#{rand}", b64_json_inputs)
+      -%>
+<%=   module_name%>.facter = {
+        "base64_inputs_file" => '<%= rand %>',
       }
 <%    end -%>
       <%=module_name%>.module_path = "<%="puppet/#{system.name}/modules"%>"

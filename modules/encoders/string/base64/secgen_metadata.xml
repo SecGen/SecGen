@@ -9,35 +9,16 @@
   <description>Converts to BASE64 encoding.</description>
 
   <type>string_encoder</type>
-  <type>ascii_reversable</type>
-  <type>alpha_reversable</type>
+  <type>ascii_reversible</type>
+  <type>alpha_reversible</type>
   <platform>linux</platform>
   <platform>windows</platform>
 
-  <!--optional encoder details-->
-  <!--<difficulty>low</difficulty>-->
-  
-<!--   <reference>...</reference> -->
-<!--  <software_name></software_name>
-  <software_license>GPL</software_license>-->
+  <solution>Encoded using Base64. Decoding tools available online e.g. https://www.base64decode.org/</solution>
 
-  <!--optional hints-->
-  <!--TODO <hint>A simple transform</hint>-->
-  <!--<solution>Run rot13 on the cyphertext</solution>-->
-  
-  
-<!--  <read_fact_required>strings_to_encode</read_fact>
-  <read_fact_optional>rot13_options</read_fact>-->
- 
-  <!--<read_fact valid_match=".*" default_value="You found a message">-->
   <read_fact>strings_to_encode</read_fact>
-  <!--valid_match="retain_caps|lower|upper" default_value="retain_caps"-->
   <read_fact>base64_options</read_fact>
 
   <output_type>encoded_strings</output_type>
   
-  <!--Cannot co-exist with other installations-->
-<!--  <conflict>
-    <software_name>proftpd</software_name>
-  </conflict>-->
 </encoder>

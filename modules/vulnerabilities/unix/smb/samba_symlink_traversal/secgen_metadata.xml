@@ -23,10 +23,8 @@
   <read_fact>read_only_share</read_fact>
   <read_fact>guests_allowed</read_fact>
 
-  <!-- Team Project-style scenario selectors. No default and overrides other values if populated. -->
-  <read_fact>business_name</read_fact>
-  <read_fact>business_domain</read_fact>
-  <read_fact>person</read_fact>
+  <!-- No organisation by default, overrides other values if provided through scenario. -->
+  <read_fact>organisation</read_fact>
 
   <!-- drops 2 flags, one in the store and one in the root directory-->
   <default_input into="strings_to_leak">

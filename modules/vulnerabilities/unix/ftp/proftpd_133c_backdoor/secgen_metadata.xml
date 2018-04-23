@@ -19,11 +19,14 @@
   <read_fact>server_name</read_fact>
   <read_fact>strings_to_leak</read_fact>
   <read_fact>welcome_msg</read_fact>
+  <read_fact>port</read_fact>
 
-  <!-- Team project selectors -->
-  <read_fact>business_name</read_fact>
-  <read_fact>business_domain</read_fact>
-  <read_fact>person</read_fact>
+  <!-- No organisation by default, overrides other values if provided through scenario. -->
+  <read_fact>organisation</read_fact>
+
+  <default_input into="port">
+    <value>21</value>
+  </default_input>
 
   <default_input into="server_name">
     <generator type="username_generator"/>
@@ -46,9 +49,6 @@
   <reference>https://www.rapid7.com/db/modules/exploit/unix/ftp/proftpd_133c_backdoor</reference>
   <software_name>proftpd</software_name>
   <software_license>GPL</software_license>
-
-  <!--optional breadcrumb (info that is leaked and required to exploit)-->
-  <!--<breadcrumb></breadcrumb>-->
 
   <!--optional hints-->
   <!--<msf_module>exploits/unix/ftp/proftpd_133c_backdoor.rb</msf_module>-->

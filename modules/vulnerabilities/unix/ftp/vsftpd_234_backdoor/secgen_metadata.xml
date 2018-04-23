@@ -18,12 +18,10 @@
 
   <read_fact>anonymous_ftp</read_fact>
   <read_fact>ftpd_banner</read_fact>
+  <read_fact>port</read_fact>
 
-  <!-- Team project selectors -->
-  <read_fact>business_name</read_fact>
-  <!--TODO: Remove below + match only on business_name? Currently does nothing.-->
-  <read_fact>business_domain</read_fact>
-  <read_fact>person</read_fact>
+  <!-- No organisation by default, overrides other values if provided through scenario. -->
+  <read_fact>organisation</read_fact>
 
   <default_input into="anonymous_ftp">
     <value>false</value>
@@ -31,6 +29,10 @@
 
   <default_input into="ftpd_banner">
     <generator type="message_generator"/>
+  </default_input>
+
+  <default_input into="port">
+    <value>21</value>
   </default_input>
 
   <!--optional vulnerability details-->
@@ -43,11 +45,7 @@
   <software_name>vsftpd</software_name>
   <software_license>GPLv2</software_license>
 
-  <!--optional breadcrumb (info that is leaked and required to exploit)-->
-  <!--<breadcrumb></breadcrumb>-->
-
   <!--optional hints-->
-  <!--<msf_module></msf_module>-->
   <hint>A backdoor in a service</hint>
   <solution>Remotely exploitable backdoor in the FTP service</solution>
 

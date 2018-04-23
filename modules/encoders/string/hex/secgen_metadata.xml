@@ -8,11 +8,15 @@
   <module_license>MIT</module_license>
   <description>Takes ASCII strings and encodes each character into it's hexadecimal representation.</description>
 
-  <type>ascii_reversable</type>
+  <type>ascii_reversible</type>
   <type>hex_encoder</type>
   <type>string_encoder</type>
   <platform>linux</platform>
   <platform>windows</platform>
+
+  <solution>Convert the hexadecimal (base 16) string into its ASCII value, character by character in sets of 2.
+    Use an ascii table e.g. http://www.asciitable.com OR an online converter e.g. https://www.branah.com/ascii-converter
+  </solution>
 
   <read_fact>strings_to_encode</read_fact>
 

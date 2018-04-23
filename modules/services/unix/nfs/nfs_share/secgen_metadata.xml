@@ -9,8 +9,13 @@
   <description>NFS (Network File System) sharing a directory</description>
 
   <type>nfs</type>
-
+  <type>storage</type>
   <platform>unix</platform>
+
+  <read_fact>storage_directory</read_fact>
+  <default_input into="storage_directory">
+    <value>/exports_test</value>
+  </default_input>
 
   <!--optional details-->
   <reference>https://en.wikipedia.org/wiki/Network_File_System</reference>

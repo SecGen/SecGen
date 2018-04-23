@@ -80,9 +80,9 @@ class BusinessEmailEncoder < StringEncoder
       domain = self.domain.to_s
     end
 
-    'name: ' + name + ',
-    business_name: ' + business_name + ',
-    domain: ' + domain
+    'name: ' + name + print_string_padding +
+    'business_name: ' + business_name + print_string_padding +
+    'domain: ' + domain
   end
 end
 

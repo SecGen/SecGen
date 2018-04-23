@@ -11,6 +11,7 @@ define unrealirc::config::listen (
     owner    => $unrealirc::user,
     group    => $unrealirc::group,
     content  => template('unrealirc/config/listen.conf.erb'),
+    notify   => Service['unreal'],
     require  => File['unrealirc_config_directory'],
   }
 }

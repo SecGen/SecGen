@@ -36,9 +36,6 @@
   <software_name>distcc</software_name>
   <software_license>GPLv2</software_license>
 
-  <!--optional breadcrumb (info that is leaked and required to exploit)-->
-  <!--<breadcrumb></breadcrumb>-->
-
   <!--optional hints-->
   <msf_module>exploit/unix/misc/distcc_exec</msf_module>
   <hint>On a non-standard port</hint>

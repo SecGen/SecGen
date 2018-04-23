@@ -1,6 +1,13 @@
 class vsftpd_234_backdoor::config {
 
-  $json_inputs = base64('decode', $::base64_inputs)
+  $secgen_parameters = secgen_functions::get_parameters($::base64_inputs_file)
+  $raw_org = $secgen_parameters['organisation']
+  if $raw_org and $raw_org[0] and $raw_org[0] != '' {
+    $organisation = parsejson($raw_org[0])
+  } else {
+    $organisation = ''
+  }
+
   # Config files + manuals
   file { ['/usr/local/man/man5/vsftpd.conf.5']:
     require => File['/usr/local/src/vsftpd-2.3.4/Makefile'],

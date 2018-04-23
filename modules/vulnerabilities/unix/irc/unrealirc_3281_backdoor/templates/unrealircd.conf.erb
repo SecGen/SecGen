@@ -1,21 +1,16 @@
 <%  require 'json'
-    $secgen_parameters = JSON.parse(@json_inputs)
-    $server_name = $secgen_parameters['server_name'].first
-    $server_desc = $secgen_parameters['server_desc'].first
-    $admins = [ $secgen_parameters['admin_name'].first + ' <' + $secgen_parameters['admin_email'].first + '>' ]
-    $user = $secgen_parameters['user'].first
-    $group = $secgen_parameters['group'].first
+    $server_name = @secgen_parameters['server_name'].first
+    $server_desc = @secgen_parameters['server_desc'].first
+    $user = @secgen_parameters['user'].first
+    $group = @secgen_parameters['group'].first
 
-    # Team Project style scenario overrides.
-    if $secgen_parameters['person']
-      $admin = JSON.parse($secgen_parameters['person'].first)
+    if @organisation and @organisation[0] and @organisation[0] != ''
+      $admin = @organisation['manager']
       $admins = [ $admin['username'] + ' <' + $admin['email_address'] + '>' ]
-    end
-
-    if $secgen_parameters['business_name'] and $secgen_parameters['business_domain']
-      $server_name = $secgen_parameters['business_domain'].first
-      $business_name = $secgen_parameters['business_name'].first
-      $server_desc = "Welcome to the #{$business_name} IRC server!"
+      $server_name = @organisation['domain']
+      $server_desc = "Welcome to the #{@organisation['business_name']} IRC server!"
+    else
+      $admins = [ @secgen_parameters['admin_name'].first + ' <' + @secgen_parameters['admin_email'].first + '>' ]
     end
 %>
 # Example UnrealIRCd 3.2.8.1 configuration file

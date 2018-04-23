@@ -8,6 +8,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="linux"/>
       <xs:enumeration value="unix"/>
+      <xs:enumeration value="windows"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -27,11 +28,20 @@
           </xs:simpleType>
         </xs:element>
         <xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="cpu_word_size" minOccurs="1" maxOccurs="1">
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="32-bit"/>
+              <xs:enumeration value="64-bit"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
         <xs:element name="type" minOccurs="1" maxOccurs="unbounded">
           <xs:simpleType>
             <xs:restriction base="xs:string">
               <xs:enumeration value="server"/>
               <xs:enumeration value="desktop"/>
+              <xs:enumeration value="attack"/>
               <xs:enumeration value="cli"/>
             </xs:restriction>
           </xs:simpleType>
@@ -40,6 +50,10 @@
         <xs:element name="platform" type="platformOptions" minOccurs="1" maxOccurs="unbounded"/>
         <xs:element name="distro" type="xs:string" minOccurs="1" maxOccurs="1"/>
         <xs:element name="url" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="ovirt_template" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+
+        <xs:element name="packerfile_path" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="product_key" type="xs:string" minOccurs="0" maxOccurs="1"/>
 
         <!--optional details-->
         <xs:element name="reference" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>

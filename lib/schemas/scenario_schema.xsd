@@ -57,6 +57,7 @@
     <xs:attribute name='author' type='xs:string'/>
     <xs:attribute name='module_license' type='xs:string'/>
     <xs:attribute name='description' type='xs:string'/>
+    <xs:attribute name='cpu_word_size' type='xs:string'/>
     <xs:attribute name='type' type='xs:string'/>
     <xs:attribute name='platform' type='xs:string'/>
     <xs:attribute name='distro' type='xs:string'/>
@@ -125,6 +126,9 @@
   </xs:complexType>
 
   <xs:complexType name="NetworkType">
+    <xs:sequence>
+      <xs:element name="input" type="InputElements" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
     <xs:attribute name="module_path" type="xs:string"/>
 
     <xs:attribute name="name" type="xs:string"/>
@@ -139,6 +143,7 @@
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute name="access" type="xs:string" default="next"/>
+        <xs:attribute name="access_json" type="xs:string"/>
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>

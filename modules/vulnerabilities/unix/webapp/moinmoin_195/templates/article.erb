@@ -1,27 +1,22 @@
-<% require 'json'
-   if @secgen_parameters['person']
-     $person = JSON.parse(@secgen_parameters['person'][0])
+<% if @organisation
+     $manager = @organisation['manager']
+     $business_name = @organisation['business_name']
    end
-
-   if $secgen_parameters['business_name']
-     $business_name = $secgen_parameters['business_name'][0]
-   end
-
 -%>
 
-<% @images_to_leak.each_with_index{ |image_to_leak, counter| -%>
+<% @images_to_leak.each_with_index{ |_, counter| -%>
 [[attachment:image<%=counter + 1 %>.png|{{attachment:image<%=counter + 1 %>.png||width=100}}]]
 <% } -%>
 
 <% if $business_name %>
 Welcome to the <%= $business_name %> Wiki!
 <% end %>
-<% if $person %>
+<% if $manager %>
 Manager:
-<%= $person['name'] + "\n" %>
-<%= $person['phone_number'] + "\n"  %>
-<%= $person['email_address'] + "\n"  %>
+<%= $manager['name'] + "\n" %>
+<%= $manager['phone_number'] + "\n"  %>
+<%= $manager['email_address'] + "\n"  %>
 ----
 <% end %>
 
-<%= $secgen_parameters['strings_to_leak'].join("\n----\n") %>
+<%= @secgen_parameters['strings_to_leak'].join("\n----\n") %>

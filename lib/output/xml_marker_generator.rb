@@ -34,7 +34,7 @@ class XmlMarkerGenerator
 
               # start by finding a flag, and work the way back providing hints
               selected_module.output.each { |output_value|
-                if output_value.match("flag{")
+                if output_value.match(/^flag{.*$/)
                   xml.challenge{
                     xml.flag(output_value)
 
@@ -44,7 +44,7 @@ class XmlMarkerGenerator
                       end
                     }
 
-                    add_hint("Remember, search for text in the format of flag{SOMETHING}, and submit it for points", "flaggyflag", "normal", xml)
+                    # add_hint("Remember, search for text in the format of flag{SOMETHING}, and submit it for points", "flaggyflag", "normal", xml)
                   }
                 end
               }
@@ -70,34 +70,59 @@ class XmlMarkerGenerator
 
     case search_module.module_type
       when "vulnerability"
-        add_hint("There is a vulnerability of some kind for you to exploit", "#{search_module.unique_id}itsavulnerability", "normal", xml)
-
         case search_module.attributes['access'].first
           when "remote"
             add_hint("A vulnerability that can be accessed/exploited remotely. Perhaps try scanning the system/network?", "#{search_module.unique_id}remote", "normal", xml)
           when "local"
             add_hint("A vulnerability that can only be accessed/exploited with local access. You need to first find a way in...", "#{search_module.unique_id}local", "normal", xml)
         end
-
-        add_hint("The system is vulnerable in terms of its #{search_module.attributes['type'].first}", "#{search_module.unique_id}firsttype", "big_hint", xml)
+        type = search_module.attributes['type'].first
+        unless type == 'system' or type == 'misc' or type == 'ctf' or type == 'local' or type == 'ctf_challenge'
+          add_hint("The system is vulnerable in terms of its #{search_module.attributes['type'].first}", "#{search_module.unique_id}firsttype", "big_hint", xml)
+        end
         add_hint("The system is vulnerable to #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
+        if search_module.attributes['hint']
+          search_module.attributes['hint'].each_with_index { |hint, i|
+            add_hint(clean_hint(hint), "#{search_module.unique_id}hint#{i}", "big_hint", xml)  # .gsub(/\s+/, ' ')
+          }
+        end
         if search_module.attributes['solution']
-          add_hint(search_module.attributes['solution'].first, "#{search_module.unique_id}solution", "big_hint", xml)
+          solution = search_module.attributes['solution'].first
+          add_hint(clean_hint(solution), "#{search_module.unique_id}solution", "big_hint", xml)
         end
         if search_module.attributes['msf_module']
           add_hint("Can be exploited using the Metasploit module: #{search_module.attributes['msf_module'].first}", "#{search_module.unique_id}msf_module", "big_hint", xml)
         end
 
       when "service"
-        add_hint("There is a service of some kind waiting for you to discover and access", "#{search_module.unique_id}itsaservice", "normal", xml)
-        add_hint("The flag is hosted using #{search_module.attributes['type'].first}", "#{search_module.unique_id}type", "big_hint", xml)
-        add_hint("The flag is hosted using #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
+        add_hint("The flag is hosted using #{search_module.attributes['type'].first}", "#{search_module.unique_id}type", "normal", xml)
       when "encoder"
         add_hint("The flag is encoded/hidden somewhere", "#{search_module.unique_id}itsanencoder", "normal", xml)
         if search_module.attributes['type'].include? 'string_encoder'
-          add_hint("The flag has been encoded using a standard encoding method, look for an unusual string of text and try to figure out how it was encoded, and decode it", "#{search_module.unique_id}stringencoder", "normal", xml)
+          add_hint("There is a layer of encoding using a standard encoding method, look for an unusual string of text and try to figure out how it was encoded, and decode it", "#{search_module.unique_id}stringencoder", "normal", xml)
         end
-        add_hint("The flag is encoded using a #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
+        if search_module.attributes['solution'] == nil
+          add_hint("The flag is encoded using a #{search_module.attributes['name'].first}", "#{search_module.unique_id}name", "big_hint", xml)
+        end
+        if search_module.attributes['hint']
+          search_module.attributes['hint'].each_with_index { |hint, i|
+            add_hint(clean_hint(hint), "#{search_module.unique_id}hint#{i}", "big_hint", xml)
+          }
+        end
+        if search_module.attributes['solution']
+          solution = search_module.attributes['solution'].first
+          add_hint(clean_hint(solution), "#{search_module.unique_id}solution", "big_hint", xml)
+        end
+      when "generator"
+        if search_module.attributes['hint']
+          search_module.attributes['hint'].each_with_index { |hint, i|
+            add_hint(clean_hint(hint), "#{search_module.unique_id}hint#{i}", "big_hint", xml)
+          }
+        end
+        if search_module.attributes['solution']
+          solution = search_module.attributes['solution'].first
+          add_hint(clean_hint(solution), "#{search_module.unique_id}solution", "big_hint", xml)
+        end
     end
 
   end
@@ -109,4 +134,8 @@ def add_hint(hint_text, hint_id, hint_type, xml)
     xml.hint_type(hint_type)
     xml.hint_id(hint_id)
   }
+end
+
+def clean_hint str
+  str.tr("\n",'').gsub(/\s+/, ' ')
 end

@@ -3,9 +3,10 @@
 ## Summary
 SecGen creates vulnerable virtual machines so students can learn security penetration testing techniques. 
 
-Boxes like Metasploitable2 are always the same, this project uses Vagrant, Puppet, and Ruby to quickly create randomly vulnerable virtual machines that can be used for learning or for hosting CTF events. 
+Boxes like Metasploitable2 are always the same, this project uses Vagrant, Puppet, and Ruby to create randomly vulnerable virtual machines that can be used for learning or for hosting CTF events. 
 
-[The latest version is available at: http://github.com/cliffe/SecGen/](http://github.com/cliffe/SecGen/) 
+[The latest version is available at: http://github.com/cliffe/SecGen/](http://github.com/cliffe/SecGen/)
+
 ## Introduction
 Computer security students benefit from engaging in hacking challenges. Practical lab work and pre-configured hacking challenges are common practice both in security education and also as a pastime for security-minded individuals. Competitive hacking challenges, such as capture the flag (CTF) competitions have become a mainstay at industry conferences and are the focus of large online communities. Virtual machines (VMs) provide an effective way of sharing targets for hacking, and can be designed in order to test the skills of the attacker. Websites such as Vulnhub host pre-configured hacking challenge VMs and are a valuable resource for those learning and advancing their skills in computer security. However, developing these hacking challenges is time consuming, and once created, essentially static. That is, once the challenge has been "solved" there is no remaining challenge for the student, and if the challenge is created for a competition or assessment, the challenge cannot be reused without risking plagiarism, and collusion. 
 
@@ -22,20 +23,27 @@ SecGen contains modules, which install various software packages. Each SecGen mo
 SecGen is developed and tested on Ubuntu Linux. In theory, SecGen should run on Mac or Windows, if you have all the required software installed.
 
 You will need to install the following:
--  Ruby (development): https://www.ruby-lang.org/en/
+- Ruby (development): https://www.ruby-lang.org/en/
 - Vagrant: http://www.vagrantup.com/
 - Virtual Box: https://www.virtualbox.org/
 - Puppet: http://puppet.com/
+- Packer: https://www.packer.io/
 - ImageMagick: https://www.imagemagick.org/
 - And the required Ruby Gems (including Nokogiri and Librarian-puppet)
 
 ### On Ubuntu these commands will get you up and running
 Install all the required packages:
 ```bash
-sudo apt-get install ruby-dev zlib1g-dev liblzma-dev build-essential patch virtualbox ruby-bundler vagrant imagemagick libmagickwand-dev
+# install a recent version of vagrant
+wget https://releases.hashicorp.com/vagrant/1.9.8/vagrant_1.9.8_x86_64.deb
+sudo apt install ./vagrant_1.9.8_x86_64.deb
+# install other required packages via repos
+sudo apt-get install ruby-dev zlib1g-dev liblzma-dev build-essential patch virtualbox ruby-bundler imagemagick libmagickwand-dev exiftool libpq-dev libcurl4-openssl-dev libxml2-dev
 ```
 
-Copy SecGen to a directory of your choosing, such as */home/user/bin/SecGen*, then:
+Copy SecGen to a directory of your choosing, such as */home/user/bin/SecGen*
+
+Then install gems:
 ```bash
 cd /home/user/bin/SecGen
 bundle install
@@ -60,13 +68,35 @@ SecGen accepts arguments to change the way that it behaves, the currently implem
               (defaults to scenarios/default_scenario.xml)
    --project [output dir], -p [output dir]: directory for the generated project
               (output will default to projects/SecGen_DATEandTIME)
-   --help, -h: shows this usage information
+   --shutdown: Shutdown vms after provisioning
+   --network-ranges: Override network ranges within the scenario, use a comma-separated list
+   --forensic-image-type [image type]: Forensic image format of generated image (raw, ewf)
+   --read-options [conf path]: Reads options stored in file as arguments (see example.conf)
+   --help, -h: Shows this usage information
 
+   VIRTUALBOX OPTIONS:
+   --gui-output', '-g': gui output
+   --nopae: disable PAE support
+   --hwvirtex: enable HW virtex support
+   --vtxvpid: enable VTX support
+
+   OVIRT OPTIONS:
+   --ovirtuser [ovirt_username]         
+   --ovirtpass [ovirt_password]         
+   --ovirt-url [ovirt_api_url]          
+   --ovirt-cluster [ovirt_cluster]      
+   --ovirt-network [ovirt_network_name] 
+   
    COMMANDS:
    run, r: builds project and then builds the VMs
    build-project, p: builds project (vagrant and puppet config), but does not build VMs
    build-vms, v: builds VMs from a previously generated project
               (use in combination with --project [dir])
+   create-forensic-image [/project/dir], v [project #]: Builds forensic images from a previously generated project
+                         (can be used in combination with --project [dir])
+   list-scenarios: Lists all scenarios that can be used with the --scenario option
+   list-projects: Lists all projects that can be used with the --project option
+   delete-all-projects: Deletes all current projects in the projects directory
 
 ```
 
@@ -244,7 +274,7 @@ Another example, as above, but the message and flag are first base64 encoded:
 
 Generators and encoders will always produce/return an (unnamed) array of Strings, which can be directed to input parameters for other modules (by parameter name into modules they are nested under, as illustrated above). 
 
-All encoders will accept and process the "strings_to_encode" parameter, so it's safe to pass input into any randomly selected encoder (though you may want to filter to reversable encoders for a decoding challenge, as shown below). It's possible to direct the output from multiple modules to input to the same module parameter. For example: 
+All encoders will accept and process the "strings_to_encode" parameter, so it's safe to pass input into any randomly selected encoder (though you may want to filter to reversible encoders for a decoding challenge, as shown below). It's possible to direct the output from multiple modules to input to the same module parameter. For example: 
 
 ```xml
 <?xml version="1.0"?>
@@ -260,7 +290,7 @@ All encoders will accept and process the "strings_to_encode" parameter, so it's 
 		<vulnerability module_path=".*nfs_overshare">
 			<input into="strings_to_leak">
 				<!--output from this encoder...-->
-				<encoder type="ascii_reversable">
+				<encoder type="ascii_reversible">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
 					</input>
@@ -281,7 +311,7 @@ In this case each of the nested inputs to that same parameter are concatenated i
 ```C
 // This is just some pseudo code to help explain
 // (C#-like methods with named arguments)
-vulnerability_nfs_share_leak(strings_to_leak: encoder_selected_ascii_reversable(strings_to_encode: encoder_flag_generator()) CONCATENATE_WITH encoder_flag_generator());
+vulnerability_nfs_share_leak(strings_to_leak: encoder_selected_ascii_reversible(strings_to_encode: encoder_flag_generator()) CONCATENATE_WITH encoder_flag_generator());
 ```
 
 You might want to write to any module that has a particular parameter: for example, a vulnerability that has a "strings_to_leak" parameter, meaning a vulnerability that when exploited reveals strings to the attacker:
@@ -298,7 +328,7 @@ You might want to write to any module that has a particular parameter: for examp
 		<!--this line selects a vulnerability that can leak strings:-->
  		<vulnerability read_fact="strings_to_leak">
  			<input into="strings_to_leak">
- 				<encoder type="ascii_reversable">
+ 				<encoder type="ascii_reversible">
  					<input into="strings_to_encode">
  						<generator type="flag_generator" />
  					</input>
@@ -323,17 +353,17 @@ If you want to use a bunch of modules to generate input for another module's par
 [snip]
 		<vulnerability name="NFS Share Leak">
 			<input into="strings_to_leak" unique_module_list="unique_encoders">
-				<encoder type="ascii_reversable">
+				<encoder type="ascii_reversible">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
 					</input>
 				</encoder>
-				<encoder type="alpha_reversable">
+				<encoder type="alpha_reversible">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
 					</input>
 				</encoder>
-				<encoder type="alpha_reversable">
+				<encoder type="alpha_reversible">
 					<input into="strings_to_encode">
 						<generator type="flag_generator" />
 					</input>
@@ -369,7 +399,7 @@ We can then pass the datastore (flag2) into a module parameter, and capture the 
 ```xml
 
 		<input into_datastore="encoded_flag">
-			<encoder type="ascii_reversable">
+			<encoder type="ascii_reversible">
 				<input into="strings_to_encode">
 					<datastore>flag2</datastore>
 				</input>
@@ -393,6 +423,12 @@ You can use datastores to store generate information for complex scenarios, such
 
 It is also possible to iterate through a datastore, and feed each value into separate modules. This is illustrated in:
 ```scenarios/examples/datastore_examples/iteration_and_element_access.xml```
+
+Some generators generate structured content in JSON format, for example the organisation type. It is possible to access a particular element of structured data from a datastore with the access_json using the ruby hash lookup format. See the example scenario:
+```scenarios/examples/datastore_examples/json_selection_example.xml```
+
+Some scenarios require VMs IP addresses to be used as parameters for other modules in the scenario. If this is the case, you should use the 'IP_addresses' datastore to store the IPs for all VMs in the scenario and use the access functionality to pass them into network modules.For example:
+```scenarios/examples/datastore_examples/network_ip_datastore_example.xml```  
 
 ## Modules
 SecGen is designed to be easily extendable with modules that define vulnerabilities and other kinds of software, configuration, and content changes. 
@@ -713,6 +749,8 @@ If you start SecGen with the "build-project" (or "p") command it creates the abo
 
 It is possible to copy the project directory to any compatible system with Vagrant, and simply run "vagrant up" to create the VMs.
 
+The default root password for the base-boxes is 'puppet', but this may be modified by SecGen depending on the scenario used.
+
 ## Roadmap
 - **More modules!** Including more CTF-style modules.
 - Windows baseboxes and vulnerabilities.
@@ -728,7 +766,7 @@ It is possible to copy the project directory to any compatible system with Vagra
 - Lewis Ardern -- author of the first proof-of-concept release of SecGen
 - Connor Wilson
 
-Many thanks to everyone who have contributed to the project. The above list is not complete or exhaustive, please refer to the [GitHub history](https://github.com/cliffe/SecGen/graphs/contributors).
+Many thanks to everyone who has contributed to the project. The above list is not complete or exhaustive, please refer to the [GitHub history](https://github.com/cliffe/SecGen/graphs/contributors).
 
 This project is supported by a Higher Education Academy (HEA) learning and teaching in cyber security grant (2015-2017).
 
@@ -736,3 +774,10 @@ This project is supported by a Higher Education Academy (HEA) learning and teach
 We encourage contributions to the project, please see the wiki for guidance on how to contribute.
 
 Briefly, please fork from http://github.com/cliffe/SecGen/, create a branch, make and commit your changes, then create a pull request.
+
+## Resources
+Paper: [Z.C. Schreuders, T. Shaw, M. Shan-A-Khuda, G. Ravichandran, J. Keighley, M. Ordean, “Security Scenario Generator (SecGen): A Framework for Generating Randomly Vulnerable Rich-scenario VMs for Learning Computer Security and Hosting CTF Events,” USENIX Workshop on Advances in Security Education (ASE'17), Vancouver, BC, Canada. USENIX Association, 2017.](https://www.usenix.org/conference/ase17/workshop-program/presentation/schreuders) (This paper provides a good overview of SecGen.)
+
+Paper: [Z.C. Schreuders, and L. Ardern, "Generating randomised virtualised scenarios for ethical hacking and computer security education: SecGen implementation and deployment," in The first UK Workshop on Cybersecurity Training & Education (Vibrant Workshop 2015) Liverpool, UK, 2015.](http://z.cliffe.schreuders.org/publications/VibrantWorkshop2015%20-%20Generating%20randomised%20virtualised%20scenarios%20for%20ethical%20hacking%20and%20computer%20security%20education%20%28SecGen%29.pdf) (This paper describes the first prototype.)
+
+Podcast interview: [Purple Squad Security Episode 011 – Security Scenario Generator with Dr. Z. Cliffe Schreuders](https://purplesquadsec.com/podcast/episode-011-security-scenario-generator-dr-z-cliffe-schreuders/) 

@@ -4,7 +4,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/service">
   <name>LAMP Stack: Apache HTTP Server, MySQL, and PHP</name>
-  <author>TODO</author>
+  <author>Connor Wilson</author>
+  <author>alexggolovin</author>
   <module_license>Apache v2</module_license>
   <description>A LAMP stack</description>
 
@@ -15,6 +16,7 @@
 
   <!--optional details-->
   <reference>https://httpd.apache.org/</reference>
+  <reference>https://forge.puppet.com/alexggolovin/lamp</reference>
 
   <software_name>apache</software_name>
   <software_name>mysql</software_name>
@@ -25,13 +27,15 @@
 
   <!--Cannot co-exist with other installations-->
   <conflict>
-    <software_name>apache</software_name>
-  </conflict>
-  <conflict>
     <software_name>mysql</software_name>
   </conflict>
   <conflict>
     <software_name>php</software_name>
+  </conflict>
+
+  <!-- FIXME: Currently fails to install PHP on kali... -->
+  <conflict>
+    <name>Kali</name>
   </conflict>
 
 </service>

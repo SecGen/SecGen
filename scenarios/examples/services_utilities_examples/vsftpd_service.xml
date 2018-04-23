@@ -7,7 +7,7 @@
 	<!-- An example secure ftp server using the service vsftpd -->
 	<system>
 		<system_name>vsftpd_server</system_name>
-		<base platform="linux"/>
+		<base platform="linux" type="server"/>
 
 		<service module_path="modules/services/unix/ftp/vsftpd"></service>
 

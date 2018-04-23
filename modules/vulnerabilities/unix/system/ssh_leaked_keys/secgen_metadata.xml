@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 
 <vulnerability xmlns="http://www.github/cliffe/SecGen/vulnerability"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
-  <name>Leaked SSH keys module</name>
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
+  <name>Leaked SSH keys</name>
   <author>Mihai Ordean</author>
   <author>Puppet Labs</author>
   <module_license>Apache v2</module_license>
-  <description>Adds a ssh enabled account which has keys leaked in user dir.</description>
+  <description>Adds a ssh enabled account which has keys leaked in a local user's home directory.</description>
 
   <type>system</type>
   <privilege>user_rwx</privilege>
@@ -37,11 +37,14 @@
   <!--optional details-->
   <reference>https://forge.puppet.com/puppetlabs/accounts</reference>
 
+  <hint>Look for hidden files in the home directories on the box.</hint>
+  <hint>Copy the .ssh.tar.gz archive with cp /origin/path ~/.ssh/, extract and connect via ssh.</hint>
+  <solution>Extract the archive with tar -xvzf /path/to/.ssh.tar.gz, ensure ~/.ssh/id_rsa and ~/.ssh/id_rsa.pub are in
+    place, connect with ssh user@localhost
+  </solution>
+
   <requires>
     <module_path>utilities/unix/system/accounts</module_path>
   </requires>
 
-  <requires>
-    <privilege>user_rw</privilege>
-  </requires>
 </vulnerability>

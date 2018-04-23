@@ -1,4 +1,4 @@
-define secgen_functions::leak_files($leaked_filenames=[], $storage_directory, $strings_to_leak=[], $images_to_leak=[], $owner = 'root', $group = 'root', $mode = '0777', $leaked_from) {
+define secgen_functions::leak_files($leaked_filenames=[], $storage_directory, $strings_to_leak=[], $images_to_leak=[], $owner = 'root', $group = 'root', $mode = '0660', $leaked_from) {
 
   # $leaked_from is a mandatory resource specifying where the file was being leaked (i.e. which module / user leaked it.)
   # This is to avoid resource clashes if two users get the same 'leaked_filenames' results

@@ -8,11 +8,15 @@
   <module_license>MIT</module_license>
   <description>Takes ASCII strings and encodes each character into it's Octal representation.</description>
 
-  <type>ascii_reversable</type>
+  <type>ascii_reversible</type>
   <type>oct_encoder</type>
   <type>string_encoder</type>
   <platform>linux</platform>
   <platform>windows</platform>
+
+  <solution>Convert the octal (base 8) string character by character in sets of 3 into its ASCII value.
+    Decoders are available online e.g. http://www.unit-conversion.info/texttools/octal/
+  </solution>
 
   <read_fact>strings_to_encode</read_fact>
 

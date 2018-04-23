@@ -8,7 +8,7 @@ class ImageGenerator < StringEncoder
   def initialize
     super
     self.module_name = 'Random JPG Generator'
-    self.selected_image_path = Dir["#{IMAGES_DIR}/*"].sample
+    self.selected_image_path = Dir["#{IMAGES_DIR}/misc/*"].sample
   end
 
   def encode_all

@@ -2,7 +2,7 @@ class gitlist_040::install {
 
   Exec { path => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'] }
 
-  package { ['git', 'php5']:
+  package { 'git':
     ensure => installed,
   }
 

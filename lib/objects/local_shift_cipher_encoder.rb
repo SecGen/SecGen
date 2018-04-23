@@ -41,7 +41,7 @@ class ShiftCipherEncoder < StringEncoder
   end
 
   def encoding_print_string
-    'shift_key: ' + self.shift_key.to_s + ',
-    strings_to_encode: ' + self.strings_to_encode.to_s
+    'shift_key: ' + self.shift_key.to_s + print_string_padding +
+    'strings_to_encode: ' + self.strings_to_encode.to_s
   end
 end

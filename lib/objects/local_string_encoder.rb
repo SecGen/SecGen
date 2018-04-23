@@ -104,7 +104,17 @@ class StringEncoder
 
     Print.local_verbose "Encoding '#{encoding_print_string}'"
     encode_all
-    Print.local_verbose "Encoded: #{self.outputs.to_s}"
+
+    # print the first 700 chars to screen
+    output = self.outputs.to_s
+    length = output.length
+    if length < 1000
+      Print.local_verbose "Encoded: #{output}..."
+    else
+      Print.local_verbose "Encoded: #{output.to_s[0..1000]}..."
+      Print.local_verbose "(Displaying 1000/#{length} length output)"
+    end
+
     puts has_base64_inputs ? base64_encode_outputs : self.outputs
   end
 
@@ -114,6 +124,10 @@ class StringEncoder
 
   def encoding_print_string
     self.strings_to_encode.to_s
+  end
+
+  def print_string_padding
+    "\n" + (' ' * 11)
   end
 
   def option_is_valid(opt_to_check)

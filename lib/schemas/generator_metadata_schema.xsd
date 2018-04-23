@@ -23,6 +23,7 @@
             <xs:restriction base="xs:string">
               <xs:enumeration value="MIT"/>
               <xs:enumeration value="Apache v2"/>
+              <xs:enumeration value="GPLv3"/>
             </xs:restriction>
           </xs:simpleType>
         </xs:element>
@@ -35,6 +36,8 @@
         <xs:element name="reference" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="software_name" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
         <xs:element name="software_license" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="hint" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="solution" type="xs:string" minOccurs="0" maxOccurs="1"/>
 
         <!--I/O: a generator writes it's output to one fact & can also take inputs-->
         <xs:element name="read_fact" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
