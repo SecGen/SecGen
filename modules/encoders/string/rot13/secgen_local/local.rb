@@ -7,7 +7,7 @@ class ROT13Encoder < StringEncoder
   end
 
   def encode(str)
-    str.tr!('A-Za-z', 'N-ZA-Mn-za-m')
+    str.tr('A-Za-z', 'N-ZA-Mn-za-m')
   end
 end
 
