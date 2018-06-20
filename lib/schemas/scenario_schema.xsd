@@ -63,6 +63,7 @@
     <xs:attribute name='distro' type='xs:string'/>
     <xs:attribute name='url' type='xs:string'/>
     <xs:attribute name='vagrantbase' type='xs:string'/>
+    <xs:attribute name='ovirt_template' type='xs:string'/>
     <xs:attribute name='reference' type='xs:string'/>
     <xs:attribute name='software_license' type='xs:string'/>
   </xs:complexType>
