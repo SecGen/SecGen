@@ -2,8 +2,10 @@ require 'erb'
 require_relative '../helpers/constants.rb'
 require_relative 'xml_scenario_generator.rb'
 require_relative 'xml_marker_generator.rb'
+require_relative 'ctfd_generator.rb'
 require 'fileutils'
 require 'librarian'
+require 'zip/zip'
 
 class ProjectFilesCreator
 # Creates project directory, uses .erb files to create a report and the vagrant file that will be used
@@ -83,7 +85,7 @@ class ProjectFilesCreator
 
               if File.file? packerfile_path
                 Print.info "Would you like to use the packerfile to create the packerfile from the given url (y/n)"
-                # TODO: remove user interaction, this should be an config option
+                # TODO: remove user interaction, this should be set via a config option
                 (Print.info "Exiting as vagrant needs the basebox to continue"; abort) unless ['y','yes'].include?(STDIN.gets.chomp.downcase)
 
                 Print.std "Packerfile #{packerfile_path.split('/').last} found, building basebox #{url.split('/').last} via packer"
@@ -140,6 +142,37 @@ class ProjectFilesCreator
       Print.err "Error writing file: #{e.message}"
       abort
     end
+    
+    # Create the CTFd zip file for import
+    ctfdfile = "#{@out_dir}/CTFd_importable.zip"
+    Print.std "Creating CTFd configuration: #{ctfdfile}"
+    
+    ctfd_generator = CTFdGenerator.new(@systems, @scenario, @time)
+    ctfd_files = ctfd_generator.ctfd_files
+    
+    # zip up the CTFd export
+    begin
+      Zip::ZipFile.open(ctfdfile, Zip::ZipFile::CREATE) { |zipfile|
+        zipfile.mkdir("db")
+        ctfd_files.each do |ctfd_file_name, ctfd_file_content|
+          zipfile.get_output_stream("db/#{ctfd_file_name}") { |f|
+            f.print ctfd_file_content
+          }
+        end
+        zipfile.mkdir("uploads")
+        # TODO: could add a logo image
+        # zipfile.mkdir("uploads/uploads") # empty as in examples
+        # zipfile.mkdir("uploads/fca9b07e1f3699e07870b86061815b1c")
+        # zipfile.get_output_stream("uploads/fca9b07e1f3699e07870b86061815b1c/logo.svg") { |f|
+        #   f.print File.readlines(ROOT_DIR + '/lib/resources/images/svg_icons/flag.svg')
+        # }
+      }
+    rescue StandardError => e
+      Print.err "Error writing zip file: #{e.message}"
+      abort
+    end
+    
+    
     Print.std "VM(s) can be built using 'vagrant up' in #{@out_dir}"
 
   end
