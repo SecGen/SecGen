@@ -1,12 +1,11 @@
 # Batch Processing with SecGen
 
-Generating multiple VMs in a batch is now possible through the use of batch_secgen, a ruby script which uses postgresql 
-as a job queue to mass-create VMs with SecGen. 
+Generating multiple VMs in a batch is now possible through the use of batch_secgen, a ruby script which uses postgresql as a job queue to mass-create VMs with SecGen.
 
 There are helper commands available to add jobs, list jobs in the table, remove jobs, and reset the status of jobs from 'running' or 'error' to 'todo'.  
 
-When adding multiple jobs to the queue, it is possible to prefix the VM names with unique strings. 
-The example below demonstrates adding 3 copies of the flawed_fortress scenario, which results in the VM names being prefixed with 'tom_', 'cliffe_', and 'aimee_'. 
+When adding multiple jobs to the queue, it is possible to prefix the VM names with unique strings.
+The example below demonstrates adding 3 copies of the flawed_fortress scenario, which results in the VM names being prefixed with 'tom_', 'cliffe_', and 'aimee_'.
 
 ```
 ruby batch_secgen.rb add --instances tom,cliffe,aimee --- -s scenarios/ctf/flawed_fortress_1.xml r
@@ -21,7 +20,7 @@ sudo apt-get install postgresql
 
 ```
 
-Add the database user role and give the user database superuser permissions. 
+Add the database user role and give the user database superuser permissions.
 
 ```
 sudo -u postgres createuser <username>
@@ -35,7 +34,7 @@ sudo -u postgres createdb batch_secgen
 ```
 
 Replace 'username' within the lib/batch/batch_secgen.sql dump with your database username on lines 131 and 141
- 
+
 ```
 ...
 128: REVOKE ALL ON TABLE queue FROM PUBLIC;
@@ -55,8 +54,8 @@ Import the modified SQL file
 ```
 psql -U <username> batch_secgen < lib/batch/batch_secgen.sql
 ```
- 
-## Using secgen-batch.rb 
+
+## Using secgen-batch.rb
 
 COMMANDS:
 add, a: Adds a job to the queue
@@ -91,12 +90,12 @@ Example: `ruby batch_secgen.rb add --instances here,are,some,prefixes --- -s sce
 
 [misc]
 --help, -h: Shows this usage information
- 
+
 
 ## Install the service to run batch-secgen in the background
 
 Install the lib/batch/batch-secgen.service systemd service file.
- 
+
 ```
 sudo systemctl enable /absolute/path/to/SecGen/lib/batch/batch-secgen.service
 service batch-secgen start
