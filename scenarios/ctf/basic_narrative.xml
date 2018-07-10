@@ -4,7 +4,15 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-  <!-- Single system narrative-based CTF challenge. -->
+  <name>Basic Narrative</name>
+  <author>Thomas Shaw</author>
+  <description>Single system narrative-based CTF challenge.
+  </description>
+
+  <type>ctf</type>
+  <type>attack-ctf</type>
+  <type>web-hints</type>
+  <difficulty>intermediate</difficulty>
 
   <system>
     <system_name>system</system_name>

@@ -4,6 +4,16 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
+  <name>Fictional organisation security audit</name>
+  <author>Thomas Shaw</author>
+  <author>Z. Cliffe Schreuders</author>
+  <description>A set of VMs for a randomly generated fictional organisation, with a desktop system, webserver, and intranet server.
+    Note that the intranet server has a security remit, with instructions on performing a security audit of these systems. The desktop system can access the intranet to access the remit, but the attacker VM (for example, Kali) can be connected to the NIC only shared by the Web server to simulate the need to pivot attacks through the Web server, as they can't connect to the intranet system directly. The "marking guide" is in the form of the output scenario.xml in the project directory, which provides the details of the systems generated.
+  </description>
+
+  <type>blind-audit</type>
+  <difficulty>intermediate</difficulty>
+
   <!-- Web Server on NIC1 and NIC2 -->
   <system>
     <system_name>web_server</system_name>

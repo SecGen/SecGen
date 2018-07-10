@@ -4,6 +4,14 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
+	<name>Hacker vs hacker 2</name>
+	<author>Z. Cliffe Schreuders</author>
+	<description>A Hackerbot test.</description>
+
+	<type>ctf-test</type>
+	<type>hackerbot-test</type>
+	<difficulty>intermediate</difficulty>
+
 	<system>
 		<system_name>desktop</system_name>
 		<base distro="Debian 7.8" type="desktop" name="KDE"/>

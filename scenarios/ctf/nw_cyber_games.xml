@@ -4,7 +4,17 @@
 		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		  xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-	<!--some basic decoding challenges-->
+	<name>Basic Narrative</name>
+  <author>Thomas Shaw</author>
+  <description>Some basic decoding challenges.
+		The challenges are presented on a website on one of these VMs, separate from the CTF scoring.
+  </description>
+
+  <type>ctf</type>
+  <type>jeopardy-ctf</type>
+  <type>web-hints</type>
+  <difficulty>easy</difficulty>
+
 	<system>
 		<system_name>nw_cyber_games</system_name>
 		<base platform="linux" type="server"/>
@@ -15,7 +25,7 @@
 			<input into="visible_tabs">
 				<generator type="html_snippet_generator" >
 					<input into="heading">
-						<value>Welcome to the North West Cyber Games!</value>
+						<value>Welcome to the Cyber Games!</value>
 					</input>
 					<input into="paragraphs" unique_module_list="unique_encoders">
 						<value>Hunt down the flags. There are more challenges than meets the eye.</value>
