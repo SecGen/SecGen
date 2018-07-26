@@ -120,7 +120,7 @@ Scenarios can be found in the scenarios/ directory. For example, to spin up a VM
 #### VMs for a security audit of an organisation
 To generate a set of VMs for a randomly generated fictional organisation, with a desktop system, webserver, and intranet server:
 ```bash
-   ruby secgen.rb --scenario scenarios/security_audit/team_project_scenario.xml run
+   ruby secgen.rb --scenario scenarios/security_audit/team_project.xml run
 ```
 Note that the intranet server has a security remit, with instructions on performing a security audit of these systems. The desktop system can access the intranet to access the remit, but the attacker VM (for example, Kali) can be connected to the NIC only shared by the Web server to simulate the need to pivot attacks through the Web server, as they can't connect to the intranet system directly. The "marking guide" is in the form of the output scenario.xml in the project directory, which provides the details of the systems generated.
 
