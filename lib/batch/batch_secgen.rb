@@ -306,10 +306,11 @@ def insert_row(db_conn, prepared_statements, statement_id, secgen_args)
   secgen_args = '--shutdown ' + secgen_args.strip
   Print.info "Adding to queue: '#{statement}' '#{secgen_args}' 'todo'"
   unless prepared_statements.include? statement
-    db_conn.prepare(statement, 'insert into queue (secgen_args, status) values ($1, $2)')
+    db_conn.prepare(statement, 'insert into queue (secgen_args, status) values ($1, $2) returning id')
     prepared_statements << statement
   end
-  db_conn.exec_prepared(statement, [secgen_args, 'todo'])
+  result = db_conn.exec_prepared(statement, [secgen_args, 'todo'])
+  Print.info "id: #{result.first['id']}"
 end
 
 def select_all(db_conn)
