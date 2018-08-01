@@ -2,6 +2,7 @@ require 'fileutils'
 require 'getoptlong'
 require 'open3'
 require 'pg'
+require 'json'
 
 require_relative '../helpers/print.rb'
 require_relative '../helpers/constants.rb'
@@ -266,7 +267,7 @@ def list(options)
     items = select_all(db_conn)
   end
   items.each do |row|
-    Print.info row
+    Print.info row.to_json
   end
 
   db_conn.finish
