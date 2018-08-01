@@ -31,7 +31,7 @@ define secgen_functions::install_setuid_root_binary (
       home_mode  => '0755',
     }
   } else {
-    err('dc16_amadhj::install: Either storage_directory or account is required')
+    err('install: Either storage_directory or account is required')
     fail
   }
 
