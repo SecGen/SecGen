@@ -10,6 +10,7 @@
 
   <type>ctf_challenge</type>
   <type>reverse_engineering</type>
+  <type>pwnable_binary</type>
   <privilege>none</privilege>
   <access>local</access>
   <platform>linux</platform>
