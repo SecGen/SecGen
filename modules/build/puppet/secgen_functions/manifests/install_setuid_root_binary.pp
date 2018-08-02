@@ -23,12 +23,7 @@ define secgen_functions::install_setuid_root_binary (
       managehome => true,
       home_mode  => '0755',
     }
-
     $storage_directory = "/home/$username"
-
-  } elsif $storage_dir {
-    $storage_directory = $storage_dir
-
   } else {
     err('install: either account or storage_dir is required')
     fail
