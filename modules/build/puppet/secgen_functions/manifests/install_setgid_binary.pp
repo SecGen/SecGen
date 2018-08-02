@@ -1,11 +1,5 @@
-# Install function for setuid_root binaries
+# Install function for setgid binaries
 # -- Modules calling this function must provide a Makefile and any .c files within it's <module_name>/files directory
-#
-# ** NOTES ***
-#   Do we really need a user account or can we just pass in the directory path?
-#
-
-
 
 define secgen_functions::install_setgid_binary (
   $challenge_name, # Challenge name, used for the wrapper-directory
@@ -38,15 +32,9 @@ define secgen_functions::install_setgid_binary (
     fail
   }
 
-
   $compile_directory = "$storage_directory/tmp"
   $challenge_directory = "$storage_directory/$challenge_name"
   $modules_source = "puppet:///modules/$source_module_name"
-
-  notice("compile_directory: ")
-  notice($compile_directory)
-  notice("challenge_directory: ")
-  notice($challenge_directory)
 
   group { $group:
     ensure => present,
@@ -90,7 +78,7 @@ define secgen_functions::install_setgid_binary (
     strings_to_leak   => [$flag],
     owner             => 'root',
     group             => $group,
-    mode              => '4440',
+    mode              => '0440',
     leaked_from       => "accounts_$username",
     require           => [Group[$group], Exec["gcc_$challenge_name-$compile_directory"]],
     notify            => Exec["remove_$compile_directory"],
