@@ -9,8 +9,6 @@
 		<system_name>reverse_me</system_name>
 		<base platform="linux" type="server"/>
 
-		<!--TODO: use same pattern for all type=".*pwnable_binary" -->
-
 		<!-- 1) Default uses an account and drops the binary in the users home directory
 				(username/pw: challenges/password) -->
 		<vulnerability type="pwnable_binary"/>
@@ -21,7 +19,7 @@
             <!--<value/>-->
           <!--</input>-->
           <!--<input into="storage_directory">-->
-            <!--<value>/home</value>-->
+            <!--<value>/test/hidden/challenges</value>-->
           <!--</input>-->
         <!--</vulnerability>-->
 

@@ -39,9 +39,9 @@ define secgen_functions::install_setuid_root_binary (
   $modules_source = "puppet:///modules/$source_module_name"
 
   # Create challenge directory
-  file { "create_$challenge_directory":
+  ::secgen_functions::create_directory { "create_$challenge_directory":
     path => $challenge_directory,
-    ensure => directory,
+    notify => File["create_$compile_directory"],
   }
 
   # Move contents of the module's files directory into compile directory
@@ -56,7 +56,7 @@ define secgen_functions::install_setuid_root_binary (
   exec { "gcc_$challenge_name-$compile_directory":
     cwd     => $compile_directory,
     command => "/usr/bin/make",
-    require => [File["create_$challenge_directory", "create_$compile_directory"], Package['build-essential', 'gcc-multilib']]
+    require => [File["create_$compile_directory"], Package['build-essential', 'gcc-multilib']]
   }
 
   # Move the compiled binary into the challenge directory
