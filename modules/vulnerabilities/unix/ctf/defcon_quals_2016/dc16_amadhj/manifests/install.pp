@@ -15,7 +15,7 @@ class dc16_amadhj::install {
   }
 
   if $group {
-    ::secgen_functions::install_setgid_binary { 'defcon16_amadhj_group':
+    ::secgen_functions::install_setgid_binary { 'dc16_amadhj':
       source_module_name     => $module_name,
       challenge_name         => $secgen_params['challenge_name'][0],
       group                  => $group[0],
@@ -26,7 +26,7 @@ class dc16_amadhj::install {
       strings_to_leak        => $secgen_params['strings_to_leak'],
     }
   } else {
-    ::secgen_functions::install_setuid_root_binary { 'defcon16_amadhj':
+    ::secgen_functions::install_setuid_root_binary { 'dc16_amadhj':
       source_module_name     => $module_name,
       challenge_name         => $secgen_params['challenge_name'][0],
       account                => $account,

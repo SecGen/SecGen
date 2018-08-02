@@ -12,14 +12,14 @@
 		<!--TODO: use same pattern for all type=".*pwnable_binary" -->
 
 		<!-- 1) Default uses an account and drops the binary in the users home directory -->
-		<vulnerability module_path=".*dc16_amadhj">
+		<vulnerability type="pwnable_binary">
           <input into="group">
             <value>task1</value>
           </input>
         </vulnerability>
 
 		<!-- 2) Using a custom storage directory -->
-		<!--<vulnerability module_path=".*dc16_amadhj_group.*">-->
+		<!--<vulnerability type="pwnable_binary">-->
           <!--<input into="group">-->
             <!--<value>task2</value>-->
           <!--</input>-->
