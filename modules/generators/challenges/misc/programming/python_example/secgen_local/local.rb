@@ -5,16 +5,18 @@ class RubyExampleScriptGenerator < ScriptChallengeGenerator
 
   def initialize
     super
-    self.module_name = 'Ruby Example Script Generator'
+    self.module_name = 'Python Example Script Generator'
   end
 
 
   def interpreter_path
-    '/usr/bin/ruby'
+    '/usr/bin/python'
   end
 
   def script_content
-    "puts File.read('flag')"
+"from sys import argv
+with open('flag') as f:
+  print f.read()"
   end
 
 end
