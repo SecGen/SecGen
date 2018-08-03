@@ -5,7 +5,7 @@ class RubyExampleScriptGenerator < ScriptChallengeGenerator
 
   def initialize
     super
-    self.module_name = 'Python Example Script Generator'
+    self.module_name = 'Python2 Example Script Generator'
   end
 
 
