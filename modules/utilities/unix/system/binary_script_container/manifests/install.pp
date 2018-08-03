@@ -1,12 +1,11 @@
 class binary_script_container::install {
-
-  # Create temp install directory
+  # Create install directory
   file { '/root/suid/':
     ensure => directory,
   }
 
   # Move wrapper.c onto box
-  file { "/root/tmp/suid.c":
+  file { "/root/suid/suid.c":
     ensure => file,
     source => 'puppet:///modules/binary_script_container/wrapper.c',
   }
@@ -17,5 +16,4 @@ class binary_script_container::install {
     cwd => '/root/suid/',
     path => '/bin:/sbin:/usr/bin:/usr/sbin',
   }
-
 }
