@@ -14,23 +14,20 @@
   <access>local</access>
   <platform>linux</platform>
 
-  <!-- binary dropped in account's home directory by default. -->
+  <!-- script dropped in account's home directory by default with setuid configuration. -->
   <read_fact>challenge_name</read_fact>
   <read_fact>script_data</read_fact>
-  <read_fact>group</read_fact>
   <read_fact>account</read_fact>
   <read_fact>flag</read_fact>
   <!-- storage_directory: Blank by default. If supplied, store the files here. e.g. NFS or SMB storage location -->
   <read_fact>storage_directory</read_fact>
-
+  <!--  group: Blank by default. If supplied install script challenge as setgid  -->
+  <read_fact>group</read_fact>
   <default_input into="challenge_name">
     <value>ruby_script_example</value>
   </default_input>
   <default_input into="script_data">
     <generator module_path=".*ruby_example"/>
-  </default_input>
-  <default_input into="group">
-    <value>test1</value>
   </default_input>
   <default_input into="account">
     <generator type="account">

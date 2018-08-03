@@ -66,7 +66,7 @@ define secgen_functions::install_setgid_binary (
     ensure  => present,
     owner   => 'root',
     group   => $group,
-    mode    => '4771',
+    mode    => '2771',
     source  => "$compile_directory/$challenge_name",
     require => Exec["gcc_$challenge_name-$compile_directory"],
   }

@@ -53,7 +53,7 @@ define secgen_functions::install_setgid_script (
     ensure  => present,
     owner   => 'root',
     group   => $group,
-    mode    => '4775',
+    mode    => '2775',
     content => $script_data,
     require => Group[$group],
   }
@@ -66,7 +66,7 @@ define secgen_functions::install_setgid_script (
     owner             => 'root',
     group             => $group,
     mode              => '0440',
-    leaked_from       => "accounts_$username",
+    leaked_from       => "$source_module_name-$module_name",
     require           => Group[$group],
   }
 

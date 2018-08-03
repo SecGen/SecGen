@@ -28,16 +28,18 @@ class ruby_challenge_example::install {
       storage_dir        => $storage_dir,
       strings_to_leak    => $secgen_params['strings_to_leak'],
     }
-  # } else {
-    # ::secgen_functions::install_setuid_root_binary { 'ruby_challenge_example':
-    #   source_module_name     => $module_name,
-    #   challenge_name         => $secgen_params['challenge_name'][0],
-    #   account                => $account,
-    #   flag                   => $secgen_params['flag'][0],
-    #   flag_name              => 'flag',
-    #   storage_dir            => $storage_dir,
-    #   strings_to_leak        => $secgen_params['strings_to_leak'],
-    # }
+  } else {
+    ::secgen_functions::install_setuid_root_script { 'ruby_challenge_example':
+      source_module_name => $module_name,
+      challenge_name     => $secgen_params['challenge_name'][0],
+      script_name        => 'test.rb',
+      script_data        => $script_data[0],
+      account            => $account,
+      flag               => $secgen_params['flag'][0],
+      flag_name          => 'flag',
+      storage_dir        => $storage_dir,
+      strings_to_leak    => $secgen_params['strings_to_leak'],
+    }
   }
 
 }
