@@ -1,22 +1,17 @@
 #!/usr/bin/ruby
 
-require_relative '../../../../../../../lib/objects/local_script_challenge_generator.rb'
-class RubyExampleScriptGenerator < ScriptChallengeGenerator
+require_relative '../../../../../../../lib/objects/local_ruby_challenge_generator.rb'
+class ExampleRubyScriptGenerator < RubyChallengeGenerator
 
   def initialize
     super
     self.module_name = 'Ruby Example Script Generator'
   end
 
-
-  def interpreter_path
-    '/usr/bin/ruby'
-  end
-
-  def script_content
+  def challenge_content
     "puts File.read('flag')"
   end
 
 end
 
-RubyExampleScriptGenerator.new.run
+ExampleRubyScriptGenerator.new.run

@@ -25,7 +25,7 @@ class ScriptChallengeGenerator
 
   # override this
   def generate
-    self.outputs << shebang_line + script_content
+    self.outputs << shebang_line + pre_challenge_setup + challenge_content
   end
 
   def read_arguments
@@ -115,8 +115,12 @@ class ScriptChallengeGenerator
     arg_validity
   end
 
-  def script_content
-    # override me with script content
+  def pre_challenge_setup
+    # override me with setup content
+  end
+
+  def challenge_content
+    # override me with challenge content
   end
 
   def interpreter_path

@@ -1,5 +1,6 @@
 # Install function for setgid binaries
-# -- Modules calling this function must provide a Makefile and any .c files within it's <module_name>/files directory
+# -- usage depends on utilities/accounts and utilities/xinetd so ensure they are included as requirements
+#  TODO: this is probably a poor way of doing this - can we automate it?
 
 define secgen_functions::install_setgid_script (
   $challenge_name, # Challenge name, used for the wrapper-directory
@@ -10,6 +11,7 @@ define secgen_functions::install_setgid_script (
   $account, # User account
   $flag, # ctf flag string
   $flag_name, # ctf flag name
+  $port, # Optional: script will be run on network port using xinetd
   $storage_dir     = '', # Optional: Storage directory (takes precedent if supplied, e.g. nfs / smb share dir)
   $strings_to_leak = [''], # Optional: strings to leak (could contain instructions or a message)
 ) {
@@ -28,7 +30,7 @@ define secgen_functions::install_setgid_script (
 
   } elsif $storage_dir {
     $storage_directory = $storage_dir
-
+    $username = 'root'
   } else {
     err('install: either account or storage_dir is required')
     fail
@@ -70,4 +72,16 @@ define secgen_functions::install_setgid_script (
     require           => Group[$group],
   }
 
+  if $port {
+    notice("Running $challenge_name on port $port  (dir: $challenge_directory")
+    xinetd::service { "xinetd_$challenge_name":
+      port         => $port,
+      server       => "$challenge_directory/$script_name",
+      require      => File["$challenge_directory/$script_name"],
+      service_type => 'UNLISTED',
+      server_args  => $challenge_directory,
+      user         => $username,
+      group        => $group,
+    }
+  }
 }

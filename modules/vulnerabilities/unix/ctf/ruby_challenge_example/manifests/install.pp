@@ -15,6 +15,14 @@ class ruby_challenge_example::install {
     $storage_dir = undef
   }
 
+  if $secgen_params['port'] and $secgen_params['port'][0] {
+    $port = $secgen_params['port'][0]
+  } else {
+    $port = undef
+  }
+
+  notice ("running on port: $port")
+
   if $group {
     ::secgen_functions::install_setgid_script { 'ruby_challenge_example':
       source_module_name => $module_name,
@@ -25,6 +33,7 @@ class ruby_challenge_example::install {
       account            => $account,
       flag               => $secgen_params['flag'][0],
       flag_name          => 'flag',
+      port               => $port,
       storage_dir        => $storage_dir,
       strings_to_leak    => $secgen_params['strings_to_leak'],
     }

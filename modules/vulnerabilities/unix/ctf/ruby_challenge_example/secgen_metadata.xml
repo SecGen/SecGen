@@ -23,6 +23,9 @@
   <read_fact>storage_directory</read_fact>
   <!--  group: Blank by default. If supplied install script challenge as setgid  -->
   <read_fact>group</read_fact>
+  <!--  port: Blank by default. If supplied install script challenge as xinetd program running on given port -->
+  <read_fact>port</read_fact>
+
   <default_input into="challenge_name">
     <value>ruby_script_example</value>
   </default_input>
@@ -56,6 +59,10 @@
 
   <requires>
     <module_path>utilities/unix/languages/ruby</module_path>
+  </requires>
+
+  <requires>
+    <module_path>utilities/unix/system/xinetd</module_path>
   </requires>
 
 </vulnerability>
