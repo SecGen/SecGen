@@ -19,15 +19,15 @@
   <read_fact>script_data</read_fact>
   <read_fact>account</read_fact>
   <read_fact>flag</read_fact>
+  <!-- group: Blank by default. Uses challenge name as group name unless explicitly provided. -->
+  <read_fact>group</read_fact>
   <!-- storage_directory: Blank by default. If supplied, store the files here. e.g. NFS or SMB storage location -->
   <read_fact>storage_directory</read_fact>
-  <!--  group: Blank by default. If supplied install script challenge as setgid  -->
-  <read_fact>group</read_fact>
   <!--  port: Blank by default. If supplied install script challenge as xinetd program running on given port -->
   <read_fact>port</read_fact>
 
   <default_input into="challenge_name">
-    <value>ruby_script_example</value>
+    <value>ruby_challenge_example</value>
   </default_input>
   <default_input into="script_data">
     <generator module_path=".*ruby_example"/>
@@ -44,9 +44,6 @@
   </default_input>
   <default_input into="flag">
     <generator type="flag_generator"/>
-  </default_input>
-  <default_input into="challenge_name">
-    <value>ruby_script_example</value>
   </default_input>
 
   <requires>

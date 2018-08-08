@@ -10,7 +10,7 @@ define secgen_functions::install_setgid_script (
   $group, # Name of group
   $account, # User account
   $flag, # ctf flag string
-  $flag_name, # ctf flag name
+  $flag_name = 'flag', # ctf flag name
   $port, # Optional: script will be run on network port using xinetd
   $storage_dir     = '', # Optional: Storage directory (takes precedent if supplied, e.g. nfs / smb share dir)
   $strings_to_leak = [''], # Optional: strings to leak (could contain instructions or a message)

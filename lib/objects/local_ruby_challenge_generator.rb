@@ -9,7 +9,14 @@ class RubyChallengeGenerator < ScriptChallengeGenerator
   end
 
   def pre_challenge_setup
-    "Dir.chdir(ARGV[0])\n"
+    "flag_path = ''
+     if ARGV[0] and File.directory? ARGV[0]
+       flag_path = ARGV.shift
+       if flag_path[-1] != '/'
+         flag_path += '/'
+       end
+     end
+     flag_path += 'flag'\n"
   end
 
   def interpreter_path

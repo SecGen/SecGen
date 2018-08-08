@@ -12,9 +12,6 @@
 			<input into="port">
 				<value>1337</value>
 			</input>
-			<input into="group">
-				<value>test</value>
-			</input>
 		</vulnerability>
 
 	</system>

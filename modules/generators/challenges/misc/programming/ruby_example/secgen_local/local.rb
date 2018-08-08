@@ -9,7 +9,7 @@ class ExampleRubyScriptGenerator < RubyChallengeGenerator
   end
 
   def challenge_content
-    "puts File.read('flag')"
+    "puts File.read(flag_path)"
   end
 
 end
