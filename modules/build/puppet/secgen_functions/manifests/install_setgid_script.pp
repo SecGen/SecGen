@@ -12,35 +12,42 @@ define secgen_functions::install_setgid_script (
   $flag, # ctf flag string
   $flag_name = 'flag', # ctf flag name
   $port, # Optional: script will be run on network port using xinetd
-  $storage_dir     = '', # Optional: Storage directory (takes precedent if supplied, e.g. nfs / smb share dir)
+  $storage_directory     = '', # Optional: Storage directory (takes precedent if supplied, e.g. nfs / smb share dir)
   $strings_to_leak = [''], # Optional: strings to leak (could contain instructions or a message)
 ) {
 
-  if $account {
-    $username = $account['username']
+  if $group and $group[0] {
+    $grp = $group[0]
+  } else {
+    $grp = $challenge_name
+  }
+
+  if $account and $account[0] and $account[0] != ''{
+    $acc = parsejson($account[0])
+    $username = $acc['username']
 
     ::accounts::user { $username:
       shell      => '/bin/bash',
-      password   => pw_hash($account['password'], 'SHA-512', 'mysalt'),
+      password   => pw_hash($acc['password'], 'SHA-512', 'mysalt'),
       managehome => true,
       home_mode  => '0755',
     }
 
-    $storage_directory = "/home/$username"
+    $storage_dir = "/home/$username"
 
-  } elsif $storage_dir {
-    $storage_directory = $storage_dir
+  } elsif $storage_directory and $storage_directory[0]{
+    $storage_dir = $storage_directory[0]
     $username = 'root'
   } else {
     err('install: either account or storage_dir is required')
     fail
   }
 
-  $compile_directory = "$storage_directory/tmp"
-  $challenge_directory = "$storage_directory/$challenge_name"
+  $compile_directory = "$storage_dir/tmp"
+  $challenge_directory = "$storage_dir/$challenge_name"
   $modules_source = "puppet:///modules/$source_module_name"
 
-  group { $group:
+  group { $grp:
     ensure => present,
   }
 
@@ -54,34 +61,35 @@ define secgen_functions::install_setgid_script (
   file { "$challenge_directory/$script_name":
     ensure  => present,
     owner   => 'root',
-    group   => $group,
+    group   => $grp,
     mode    => '2775',
-    content => $script_data,
-    require => Group[$group],
+    content => $script_data[0],
+    require => Group[$grp],
   }
 
   # Drop the flag file on the box and set permissions
   ::secgen_functions::leak_files { "$username-file-leak":
     storage_directory => "$challenge_directory",
     leaked_filenames  => [$flag_name],
-    strings_to_leak   => [$flag],
+    strings_to_leak   => [$flag[0]],
     owner             => 'root',
-    group             => $group,
+    group             => $grp,
     mode              => '0440',
     leaked_from       => "$source_module_name-$module_name",
-    require           => Group[$group],
+    require           => Group[$grp],
   }
 
-  if $port {
-    notice("Running $challenge_name on port $port  (dir: $challenge_directory")
+  if $port and $port[0] {
+    $p = $port[0]
+    notice("Running $challenge_name on port $p  (dir: $challenge_directory")
     xinetd::service { "xinetd_$challenge_name":
-      port         => $port,
+      port         => $p,
       server       => "$challenge_directory/$script_name",
       require      => File["$challenge_directory/$script_name"],
       service_type => 'UNLISTED',
       server_args  => $challenge_directory,
       user         => $username,
-      group        => $group,
+      group        => $grp,
     }
   }
 }
