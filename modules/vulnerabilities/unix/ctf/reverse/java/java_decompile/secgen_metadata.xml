@@ -17,6 +17,7 @@
 
   <challenge_type>reverse</challenge_type>
   <challenge_subtype>java</challenge_subtype>
+  <difficulty>low</difficulty>
 
   <!-- binary dropped in account's home directory by default. -->
   <read_fact>challenge_name</read_fact>

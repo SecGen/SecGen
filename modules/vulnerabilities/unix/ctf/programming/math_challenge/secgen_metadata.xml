@@ -18,6 +18,7 @@
   <challenge_type>misc</challenge_type>
   <challenge_subtype>programming</challenge_subtype>
   <challenge_subtype>math</challenge_subtype>
+  <difficulty>medium</difficulty>
 
   <!-- script dropped in account's home directory by default with setuid configuration. -->
   <read_fact>challenge_name</read_fact>

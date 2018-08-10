@@ -19,6 +19,7 @@
 
   <challenge_type>pwn</challenge_type>
   <challenge_subtype>access_controls</challenge_subtype>
+  <difficulty>medium</difficulty>
 
   <read_fact>accounts</read_fact>
 

@@ -16,6 +16,7 @@
 
   <challenge_type>misc</challenge_type>
   <challenge_subtype>information_gathering</challenge_subtype>
+  <difficulty>low</difficulty>
 
   <read_fact>challenge_name</read_fact>
   <read_fact>leaked_filenames</read_fact>

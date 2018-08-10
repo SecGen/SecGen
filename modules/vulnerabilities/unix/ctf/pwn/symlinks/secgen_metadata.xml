@@ -16,6 +16,7 @@
 
   <challenge_type>pwn</challenge_type>
   <challenge_subtype>others</challenge_subtype>
+  <difficulty>medium</difficulty>
 
   <read_fact>accounts</read_fact>
 
