@@ -14,6 +14,7 @@ class ScriptChallengeGenerator
   attr_accessor :module_name
   attr_accessor :has_base64_inputs
   attr_accessor :outputs
+  attr_accessor :difficulty
 
   # override this
   def initialize
@@ -21,6 +22,7 @@ class ScriptChallengeGenerator
     self.module_name = 'Null generator'
     self.has_base64_inputs = false
     self.outputs = []
+    self.difficulty = ''
   end
 
   # override this
@@ -51,7 +53,8 @@ class ScriptChallengeGenerator
 
   def get_options_array
     [['--help', '-h', GetoptLong::NO_ARGUMENT],
-     ['--b64', GetoptLong::OPTIONAL_ARGUMENT]]
+     ['--b64', GetoptLong::OPTIONAL_ARGUMENT],
+     ['--difficulty', GetoptLong::OPTIONAL_ARGUMENT]]
   end
 
   # Override this when using read_fact's in your module. Always call super first
@@ -67,6 +70,9 @@ class ScriptChallengeGenerator
         usage
       when '--b64'
         # do nothing
+      when '--difficulty'
+        self.difficulty << arg
+
     end
   end
 

@@ -15,6 +15,15 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
+  <read_fact>difficulty</read_fact>
+
+  <default_input into="difficulty">
+    <value>low</value>
+    <!--TODO: implement higher difficulty options -->
+    <!--<value>medium</value>-->
+    <!--<value>high</value>-->
+  </default_input>
+
   <output_type>script</output_type>
 
 </generator>

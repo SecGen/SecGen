@@ -9,7 +9,7 @@ class EchoStringChallenge < RubyChallengeGenerator
   end
 
   def challenge_content
-    File.read(File.join(File.dirname(__FILE__), 'challenge.rb'))
+    File.read(File.join(File.dirname(__FILE__), "#{difficulty}.rb"))
   end
 
 end

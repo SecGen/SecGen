@@ -13,6 +13,19 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
+
+  <!-- Some script challenges can take a difficulty parameter. -->
+  <!-- Valid inputs are: low, medium, high -->
+
+  <!--<read_fact>difficulty</read_fact>-->
+
+  <!--<default_input into="difficulty">-->
+    <!--<value>low</value>-->
+    <!--<value>medium</value>-->
+    <!--<value>high</value>-->
+  <!--</default_input>-->
+
+
   <output_type>script</output_type>
 
 </generator>
