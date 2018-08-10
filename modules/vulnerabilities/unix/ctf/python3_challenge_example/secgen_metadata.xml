@@ -14,6 +14,9 @@
   <access>local</access>
   <platform>linux</platform>
 
+  <challenge_type>misc</challenge_type>
+  <challenge_subtype>example</challenge_subtype>
+
   <!-- script dropped in account's home directory by default with setuid configuration. -->
   <read_fact>challenge_name</read_fact>
   <read_fact>script_data</read_fact>

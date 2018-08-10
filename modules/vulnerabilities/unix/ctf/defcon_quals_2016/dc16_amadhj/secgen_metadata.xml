@@ -15,6 +15,9 @@
   <access>local</access>
   <platform>linux</platform>
 
+  <challenge_type>reverse</challenge_type>
+  <challenge_subtype>binary</challenge_subtype>
+
   <!-- binary dropped in account's home directory by default. -->
   <read_fact>challenge_name</read_fact>
   <read_fact>account</read_fact>

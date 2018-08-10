@@ -8,11 +8,13 @@
   <module_license>MIT</module_license>
   <description>python2 challenge example</description>
 
-  <type>ctf_challenge</type>
   <type>script_challenge</type>
   <privilege>none</privilege>
   <access>local</access>
   <platform>linux</platform>
+
+  <challenge_type>misc</challenge_type>
+  <challenge_subtype>example</challenge_subtype>
 
   <!-- script dropped in account's home directory by default with setuid configuration. -->
   <read_fact>challenge_name</read_fact>

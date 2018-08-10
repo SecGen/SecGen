@@ -14,6 +14,9 @@
   <access>local</access>
   <platform>linux</platform>
 
+  <challenge_type>pwn</challenge_type>
+  <challenge_subtype>others</challenge_subtype>
+
   <read_fact>strings_to_leak</read_fact>
   <read_fact>accounts</read_fact>
   <read_fact>ssh_key_pair</read_fact>
