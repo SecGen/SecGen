@@ -15,6 +15,7 @@
   <privilege>root_rwx</privilege>
   <access>local</access>
   <platform>linux</platform>
+  <difficulty>high</difficulty>
 
   <read_fact>strings_to_leak</read_fact>
   <read_fact>leaked_filenames</read_fact>
@@ -34,7 +35,6 @@
   </default_input>
 
   <!--optional vulnerability details-->
-  <difficulty>high</difficulty>
   <cve>CVE-2014-0476</cve>
   <cvss_base_score>3.7</cvss_base_score>
   <reference>https://www.rapid7.com/db/modules/exploit/unix/local/chkrootkit</reference>

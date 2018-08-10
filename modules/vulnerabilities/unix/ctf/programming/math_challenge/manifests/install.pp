@@ -5,7 +5,7 @@ class math_challenge::install {
   ::secgen_functions::install_setgid_script { $challenge_name:
     source_module_name => $module_name,
     challenge_name     => $challenge_name,
-    script_name        => "$challenge_name  .rb",
+    script_name        => "$challenge_name.rb",
     script_data        => $secgen_params['script_data'],
     group              => $secgen_params['group'],
     account            => $secgen_params['account'],
