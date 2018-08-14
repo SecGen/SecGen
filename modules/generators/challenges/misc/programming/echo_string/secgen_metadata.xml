@@ -18,10 +18,14 @@
   <read_fact>difficulty</read_fact>
 
   <default_input into="difficulty">
-    <!--<value>low</value>-->
-    <!--<value>medium</value>-->
-    <!--TODO: implement high difficulty options -->
-    <value>high</value>
+    <encoder type="string_selector">
+      <input into="strings_to_encode">
+        <value>low</value>
+        <value>medium</value>
+        <value>high</value>
+      </input>
+    </encoder>
+
   </default_input>
 
   <output_type>script</output_type>
