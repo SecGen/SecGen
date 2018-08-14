@@ -1,6 +1,6 @@
 # #####################
 # Programming Challenge
-# Echo string - Repeat a string and repeat back to the script
+# Echo string - Medium: Reverse a string and repeat it back to the script
 # #####################
 
 require 'securerandom'
@@ -10,7 +10,7 @@ $stdout.sync = true  # Disable stdout caching (for challenges that can be run ov
 puts 'Prepare yourself. You need to work quickly for this challenge.'
 
 sleep 2
-puts 'Echo the string back to me before the script times out. Try writing a script of your own to make it easier!'
+puts 'Echo the string back to me, in reverse, before the script times out. Try writing a script of your own to make it easier!'
 sleep 2
 puts 'Get ready, here we go...'
 sleep 2
@@ -21,9 +21,9 @@ puts string
 STDOUT.flush
 
 begin
-  Timeout.timeout 0.25 do
+  Timeout.timeout 5 do
     response = gets.chomp
-    if response == string
+    if response == string.reverse
       puts File.read('flag')
     else
       puts 'Incorrect answer!'

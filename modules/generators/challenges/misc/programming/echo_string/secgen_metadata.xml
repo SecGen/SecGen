@@ -18,9 +18,9 @@
   <read_fact>difficulty</read_fact>
 
   <default_input into="difficulty">
-    <value>low</value>
-    <!--TODO: implement higher difficulty options -->
-    <!--<value>medium</value>-->
+    <!--<value>low</value>-->
+    <value>medium</value>
+    <!--TODO: implement high difficulty options -->
     <!--<value>high</value>-->
   </default_input>
 
