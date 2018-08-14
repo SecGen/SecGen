@@ -7,8 +7,15 @@ require 'securerandom'
 require 'timeout'
 
 $stdout.sync = true  # Disable stdout caching (for challenges that can be run over the network)
-puts 'Prepare yourself. You need to work quickly for this challenge.'
 
+# Should the challenge types be separate scripts (medium1,medium2,medium3 etc?)
+# so the challenge type is static on the box? less difficult + more replayable
+# TODO: Implement other medium difficulty options:
+# in reverse [done]
+# but I only want every second character starting with index 0 e.g. [0,2,4...]
+# but I only want every second character starting with index 1 e.g. [1,3,5...]
+
+puts 'Prepare yourself. You need to work quickly for this challenge.'
 sleep 2
 puts 'Echo the string back to me, in reverse, before the script times out. Try writing a script of your own to make it easier!'
 sleep 2

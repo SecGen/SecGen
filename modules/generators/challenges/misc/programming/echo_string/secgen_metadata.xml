@@ -19,9 +19,9 @@
 
   <default_input into="difficulty">
     <!--<value>low</value>-->
-    <value>medium</value>
+    <!--<value>medium</value>-->
     <!--TODO: implement high difficulty options -->
-    <!--<value>high</value>-->
+    <value>high</value>
   </default_input>
 
   <output_type>script</output_type>
