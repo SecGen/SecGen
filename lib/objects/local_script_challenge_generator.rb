@@ -1,7 +1,6 @@
 require 'getoptlong'
 require_relative '../helpers/constants'
 require 'base64'
-
 # Inherited by local script challenge generators
 # stdout used to return value
 # use Print.local to print status messages (formatted to stdout)
@@ -15,6 +14,7 @@ class ScriptChallengeGenerator
   attr_accessor :has_base64_inputs
   attr_accessor :outputs
   attr_accessor :difficulty
+  attr_accessor :challenge_path
 
   # override this
   def initialize
@@ -23,6 +23,7 @@ class ScriptChallengeGenerator
     self.has_base64_inputs = false
     self.outputs = []
     self.difficulty = ''
+    self.challenge_path = ''
   end
 
   # override this
@@ -94,6 +95,11 @@ class ScriptChallengeGenerator
     # print the first 1000 chars to screen
     output = self.outputs.to_s
     length = output.length
+
+    if self.challenge_path
+      Print.local_verbose "Selected: #{self.challenge_path}"
+    end
+
     if length < 1000
       Print.local_verbose "Generated: #{output}..."
     else
@@ -121,16 +127,29 @@ class ScriptChallengeGenerator
     arg_validity
   end
 
+  # override me with setup content
   def pre_challenge_setup
-    # override me with setup content
   end
 
+  # For non-randomised difficulty override me with challenge content
   def challenge_content
-    # override me with challenge content
+    randomise_by_difficulty ? select_by_difficulty(randomise_by_difficulty) : ''
   end
 
+  # Override me with a generator's '__FILE__' path for difficulty based selection.
+  # Files will be selected from the generators secgen_local/ directory based on the difficulty
+  # i.e. 'medium' will select any file that satisfies generators/etc/module_name/secgen_local/medium.*.rb
+  def randomise_by_difficulty
+    false
+  end
+
+  def select_by_difficulty(path)
+    self.challenge_path = Dir.glob(File.dirname(path) + '/' + difficulty + '*').sample
+    File.read(ROOT_DIR + '/' + self.challenge_path)
+  end
+
+  # override me with a string containing the interpreter path e.g. "/bin/bash"
   def interpreter_path
-    # override me with a string containing the interpreter path e.g. "/bin/bash"
   end
 
   def shebang_line

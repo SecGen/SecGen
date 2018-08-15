@@ -8,8 +8,8 @@ class EchoStringChallenge < RubyChallengeGenerator
     self.module_name = 'Echo String Script Generator'
   end
 
-  def challenge_content
-    File.read(File.join(File.dirname(__FILE__), "#{difficulty}.rb"))
+  def randomise_by_difficulty
+    __FILE__
   end
 
 end

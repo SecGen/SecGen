@@ -3,8 +3,6 @@
 require_relative 'local_script_challenge_generator.rb'
 class RubyChallengeGenerator < ScriptChallengeGenerator
 
-  attr_accessor :difficulty
-
   def initialize
     super
     self.module_name = 'Ruby Example Script Generator'
