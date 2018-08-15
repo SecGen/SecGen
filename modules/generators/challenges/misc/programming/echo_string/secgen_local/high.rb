@@ -12,10 +12,13 @@ require 'securerandom'
 require 'timeout'
 
 # determine encoding format required
-encoding_formats = %w[hex_little_endian hex_big_endian binary_little_endian binary_big_endian base64 octal decimal]
+encoding_formats = %w[reverse hex_little_endian hex_big_endian binary_little_endian binary_big_endian base64 octal decimal]
 encoding_format = encoding_formats.sample
 
 case encoding_format
+  when 'reverse'
+    print_string = 'reverse'
+    operation = ->(data) {data.reverse}
   when 'hex_little_endian'
     print_string = 'hexadecimal (little endian / LSB first)'
     operation = ->(data) {data.unpack('h*').first}
@@ -59,11 +62,11 @@ string = [SecureRandom.base64(rand(20..40)), SecureRandom.hex(rand(20..40))].sam
 puts string
 
 begin
-  Timeout.timeout 60 do
+  Timeout.timeout 0.3 do
     response = gets.chomp
     valid_answer = operation.call(string)
     if response == valid_answer
-      puts File.read('flag')
+      puts File.read(flag_path)
     else
       puts 'Incorrect!'
       puts 'We were looking for: ' + valid_answer

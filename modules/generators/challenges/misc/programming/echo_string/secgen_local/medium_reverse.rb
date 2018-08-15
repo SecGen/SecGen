@@ -28,10 +28,10 @@ puts string
 STDOUT.flush
 
 begin
-  Timeout.timeout 5 do
+  Timeout.timeout 0.3 do
     response = gets.chomp
     if response == string.reverse
-      puts File.read('flag')
+      puts File.read(flag_path)  # Flag path
     else
       puts 'Incorrect answer!'
       exit

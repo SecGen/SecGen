@@ -21,10 +21,10 @@ puts string
 STDOUT.flush
 
 begin
-  Timeout.timeout 0.25 do
+  Timeout.timeout 0.3 do
     response = gets.chomp
     if response == string
-      puts File.read('flag')
+      puts File.read(flag_path)
     else
       puts 'Incorrect answer!'
       exit
