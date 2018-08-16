@@ -1,15 +1,7 @@
-# #####################
-# Programming Challenge
-# Echo string - Medium: Reverse a string and repeat it back to the script
-# #####################
-
-# TODO: Decide the below
-# Should the challenge types be separate scripts (medium1,medium2,medium3 etc?)
-# so the challenge type is static on the box? less difficult + more replayable
-
-$stdout.sync = true # Disable stdout caching (for challenges that can be run over the network)
 require 'securerandom'
 require 'timeout'
+
+$stdout.sync = true # Disable stdout caching (for challenges that can be run over the network)
 
 # determine encoding format required
 encoding_formats = %w[reverse hex_little_endian hex_big_endian binary_little_endian binary_big_endian base64 octal decimal]
@@ -37,14 +29,18 @@ case encoding_format
     operation = ->(data) {Base64.strict_encode64(data)}
   when 'octal'
     print_string = 'octal'
-    operation = lambda {|data|
+    operation = -> (data) {
       sum = []
       data.each_char {|char| sum << char.ord.to_s(8).to_i}
       sum.join
     }
   when 'decimal'
     print_string = 'decimal'
-    operation = ->(data) {data.sum.to_s}
+    operation = -> (data) {
+      sum = []
+      data.each_char {|char| sum << char.ord.to_s}
+      sum.join
+    }
   else
     print_string = 'ERROR'
     operation = ->(data) {data}
@@ -56,9 +52,9 @@ puts "Echo the string back to me, in #{print_string}, before the script times ou
 sleep 2
 puts 'Get ready, here we go...'
 sleep 2
+
 # Generate random string
 string = [SecureRandom.base64(rand(20..40)), SecureRandom.hex(rand(20..40))].sample
-
 puts string
 
 begin
