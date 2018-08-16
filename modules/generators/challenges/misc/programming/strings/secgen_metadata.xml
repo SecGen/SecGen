@@ -3,7 +3,7 @@
 <generator xmlns="http://www.github/cliffe/SecGen/generator"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
-  <name>Echo String Challenge Generator</name>
+  <name>String Challenge Generator</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
   <description>TODO</description>
