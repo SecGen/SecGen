@@ -62,7 +62,7 @@ define secgen_functions::install_setgid_script (
     owner   => 'root',
     group   => $grp,
     mode    => '2775',
-    content => $script_data[0],
+    content => $script_data,
     require => Group[$grp],
   }
 

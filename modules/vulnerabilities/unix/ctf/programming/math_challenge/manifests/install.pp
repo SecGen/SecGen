@@ -6,7 +6,7 @@ class math_challenge::install {
     source_module_name => $module_name,
     challenge_name     => $challenge_name,
     script_name        => "$challenge_name.rb",
-    script_data        => $secgen_params['script_data'],
+    script_data        => $secgen_params['script_data'][0],
     group              => $secgen_params['group'],
     account            => $secgen_params['account'],
     flag               => $secgen_params['flag'],
