@@ -9,7 +9,11 @@
 		<system_name>solve_the_maze</system_name>
 		<base platform="linux" type="server"/>
 
-        <vulnerability module_path=".*maze.*"/>
+		<vulnerability module_path=".*maze.*" >
+			<input into="port">
+				<value>1337</value>
+			</input>
+		</vulnerability>
 
 		<network type="private_network" range="dhcp"/>
 	</system>

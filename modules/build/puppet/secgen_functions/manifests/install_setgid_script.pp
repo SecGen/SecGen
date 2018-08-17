@@ -43,7 +43,6 @@ define secgen_functions::install_setgid_script (
     fail
   }
 
-  $compile_directory = "$storage_dir/tmp"
   $challenge_directory = "$storage_dir/$challenge_name"
   $modules_source = "puppet:///modules/$source_module_name"
 
