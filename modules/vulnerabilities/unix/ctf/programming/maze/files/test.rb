@@ -5,7 +5,7 @@ def generate_maze
 
   maze_arr = maze_output.split("*********")
   maze = maze_arr.first
-  solution = maze_arr.last
+  solution = maze_arr.last[1..-1]
   [maze, solution]
 end
 
@@ -13,11 +13,11 @@ _, example_solution = generate_maze
 
 puts 'Solve the maze, quickly!'
 puts 'Use "@" characters to fill correct path through the maze.'
-# sleep(1.5)
+sleep(1.5)
 puts 'Here is an example of a solved maze: '
-# sleep(1.5)
-puts example_solution
-# sleep(1.5)
+sleep(1.5)
+puts "\n #{example_solution}"
+sleep(1.5)
 puts('Get ready...')
 
 
@@ -29,20 +29,16 @@ puts solution
 puts 'solution: '
 
 response = []
-for i in 0..20 do
-  response << gets.chomp
-end
+(0..20).each {|i| response << gets}
 
 puts '*********'
-answer = response.join("\n")
+answer = response.join
 puts answer
 
-if answer.chomp == solution.chomp
+# Remove carriage returns and newlines for comparison
+if answer.gsub(/\r?\n/, " ") == solution.gsub(/\r?\n/, " ")
   puts 'Congrats!'
 else
-  puts 'expected: '
-  puts solution.split
-
-  puts 'got: '
-  puts answer.split
+  puts 'Incorrect, expected answer: '
+  puts solution
 end
