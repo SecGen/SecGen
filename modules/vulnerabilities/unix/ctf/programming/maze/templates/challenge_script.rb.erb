@@ -8,19 +8,30 @@ end
 end
 flag_path += 'flag'
 
-puts "test"
-puts "<%=@challenge_name-%>"
+def generate_maze
+  maze_output = `/usr/bin/ruby <%=@challenge_dir-%>/maze.rb 10 10 `
+  maze_arr = maze_output.split("*********")
+  maze = maze_arr.first
+  solution = maze_arr.last
+  [maze, solution]
+end
 
-maze_output = `ruby maze.rb 10 10 <%= @challenge_dir -%>`
-maze_arr = maze_output.split("*********")
-maze = maze_arr.first
-solution = maze_arr.last
-puts 'maze: '
+_, example_solution = generate_maze
+
+puts 'Solve the maze, quickly!'
+puts 'Use "@" characters to fill correct path through the maze.'
+sleep(1.5)
+puts 'Here is an example of a solved maze: '
+sleep(1.5)
+puts example_solution
+sleep(1.5)
+puts('Get ready...')
+
+
+maze, solution = generate_maze
+
 puts maze
-puts 'solution: '
-puts solution
 
-# TODO: add instructions
 # TODO: add comparison between solution and maze
 # TODO: add functionality to require the solution of n>1 mazes
 # TODO: add a time restriction
