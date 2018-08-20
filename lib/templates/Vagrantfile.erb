@@ -53,8 +53,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 "        ovirt.cpu_cores = #{@options[:cpu_cores]}\n"
         end -%>
         ovirt.console = 'spice'
+        # ovirt.filtered_api = true
         ovirt.insecure = true
-        ovirt.filtered_api = true
         ovirt.debug = true
     end
     # oVirt provider end
