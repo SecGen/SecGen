@@ -219,6 +219,7 @@ def start(options)
           project_id = project_path.split('projects/')[1]
         else
           project_id = "job_#{job_id}"
+          update_status(db_conn, threadwide_statements, job_id, :error)
           Print.err(stderr)
           Print.err("Fatal error on job #{job_id}: SecGen crashed before project creation.")
           Print.err('Check your scenario file.')
