@@ -28,6 +28,7 @@ def usage
    --cpu-cores: Number of virtual CPUs for generated VMs
    --help, -h: Shows this usage information
    --system, -y [system_name]: Only build this system_name from the scenario
+   --snapshot: Creates a snapshot of VMs once built
 
    VIRTUALBOX OPTIONS:
    --gui-output, -g: Show the running VM (not headless)
@@ -168,7 +169,7 @@ def build_vms(scenario, project_dir, options)
               # TODO: not sure if there is a need to remove_uncreated_vms() here too? (I don't think so?)
             end
           end
-          
+
           failures_to_destroy = failures_to_destroy.uniq
 
           if failures_to_destroy.size == 0
@@ -202,6 +203,10 @@ def build_vms(scenario, project_dir, options)
       end
     end
     retry_count -= 1
+  end
+  if successful_creation && options[:snapshot]
+    Print.info 'Creating a snapshot of VM(s)'
+    GemExec.exe('vagrant', project_dir, 'snapshot push')
   end
 end
 
@@ -346,6 +351,7 @@ opts = GetoptLong.new(
     ['--ovirt-url', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirt-cluster', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirt-network', GetoptLong::REQUIRED_ARGUMENT],
+    ['--snapshot', GetoptLong::NO_ARGUMENT],
 )
 
 scenario = SCENARIO_XML
@@ -430,6 +436,9 @@ opts.each do |opt, arg|
     when '--ovirt-network'
       Print.info "Ovirt Network Name : #{arg}"
       options[:ovirtnetwork] = arg
+    when '--snapshot'
+      Print.info "Taking snapshots when VMs are created"
+      options[:snapshot] = true
 
     else
       Print.err "Argument not valid: #{arg}"
