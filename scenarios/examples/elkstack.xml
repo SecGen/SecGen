@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<scenario xmlns="http://www.github/cliffe/SecGen/scenario"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+
+	<!-- an example single system containing a ELK stack instance
+		TODO : Configure a scenario where another system can use the logstash client + push to the ELK instance
+
+		Note: They do not support 32 bit elk! we need to create a new base box / template to accomodate this part of the research.
+	-->
+
+	<system>
+		<system_name>escalation</system_name>
+		<base platform="linux" type="server" distro=".*Ubuntu.*"/>
+
+		<!-- Define a static IP address for the logstash server -->
+		<input into_datastore="logstash_ip">
+			<value>172.16.0.2</value>
+		</input>
+
+		<utility module_path=".*elasticsearch.*">
+			<input into="IP_address">
+				<datastore access="0">logstash_ip</datastore>
+			</input>
+		</utility>
+
+		<!-- TODO -->
+		<!--<utility module_path=".*kibana.*">-->
+			<!--<input into="IP_address">-->
+				<!--<datastore access="0">logstash_ip</datastore>-->
+			<!--</input>-->
+		<!--</utility>-->
+		<!--<utility module_path=".*logstash.*">-->
+			<!--<input into="IP_address">-->
+				<!--<datastore access="0">logstash_ip</datastore>-->
+			<!--</input>-->
+		<!--</utility>-->
+
+		<network type="private_network" >
+			<input into="IP_address">
+				<datastore access="0">logstash_ip</datastore>
+			</input>
+		</network>
+	</system>
+
+</scenario>
