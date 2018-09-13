@@ -1,8 +1,18 @@
 $secgen_parameters = secgen_functions::get_parameters($::base64_inputs_file)
-$ip_address = $secgen_parameters['IP_address'][0]  # TODO: Which IP address? how do we do this with two servers?
+$elasticsearch_ip = $secgen_parameters['elasticsearch_ip'][0]
+$elasticsearch_port = 0 + $secgen_parameters['elasticsearch_port'][0]
 
 include ::java
 
-class { 'elasticsearch': }
-elasticsearch::instance { 'es-01': }
+class { 'elasticsearch':
+  api_host => $elasticsearch_ip,
+  api_port => $elasticsearch_port,
+}
+
+elasticsearch::instance { 'es-01':
+  config => {
+    'network.host' => $elasticsearch_ip,
+    'http.port' => $elasticsearch_port,
+  },
+}
 
