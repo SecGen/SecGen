@@ -14,6 +14,7 @@
 
   <read_fact>logstash_ip</read_fact>
   <read_fact>logstash_port</read_fact>
+  <read_fact>files_to_audit</read_fact>
 
   <default_input into="logstash_ip">
     <value>localhost</value>
@@ -21,6 +22,11 @@
 
   <default_input into="logstash_port">
     <value>5044</value>
+  </default_input>
+
+  <default_input into="files_to_audit">
+    <value>/etc/shadow</value>
+    <value>/etc/passwd</value>
   </default_input>
 
   <requires>
