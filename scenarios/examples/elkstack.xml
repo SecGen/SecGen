@@ -10,7 +10,7 @@
 	-->
 
 	<system>
-		<system_name>escalation</system_name>
+		<system_name>elk</system_name>
 		<base platform="linux" type="server" distro=".*Ubuntu.*"/>
 
 		<input into_datastore="IP_address">
@@ -74,12 +74,42 @@
 			</input>
 		</utility>
 
+		<utility module_path=".*auditbeat.*">
+			<input into="logstash_ip">
+				<datastore access="0">IP_address</datastore>
+			</input>
+			<input into="logstash_port">
+				<datastore access="0">logstash_port</datastore>
+			</input>
+		</utility>
+
 		<network type="private_network" >
 			<input into="IP_address">
 				<datastore access="0">IP_address</datastore>
 			</input>
 		</network>
 	</system>
+
+	<!--<system>-->
+		<!--<system_name>auditpusher</system_name>-->
+		<!--<base platform="linux" type="server" distro=".*Ubuntu.*"/>-->
+
+		<!--<utility module_path=".*auditbeat.*">-->
+			<!--<input into="logstash_ip">-->
+				<!--<value>172.16.0.2</value>-->
+			<!--</input>-->
+			<!--&lt;!&ndash; TODO: rename to elasticsearch port if it works smoothly&ndash;&gt;-->
+			<!--<input into="logstash_port">-->
+				<!--<value>9200</value>-->
+			<!--</input>-->
+		<!--</utility>-->
+
+		<!--<network type="private_network" >-->
+			<!--<input into="IP_address">-->
+				<!--<value>172.16.0.3</value>-->
+			<!--</input>-->
+		<!--</network>-->
+	<!--</system>-->
 
 	<!--TODO: Test this system afterwards. Save as another example.xml -->
 	<!--<system>-->
