@@ -6,6 +6,16 @@ require_relative './print.rb'
 
 class OVirtFunctions
 
+  # TODO supply this as a parameter/option instead
+  def self.authz
+    '@aet.leedsbeckett.ac.uk-authz'
+  end
+
+  # @param [Hash] options -- command-line opts
+  # @return [Boolean] is this secgen process using oVirt as the vagrant provider?
+  def self.provider_ovirt?(options)
+    options[:ovirtuser] and options[:ovirtpass] and options[:ovirturl]
+  end
 
   # Helper for removing VMs which Vagrant lost track of, i.e. exist but are reported as 'have not been created'.
   # @param [String] destroy_output_log -- logfile from vagrant destroy process which contains loose VMs
@@ -64,6 +74,22 @@ class OVirtFunctions
     end
   end
 
+  def self.get_userrole_role(ovirt_connection)
+    roles_service(ovirt_connection).list.each do |role_item|
+      if role_item.name == "UserRole"
+        return role_item
+      end
+    end
+  end
+
+  def self.roles_service(ovirt_connection)
+    ovirt_connection.system_service.roles_service
+  end
+
+  def self.users_service(ovirt_connection)
+    ovirt_connection.system_service.users_service
+  end
+
   def self.vms_service(ovirt_connection)
     ovirt_connection.system_service.vms_service
   end
@@ -110,9 +136,95 @@ class OVirtFunctions
     failures.uniq
   end
 
-  # @param [String] options -- command-line opts, contains oVirt username, password and url
+  def self.create_snapshot(options, scenario_path, vm_names)
+    vms = []
+    ovirt_connection = get_ovirt_connection(options)
+    ovirt_vm_names = build_ovirt_names(scenario_path, options[:prefix], vm_names)
+    ovirt_vm_names.each do |vm_name|
+      vms << vms_service(ovirt_connection).list(search: "name=#{vm_name}")
+    end
+
+    vms.each do |vm_list|
+      vm_list.each do |vm|
+        Print.std " VM: #{vm.name}"
+        # find the service that manages that vm
+        vm_service = vms_service(ovirt_connection).vm_service(vm.id)
+        Print.std "  Creating snapshot: #{vm.name}"
+        begin
+          vm_service.snapshots_service.add(
+              OvirtSDK4::Snapshot.new(
+                  description: "Automated snapshot: #{Time.new.to_s}"
+              )
+          )
+        rescue Exception => e
+          Print.err '****************************************** Skipping'
+          Print.err e.message
+        end
+      end
+    end
+  end
+
+  def self.assign_permissions(options, scenario_path, vm_names)
+    ovirt_connection = get_ovirt_connection(options)
+    username = options[:prefix].chomp
+    user = get_user(ovirt_connection, username)
+    if user
+      vms = []
+
+      ovirt_vm_names = build_ovirt_names(scenario_path, username, vm_names)
+      Print.std "Searching for VMs owned by #{username} #{ovirt_vm_names}"
+      ovirt_vm_names.each do |vm_name|
+        vms << vms_service(ovirt_connection).list(search: "name=#{vm_name}")
+      end
+
+      vms.each do |vm_list|
+        vm_list.each do |vm|
+          Print.std " Found VM: #{vm.name}"
+
+          # find the service that manages that vm
+          vm_service = vms_service(ovirt_connection).vm_service(vm.id)
+
+          # find the service that manages the permissions of that vm
+          perm_service = vm_service.permissions_service
+
+          # add a permission for that user to use that VM
+          perm_attr = {}
+          perm_attr[:comment] = 'Automatic assignment'
+          perm_attr[:role] = get_userrole_role(ovirt_connection)
+          perm_attr[:user] = user
+          Print.std "  Adding permissions"
+          begin
+            perm_service.add OvirtSDK4::Permission.new(perm_attr)
+          rescue Exception => e
+            Print.err '****************************************** Skipping'
+            Print.err e.message
+          end
+        end
+      end
+    else
+      Print.info "No account with username #{username} found, skipping ..."
+    end
+  end
+
+    # @param [String] username
+    # @return [OvirtUser]
+  def self.get_user(ovirt_connection, username)
+    un = username.chomp
+    search_string = "usrname=#{un}#{authz}"
+    puts "Searching for VMs owned by #{un}"
+    user = users_service(ovirt_connection).list(search: search_string).first
+    if user
+      Print.std "Found user '#{un}' on oVirt"
+      user
+    else
+      Print.err "User #{un} not found"
+      nil
+    end
+  end
+
+    # @param [String] options -- command-line opts, contains oVirt username, password and url
   def self.get_ovirt_connection(options)
-    if options[:ovirtuser] and options[:ovirtpass] and options[:ovirturl]
+    if provider_ovirt?(options)
       conn_attr = {}
       conn_attr[:url] = options[:ovirturl]
       conn_attr[:username] = options[:ovirtuser]
@@ -128,3 +240,103 @@ class OVirtFunctions
   end
 
 end
+
+## TODO: Remove me
+#
+## Included cliffe's permissions script to modify tomorrow!
+#
+# require 'ovirtsdk4'
+#
+# create_snapshots = true
+# assign_permissions = true
+#
+# authz = '@aet.leedsbeckett.ac.uk-authz'
+#
+# # read in the list of users (one username per line)
+# localuserslist = File.readlines('./userlist.complete')
+#
+# # connect to oVirt
+# conn_attr = {}
+# conn_attr[:url] = 'https://aet-ovirt.aet.leedsbeckett.ac.uk/ovirt-engine/api'
+# conn_attr[:username] = 'secgen@aet.leedsbeckett.ac.uk'
+# conn_attr[:password] = 'assay4?ravel'
+# conn_attr[:debug] = true
+# conn_attr[:headers] = {'Filter' => true }
+#
+# ovirt_connection = OvirtSDK4::Connection.new(conn_attr)
+# # get the service that manages the VMs
+# vms_service = ovirt_connection.system_service.vms_service
+# # puts vms_service.to_s
+#
+# # get the service that manages the users
+# users_service = ovirt_connection.system_service.users_service
+# # puts users_service.list
+#
+# # get the service that manages the roles
+# roles_service = ovirt_connection.system_service.roles_service
+# # puts roles_service.list
+#
+# # find the UserRole role
+# role = "";
+# roles_service.list().each do |role_item|
+#   if role_item.name == "UserRole"
+#     role = role_item
+#   end
+# end
+#
+# # iterate through our local list of users
+# localuserslist.each do |username|
+#   # find the user on oVirt
+#   search_string = "usrname=#{username.chomp()}#{authz}"
+#   puts "Searching for VMs owned by #{username.chomp()}"
+#   user = users_service.list(search: search_string).first
+#   # puts user.to_s
+#
+#   if user
+#     puts " Found user on oVirt"
+#     # find any VMs we have access to that start with their username
+#     vms = vms_service.list(search: "name=#{username.chomp()}-7-*")
+#     vms.each do |vm|
+#       puts " VM: #{vm.name}"
+#
+#       # find the service that manages that vm
+#       vm_service = vms_service.vm_service(vm.id)
+#
+#       if assign_permissions
+#         # find the service that manages the permissions of that vm
+#         perm_service = vm_service.permissions_service
+#
+#         # add a permission for that user to use that VM
+#         perm_attr = {}
+#         perm_attr[:comment] = 'Automatic assignment'
+#         perm_attr[:role] = role
+#         perm_attr[:user] = user
+#         puts "  Adding permissions"
+#         begin
+#           perm_service.add OvirtSDK4::Permission.new(perm_attr)
+#         rescue Exception => e
+#           puts "****************************************** Skipping"
+#           puts e.message
+#         end
+#       end
+#
+#       if create_snapshots
+#         puts "  Creating snapshot"
+#         begin
+#           vm_service.snapshots_service.add(
+#               OvirtSDK4::Snapshot.new(
+#                   description: "Automated snapshot: #{Time.new.to_s}"
+#               )
+#           )
+#         rescue Exception => e
+#           puts "****************************************** Skipping"
+#           puts e.message
+#         end
+#       end
+#
+#     end
+#   else
+#     puts "Skipping missing user: #{username}"
+#   end
+#
+# end

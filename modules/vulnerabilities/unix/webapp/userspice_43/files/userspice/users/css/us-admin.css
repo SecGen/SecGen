@@ -1,0 +1,141 @@
+body { }
+
+#page-wrapper {
+margin-top: 70px;
+	}
+
+/* Fixed tables */
+.allutable { } /* max-height: 600px;overflow-y: scroll; */
+.allutable img  { width: 100px;}
+	
+/* Navbar */
+.navbar { border-radius: 0px;}
+.navbar-brand { margin: -15px;}
+
+
+/* Admin Dashboard */
+.uvistable { height: 200px;overflow-y: scroll;}
+.huge { font-size: 2em; line-height: normal;}
+.large { font-size: 1.5em; line-height: normal;}
+.us-dash-panels { padding-top: 12px;}
+
+/* Login/Logout forms */
+/* Form styles */
+.form-signup {
+  max-width: 640px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+
+.fb-profile img.fb-image-lg{
+    z-index: 0;
+    width: 100%;  
+    margin-bottom: 10px;
+}
+
+.fb-image-profile
+{
+    margin: -90px 10px 0px 50px;
+    z-index: 9;
+    width: 20%; 
+}
+
+@media (max-width:768px)
+{
+    
+.fb-profile-text>h1{
+    font-weight: 700;
+    font-size:16px;
+}
+
+.fb-image-profile
+{
+    margin: -45px 10px 0px 25px;
+    z-index: 9;
+    width: 20%; 
+}
+}
+
+/* Custom Responsive style */
+@media(min-width:768px) {
+ 
+  
+	 #page-wrapper {
+		font-size: 1.0em;
+		}
+ 
+	 .huge {
+		font-size: 3em;
+		line-height: normal;
+	}	
+
+	.large {
+		font-size: 2em;
+		line-height: normal;
+	}
+ 
+ 
+ 
+ .fb-profile-text>h1{
+    font-weight: 700;
+    font-size:16px;
+}
+
+.fb-image-profile
+{
+    margin: -45px 10px 0px 25px;
+    z-index: 9;
+    width: 20%; 
+}
+ 
+ 
+}
+
+.fb-profile img.fb-image-lg{
+    z-index: 0;
+    width: 100%;  
+    margin-bottom: 10px;
+}
+
+.fb-image-profile
+{
+    margin: -90px 10px 0px 50px;
+    z-index: 9;
+    width: 20%; 
+}
+

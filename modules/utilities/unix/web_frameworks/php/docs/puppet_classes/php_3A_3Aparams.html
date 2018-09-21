@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Puppet Class: php::params
+  
+    &mdash; Documentation by YARD 0.9.9
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_classes::php::params";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (p)</a> &raquo;
+    <span class='title'><span class='object_link'>Puppet Classes</span></span>
+     &raquo; 
+    <span class="title">php::params</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Puppet Class: php::params</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd><span class='object_link'><a href="php_3A_3Aglobals.html" title="puppet_classes::php::globals (puppet_class)">php::globals</a></span></dd>
+  </dl>
+  
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/params.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    <p>PHP params class</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/params.pp', line 3</span>
+
+class php::params inherits php::globals {
+
+  $ensure              = &#39;present&#39;
+  $fpm_service_enable  = true
+  $fpm_service_ensure  = &#39;running&#39;
+  $composer_source     = &#39;https://getcomposer.org/composer.phar&#39;
+  $composer_path       = &#39;/usr/local/bin/composer&#39;
+  $composer_max_age    = 30
+  $pear_ensure         = &#39;present&#39;
+  $pear_package_suffix = &#39;pear&#39;
+  $phpunit_source      = &#39;https://phar.phpunit.de/phpunit.phar&#39;
+  $phpunit_path        = &#39;/usr/local/bin/phpunit&#39;
+  $phpunit_max_age     = 30
+
+  case $facts[&#39;os&#39;][&#39;family&#39;] {
+    &#39;Debian&#39;: {
+      $config_root             = $php::globals::globals_config_root
+      $config_root_ini         = &quot;${config_root}/mods-available&quot;
+      $config_root_inifile     = &quot;${config_root}/php.ini&quot;
+      $common_package_names    = []
+      $common_package_suffixes = [&#39;cli&#39;, &#39;common&#39;]
+      $cli_inifile             = &quot;${config_root}/cli/php.ini&quot;
+      $dev_package_suffix      = &#39;dev&#39;
+      $fpm_pid_file            = $php::globals::globals_fpm_pid_file
+      $fpm_config_file         = &quot;${config_root}/fpm/php-fpm.conf&quot;
+      $fpm_error_log           = $php::globals::fpm_error_log
+      $fpm_inifile             = &quot;${config_root}/fpm/php.ini&quot;
+      $fpm_package_suffix      = &#39;fpm&#39;
+      $fpm_pool_dir            = &quot;${config_root}/fpm/pool.d&quot;
+      $fpm_service_name        = $php::globals::fpm_service_name
+      $fpm_user                = &#39;www-data&#39;
+      $fpm_group               = &#39;www-data&#39;
+      $apache_inifile          = &quot;${config_root}/apache2/php.ini&quot;
+      $embedded_package_suffix = &#39;embed&#39;
+      $embedded_inifile        = &quot;${config_root}/embed/php.ini&quot;
+      $package_prefix          = $php::globals::package_prefix
+      $compiler_packages       = &#39;build-essential&#39;
+      $root_group              = &#39;root&#39;
+      $ext_tool_enable         = $php::globals::ext_tool_enable
+      $ext_tool_query          = $php::globals::ext_tool_query
+      $ext_tool_enabled        = true
+
+      case $facts[&#39;os&#39;][&#39;name&#39;] {
+        &#39;Debian&#39;: {
+          $manage_repos = (versioncmp($facts[&#39;os&#39;][&#39;release&#39;][&#39;major&#39;], &#39;8&#39;) &lt; 0)
+        }
+
+        &#39;Ubuntu&#39;: {
+          $manage_repos = false
+        }
+
+        default: {
+          $manage_repos = false
+        }
+      }
+    }
+
+    &#39;Suse&#39;: {
+      if ($php::globals::php_version != undef) {
+        $php_version_major = regsubst($php::globals::php_version, &#39;^(\d+)\.(\d+)$&#39;,&#39;\1&#39;)
+      } else {
+        $php_version_major = 5
+      }
+
+      $config_root             = $php::globals::globals_config_root
+      $config_root_ini         = &quot;${config_root}/conf.d&quot;
+      $config_root_inifile     = &quot;${config_root}/php.ini&quot;
+      $common_package_names    = [&quot;php${php_version_major}&quot;]
+      $common_package_suffixes = []
+      $cli_inifile             = &quot;${config_root}/cli/php.ini&quot;
+      $dev_package_suffix      = &#39;devel&#39;
+      $fpm_pid_file            = $php::globals::globals_fpm_pid_file
+      $fpm_config_file         = &quot;${config_root}/fpm/php-fpm.conf&quot;
+      $fpm_error_log           = $php::globals::fpm_error_log
+      $fpm_inifile             = &quot;${config_root}/fpm/php.ini&quot;
+      $fpm_package_suffix      = &#39;fpm&#39;
+      $fpm_pool_dir            = &quot;${config_root}/fpm/pool.d&quot;
+      $fpm_service_name        = &#39;php-fpm&#39;
+      $fpm_user                = &#39;wwwrun&#39;
+      $fpm_group               = &#39;www&#39;
+      $embedded_package_suffix = &#39;embed&#39;
+      $embedded_inifile        = &quot;${config_root}/embed/php.ini&quot;
+      $package_prefix          = $php::globals::package_prefix
+      $manage_repos            = true
+      $root_group              = &#39;root&#39;
+      $ext_tool_enable         = undef
+      $ext_tool_query          = undef
+      $ext_tool_enabled        = false
+      case $facts[&#39;os&#39;][&#39;name&#39;] {
+        &#39;SLES&#39;: {
+          $compiler_packages = []
+        }
+        &#39;OpenSuSE&#39;: {
+          $compiler_packages = &#39;devel_basis&#39;
+        }
+        default: {
+          fail(&quot;Unsupported operating system ${facts[&#39;os&#39;][&#39;name&#39;]}&quot;)
+        }
+      }
+    }
+    &#39;RedHat&#39;: {
+      $config_root_ini         = &#39;/etc/php.d&#39;
+      $config_root_inifile     = &#39;/etc/php.ini&#39;
+      $common_package_names    = []
+      $common_package_suffixes = [&#39;cli&#39;, &#39;common&#39;]
+      $cli_inifile             = &#39;/etc/php-cli.ini&#39;
+      $dev_package_suffix      = &#39;devel&#39;
+      $fpm_pid_file            = $php::globals::globals_fpm_pid_file
+      $fpm_config_file         = &#39;/etc/php-fpm.conf&#39;
+      $fpm_error_log           = &#39;/var/log/php-fpm/error.log&#39;
+      $fpm_inifile             = &#39;/etc/php-fpm.ini&#39;
+      $fpm_package_suffix      = &#39;fpm&#39;
+      $fpm_pool_dir            = &#39;/etc/php-fpm.d&#39;
+      $fpm_service_name        = &#39;php-fpm&#39;
+      $fpm_user                = &#39;apache&#39;
+      $fpm_group               = &#39;apache&#39;
+      $apache_inifile          = &#39;/etc/php.ini&#39;
+      $embedded_package_suffix = &#39;embedded&#39;
+      $embedded_inifile        = &#39;/etc/php.ini&#39;
+      $package_prefix          = &#39;php-&#39;
+      $compiler_packages       = [&#39;gcc&#39;, &#39;gcc-c++&#39;, &#39;make&#39;]
+      $manage_repos            = false
+      $root_group              = &#39;root&#39;
+      $ext_tool_enable         = undef
+      $ext_tool_query          = undef
+      $ext_tool_enabled        = false
+    }
+    &#39;FreeBSD&#39;: {
+      $config_root             = $php::globals::globals_config_root
+      $config_root_ini         = &quot;${config_root}/php&quot;
+      $config_root_inifile     = &quot;${config_root}/php.ini&quot;
+      # No common packages, because the required PHP base package will be
+      # pulled in as a dependency. This preserves the ability to choose
+      # any available PHP version by setting the &#39;package_prefix&#39; parameter.
+      $common_package_names    = []
+      $common_package_suffixes = [&#39;extensions&#39;]
+      $cli_inifile             = &quot;${config_root}/php-cli.ini&quot;
+      $dev_package_suffix      = undef
+      $fpm_pid_file            = $php::globals::globals_fpm_pid_file
+      $fpm_config_file         = &quot;${config_root}/php-fpm.conf&quot;
+      $fpm_error_log           = &#39;/var/log/php-fpm.log&#39;
+      $fpm_inifile             = &quot;${config_root}/php-fpm.ini&quot;
+      $fpm_package_suffix      = undef
+      $fpm_pool_dir            = &quot;${config_root}/php-fpm.d&quot;
+      $fpm_service_name        = &#39;php-fpm&#39;
+      $fpm_user                = &#39;www&#39;
+      $fpm_group               = &#39;www&#39;
+      $embedded_package_suffix = &#39;embed&#39;
+      $embedded_inifile        = &quot;${config_root}/php-embed.ini&quot;
+      $package_prefix          = &#39;php56-&#39;
+      $compiler_packages       = [&#39;gcc&#39;]
+      $manage_repos            = false
+      $root_group              = &#39;wheel&#39;
+      $ext_tool_enable         = undef
+      $ext_tool_query          = undef
+      $ext_tool_enabled        = false
+    }
+    &#39;Archlinux&#39;: {
+      $config_root_ini         = &#39;/etc/php/conf.d&#39;
+      $config_root_inifile     = &#39;/etc/php/php.ini&#39;
+      $common_package_names    = []
+      $common_package_suffixes = [&#39;cli&#39;, &#39;common&#39;]
+      $cli_inifile             = &#39;/etc/php/php.ini&#39;
+      $dev_package_suffix      = undef
+      $fpm_pid_file            = &#39;/run/php-fpm/php-fpm.pid&#39;
+      $fpm_config_file         = &#39;/etc/php/php-fpm.conf&#39;
+      $fpm_error_log           = &#39;/var/log/php-fpm/error.log&#39;
+      $fpm_inifile             = &#39;/etc/php/php.ini&#39;
+      $fpm_package_suffix      = &#39;fpm&#39;
+      $fpm_pool_dir            = &#39;/etc/php/php-fpm.d&#39;
+      $fpm_service_name        = &#39;php-fpm&#39;
+      $fpm_user                = &#39;root&#39;
+      $fpm_group               = &#39;root&#39;
+      $apache_inifile          = &#39;/etc/php/php.ini&#39;
+      $embedded_package_suffix = &#39;embedded&#39;
+      $embedded_inifile        = &#39;/etc/php/php.ini&#39;
+      $package_prefix          = &#39;php-&#39;
+      $compiler_packages       = [&#39;gcc&#39;, &#39;make&#39;]
+      $manage_repos            = false
+      $root_group              = &#39;root&#39;
+      $ext_tool_enable         = undef
+      $ext_tool_query          = undef
+      $ext_tool_enabled        = false
+    }
+    default: {
+      fail(&quot;Unsupported osfamily: ${facts[&#39;os&#39;][&#39;family&#39;]}&quot;)
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

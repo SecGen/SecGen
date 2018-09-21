@@ -90,6 +90,7 @@ class apache (
   $error_log                                                     = $::apache::params::error_log,
   $scriptalias                                                   = $::apache::params::scriptalias,
   $access_log_file                                               = $::apache::params::access_log_file,
+  $overwrite_ports                                               = false, # TODO: Implement this as in wheezy apache
 ) inherits ::apache::params {
 
   $valid_mpms_re = $apache_version ? {

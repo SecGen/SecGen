@@ -29,4 +29,11 @@ class gitlist_040::install {
     mode => '777',
   }
 
+  # TODO: This should only be run on apache_kali_compat
+  file { '/var/www/gitlist/.htaccess':
+    require => Exec['unpack-gitlist'],
+    ensure => present,
+    content => template('gitlist_040/.htaccess.erb')
+  }
+
 }

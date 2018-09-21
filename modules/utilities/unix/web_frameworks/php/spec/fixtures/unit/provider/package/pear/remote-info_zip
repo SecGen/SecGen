@@ -1,0 +1,10 @@
+PACKAGE DETAILS:
+================
+Latest      1.13.5
+Installed   1.13.5
+Package     zip
+License     PHP 3.01
+Category    File Formats
+Summary     A zip management extension
+Description Zip is an extension to create, modify and read
+            zip files.

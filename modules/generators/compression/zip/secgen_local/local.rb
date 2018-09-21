@@ -3,7 +3,7 @@ require_relative '../../../../../lib/objects/local_string_encoder.rb'
 require 'rubygems'
 require 'zip'
 
-class ZipFileGenerator < StringEncoder
+class ZipGenerator < StringEncoder
   attr_accessor :file_name
   attr_accessor :strings_to_leak
   attr_accessor :password
@@ -64,4 +64,4 @@ class ZipFileGenerator < StringEncoder
   end
 end
 
-ZipFileGenerator.new.run
+ZipGenerator.new.run

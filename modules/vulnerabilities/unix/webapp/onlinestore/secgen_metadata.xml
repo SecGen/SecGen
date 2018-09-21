@@ -144,7 +144,7 @@
   </requires>
 
   <requires>
-    <module_path>.*/mysql</module_path>
+    <module_path>.*/mysql_wheezy.*</module_path>
   </requires>
 
 </vulnerability>

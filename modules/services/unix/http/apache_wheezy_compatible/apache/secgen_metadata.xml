@@ -26,6 +26,9 @@
   <conflict>
     <name>Kali</name>
   </conflict>
+  <conflict>
+    <name>Stretch</name>
+  </conflict>
   <requires>
     <type>update</type>
   </requires>

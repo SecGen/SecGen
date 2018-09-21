@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Puppet Class: php::fpm::config
+  
+    &mdash; Documentation by YARD 0.9.9
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_classes::php::fpm::config";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (p)</a> &raquo;
+    <span class='title'><span class='object_link'>Puppet Classes</span></span>
+     &raquo; 
+    <span class="title">php::fpm::config</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Puppet Class: php::fpm::config</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>::php::params</dd>
+  </dl>
+  
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/fpm/config.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    <p>Configure php-fpm service</p>
+
+<p>=== Parameters</p>
+
+<p>[<em>config_file</em>]
+  The path to the fpm config file</p>
+
+<p>[<em>user</em>]
+  The user that runs php-fpm</p>
+
+<p>[<em>group</em>]
+  The group that runs php-fpm</p>
+
+<p>[<em>inifile</em>]
+  The path to ini file</p>
+
+<p>[<em>settings</em>]
+  Nested hash of key =&gt; value to apply to php.ini</p>
+
+<p>[<em>pool_base_dir</em>]
+  The folder that contains the php-fpm pool configs</p>
+
+<p>[<em>pool_purge</em>]
+  Whether to purge pool config files not created
+  by this module</p>
+
+<p>[<em>error_log</em>]
+  Path to error log file. If it&#39;s set to &quot;syslog&quot;, log is
+  sent to syslogd instead of being written in a local file.</p>
+
+<p>[<em>log_level</em>]
+  The php-fpm log level</p>
+
+<p>[<em>emergency_restart_threshold</em>]
+  The php-fpm emergency_restart_threshold</p>
+
+<p>[<em>emergency_restart_interval</em>]
+  The php-fpm emergency_restart_interval</p>
+
+<p>[<em>process_control_timeout</em>]
+  The php-fpm process_control_timeout</p>
+
+<p>[<em>process_max</em>]
+  The maximum number of processes FPM will fork.</p>
+
+<p>[<em>rlimit_files</em>]
+  Set open file descriptor rlimit for the master process.</p>
+
+<p>[<em>systemd_interval</em>]
+  The interval between health report notification to systemd</p>
+
+<p>[<em>log_owner</em>]
+  The php-fpm log owner</p>
+
+<p>[<em>log_group</em>]
+  The group owning php-fpm logs</p>
+
+<p>[<em>log_dir_mode</em>]
+  The octal mode of the directory</p>
+
+<p>[<em>syslog_facility</em>]
+  Used to specify what type of program is logging the message</p>
+
+<p>[<em>syslog_ident</em>]
+  Prepended to every message</p>
+
+<p>[<em>root_group</em>]
+  UNIX group of the root user</p>
+
+<p>[<em>pid_file</em>]
+  Path to fpm pid file</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>config_file</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::fpm_config_file</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::fpm_user</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::fpm_group</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>inifile</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::fpm_inifile</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pid_file</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::fpm_pid_file</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>settings</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pool_base_dir</span>
+      
+      
+        <span class='type'>(<tt>Stdlib::Absolutepath</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::fpm_pool_dir</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pool_purge</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>error_log</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::fpm_error_log</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>log_level</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;notice&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>emergency_restart_threshold</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>0</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>emergency_restart_interval</span>
+      
+      
+        <span class='type'>(<tt>Variant[Integer, Pattern[/^\d+[smhd]?$/]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>0</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>process_control_timeout</span>
+      
+      
+        <span class='type'>(<tt>Variant[Integer, Pattern[/^\d+[smhd]?$/]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>0</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>process_max</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>0</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rlimit_files</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>systemd_interval</span>
+      
+      
+        <span class='type'>(<tt>Optional[Variant[Integer,Pattern[/^\d+[smhd]?$/]]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>log_owner</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::fpm_user</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>log_group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::fpm_group</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>log_dir_mode</span>
+      
+      
+        <span class='type'>(<tt>Pattern[/^\d+$/]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;0770&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>root_group</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::root_group</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>syslog_facility</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;daemon&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>syslog_ident</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;php-fpm&#39;</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/fpm/config.pp', line 73</span>
+
+class php::fpm::config(
+  $config_file                                                          = $::php::params::fpm_config_file,
+  String $user                                                          = $::php::params::fpm_user,
+  String $group                                                         = $::php::params::fpm_group,
+  String $inifile                                                       = $::php::params::fpm_inifile,
+  $pid_file                                                             = $::php::params::fpm_pid_file,
+  Hash $settings                                                        = {},
+  Stdlib::Absolutepath $pool_base_dir                                   = $::php::params::fpm_pool_dir,
+  $pool_purge                                                           = false,
+  String $error_log                                                     = $::php::params::fpm_error_log,
+  String $log_level                                                     = &#39;notice&#39;,
+  Integer $emergency_restart_threshold                                  = 0,
+  Variant[Integer, Pattern[/^\d+[smhd]?$/]] $emergency_restart_interval = 0,
+  Variant[Integer, Pattern[/^\d+[smhd]?$/]] $process_control_timeout    = 0,
+  Integer $process_max                                                  = 0,
+  $rlimit_files                                                         = undef,
+  Optional[Variant[Integer,Pattern[/^\d+[smhd]?$/]]] $systemd_interval  = undef,
+  String $log_owner                                                     = $::php::params::fpm_user,
+  String $log_group                                                     = $::php::params::fpm_group,
+  Pattern[/^\d+$/] $log_dir_mode                                        = &#39;0770&#39;,
+  $root_group                                                           = $::php::params::root_group,
+  String $syslog_facility                                               = &#39;daemon&#39;,
+  String $syslog_ident                                                  = &#39;php-fpm&#39;,
+) inherits ::php::params {
+
+  if $caller_module_name != $module_name {
+    warning(&#39;php::fpm::config is private&#39;)
+  }
+
+  # Hack-ish to default to user for group too
+  $log_group_final = $log_group ? {
+    undef   =&gt; $log_owner,
+    default =&gt; $log_group,
+  }
+
+  file { $config_file:
+    ensure  =&gt; file,
+    content =&gt; template(&#39;php/fpm/php-fpm.conf.erb&#39;),
+    owner   =&gt; root,
+    group   =&gt; $root_group,
+    mode    =&gt; &#39;0644&#39;,
+  }
+
+  file { $pool_base_dir:
+    ensure =&gt; directory,
+    owner  =&gt; root,
+    group  =&gt; $root_group,
+    mode   =&gt; &#39;0755&#39;,
+  }
+
+  if $pool_purge {
+    File[$pool_base_dir] {
+      purge   =&gt; true,
+      recurse =&gt; true,
+    }
+  }
+
+  ::php::config { &#39;fpm&#39;:
+    file   =&gt; $inifile,
+    config =&gt; $settings,
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>
