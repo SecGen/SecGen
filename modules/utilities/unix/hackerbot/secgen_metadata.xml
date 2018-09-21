@@ -36,6 +36,6 @@
     <type>update</type>
   </requires>
   <requires>
-    <type>httpd</type>
+    <module_path>.*/apache_kali.*</module_path>
   </requires>
 </utility>
