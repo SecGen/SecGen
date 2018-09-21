@@ -4,31 +4,45 @@ class kde_minimal::config {
   $autologin_user = $secgen_params['autologin_user'][0]
   $autostart_konsole = str2bool($secgen_params['autostart_konsole'][0])
 
-  if $autologin_user != "false" {
-    file { "/etc/kde4/kdm/kdmrc":
-      ensure => file,
-      content => template('kde_minimal/kdmrc.erb'),
+  case $operatingsystemrelease {
+    /^9.*/: {
+      #do 9.x stuff
+      notice('DEBIAN 9 SELECTED!!')
+      notice($operatingsystemrelease)
+    }
+    /^7.*/: {
+      #do 7.x stuff
+      notice('DEBIAN 7.8 SELECTED!!')
+      notice($operatingsystemrelease)
     }
   }
 
-  $accounts.each |$raw_account| {
-    $account = parsejson($raw_account)
-    $username = $account['username']
-
-    # autostart konsole
-    if $autostart_konsole {
-      file { ["/home/$username/.config/", "/home/$username/.config/autostart/"]:
-        ensure => directory,
-        owner  => $username,
-        group  => $username,
-      }
-
-      file { "/home/$username/.config/autostart/org.kde.konsole.desktop":
-        ensure => file,
-        source => 'puppet:///modules/kde_minimal/org.kde.konsole.desktop',
-        owner  => $username,
-        group  => $username,
-      }
-    }
-  }
+  #
+  # if $autologin_user != "false" {
+  #   file { "/etc/kde4/kdm/kdmrc":
+  #     ensure => file,
+  #     content => template('kde_minimal/kdmrc.erb'),
+  #   }
+  # }
+  #
+  # $accounts.each |$raw_account| {
+  #   $account = parsejson($raw_account)
+  #   $username = $account['username']
+  #
+  #   # autostart konsole
+  #   if $autostart_konsole {
+  #     file { ["/home/$username/.config/", "/home/$username/.config/autostart/"]:
+  #       ensure => directory,
+  #       owner  => $username,
+  #       group  => $username,
+  #     }
+  #
+  #     file { "/home/$username/.config/autostart/org.kde.konsole.desktop":
+  #       ensure => file,
+  #       source => 'puppet:///modules/kde_minimal/org.kde.konsole.desktop',
+  #       owner  => $username,
+  #       group  => $username,
+  #     }
+  #   }
+  # }
 }
