@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: php::extension
+  
+    &mdash; Documentation by YARD 0.9.9
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::php::extension";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (p)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">php::extension</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: php::extension</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/extension.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    <p>Install a PHP extension package</p>
+
+<p>=== Parameters</p>
+
+<p>[<em>ensure</em>]
+  The ensure of the package to install
+  Could be &quot;latest&quot;, &quot;installed&quot; or a pinned version</p>
+
+<p>[<em>package_prefix</em>]
+  Prefix to prepend to the package name for the package provider</p>
+
+<p>[<em>provider</em>]
+  The provider used to install the package
+  Could be &quot;pecl&quot;, &quot;apt&quot;, &quot;dpkg&quot; or any other OS package provider
+  If set to &quot;none&quot;, no package will be installed</p>
+
+<p>[<em>source</em>]
+  The source to install the extension from. Possible values
+  depend on the <em>provider</em> used</p>
+
+<p>[<em>so_name</em>]
+  The DSO name of the package (e.g. opcache for zendopcache)</p>
+
+<p>[<em>ini_prefix</em>]
+  An optional filename prefix for the settings file of the extension</p>
+
+<p>[<em>php_api_version</em>]
+  This parameter is used to build the full path to the extension
+  directory for zend_extension in PHP &lt; 5.5 (e.g. 20100525)</p>
+
+<p>[<em>header_packages</em>]
+  System packages dependencies to install for extensions (e.g. for
+  memcached libmemcached-dev on Debian)</p>
+
+<p>[<em>compiler_packages</em>]
+  System packages dependencies to install for compiling extensions
+  (e.g. build-essential on Debian)</p>
+
+<p>[<em>zend</em>]
+ Boolean parameter, whether to load extension as zend_extension.
+ Defaults to false.</p>
+
+<p>[<em>settings</em>]
+  Nested hash of global config parameters for php.ini</p>
+
+<p>[<em>settings_prefix</em>]
+  Boolean/String parameter, whether to prefix all setting keys with
+  the extension name or specified name. Defaults to false.</p>
+
+<p>[<em>sapi</em>]
+  String parameter, whether to specify ALL sapi or a specific sapi.
+  Defaults to ALL.</p>
+
+<p>[<em>responsefile</em>]
+  File containing answers for interactive extension setup. Supported
+  <em>providers</em>: pear, pecl.</p>
+
+<p>[<em>install_options</em>]
+  Array of String or Hash options to pass to the provider.</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>ensure</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;installed&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>provider</span>
+      
+      
+        <span class='type'>(<tt>Optional[Php::Provider]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>source</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>so_name</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>downcase($name)</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ini_prefix</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>php_api_version</span>
+      
+      
+        <span class='type'>(<tt>Optional[String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>package_prefix</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::package_prefix</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>zend</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>settings</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>sapi</span>
+      
+      
+        <span class='type'>(<tt>Php::Sapi</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;ALL&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>settings_prefix</span>
+      
+      
+        <span class='type'>(<tt>Variant[Boolean, String]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>responsefile</span>
+      
+      
+        <span class='type'>(<tt>Optional[Stdlib::AbsolutePath]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>header_packages</span>
+      
+      
+        <span class='type'>(<tt>Variant[String, Array[String]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>compiler_packages</span>
+      
+      
+        <span class='type'>(<tt>Variant[String, Array[String]]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::compiler_packages</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>install_options</span>
+      
+      
+        <span class='type'>(<tt>Php::InstallOptions</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/extension.pp', line 61</span>
+
+define php::extension (
+  String           $ensure                          = &#39;installed&#39;,
+  Optional[Php::Provider] $provider                 = undef,
+  Optional[String] $source                          = undef,
+  Optional[String] $so_name                         = downcase($name),
+  Optional[String] $ini_prefix                      = undef,
+  Optional[String] $php_api_version                 = undef,
+  String           $package_prefix                  = $::php::package_prefix,
+  Boolean          $zend                            = false,
+  Hash             $settings                        = {},
+  Php::Sapi        $sapi                            = &#39;ALL&#39;,
+  Variant[Boolean, String]       $settings_prefix   = false,
+  Optional[Stdlib::AbsolutePath] $responsefile      = undef,
+  Variant[String, Array[String]] $header_packages   = [],
+  Variant[String, Array[String]] $compiler_packages = $::php::params::compiler_packages,
+  Php::InstallOptions $install_options              = undef,
+) {
+
+  if ! defined(Class[&#39;php&#39;]) {
+    warning(&#39;php::extension is private&#39;)
+  }
+
+  php::extension::install { $title:
+    ensure            =&gt; $ensure,
+    provider          =&gt; $provider,
+    source            =&gt; $source,
+    responsefile      =&gt; $responsefile,
+    package_prefix    =&gt; $package_prefix,
+    header_packages   =&gt; $header_packages,
+    compiler_packages =&gt; $compiler_packages,
+    install_options   =&gt; $install_options,
+  }
+
+  # PEAR packages don&#39;t require any further configuration, they just need to &quot;be there&quot;.
+  if $provider != &#39;pear&#39; {
+    php::extension::config { $title:
+      ensure          =&gt; $ensure,
+      provider        =&gt; $provider,
+      so_name         =&gt; $so_name,
+      ini_prefix      =&gt; $ini_prefix,
+      php_api_version =&gt; $php_api_version,
+      zend            =&gt; $zend,
+      settings        =&gt; $settings,
+      settings_prefix =&gt; $settings_prefix,
+      sapi            =&gt; $sapi,
+      subscribe       =&gt; Php::Extension::Install[$title],
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

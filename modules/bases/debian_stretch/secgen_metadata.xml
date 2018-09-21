@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<base xmlns="http://www.github/cliffe/SecGen/base"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.github/cliffe/SecGen/base">
+  <name>Debian 9 Stretch Server</name>
+  <author>Thomas Shaw</author>
+  <module_license>GPLv3</module_license>
+  <description>For testing purposes, the default root password is puppet.</description>
+  <cpu_word_size>64-bit</cpu_word_size>
+  <type>server</type>
+  <type>cli</type>
+
+  <platform>linux</platform>
+  <platform>unix</platform>
+  <distro>Debian 9 (stretch) TODO: 32-bit (i386)</distro>
+  <url>https://app.vagrantup.com/summernguyen/boxes/debian-stretch-puppet/versions/1.0.0/providers/virtualbox.box</url>
+  <ovirt_template>debian_stretch_server_n</ovirt_template>
+
+  <reference>https://atlas.hashicorp.com/puppetlabs</reference>
+  <software_license>various</software_license>
+</base>

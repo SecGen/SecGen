@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.9
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="puppet_class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'><p><a href="https://forge.puppetlabs.com/puppet/php"><img src="http://img.shields.io/puppetforge/v/puppet/php.svg" alt="Puppet Forge"></a>
+<a href="https://travis-ci.org/voxpupuli/puppet-php"><img src="https://travis-ci.org/voxpupuli/puppet-php.svg?branch=master" alt="Build Status"></a></p>
+
+<h2>Current Status</h2>
+
+<p>As the original creators of <code>puppet-php</code> are no longer maintaining the module, it has been handed over into the care of Vox Pupuli.
+Please be sure to update all your links to the new location.</p>
+
+<h1>voxpupuli/php Puppet Module</h1>
+
+<p>voxpupuli/php is a Puppet module for managing PHP with a strong focus
+on php-fpm. The module aims to use sane defaults for the supported
+architectures. We strive to support all recent versions of Debian,
+Ubuntu, RedHat/CentOS, openSUSE/SLES and FreeBSD. Managing Apache
+with <code>mod_php</code> is not supported.</p>
+
+<p>This originally was a fork of <a href="https://github.com/jippi/puppet-php">jippi/puppet-php</a>
+(nodes-php on Puppet Forge) but has since been rewritten in large parts.</p>
+
+<h2>Usage</h2>
+
+<p>Quickest way to get started is simply <code>include</code>&#39;ing the <em><code>php</code> class</em>.</p>
+
+<pre class="code puppet"><code class="puppet">include &#39;::php&#39;
+</code></pre>
+
+<p>Or, you can override defaults and specify additional custom
+configurations by declaring <code>class { &#39;::php&#39;: }</code> with parameters:</p>
+
+<pre class="code puppet"><code class="puppet">class { &#39;::php&#39;:
+  ensure       =&gt; latest,
+  manage_repos =&gt; true,
+  fpm          =&gt; true,
+  dev          =&gt; true,
+  composer     =&gt; true,
+  pear         =&gt; true,
+  phpunit      =&gt; false,
+}
+</code></pre>
+
+<p>Optionally the PHP version or configuration root directory can be changed also:</p>
+
+<pre class="code puppet"><code class="puppet">class { &#39;::php::globals&#39;:
+  php_version =&gt; &#39;7.0&#39;,
+  config_root =&gt; &#39;/etc/php/7.0&#39;,
+}-&gt;
+class { &#39;::php&#39;:
+  manage_repos =&gt; true
+}
+</code></pre>
+
+<p>There are more configuration options available. Please refer to the
+auto-generated documentation at <a href="http://php.puppet.mayflower.de/">http://php.puppet.mayflower.de/</a>.</p>
+
+<h3>Defining <code>php.ini</code> settings</h3>
+
+<p>PHP configuration parameters in <code>php.ini</code> files can be defined as parameter
+<code>settings</code> on the main <code>php</code> class, or <code>php::fpm</code> / <code>php::cli</code> classes,
+or <code>php::extension</code> resources for each component independently.</p>
+
+<p>These settings are written into their respective <code>php.ini</code> file. Global
+settings in <code>php::settings</code> are merged with the settings of all components.
+Please note that settings of extensions are always independent.</p>
+
+<p>In the following example the PHP options and timezone will be set in
+all PHP configurations, i.e. the PHP cli application and all php-fpm pools.</p>
+
+<pre class="code puppet"><code class="puppet">  class { &#39;::php&#39;:
+    settings   =&gt; {
+      &#39;PHP/max_execution_time&#39;  =&gt; &#39;90&#39;,
+      &#39;PHP/max_input_time&#39;      =&gt; &#39;300&#39;,
+      &#39;PHP/memory_limit&#39;        =&gt; &#39;64M&#39;,
+      &#39;PHP/post_max_size&#39;       =&gt; &#39;32M&#39;,
+      &#39;PHP/upload_max_filesize&#39; =&gt; &#39;32M&#39;,
+      &#39;Date/date.timezone&#39;      =&gt; &#39;Europe/Berlin&#39;,
+    },
+  }
+</code></pre>
+
+<h3>Installing extensions</h3>
+
+<p>PHP configuration parameters in <code>php.ini</code> files can be defined
+as parameter <code>extensions</code> on the main <code>php</code> class. They are
+activated for all activated SAPIs.</p>
+
+<pre class="code puppet"><code class="puppet">  class { &#39;::php&#39;:
+    extensions =&gt; {
+      bcmath    =&gt; { },
+      imagick   =&gt; {
+        provider =&gt; pecl,
+      },
+      xmlrpc    =&gt; { },
+      memcached =&gt; {
+        provider        =&gt; &#39;pecl&#39;,
+        header_packages =&gt; [ &#39;libmemcached-devel&#39;, ],
+      },
+      apc       =&gt; {
+        provider =&gt; &#39;pecl&#39;,
+        settings =&gt; {
+          &#39;apc/stat&#39;       =&gt; &#39;1&#39;,
+          &#39;apc/stat_ctime&#39; =&gt; &#39;1&#39;,
+        },
+        sapi     =&gt; &#39;fpm&#39;,
+      },
+    },
+  }
+</code></pre>
+
+<p>See <a href="http://php.puppet.mayflower.de/php/extension.html">the documentation</a>
+of the <code>php::extension</code> resource for all available parameters and default
+values.</p>
+
+<h3>Defining php-fpm pools</h3>
+
+<p>If different php-fpm pools are required, you can use <code>php::fpm::pool</code>
+defined resource type. A single pool called <code>www</code> will be configured
+by default. Specify additional pools like so:</p>
+
+<pre class="code puppet"><code class="puppet">  php::fpm::pool { &#39;www2&#39;:
+    listen =&gt; &#39;127.0.1.1:9000&#39;,
+  }
+</code></pre>
+
+<p>For an overview of all possible parameters for <code>php::fpm::pool</code> resources
+please see <a href="http://php.puppet.mayflower.de/php/fpm/pool.html">its documention</a>.</p>
+
+<h3>Overriding php-fpm user</h3>
+
+<p>By default, php-fpm is set up to run as Apache. If you need to customize that user, you can do that like so:</p>
+
+<pre class="code puppet"><code class="puppet">  class { &#39;::php&#39;:
+    fpm_user  =&gt; &#39;nginx&#39;,
+    fpm_group =&gt; &#39;nginx&#39;,
+  }
+</code></pre>
+
+<h3>Alternative examples using Hiera</h3>
+
+<p>Alternative to the Puppet DSL code examples above, you may optionally define your PHP configuration using Hiera.</p>
+
+<p>Below are all the examples you see above, but defined in YAML format for use with Hiera.</p>
+
+<pre class="code yaml"><code class="yaml">---
+php::ensure: latest
+php::manage_repos: true
+php::fpm: true
+php::fpm_user: &#39;nginx&#39;
+php::fpm_group: &#39;nginx&#39;
+php::dev: true
+php::composer: true
+php::pear: true
+php::phpunit: false
+php::settings:
+  &#39;PHP/max_execution_time&#39;: &#39;90&#39;
+  &#39;PHP/max_input_time&#39;: &#39;300&#39;
+  &#39;PHP/memory_limit&#39;: &#39;64M&#39;
+  &#39;PHP/post_max_size&#39;: &#39;32M&#39;
+  &#39;PHP/upload_max_filesize&#39;: &#39;32M&#39;
+  &#39;Date/date.timezone&#39;: &#39;Europe/Berlin&#39;
+php::extensions:
+  bcmath: {}
+  xmlrpc: {}
+  imagick:
+    provider: pecl
+  memcached:
+    provider: pecl
+    header_packages:
+      - libmemcached-dev
+  apc:
+    provider: pecl
+    settings:
+      &#39;apc/stat&#39;: 1
+      &#39;apc/stat_ctime&#39;: 1
+    sapi: &#39;fpm&#39;
+php::fpm::pools:
+  www2:
+    listen: &#39;127.0.1.1:9000&#39;
+</code></pre>
+
+<h2>Notes</h2>
+
+<h3>Debian squeeze &amp; Ubuntu precise come with PHP 5.3</h3>
+
+<p>On Debian-based systems, we use <code>php5enmod</code> to enable extension-specific
+configuration. This script is only present in <code>php5</code> packages beginning with
+version 5.4. Furthermore, PHP 5.3 is not supported by upstream anymore.</p>
+
+<p>We strongly suggest you use a recent PHP version, even if you&#39;re using an
+older though still supported distribution release. Our default is to have
+<code>php::manage_repos</code> enabled to add apt sources for
+<a href="http://www.dotdeb.org/">Dotdeb</a> on Debian and
+<a href="https://launchpad.net/%7Eondrej/+archive/ubuntu/php5/">ppa:ondrej/php5</a> on
+Ubuntu with packages for the current stable PHP version closely tracking
+upstream.</p>
+
+<h3>Ubuntu systems and Ondřej&#39;s PPA</h3>
+
+<p>The older Ubuntu PPAs run by Ondřej have been deprecated (ondrej/php5, ondrej/php5.6)
+in favor of a new PPA: ondrej/php which contains all 3 versions of PHP: 5.5, 5.6, and 7.0
+Here&#39;s an example in hiera of getting PHP 5.6 installed with php-fpm, pear/pecl, and composer:</p>
+
+<pre class="code ruby"><code class="ruby">php::globals::php_version: &#39;5.6&#39;
+php::fpm: true
+php::dev: true
+php::composer: true
+php::pear: true
+php::phpunit: false
+</code></pre>
+
+<p>If you do not specify a php version, in Ubuntu the default will be 7.0 if you are
+running Xenial (16.04), otherwise PHP 5.6 will be installed (for other versions)</p>
+
+<h3>Apache support</h3>
+
+<p>Apache with <code>mod_php</code> is not supported by this module. Please use
+<a href="https://forge.puppetlabs.com/puppetlabs/apache">puppetlabs/apache</a> instead.</p>
+
+<p>We prefer using php-fpm. You can find an example Apache vhost in
+<code>manifests/apache_vhost.pp</code> that shows you how to use <code>mod_proxy_fcgi</code> to
+connect to php-fpm.</p>
+
+<h3>Facts</h3>
+
+<p>We deliver a <code>phpversion</code> fact with this module. This is explicitly <strong>NOT</strong> intended
+to be used within your puppet manifests as it will only work on your second puppet
+run. Its intention is to make querying PHP versions per server easy via PuppetDB or Foreman.</p>
+
+<h3>FreeBSD support</h3>
+
+<p>On FreeBSD systems we purge the system-wide <code>extensions.ini</code> in favour of
+per-module configuration files.</p>
+
+<p>Please also note that support for Composer and PHPUnit on FreeBSD is untested
+and thus likely incomplete.</p>
+
+<h3>Running the test suite</h3>
+
+<p>To run the tests install the ruby dependencies with <code>bundler</code> and execute
+<code>rake</code>:</p>
+
+<pre class="code ruby"><code class="ruby">bundle install --path vendor/bundle
+bundle exec rake
+</code></pre>
+
+<h2>Bugs &amp; New Features</h2>
+
+<p>If you happen to stumble upon a bug, please feel free to create a pull request
+with a fix (optionally with a test), and a description of the bug and how it
+was resolved.</p>
+
+<p>Or if you&#39;re not into coding, simply create an issue adding steps to let us
+reproduce the bug and we will happily fix it.</p>
+
+<p>If you have a good idea for a feature or how to improve this module in general,
+please create an issue to discuss it. We are very open to feedback. Pull
+requests are always welcome.</p>
+
+<p>We hate orphaned and unmaintained Puppet modules as much as you do and
+therefore promise that we will continue to maintain this module and keep
+response times to issues short. If we happen to lose interest, we will write
+a big fat warning into this README to let you know.</p>
+
+<h2>License</h2>
+
+<p>The project is released under the permissive MIT license.</p>
+
+<p>The source can be found at
+<a href="https://github.com/voxpupuli/puppet-php/">github.com/voxpupuli/puppet-php</a>.</p>
+
+<p>This Puppet module was originally maintained by some fellow puppeteers at
+<a href="https://mayflower.de">Mayflower GmbH</a> and is now maintained by
+<a href="https://voxpupuli.org/">Vox Pupuli</a>.</p>
+</div></div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

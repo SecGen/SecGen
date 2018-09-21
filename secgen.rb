@@ -121,7 +121,7 @@ end
 
 # Builds the vm via the vagrant file in the project dir
 # @param project_dir
-def build_vms(scenario, project_dir, options)
+def build_vms(scenario, project_dir, options, systems)
 
   Print.info "Building project: #{project_dir}"
   system = ''
@@ -134,7 +134,7 @@ def build_vms(scenario, project_dir, options)
   end
 
   # if deploying to ovirt, when things fail to build, set the retry_count
-  retry_count = (options[:ovirtuser] and options[:ovirtpass]) ? 10 : 0
+  retry_count = OVirtFunctions::provider_ovirt?(options) ? 10 : 0
   successful_creation = false
 
   while retry_count and !successful_creation
@@ -142,11 +142,9 @@ def build_vms(scenario, project_dir, options)
     if vagrant_output[:status] == 0
       Print.info 'VMs created.'
       successful_creation = true
-      if options[:shutdown]
+      if options[:shutdown] or OVirtFunctions::provider_ovirt?(options)
         Print.info 'Shutting down VMs.'
-        if options[:ovirtuser] and options[:ovirtpass]
-          sleep(30)
-        end
+        sleep(30)
         GemExec.exe('vagrant', project_dir, 'halt')
       end
     else
@@ -169,7 +167,7 @@ def build_vms(scenario, project_dir, options)
               # TODO: not sure if there is a need to remove_uncreated_vms() here too? (I don't think so?)
             end
           end
-
+          
           failures_to_destroy = failures_to_destroy.uniq
 
           if failures_to_destroy.size == 0
@@ -205,6 +203,10 @@ def build_vms(scenario, project_dir, options)
     retry_count -= 1
   end
   if successful_creation && options[:snapshot]
+    if OVirtFunctions::provider_ovirt?(options)
+      vm_names = get_vm_names(systems)
+      OVirtFunctions::assign_permissions(options, scenario, vm_names)
+    end
     Print.info 'Creating a snapshot of VM(s)'
     GemExec.exe('vagrant', project_dir, 'snapshot push')
   end
@@ -271,8 +273,8 @@ end
 
 # Runs methods to run and configure a new vm from the configuration file
 def run(scenario, project_dir, options)
-  build_config(scenario, project_dir, options)
-  build_vms(scenario, project_dir, options)
+  systems = build_config(scenario, project_dir, options)
+  build_vms(scenario, project_dir, options, systems)
 end
 
 def default_project_dir
@@ -304,6 +306,12 @@ end
 # @return [Void]
 def delete_all_projects
   FileUtils.rm_r(Dir.glob("#{PROJECTS_DIR}/*"))
+end
+
+def get_vm_names(systems)
+  vm_names = []
+  systems.each { |system| vm_names << system.name }
+  vm_names
 end
 
 # end of method declarations

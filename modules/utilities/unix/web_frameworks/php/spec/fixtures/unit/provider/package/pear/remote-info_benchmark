@@ -1,0 +1,11 @@
+PACKAGE DETAILS:
+================
+Latest      1.2.9
+Installed   - no -
+Package     Benchmark
+License     New BSD
+Category    Benchmarking
+Summary     Framework to benchmark PHP scripts or function
+            calls.
+Description Framework to benchmark PHP scripts or function
+            calls.

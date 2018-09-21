@@ -28,7 +28,7 @@ class System
   # @return [Object] the list of selected modules
   def resolve_module_selection(available_modules, options)
     retry_count = 0
-
+    begin
     # Replace $IP_addresses with options ip_ranges if required
     begin
       if options[:ip_ranges] and $datastore['IP_addresses'] and !$datastore['replaced_ranges']
@@ -79,8 +79,6 @@ class System
       Print.err("Fatal: Not enough ranges were provided with --network-ranges. Provided: #{options[:ip_ranges].size} Required: #{required_ranges.uniq.size}")
       exit
     end
-
-    begin
 
       selected_modules = []
       self.num_actioned_module_conflicts = 0
@@ -184,7 +182,7 @@ class System
       end
 
       # feed in input from any received datastores
-      if selected.received_datastores != {}
+      if selected.received_datastores != {} and $datastore != {}
         Print.verbose "Receiving datastores: #{selected.received_datastores}"
         selected.received_datastores.each do |input_into, datastore_list|
           datastore_list.each do |datastore_variablename_and_access_type|

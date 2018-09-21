@@ -13,6 +13,7 @@
   </description>
 
   <type>webapp</type>
+  <type>in_the_wild</type>
   <privilege>user_rwx</privilege>
   <access>remote</access>
   <platform>linux</platform>
@@ -67,8 +68,12 @@
     Path traversal found in AttachFile module.
   </solution>
 
+  <conflict>
+    <name>Stretch</name>
+  </conflict>
+
   <requires>
-    <module_path>.*apache</module_path>
+    <module_path>.*apache.*</module_path>
     <type>httpd</type>
   </requires>
 

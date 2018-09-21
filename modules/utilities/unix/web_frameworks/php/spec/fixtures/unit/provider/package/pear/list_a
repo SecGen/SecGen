@@ -1,0 +1,22 @@
+INSTALLED PACKAGES, CHANNEL __URI:
+==================================
+(no packages installed)
+
+INSTALLED PACKAGES, CHANNEL DOC.PHP.NET:
+========================================
+(no packages installed)
+
+INSTALLED PACKAGES, CHANNEL PEAR.PHP.NET:
+=========================================
+PACKAGE          VERSION STATE
+Archive_Tar      1.4.0   stable
+Console_Getopt   1.4.1   stable
+PEAR             1.10.1  stable
+Structures_Graph 1.1.1   stable
+XML_Util         1.3.0   stable
+
+INSTALLED PACKAGES, CHANNEL PECL.PHP.NET:
+=========================================
+PACKAGE VERSION STATE
+zip     1.13.5  stable
+

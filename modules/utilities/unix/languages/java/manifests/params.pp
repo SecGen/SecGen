@@ -124,7 +124,7 @@ class java::params {
               },
           }
         }
-        'vivid', 'wily': {
+        'vivid', 'wily', 'kali-rolling': {
           $java =  {
             'jdk' => {
               'package'          => 'openjdk-8-jdk',

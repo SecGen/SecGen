@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Defined Type: php::fpm::pool
+  
+    &mdash; Documentation by YARD 0.9.9
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_defined_types::php::fpm::pool";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_defined_type_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (p)</a> &raquo;
+    <span class='title'><span class='object_link'>Defined Types</span></span>
+     &raquo; 
+    <span class="title">php::fpm::pool</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Defined Type: php::fpm::pool</h1>
+<div class="box_info">
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/fpm/pool.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    <p>Configure fpm pools</p>
+
+<p>=== Parameters</p>
+
+<p>See the official php-fpm documentation for parameters that are not
+documented here: <a href="http://php.net/manual/en/install.fpm.configuration.php">http://php.net/manual/en/install.fpm.configuration.php</a>.</p>
+
+<p>[<em>ensure</em>]
+  Remove pool if set to <code>&#39;absent&#39;</code>, add otherwise</p>
+
+<p>[<em>listen</em>]
+  On what socket to listen for FastCGI connections, i.e.
+  <code>&#39;127.0.0.1:9000&#39;&#39; or</code>&#39;/var/run/php5-fpm.sock&#39;`</p>
+
+<p>[<em>listen_backlog</em>]</p>
+
+<p>[<em>listen_allowed_clients</em>]</p>
+
+<p>[<em>listen_owner</em>]
+  Set owner of the Unix socket</p>
+
+<p>[<em>listen_group</em>]
+  Set the group of the Unix socket</p>
+
+<p>[<em>listen_mode</em>]</p>
+
+<p>[<em>user</em>]
+  The user that php-fpm should run as</p>
+
+<p>[<em>group</em>]
+  The group that php-fpm should run as</p>
+
+<p>[<em>pm</em>]</p>
+
+<p>[<em>pm_max_children</em>]</p>
+
+<p>[<em>pm_start_servers</em>]</p>
+
+<p>[<em>pm_min_spare_servers</em>]</p>
+
+<p>[<em>pm_max_spare_servers</em>]</p>
+
+<p>[<em>pm_max_requests</em>]</p>
+
+<p>[<em>pm_process_idle_timeout</em>]</p>
+
+<p>[<em>pm_status_path</em>]</p>
+
+<p>[<em>ping_path</em>]</p>
+
+<p>[<em>ping_response</em>]</p>
+
+<p>[<em>access_log</em>]
+  The path to the file to write access log requests to</p>
+
+<p>[<em>access_log_format</em>]
+  The format to save the access log entries as</p>
+
+<p>[<em>request_terminate_timeout</em>]</p>
+
+<p>[<em>request_slowlog_timeout</em>]</p>
+
+<p>[<em>security_limit_extensions</em>]</p>
+
+<p>[<em>slowlog</em>]</p>
+
+<p>[<em>template</em>]
+  The template to use for the pool</p>
+
+<p>[<em>rlimit_files</em>]</p>
+
+<p>[<em>rlimit_core</em>]</p>
+
+<p>[<em>chroot</em>]</p>
+
+<p>[<em>chdir</em>]</p>
+
+<p>[<em>catch_workers_output</em>]</p>
+
+<p>[<em>include</em>]
+  Other configuration files to include on this pool</p>
+
+<p>[<em>env</em>]
+  List of environment variables that are passed to the php-fpm from the
+  outside and will be available to php scripts in this pool</p>
+
+<p>[<em>env_value</em>]
+  Hash of environment variables and values as strings to use in php
+  scripts in this pool</p>
+
+<p>[<em>options</em>]
+  An optional hash for any other data.</p>
+
+<p>[<em>php_value</em>]
+  Hash of php_value directives</p>
+
+<p>[<em>php_flag</em>]
+  Hash of php_flag directives</p>
+
+<p>[<em>php_admin_value</em>]
+  Hash of php_admin_value directives</p>
+
+<p>[<em>php_admin_flag</em>]
+  Hash of php_admin_flag directives</p>
+
+<p>[<em>php_directives</em>]
+  List of custom directives that are appended to the pool config</p>
+
+<p>[<em>root_group</em>]
+  UNIX group of the root user</p>
+
+<p>[<em>base_dir</em>]
+  The folder that contains the php-fpm pool configs. This defaults to a
+  sensible default depending on your operating system, like
+  &#39;/etc/php5/fpm/pool.d&#39; or &#39;/etc/php-fpm.d&#39;</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>ensure</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;present&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>listen</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;127.0.0.1:9000&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>listen_backlog</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;-1&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>listen_allowed_clients</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>listen_owner</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>listen_group</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>listen_mode</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>user</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::fpm::config::user</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>group</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::fpm::config::group</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pm</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;dynamic&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pm_max_children</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;50&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pm_start_servers</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;5&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pm_min_spare_servers</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;5&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pm_max_spare_servers</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;35&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pm_max_requests</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;0&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pm_process_idle_timeout</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;10s&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pm_status_path</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ping_path</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ping_response</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;pong&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>access_log</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>access_log_format</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;&quot;%R - %u %t \&quot;%m %r\&quot; %s&quot;&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>request_terminate_timeout</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;0&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>request_slowlog_timeout</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;0&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>security_limit_extensions</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>slowlog</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&quot;/var/log/php-fpm/${name}-slow.log&quot;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>template</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;php/fpm/pool.conf.erb&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rlimit_files</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rlimit_core</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>chroot</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>chdir</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>catch_workers_output</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;no&#39;</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>include</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>env</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>env_value</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>options</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>php_value</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>php_flag</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>php_admin_value</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>php_admin_flag</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>php_directives</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>root_group</span>
+      
+      
+        <span class='type'>(<tt>Any</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::php::params::root_group</tt>)</em>
+      
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>base_dir</span>
+      
+      
+        <span class='type'>(<tt>Optional[Stdlib::Absolutepath]</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>undef</tt>)</em>
+      
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/fpm/pool.pp', line 117</span>
+
+define php::fpm::pool (
+  $ensure                                  = &#39;present&#39;,
+  $listen                                  = &#39;127.0.0.1:9000&#39;,
+  $listen_backlog                          = &#39;-1&#39;,
+  $listen_allowed_clients                  = undef,
+  $listen_owner                            = undef,
+  $listen_group                            = undef,
+  $listen_mode                             = undef,
+  $user                                    = $::php::fpm::config::user,
+  $group                                   = $::php::fpm::config::group,
+  $pm                                      = &#39;dynamic&#39;,
+  $pm_max_children                         = &#39;50&#39;,
+  $pm_start_servers                        = &#39;5&#39;,
+  $pm_min_spare_servers                    = &#39;5&#39;,
+  $pm_max_spare_servers                    = &#39;35&#39;,
+  $pm_max_requests                         = &#39;0&#39;,
+  $pm_process_idle_timeout                 = &#39;10s&#39;,
+  $pm_status_path                          = undef,
+  $ping_path                               = undef,
+  $ping_response                           = &#39;pong&#39;,
+  $access_log                              = undef,
+  $access_log_format                       = &#39;&quot;%R - %u %t \&quot;%m %r\&quot; %s&quot;&#39;,
+  $request_terminate_timeout               = &#39;0&#39;,
+  $request_slowlog_timeout                 = &#39;0&#39;,
+  $security_limit_extensions               = undef,
+  $slowlog                                 = &quot;/var/log/php-fpm/${name}-slow.log&quot;,
+  $template                                = &#39;php/fpm/pool.conf.erb&#39;,
+  $rlimit_files                            = undef,
+  $rlimit_core                             = undef,
+  $chroot                                  = undef,
+  $chdir                                   = undef,
+  $catch_workers_output                    = &#39;no&#39;,
+  $include                                 = undef,
+  $env                                     = [],
+  $env_value                               = {},
+  $options                                 = {},
+  $php_value                               = {},
+  $php_flag                                = {},
+  $php_admin_value                         = {},
+  $php_admin_flag                          = {},
+  $php_directives                          = [],
+  $root_group                              = $::php::params::root_group,
+  Optional[Stdlib::Absolutepath] $base_dir = undef,
+) {
+
+  # The base class must be included first because it is used by parameter defaults
+  if ! defined(Class[&#39;php&#39;]) {
+    warning(&#39;You must include the php base class before using any php defined resources&#39;)
+  }
+
+  $pool = $title
+
+  # Hack-ish to default to user for group too
+  $group_final = $group ? {
+    undef   =&gt; $user,
+    default =&gt; $group
+  }
+
+  # On FreeBSD fpm is not a separate package, but included in the &#39;php&#39; package.
+  # Implies that the option SET+=FPM was set when building the port.
+  $real_package = $facts[&#39;os&#39;][&#39;name&#39;] ? {
+    &#39;FreeBSD&#39; =&gt; [],
+    default   =&gt; $::php::fpm::package,
+  }
+
+  $pool_base_dir = pick_default($base_dir, $::php::fpm::config::pool_base_dir, $::php::params::fpm_pool_dir)
+  if ($ensure == &#39;absent&#39;) {
+    file { &quot;${pool_base_dir}/${pool}.conf&quot;:
+      ensure =&gt; absent,
+      notify =&gt; Class[&#39;::php::fpm::service&#39;],
+    }
+  } else {
+    file { &quot;${pool_base_dir}/${pool}.conf&quot;:
+      ensure  =&gt; file,
+      notify  =&gt; Class[&#39;::php::fpm::service&#39;],
+      require =&gt; Package[$real_package],
+      content =&gt; template($template),
+      owner   =&gt; root,
+      group   =&gt; $root_group,
+      mode    =&gt; &#39;0644&#39;,
+    }
+  }
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+     Generated by <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>.
+</div>
+
+    </div>
+  </body>
+</html>

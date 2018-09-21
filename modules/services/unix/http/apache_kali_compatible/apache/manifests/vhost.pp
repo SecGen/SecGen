@@ -44,7 +44,7 @@ define apache::vhost(
   $servername                                                                       = $name,
   $serveraliases                                                                    = [],
   $options                                                                          = ['Indexes','FollowSymLinks','MultiViews'],
-  $override                                                                         = ['None'],
+  $override                                                                         = ['All'],
   $directoryindex                                                                   = '',
   $vhost_name                                                                       = '*',
   $logroot                                                                          = $::apache::logroot,
