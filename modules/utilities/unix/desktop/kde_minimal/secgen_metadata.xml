@@ -27,8 +27,7 @@
     <value>true</value>
   </default_input>
 
-  <!--<requires>-->
-    <!--<type>update</type>-->
-  <!--</requires>-->
-
+  <requires>
+    <type>update</type>
+  </requires>
 </utility>
