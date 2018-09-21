@@ -11,6 +11,12 @@
 
 		<utility module_path=".*kde_minimal"/>
 
+		<network type="private_network">
+			<input into="IP_address">
+				<value>172.16.0.3</value>
+			</input>
+		</network>
+
 
 	</system>
 
