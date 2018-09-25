@@ -3,6 +3,7 @@ class iceweasel::config {
   $accounts = $secgen_params['accounts']
   $autostart = str2bool($secgen_params['autostart'][0])
   $start_page = $secgen_params['start_page'][0]
+  $disable_proxy = str2bool($secgen_params['disable_proxy'][0])
 
   # Setup IW for each user account
   $accounts.each |$raw_account| {
