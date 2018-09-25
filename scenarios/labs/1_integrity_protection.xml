@@ -196,7 +196,7 @@ Diner's Club	3000 0000 0000 04</value>
 	<!--</system>-->
 
 	<system>
-		<system_name>hb_server</system_name>
+		<system_name>hackerbot_server</system_name>
 		<base distro="Kali" name="MSF"/>
 
 		<service type="ircd"/>
