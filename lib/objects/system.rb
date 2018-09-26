@@ -1,5 +1,6 @@
 require 'json'
 require 'base64'
+require 'duplicate'
 
 class System
 
@@ -8,7 +9,12 @@ class System
   attr_accessor :module_selectors # (filters)
   attr_accessor :module_selections # (after resolution)
   attr_accessor :num_actioned_module_conflicts
-  attr_accessor :options #(command line options hash)
+
+  # Attributes for resetting retry loop
+  attr_accessor :available_mods #(command line options hash)
+  attr_accessor :original_datastores #(command line options hash)
+  attr_accessor :original_module_selectors #(command line options hash)
+  attr_accessor :original_available_modules #(command line options hash)
 
   # Initalizes System object
   # @param [Object] name of the system
@@ -28,7 +34,57 @@ class System
   # @return [Object] the list of selected modules
   def resolve_module_selection(available_modules, options)
     retry_count = 0
-    # Replace $IP_addresses with options ip_ranges if required
+
+    # duplicate original data and parameters for retries
+    self.available_mods = duplicate(available_modules)
+    self.original_datastores = duplicate($datastore)
+    self.original_module_selectors = duplicate(module_selectors)
+    self.original_available_modules = duplicate(available_mods)
+
+    begin
+      selected_modules = []
+      self.num_actioned_module_conflicts = 0
+      replace_datastore_ips(options)
+
+      # for each module specified in the scenario
+      module_selectors.each do |module_filter|
+        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_mods, selected_modules, module_filter.unique_id, module_filter.write_output_variable, module_filter.write_to_module_with_id, module_filter.received_inputs, module_filter.default_inputs_literals, module_filter.write_to_datastore, module_filter.received_datastores, module_filter.write_module_path_to_datastore)
+      end
+      selected_modules
+
+    rescue RuntimeError=>e
+      # When the scenario fails to be resolved
+      # bruteforce conflict resolution (could be more intelligent)
+
+      Print.err 'Failed to resolve scenario.'
+      if self.num_actioned_module_conflicts > 0
+        Print.err "During scenario generation #{num_actioned_module_conflicts} module conflict(s) occured..."
+      else
+        Print.err 'No conflicts, but failed to resolve scenario -- this is a sign there is something wrong in the config (scenario / modules)'
+        Print.err 'Please review the scenario -- something is wrong.'
+        exit
+      end
+      if retry_count < RETRIES_LIMIT
+        Print.err "Re-attempting to resolve scenario (##{retry_count + 1})..."
+        sleep 1
+        retry_count += 1
+        # reset module_filters recieved inputs
+        # We need a way to distinguish between the received inputs from values vs from generators
+        self.module_selectors = self.original_module_selectors.clone
+        self.available_mods = self.original_available_modules.clone
+        # reset globals
+        $datastore = self.original_datastores.clone
+        $datastore_iterators = {}
+        retry
+      else
+        Print.err "Tried re-randomising #{RETRIES_LIMIT} times. Still no joy."
+        Print.err 'Please review the scenario -- something is wrong.'
+        exit
+      end
+    end
+  end
+
+  def replace_datastore_ips(options)
     begin
       if options[:ip_ranges] and $datastore['IP_addresses'] and !$datastore['replaced_ranges']
         unused_opts_ranges = options[:ip_ranges].clone
@@ -77,43 +133,6 @@ class System
       required_ranges.uniq!
       Print.err("Fatal: Not enough ranges were provided with --network-ranges. Provided: #{options[:ip_ranges].size} Required: #{required_ranges.uniq.size}")
       exit
-    end
-
-    begin
-      selected_modules = []
-      self.num_actioned_module_conflicts = 0
-
-      # for each module specified in the scenario
-      module_selectors.each do |module_filter|
-        selected_modules += select_modules(module_filter.module_type, module_filter.attributes, available_modules, selected_modules, module_filter.unique_id, module_filter.write_output_variable, module_filter.write_to_module_with_id, module_filter.received_inputs, module_filter.default_inputs_literals, module_filter.write_to_datastore, module_filter.received_datastores, module_filter.write_module_path_to_datastore)
-      end
-      selected_modules
-
-    rescue RuntimeError=>e
-      # When the scenario fails to be resolved
-      # bruteforce conflict resolution (could be more intelligent)
-
-      Print.err 'Failed to resolve scenario.'
-      if self.num_actioned_module_conflicts > 0
-        Print.err "During scenario generation #{num_actioned_module_conflicts} module conflict(s) occured..."
-      else
-        Print.err 'No conflicts, but failed to resolve scenario -- this is a sign there is something wrong in the config (scenario / modules)'
-        Print.err 'Please review the scenario -- something is wrong.'
-        exit
-      end
-      if retry_count < RETRIES_LIMIT
-        Print.err "Re-attempting to resolve scenario (##{retry_count + 1})..."
-        sleep 1
-        retry_count += 1
-        # reset globals
-        $datastore = {}
-        $datastore_iterators = {}
-        retry
-      else
-        Print.err "Tried re-randomising #{RETRIES_LIMIT} times. Still no joy."
-        Print.err 'Please review the scenario -- something is wrong.'
-        exit
-      end
     end
   end
 

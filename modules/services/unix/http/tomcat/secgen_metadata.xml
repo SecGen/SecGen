@@ -9,7 +9,7 @@
   <module_license>Apache v2</module_license>
   <description>Puppetlabs Apache Tomcat module</description>
 
-  <type>servlet</type>
+  <type>httpd</type>
   <type>tomcat</type>
   <platform>linux</platform>
 
