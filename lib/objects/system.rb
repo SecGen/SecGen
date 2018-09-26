@@ -70,10 +70,10 @@ class System
         retry_count += 1
         # reset module_filters recieved inputs
         # We need a way to distinguish between the received inputs from values vs from generators
-        self.module_selectors = self.original_module_selectors.clone
-        self.available_mods = self.original_available_modules.clone
+        self.module_selectors = duplicate(self.original_module_selectors)
+        self.available_mods = duplicate(self.original_available_modules)
         # reset globals
-        $datastore = self.original_datastores.clone
+        $datastore = duplicate(self.original_datastores)
         $datastore_iterators = {}
         retry
       else
