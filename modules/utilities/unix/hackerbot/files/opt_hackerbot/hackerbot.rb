@@ -324,14 +324,14 @@ def read_bots (irc_server_ip_address)
             current = check_output_conditions(bot_name, bots, current, pre_output, m)
 
           end
-          
+
           # use bot-wide method for obtaining shell, unless specified per-attack
           if bots[bot_name]['attacks'][current].key?('get_shell')
             shell_cmd = bots[bot_name]['attacks'][current]['get_shell'].to_s.clone
           else
             shell_cmd = bots[bot_name]['get_shell'].clone
           end
-          
+
           if shell_cmd != 'false'
             # substitute special variables
             shell_cmd.gsub!(/{{chat_ip_address}}/, m.user.host.to_s)
@@ -339,37 +339,46 @@ def read_bots (irc_server_ip_address)
             shell_cmd << ';'
             Print.debug shell_cmd
 
-            Open3.popen2e(shell_cmd) do |stdin, stdout_err, wait_thr|
-              # check whether we have shell by echoing "shelltest"
-              got_shell = false
-              lines = ''
-              post_lines = ''
-              i = 0
-              while i < 60 and not got_shell # retry for a while
-                i += 1
-                Print.debug i.to_s
-                stdin.puts "echo shelltest\n"
-                sleep(5)
+            got_shell = false
+            begin
+              Timeout.timeout(240) do # timeout 240 sec, 4mins to get root
+                Open3.popen2e(shell_cmd) do |stdin, stdout_err, wait_thr|
+                  # check whether we have shell by echoing "shelltest"
+                  lines = ''
+                  post_lines = ''
+                  i = 0
+                  while i < 60 and not got_shell # retry for a while
+                    i += 1
+                    Print.debug i.to_s
+                    stdin.puts "echo shelltest\n"
+                    sleep(5)
 
-                # non-blocking read from buffer
-                begin
-                  while ch = stdout_err.read_nonblock(1)
-                    lines << ch
+                    # non-blocking read from buffer
+                    begin
+                      while ch = stdout_err.read_nonblock(1)
+                        lines << ch
+                      end
+                    rescue # continue consuming until input blocks
+                    end
+                    bots[bot_name]['attacks'][current]['get_shell_command_output'] = lines
+
+                    Print.debug lines
+                    if lines =~ /shelltest/i
+                      got_shell = true
+                      Print.debug 'Got shell!'
+                    else
+                      Print.debug 'Still trying to get shell...'
+                      m.reply '...'
+                    end
                   end
-                rescue # continue consuming until input blocks
-                end
-                bots[bot_name]['attacks'][current]['get_shell_command_output'] = lines
-
-                Print.debug lines
-                if lines =~ /shelltest/i
-                  got_shell = true
-                  Print.debug 'Got shell!'
-                else
-                  Print.debug 'Still trying to get shell...'
-                  m.reply '...'
-                end
+                  Print.debug got_shell.to_s
               end
-              Print.debug got_shell.to_s
+            rescue Timeout::Error
+              got_shell = false
+              m.reply 'Took too long...'
+            rescue
+              got_shell = false
+            end
 
               if got_shell
                 m.reply bots[bot_name]['messages']['got_shell'].sample
@@ -390,7 +399,7 @@ def read_bots (irc_server_ip_address)
                 rescue # continue consuming until input blocks
                 end
                 begin
-                  Timeout.timeout(15) do # timeout 10 sec
+                  Timeout.timeout(15) do # timeout 15 sec
                     stdin.close # no more input, end the program
                     post_lines << stdout_err.read.chomp()
                   end
