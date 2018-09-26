@@ -28,7 +28,6 @@ class System
   # @return [Object] the list of selected modules
   def resolve_module_selection(available_modules, options)
     retry_count = 0
-    begin
     # Replace $IP_addresses with options ip_ranges if required
     begin
       if options[:ip_ranges] and $datastore['IP_addresses'] and !$datastore['replaced_ranges']
@@ -80,6 +79,7 @@ class System
       exit
     end
 
+    begin
       selected_modules = []
       self.num_actioned_module_conflicts = 0
 
