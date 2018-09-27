@@ -36,6 +36,7 @@
     <type>update</type>
   </requires>
   <requires>
-    <type>.*/apache.*</type>
+    <module_path>.*services/.*/apache.*</module_path>
+    <type>httpd</type>
   </requires>
 </utility>
