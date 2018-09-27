@@ -167,7 +167,7 @@ def build_vms(scenario, project_dir, options, systems)
               # TODO: not sure if there is a need to remove_uncreated_vms() here too? (I don't think so?)
             end
           end
-          
+
           failures_to_destroy = failures_to_destroy.uniq
 
           if failures_to_destroy.size == 0
@@ -202,13 +202,15 @@ def build_vms(scenario, project_dir, options, systems)
     end
     retry_count -= 1
   end
+
   if successful_creation && options[:snapshot]
+    Print.info 'Creating a snapshot of VM(s)'
     if OVirtFunctions::provider_ovirt?(options)
       vm_names = get_vm_names(systems)
-      OVirtFunctions::assign_permissions(options, scenario, vm_names)
+      OVirtFunctions::create_snapshot(options, scenario, vm_names)
+    else
+      GemExec.exe('vagrant', project_dir, 'snapshot push')
     end
-    Print.info 'Creating a snapshot of VM(s)'
-    GemExec.exe('vagrant', project_dir, 'snapshot push')
   end
 end
 
