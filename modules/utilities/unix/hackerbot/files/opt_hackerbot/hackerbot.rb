@@ -18,7 +18,7 @@ def check_output_conditions(bot_name, bots, current, lines, m)
       condition_met = true
       m.reply "#{condition['message']}"
     end
-    if !condition_met && condition.key?('output_equals') && lines == condition['output_equals']
+    if !condition_met && condition.key?('output_equals') && lines.chomp == condition['output_equals']
       condition_met = true
       m.reply "#{condition['message']}"
     end
@@ -340,12 +340,11 @@ def read_bots (irc_server_ip_address)
             Print.debug shell_cmd
 
             got_shell = false
-            begin
-              Timeout.timeout(240) do # timeout 240 sec, 4mins to get root
-                Open3.popen2e(shell_cmd) do |stdin, stdout_err, wait_thr|
+            Open3.popen2e(shell_cmd) do |stdin, stdout_err, wait_thr|
+              begin
+                Timeout.timeout(240) do # timeout 240 sec, 4mins to get root
                   # check whether we have shell by echoing "shelltest"
                   lines = ''
-                  post_lines = ''
                   i = 0
                   while i < 60 and not got_shell # retry for a while
                     i += 1
@@ -372,13 +371,13 @@ def read_bots (irc_server_ip_address)
                     end
                   end
                   Print.debug got_shell.to_s
+                end
+              rescue Timeout::Error
+                got_shell = false
+                m.reply 'Took too long...'
+              rescue
+                got_shell = false
               end
-            rescue Timeout::Error
-              got_shell = false
-              m.reply 'Took too long...'
-            rescue
-              got_shell = false
-            end
 
               if got_shell
                 m.reply bots[bot_name]['messages']['got_shell'].sample
@@ -392,6 +391,7 @@ def read_bots (irc_server_ip_address)
 
                 sleep(3)
                 # non-blocking read from buffer
+                post_lines = ''
                 begin
                   while ch = stdout_err.read_nonblock(1)
                     post_lines << ch
