@@ -6,14 +6,14 @@
   <name>Debian 9 Stretch Desktop KDE</name>
   <author>Thomas Shaw</author>
   <module_license>GPLv3</module_license>
-  <description>For testing purposes, the default root password is puppet.</description>
+  <description>Debian 9.5.0 Stretch Desktop KDE amd64. For testing purposes, the default root password is puppet.</description>
   <cpu_word_size>64-bit</cpu_word_size>
   <type>desktop</type>
 
   <platform>linux</platform>
   <platform>unix</platform>
-  <distro>Debian 9 (stretch) TODO: 32-bit (i386)</distro>
-  <url>https://app.vagrantup.com/summernguyen/boxes/debian-stretch-puppet/versions/1.0.0/providers/virtualbox.box</url>
+  <distro>Debian 9.5.0 Stretch amd64</distro>
+  <url>https://app.vagrantup.com/secgen/boxes/debian_stretch_desktop_kde/versions/1.0/providers/virtualbox.box</url>
   <ovirt_template>debian_stretch_desktop_kde</ovirt_template>
 
   <reference>https://atlas.hashicorp.com/puppetlabs</reference>
