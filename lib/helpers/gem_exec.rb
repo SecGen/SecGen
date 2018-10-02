@@ -10,7 +10,7 @@ class GemExec
   # @param [Object] working_dir -- the location for output
   # @param [Object] argument -- the command to send 'init', 'install'
   def self.exe(gem_name, working_dir, arguments)
-    Print.std "Loading #{gem_name} (#{arguments}) in #{working_dir}"
+    Print.std "Loading #{gem_name} (#{arguments.strip}) in #{working_dir}"
 
     version = '>= 0'
     begin

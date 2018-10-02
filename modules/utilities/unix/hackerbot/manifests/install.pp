@@ -25,13 +25,13 @@ class hackerbot::install{
     group => 'root',
   }
 
-  package { ['nori', 'cinch', 'programr','nokogiri']:
-    ensure   => 'installed',
-    provider => 'gem',
-  }
-
   package { ['zlibc','zlib1g','zlib1g-dev','sshpass']:
     ensure   => 'installed',
   }
 
+  package { ['nori', 'cinch', 'programr', 'nokogiri']:
+    ensure   => 'installed',
+    provider => 'gem',
+    require => [Package['zlibc'], Package['zlib1g'], Package['zlib1g-dev']],
+  }
 }
