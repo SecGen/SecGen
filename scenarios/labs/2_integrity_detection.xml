@@ -6,7 +6,7 @@
 
 	<name>Integrity detection lab</name>
   <author>Z. Cliffe Schreuders</author>
-  <description>A Hackerbot lab. Work through the labsheet, then when prompted interact with Hackerbot. Topics covered: Detecting changes to resources using backups; File integrity checkers.</description>
+  <description>A Hackerbot lab. Work through the labsheet, then when prompted interact with Hackerbot. Topics covered: Detecting changes to resources using backups; File integrity checkers; Detecting changes to resources using package management.</description>
 
   <type>ctf-lab</type>
   <type>hackerbot-lab</type>
