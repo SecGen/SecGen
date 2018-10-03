@@ -61,6 +61,8 @@
 	<get_shell>sshpass -p <%= $root_password %> ssh -oStrictHostKeyChecking=no root@{{chat_ip_address}} /bin/bash</get_shell>
 
 	<messages>
+    <show_attack_numbers />
+
 		<greeting>Hey, today I'm your boss of sorts... Work with me and I'll pay you in flags :) These tasks do require the steps to be completed in order.</greeting>
 
 		<!--Must provide alternatives for each message-->
