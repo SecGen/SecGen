@@ -30,9 +30,14 @@ define symlinks::account($username, $password, $strings_to_leak, $leaked_filenam
     source => 'puppet:///modules/symlinks/prompt.c',
   }
 
+  package { ['build-essential', 'gcc-multilib']:
+    ensure => installed,
+  }
+
   exec { "$username-compileandsetup1":
     cwd     => "/home/$username/",
     command => "gcc -o prompt prompt.c && sudo chown $username:shadow prompt && sudo chmod 2755 prompt",
     path    => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
+    require => Package['build-essential', 'gcc-multilib']
   }
 }

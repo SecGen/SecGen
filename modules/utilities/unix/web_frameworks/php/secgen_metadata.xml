@@ -14,6 +14,10 @@
   <software_name>PHP</software_name>
   <software_license>MIT</software_license>
 
+  <conflict>
+    <name>Stretch</name>
+  </conflict>
+
   <requires>
     <type>update</type>
   </requires>

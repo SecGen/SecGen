@@ -42,6 +42,10 @@ class unrealirc::install {
     require => Exec['extract-unrealirc'],
   }
 
+  package { ['build-essential', 'gcc-multilib']:
+    ensure => installed,
+  }
+
   # Configure and make unrealircd, with or without ssl enabled
   if $unrealirc::use_ssl {
     package { 'libssl-dev': 
@@ -52,7 +56,7 @@ class unrealirc::install {
       timeout => 0,
       cwd     => "${unrealirc::install_path}",
       creates => "${unrealirc::install_path}/unreal",
-      require => [ Package['libssl-dev'], Exec['unrealirc-dir'] ],
+      require => [ Package['build-essential','gcc-multilib','libssl-dev'], Exec['unrealirc-dir'] ],
     }
   } else {
     exec { 'make-unrealirc':
@@ -60,7 +64,7 @@ class unrealirc::install {
       timeout => 0,
       cwd     => "${unrealirc::install_path}",
       creates => "${unrealirc::install_path}/unreal",
-      require => Exec['unrealirc-dir'],
+      require => [Package['build-essential', 'gcc-multilib'],Exec['unrealirc-dir']],
     }
   }
 

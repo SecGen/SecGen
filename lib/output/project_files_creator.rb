@@ -39,7 +39,7 @@ class ProjectFilesCreator
     # when writing to a project that already contains a project, move everything out the way,
     # and keep the Vagrant config, so that existing VMs can be re-provisioned/updated
     if File.exists? "#{@out_dir}/Vagrantfile" or File.exists? "#{@out_dir}/puppet"
-      dest_dir = "#{@out_dir}/MOVED_#{Time.new.strftime("%Y%m%d_%H%M")}"
+      dest_dir = "#{@out_dir}/MOVED_#{Time.new.strftime("%Y%m%d_%H%M%S")}"
       Print.warn "Project already built to this directory -- moving last build to: #{dest_dir}"
       Dir.glob( "#{@out_dir}/**/*" ).select { |f| File.file?( f ) }.each do |f|
         dest = "#{dest_dir}/#{f}"

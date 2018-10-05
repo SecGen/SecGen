@@ -125,7 +125,7 @@ Testing
 Getting Started
 ---------------
 
-Our puppet modules provide [`Gemfile`](./Gemfile)s which can tell a ruby
+Our puppet modules provide [`Gemfile`](Gemfile)s which can tell a ruby
 package manager such as [bundler](http://bundler.io/) what Ruby packages,
 or Gems, are required to build, develop, and test this software.
 
@@ -163,7 +163,7 @@ With all dependencies in place and up-to-date we can now run the tests:
 ```
 
 This will execute all the [rspec tests](http://rspec-puppet.com/) tests
-under [spec/defines](./spec/defines), [spec/classes](./spec/classes),
+under [spec/defines](spec/defines), [spec/classes](spec/classes),
 and so on. rspec tests may have the same kind of dependencies as the
 module they are testing. While the module defines in its [Modulefile](./Modulefile),
 rspec tests define them in [.fixtures.yml](./fixtures.yml).
@@ -182,9 +182,9 @@ You can run them by issuing the following command
 % bundle exec rspec spec/acceptance
 ```
 
-This will now download a pre-fabricated image configured in the [default node-set](./spec/acceptance/nodesets/default.yml),
-install puppet, copy this module and install its dependencies per [spec/spec_helper_acceptance.rb](./spec/spec_helper_acceptance.rb)
-and then run all the tests under [spec/acceptance](./spec/acceptance).
+This will now download a pre-fabricated image configured in the [default node-set](spec/acceptance/nodesets/default.yml),
+install puppet, copy this module and install its dependencies per [spec/spec_helper_acceptance.rb](spec/spec_helper_acceptance.rb)
+and then run all the tests under [spec/acceptance](spec/acceptance).
 
 Writing Tests
 -------------

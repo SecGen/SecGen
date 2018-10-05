@@ -27,4 +27,8 @@
     <software_name>mysql</software_name>
   </conflict>
 
+  <requires>
+    <type>update</type>
+  </requires>
+
 </service>

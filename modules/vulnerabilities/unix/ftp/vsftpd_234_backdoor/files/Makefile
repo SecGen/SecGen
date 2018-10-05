@@ -1,5 +1,5 @@
 # Makefile for systems with GNU tools
-CC 	=	gcc
+CC 	=	gcc -m32
 INSTALL	=	install
 IFLAGS  = -idirafter dummyinc
 #CFLAGS = -g

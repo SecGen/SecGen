@@ -11,7 +11,7 @@ class iceweasel::config {
     $username = $account['username']
 
     # add user profile
-    file { ["/home/$username/.mozilla/",
+    file { ["/home/$username/", "/home/$username/.mozilla/",
       "/home/$username/.mozilla/firefox",
       "/home/$username/.mozilla/firefox/user.default"]:
       ensure => directory,
@@ -39,6 +39,7 @@ class iceweasel::config {
         ensure => directory,
         owner  => $username,
         group  => $username,
+        require => File["/home/$username/"],
       }
 
       file { "/home/$username/.config/autostart/iceweasel.desktop":

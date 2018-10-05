@@ -19,6 +19,9 @@
   <conflict>
     <type>ircd</type>
   </conflict>
+  <conflict>
+    <name>Stretch</name>
+  </conflict>
   <requires>
     <type>update</type>
   </requires>

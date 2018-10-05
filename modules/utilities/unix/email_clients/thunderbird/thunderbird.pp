@@ -1,2 +1,2 @@
-include iceweasel::install
-include iceweasel::config
+include thunderbird::install
+include thunderbird::config

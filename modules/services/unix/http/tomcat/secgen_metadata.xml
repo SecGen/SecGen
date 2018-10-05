@@ -21,6 +21,9 @@
   <conflict>
     <type>httpd</type>
   </conflict>
+  <conflict>
+    <name>Stretch</name>
+  </conflict>
 
   <requires>
     <type>update</type>
