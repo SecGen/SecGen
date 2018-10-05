@@ -14,6 +14,10 @@
   <software_name>weechat</software_name>
   <software_license>GPL</software_license>
 
+  <conflict>
+    <name>Stretch</name>
+  </conflict>
+
   <requires>
     <type>update</type>
   </requires>
