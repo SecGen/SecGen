@@ -33,9 +33,12 @@
     <software_name>php</software_name>
   </conflict>
 
-  <!-- FIXME: Currently fails to install PHP on kali... -->
+  <!-- FIXME: Currently fails to install PHP on kali and Stretch... -->
   <conflict>
     <name>Kali</name>
+  </conflict>
+  <conflict>
+    <name>Stretch</name>
   </conflict>
 
 </service>

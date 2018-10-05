@@ -24,7 +24,6 @@
 		<system_name>kali_base</system_name>
 		<base distro="Kali"/>
 
-		<!--TODO: a basebox with this (it takes 13 mins to install via modules)-->
 		<utility module_path=".*metasploit_framework"/>
 		<utility module_path=".*nmap"/>
 		<utility module_path=".*handy_cli_tools"/>

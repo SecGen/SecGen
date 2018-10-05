@@ -29,6 +29,14 @@
   <software_name>dvwa</software_name>
   <software_license>GPLv3</software_license>
 
+  <!-- TODO: Make stretch compatible, php5 packages are not available... -->
+  <conflict>
+    <name>Stretch</name>
+  </conflict>
+  <conflict>
+    <name>Kali</name>
+  </conflict>
+
   <requires>
     <module_path>.*/apache</module_path>
   </requires>

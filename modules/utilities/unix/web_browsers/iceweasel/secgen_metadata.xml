@@ -19,10 +19,6 @@
   <read_fact>start_page</read_fact>
   <read_fact>disable_proxy</read_fact>
 
-  <default_input into="accounts">
-    <generator type="account"/>
-  </default_input>
-
   <default_input into="autostart">
     <value>true</value>
   </default_input>

@@ -9,7 +9,7 @@
 		<system_name>system_with_java</system_name>
 		<base platform="linux" type="server"/>
 
-		<utility module_path="modules/utilities/unix/languages/java"/>
+		<utility type="java"/>
 
 		<network type="private_network" range="dhcp"></network>
 	</system>

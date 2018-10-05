@@ -19,10 +19,6 @@
     <value>false</value>
   </default_input>
 
-  <default_input into="accounts">
-    <generator type="account"/>
-  </default_input>
-
   <default_input into="autostart_konsole">
     <value>true</value>
   </default_input>

@@ -3,24 +3,20 @@
 <utility xmlns="http://www.github/cliffe/SecGen/utility"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/utility">
-  <name>Iceweasel Web Browser </name>
+  <name>Thunderbird Email Client</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>Installs Iceweasel Web Browser</description>
+  <description>Installs Thunderbird Email Client</description>
 
-  <type>web_browser</type>
+  <type>email_client</type>
   <platform>linux</platform>
 
-  <software_name>Iceweasel Web Browser</software_name>
+  <software_name>Thunderbird</software_name>
   <software_license>GPL</software_license>
 
   <read_fact>accounts</read_fact>
   <read_fact>autostart</read_fact>
   <read_fact>start_page</read_fact>
-
-  <default_input into="accounts">
-    <generator type="account"/>
-  </default_input>
 
   <default_input into="autostart">
     <value>true</value>

@@ -59,7 +59,7 @@
     <module_path>utilities/unix/system/accounts</module_path>
   </requires>
   <requires>
-    <module_path>utilities/unix/languages/java</module_path>
+    <type>java</type>
   </requires>
 
 </vulnerability>

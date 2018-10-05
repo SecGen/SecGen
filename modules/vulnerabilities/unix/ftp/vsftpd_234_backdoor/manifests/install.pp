@@ -1,9 +1,24 @@
 class vsftpd_234_backdoor::install {
 
+  # Add 32bit libs for stretch
+  case $operatingsystemrelease {
+    /^9.*/: { # do 9.x stretch stuff
+      exec { 'add_32bit_libs':
+        command => '/usr/bin/dpkg --add-architecture i386 && /usr/bin/apt-get update'
+      }
+      package { ['libssl-dev:i386','libpam0g-dev:i386']:
+        ensure => installed,
+        require => Exec['add_32bit_libs'],
+      }
+    }
+  }
+
   # Install dependencies
   package { ['libssl-dev' ,'libpam0g-dev']:
     ensure => installed,
   }
+  ensure_packages('build-essential')
+  ensure_packages('gcc-multilib')
 
   # Required directories
   file { ['/usr/share/empty','/var/ftp','/usr/local/man/man5/', '/usr/local/man/man8/']:

@@ -23,32 +23,34 @@ class kde_minimal::config {
     }
   }
 
-  $accounts.each |$raw_account| {
-    $account = parsejson($raw_account)
-    $username = $account['username']
+  unless $accounts == undef {
+    $accounts.each |$raw_account| {
+      $account = parsejson($raw_account)
+      $username = $account['username']
 
-    # autostart konsole
-    if $autostart_konsole {
-      file { ["/home/$username/.config/", "/home/$username/.config/autostart/"]:
-        ensure => directory,
-        owner  => $username,
-        group  => $username,
+      # autostart konsole
+      if $autostart_konsole {
+        file { ["/home/$username/", "/home/$username/.config/", "/home/$username/.config/autostart/"]:
+          ensure => directory,
+          owner  => $username,
+          group  => $username,
+        } ~>
+        file { "/home/$username/.config/autostart/org.kde.konsole.desktop":
+          ensure => file,
+          source => 'puppet:///modules/kde_minimal/org.kde.konsole.desktop',
+          owner  => $username,
+          group  => $username,
+        }
       }
 
-      file { "/home/$username/.config/autostart/org.kde.konsole.desktop":
-        ensure => file,
-        source => 'puppet:///modules/kde_minimal/org.kde.konsole.desktop',
-        owner  => $username,
-        group  => $username,
-      }
-    }
-
-    if $operatingsystemrelease =~ /^9.*/ {  # Disable stretch auto screen lock
-      file { "/home/$username/.config/kscreenlockrrc":
-        ensure => file,
-        source => 'puppet:///modules/kde_minimal/kscreenlockrrc',
-        owner => $username,
-        group => $username,
+      if $operatingsystemrelease =~ /^9.*/ { # Disable stretch auto screen lock
+        file { "/home/$username/.config/kscreenlockerrc":
+          ensure  => file,
+          source  => 'puppet:///modules/kde_minimal/kscreenlockerrc',
+          owner   => $username,
+          group   => $username,
+          require => File["/home/$username/"],
+        }
       }
     }
   }

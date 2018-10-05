@@ -15,9 +15,14 @@ class chkrootkit::install {
     command => "tar -xzf $archive",
   }
 
+  package { ['build-essential', 'gcc-multilib']:
+    ensure => installed,
+  }
+
   exec { 'make-chkrootkit':
     cwd => '/usr/local/chkrootkit-0.49/',
     command => 'make sense',
+    require => Package['build-essential', 'gcc-multilib'],
   }
 
   file { '/usr/sbin/chkrootkit':

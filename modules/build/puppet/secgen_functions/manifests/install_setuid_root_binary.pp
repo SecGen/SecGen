@@ -12,6 +12,9 @@ define secgen_functions::install_setuid_root_binary (
   $strings_to_leak = [''],  # Optional: strings to leak (could contain instructions or a message)
 ) {
 
+  ensure_packages('build-essential')
+  ensure_packages('gcc-multilib')
+
   # Use either storage directory or account's home directory. storage_directory takes precedent
   if $storage_dir[0] != '' {
     $storage_directory = $storage_dir[0]
@@ -53,7 +56,7 @@ define secgen_functions::install_setuid_root_binary (
   exec { "gcc_$gcc_output_binary_name-$compile_directory":
     cwd     => $compile_directory,
     command => "/usr/bin/make",
-    require => File[$challenge_directory, $compile_directory]
+    require => [File[$challenge_directory, $compile_directory], Package['build-essential', 'gcc-multilib']]
   }
 
   # Move the compiled binary into the challenge directory
