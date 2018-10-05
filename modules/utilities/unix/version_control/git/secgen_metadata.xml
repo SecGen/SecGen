@@ -14,6 +14,10 @@
   <!--optional details-->
   <reference>https://git-scm.com/</reference>
 
+  <conflict>
+    <name>Stretch</name>
+  </conflict>
+
   <requires>
     <type>update</type>
   </requires>
