@@ -6,9 +6,8 @@ require_relative './print.rb'
 
 class OVirtFunctions
 
-  # TODO supply this as a parameter/option instead
-  def self.authz
-    '@aet.leedsbeckett.ac.uk-authz'
+  def self.authz(options)
+    options[:ovirtauthz]
   end
 
   # @param [Hash] options -- command-line opts
@@ -167,7 +166,7 @@ class OVirtFunctions
   def self.assign_permissions(options, scenario_path, vm_names)
     ovirt_connection = get_ovirt_connection(options)
     username = options[:prefix].chomp
-    user = get_user(ovirt_connection, username)
+    user = get_user(options, ovirt_connection, username)
     if user
       vms = []
 
@@ -208,9 +207,9 @@ class OVirtFunctions
 
     # @param [String] username
     # @return [OvirtUser]
-  def self.get_user(ovirt_connection, username)
+  def self.get_user(options, ovirt_connection, username)
     un = username.chomp
-    search_string = "usrname=#{un}#{authz}"
+    search_string = "usrname=#{un}#{authz(options)}"
     puts "Searching for VMs owned by #{un}"
     user = users_service(ovirt_connection).list(search: search_string).first
     if user
