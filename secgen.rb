@@ -42,6 +42,7 @@ def usage
    --ovirtuser [ovirt_username]
    --ovirtpass [ovirt_password]
    --ovirt-url [ovirt_api_url]
+   --ovirtauthz [ovirt authz]
    --ovirt-cluster [ovirt_cluster]
    --ovirt-network [ovirt_network_name]
 
@@ -325,6 +326,7 @@ opts = GetoptLong.new(
     ['--ovirtuser', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirtpass', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirt-url', GetoptLong::REQUIRED_ARGUMENT],
+    ['--ovirtauthz', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirt-cluster', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirt-network', GetoptLong::REQUIRED_ARGUMENT],
     ['--snapshot', GetoptLong::NO_ARGUMENT],
