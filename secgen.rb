@@ -406,6 +406,9 @@ opts.each do |opt, arg|
     when '--ovirt-url'
       Print.info "Ovirt API url : #{arg}"
       options[:ovirturl] = arg
+    when '--ovirtauthz'
+      Print.info "Ovirt Authz: #{arg}"
+      options[:ovirtauthz] = arg
     when '--ovirt-cluster'
       Print.info "Ovirt Cluster : #{arg}"
       options[:ovirtcluster] = arg
