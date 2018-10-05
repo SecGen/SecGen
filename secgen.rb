@@ -171,7 +171,7 @@ def build_vms(scenario, project_dir, options, systems)
   end
   if successful_creation && options[:snapshot]
     Print.info 'Creating a snapshot of VM(s)'
-    if OVirtFunctions::provider_ovirt?(options)
+    if OVirtFunctions::provider_ovirt?(options) && systems
       vm_names = get_vm_names(systems)
       OVirtFunctions::create_snapshot(options, scenario, vm_names)
     else
@@ -440,7 +440,7 @@ case ARGV[0]
     build_config(scenario, project_dir, options)
   when 'build-vms', 'v'
     if project_dir
-      build_vms(scenario, project_dir, options)
+      build_vms(scenario, project_dir, options, nil)
     else
       Print.err 'Please specify project directory to read'
       usage
@@ -451,12 +451,12 @@ case ARGV[0]
     image_type = options.has_key?(:forensic_image_type) ? options[:forensic_image_type] : 'raw';
 
     if project_dir
-      build_vms(scenario, project_dir, options)
+      build_vms(scenario, project_dir, options, nil)
       make_forensic_image(project_dir, nil, image_type)
     else
       project_dir = default_project_dir unless project_dir
       build_config(scenario, project_dir, options)
-      build_vms(scenario, project_dir, options)
+      build_vms(scenario, project_dir, options, nil)
       make_forensic_image(project_dir, nil, image_type)
     end
 
