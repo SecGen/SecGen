@@ -49,13 +49,16 @@
   <msf_module>exploit/linux/http/gitlist_exec</msf_module>
   <hint>Visit the webapp in a browser at: ip:80/gitlist </hint>
 
-  <!--<conflict>-->
-    <!--<name>Stretch</name>-->
-  <!--</conflict>-->
-
   <requires>
     <module_path>.*apache.*</module_path>
-    <type>httpd</type>
+  </requires>
+
+  <requires>
+    <module_path>.*mysql.*</module_path>
+  </requires>
+
+  <requires>
+    <module_path>.*php.*</module_path>
   </requires>
 
 

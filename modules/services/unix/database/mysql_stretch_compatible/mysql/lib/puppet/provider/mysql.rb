@@ -50,13 +50,21 @@ class Puppet::Provider::Mysql < Puppet::Provider
     self.class.mysqld_version
   end
 
+  def self.newer_than(forks_versions)
+    forks_versions.keys.include?(mysqld_type) && Puppet::Util::Package.versioncmp(mysqld_version, forks_versions[mysqld_type]) >= 0
+  end
+
+  def newer_than(forks_versions)
+    self.class.newer_than(forks_versions)
+  end
+
   def defaults_file
     self.class.defaults_file
   end
 
   def self.mysql_caller(text_of_sql, type)
     if type.eql? 'system'
-      mysql_raw([defaults_file, '--host=', system_database, '-e', text_of_sql].flatten.compact)
+      mysql_raw([defaults_file, system_database, '-e', text_of_sql].flatten.compact)
     elsif type.eql? 'regular'
       mysql_raw([defaults_file, '-NBe', text_of_sql].flatten.compact)
     else

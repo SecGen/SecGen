@@ -11,9 +11,8 @@ class shellshock::install{
     creates     => '/usr/local/src/bash-4.1/',
   }
 
-  package { ['build-essential', 'gcc-multilib']:
-    ensure => installed,
-  }
+  ensure_packages('build-essential')
+  ensure_packages('gcc-multilib')
 
   exec { 'configure-make-make-install-bash':
     cwd     => '/usr/local/src/bash-4.1/',

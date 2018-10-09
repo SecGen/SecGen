@@ -1,4 +1,13 @@
-#This is a helper class to add a monitoring user to the database
+# @summary
+#   This is a helper class to add a monitoring user to the database
+#
+# @param mysql_monitor_username
+#   The username to create for MySQL monitoring.
+# @param mysql_monitor_password
+#   The password to create for MySQL monitoring.
+# @param mysql_monitor_hostname
+#   The hostname from which the monitoring user requests are allowed access.
+#
 class mysql::server::monitor (
   $mysql_monitor_username = '',
   $mysql_monitor_password = '',
@@ -9,7 +18,7 @@ class mysql::server::monitor (
 
   mysql_user { "${mysql_monitor_username}@${mysql_monitor_hostname}":
     ensure        => present,
-    password_hash => mysql_password($mysql_monitor_password),
+    password_hash => mysql::password($mysql_monitor_password),
     require       => Class['mysql::server::service'],
   }
 

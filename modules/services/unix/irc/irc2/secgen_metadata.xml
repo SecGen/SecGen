@@ -20,7 +20,7 @@
     <type>ircd</type>
   </conflict>
   <conflict>
-    <name>Stretch</name>
+    <name>.*Stretch.*</name>
   </conflict>
   <requires>
     <type>update</type>

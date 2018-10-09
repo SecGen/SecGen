@@ -19,9 +19,8 @@ class proftpd_133c_backdoor::install {
     notify  => Exec['install_proftpd-1.3.3c'],
   }
 
-  package { ['build-essential', 'gcc-multilib']:
-    ensure => installed,
-  }
+  ensure_packages('build-essential')
+  ensure_packages('gcc-multilib')
 
   exec { 'install_proftpd-1.3.3c':
     cwd     => '/usr/local/src/backdoored_proftpd-1.3.3c/',

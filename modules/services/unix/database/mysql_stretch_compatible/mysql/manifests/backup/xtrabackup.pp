@@ -1,4 +1,7 @@
-# See README.me for usage.
+# @summary
+#   "Provider" for Percona XtraBackup
+# @api private
+#
 class mysql::backup::xtrabackup (
   $xtrabackup_package_name = $mysql::params::xtrabackup_package_name,
   $backupuser              = undef,
@@ -26,14 +29,12 @@ class mysql::backup::xtrabackup (
   $additional_cron_args    = ''
 ) inherits mysql::params {
 
-  package{ $xtrabackup_package_name:
-    ensure  => $ensure,
-  }
+  ensure_packages($xtrabackup_package_name)
 
   if $backupuser and $backuppassword {
     mysql_user { "${backupuser}@localhost":
       ensure        => $ensure,
-      password_hash => mysql_password($backuppassword),
+      password_hash => mysql::password($backuppassword),
       require       => Class['mysql::server::root_password'],
     }
 

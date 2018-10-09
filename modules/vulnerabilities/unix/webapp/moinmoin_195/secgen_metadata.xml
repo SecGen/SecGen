@@ -69,7 +69,7 @@
   </solution>
 
   <conflict>
-    <name>Stretch</name>
+    <name>.*Stretch.*</name>
   </conflict>
 
   <requires>
