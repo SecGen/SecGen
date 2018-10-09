@@ -16,6 +16,8 @@ define secgen_functions::install_setgid_script (
   $strings_to_leak = [''], # Optional: strings to leak (could contain instructions or a message)
 ) {
 
+  ensure_packages(['build-essentials','gcc-multilib'])
+
   if $group and $group[0] {
     $grp = $group[0]
   } else {
