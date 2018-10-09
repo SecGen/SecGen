@@ -45,4 +45,8 @@
   <!--optional hints-->
   <msf_module>exploit/unix/local/chkrootkit</msf_module>
 
+  <requires>
+    <type>update</type>
+  </requires>
+
 </vulnerability>

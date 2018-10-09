@@ -137,7 +137,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   <%       end %>
 <%     else -%>
   <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
-  <%         if @ovirt_template and @ovirt_template.include? 'kali_linux_msf' %>
+  <%         if @ovirt_template and (@ovirt_template.include? 'kali_linux_msf' or @ovirt_template.include? 'debian_server' )%>
       <%= system.name %>.vm.provision 'shell', inline: "echo \"auto lo\niface lo inet loopback\n\nauto eth0\niface eth0 inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
       <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
   <%         elsif @ovirt_template and @ovirt_template.include? 'debian_desktop_kde' %>

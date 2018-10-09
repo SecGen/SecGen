@@ -42,9 +42,8 @@ class unrealirc::install {
     require => Exec['extract-unrealirc'],
   }
 
-  package { ['build-essential', 'gcc-multilib']:
-    ensure => installed,
-  }
+  ensure_packages('build-essential')
+  ensure_packages('gcc-multilib')
 
   # Configure and make unrealircd, with or without ssl enabled
   if $unrealirc::use_ssl {

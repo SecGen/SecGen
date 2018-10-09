@@ -36,6 +36,10 @@
   </default_input>
 
   <requires>
+    <type>update</type>
+  </requires>
+
+  <requires>
     <module_path>utilities/unix/system/accounts</module_path>
   </requires>
 

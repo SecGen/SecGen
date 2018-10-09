@@ -3,13 +3,6 @@ class gitlist_040::apache {
   $port = $secgen_parameters['port'][0]
   $docroot = '/var/www/gitlist'
 
-  package { 'php':
-    ensure => installed,
-  }
-  #
-  # include ::apache::mod::rewrite
-  # include ::apache::mod::php
-
   class { '::apache':
     default_vhost => false,
     default_mods => ['rewrite', 'php'],

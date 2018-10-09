@@ -47,7 +47,7 @@ describe 'mysql::db', type: :define do
       end
 
       it 'imports sql scripts when more than one is specified' do
-        params['sql'] = %w[test_sql test_2_sql]
+        params['sql'] = ['test_sql', 'test_2_sql']
         is_expected.to contain_exec('test_db-import').with_command('cat test_sql test_2_sql | mysql test_db')
       end
 
@@ -69,6 +69,16 @@ describe 'mysql::db', type: :define do
       it 'uses dbname parameter as database name instead of name' do
         params['dbname'] = 'real_db'
         is_expected.to contain_mysql_database('real_db')
+      end
+
+      it 'uses tls_options for user when set' do
+        params['tls_options'] = ['SSL']
+        is_expected.to contain_mysql_user('testuser@localhost').with_tls_options(['SSL'])
+      end
+
+      it 'uses grant_options for grant when set' do
+        params['grant_options'] = ['GRANT']
+        is_expected.to contain_mysql_grant('testuser@localhost/test_db.*').with_options(['GRANT'])
       end
     end
   end

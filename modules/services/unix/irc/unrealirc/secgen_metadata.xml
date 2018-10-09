@@ -32,4 +32,8 @@
     <name>Kali.*</name>
   </conflict>
 
+  <requires>
+    <type>update</type>
+  </requires>
+
 </service>

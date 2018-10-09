@@ -29,8 +29,8 @@ describe 'mysql::server::backup class' do
         }
     MANIFEST
     it 'when configuring mysql backups' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_failures: true)
+      execute_manifest(pp, catch_failures: true)
+      execute_manifest(pp, catch_failures: true)
     end
   end
 
@@ -104,8 +104,8 @@ describe 'mysql::server::backup class' do
           }
       MANIFEST
       it 'when configuring mysql backups' do
-        apply_manifest(pp, catch_failures: true)
-        apply_manifest(pp, catch_failures: true)
+        execute_manifest(pp, catch_failures: true)
+        execute_manifest(pp, catch_failures: true)
       end
     end
 
@@ -124,7 +124,7 @@ describe 'mysql::server::backup class' do
 
       it 'creates one file per database' do
         unless version_is_greater_than('5.7.0')
-          %w[backup1 backup2].each do |database|
+          ['backup1', 'backup2'].each do |database|
             shell("ls -l /tmp/backups/mysql_backup_#{database}_*-*.sql.bz2 | wc -l") do |r|
               expect(r.stdout).to match(%r{1})
               expect(r.exit_code).to be_zero
@@ -142,7 +142,7 @@ describe 'mysql::server::backup class' do
 
       it 'has one file per database per run' do
         unless version_is_greater_than('5.7.0')
-          %w[backup1 backup2].each do |database|
+          ['backup1', 'backup2'].each do |database|
             shell("ls -l /tmp/backups/mysql_backup_#{database}_*-*.sql.bz2 | wc -l") do |r|
               expect(r.stdout).to match(%r{2})
               expect(r.exit_code).to be_zero
@@ -187,7 +187,7 @@ describe 'mysql::server::backup class' do
         }
     MANIFEST
     it 'when configuring mysql backups with triggers and routines' do
-      apply_manifest(pp, catch_failures: true)
+      execute_manifest(pp, catch_failures: true)
     end
 
     it 'runs mysqlbackup.sh with no errors' do

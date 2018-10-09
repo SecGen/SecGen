@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Puppet::Type.type(:mysql_database).provider(:mysql) do
   let(:defaults_file) { '--defaults-extra-file=/root/.my.cnf' }
-  let(:parsed_databases) { %w[information_schema mydb mysql performance_schema test] }
+  let(:parsed_databases) { ['information_schema', 'mydb', 'mysql', 'performance_schema', 'test'] }
   let(:provider) { resource.provider }
   let(:instance) { provider.class.instances.first }
   let(:resource) do
@@ -13,7 +13,6 @@ describe Puppet::Type.type(:mysql_database).provider(:mysql) do
     )
   end
   let(:raw_databases) do
-    # rubocop:disable Layout/IndentHeredoc
     <<-SQL_OUTPUT
 information_schema
 mydb

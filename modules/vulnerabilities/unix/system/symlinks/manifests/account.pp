@@ -30,9 +30,9 @@ define symlinks::account($username, $password, $strings_to_leak, $leaked_filenam
     source => 'puppet:///modules/symlinks/prompt.c',
   }
 
-  package { ['build-essential', 'gcc-multilib']:
-    ensure => installed,
-  }
+  ensure_packages('build-essential')
+  ensure_packages('gcc-multilib')
+
 
   exec { "$username-compileandsetup1":
     cwd     => "/home/$username/",

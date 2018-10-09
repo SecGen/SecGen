@@ -24,4 +24,8 @@
   <software_name>bash</software_name>
   <software_license>GPLv3+</software_license>
 
+  <requires>
+    <type>update</type>
+  </requires>
+
 </vulnerability>

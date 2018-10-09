@@ -1,7 +1,65 @@
 # Change log
 
-All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org).
+All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
+
+## [6.2.0](https://github.com/puppetlabs/puppetlabs-mysql/tree/6.2.0) (2018-09-27)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-mysql/compare/6.1.0...6.2.0)
+
+### Added
+
+- pdksync - \(MODULES-6805\) metadata.json shows support for puppet 6 [\#1127](https://github.com/puppetlabs/puppetlabs-mysql/pull/1127) ([tphoney](https://github.com/tphoney))
+
+### Fixed
+
+- \(maint\) - Change versioning comparison [\#1123](https://github.com/puppetlabs/puppetlabs-mysql/pull/1123) ([eimlav](https://github.com/eimlav))
+
+## [6.1.0](https://github.com/puppetlabs/puppetlabs-mysql/tree/6.1.0) (2018-09-13)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-mysql/compare/6.0.0...6.1.0)
+
+### Fixed
+
+- pdksync - \(MODULES-7705\) - Bumping stdlib dependency from \< 5.0.0 to \< 6.0.0 [\#1114](https://github.com/puppetlabs/puppetlabs-mysql/pull/1114) ([pmcmaw](https://github.com/pmcmaw))
+- \(MODULES-6981\) Do not try to read ~root/.my.cnf when calling "mysqld -V" [\#1063](https://github.com/puppetlabs/puppetlabs-mysql/pull/1063) ([simondeziel](https://github.com/simondeziel))
+
+## [6.0.0](https://github.com/puppetlabs/puppetlabs-mysql/tree/6.0.0) (2018-08-01)
+
+[Full Changelog](https://github.com/puppetlabs/puppetlabs-mysql/compare/5.4.0...6.0.0)
+
+### Changed
+
+- \[FM-6962\] Removal of unsupported OS from mysql [\#1086](https://github.com/puppetlabs/puppetlabs-mysql/pull/1086) ([david22swan](https://github.com/david22swan))
+
+### Added
+
+- \(FM-5985\) - Addition of support for Ubuntu 18.04 to mysql [\#1104](https://github.com/puppetlabs/puppetlabs-mysql/pull/1104) ([david22swan](https://github.com/david22swan))
+- \(MODULES-7439\) - Implementing beaker-testmode\_switcher [\#1095](https://github.com/puppetlabs/puppetlabs-mysql/pull/1095) ([pmcmaw](https://github.com/pmcmaw))
+- Support for optional\_\_args and prescript to mysqldump backup provider [\#1083](https://github.com/puppetlabs/puppetlabs-mysql/pull/1083) ([eputnam](https://github.com/eputnam))
+- Allow empty user passwords [\#1075](https://github.com/puppetlabs/puppetlabs-mysql/pull/1075) ([disappear89](https://github.com/disappear89))
+- Add user tls\_options and grant options to mysql::db [\#1065](https://github.com/puppetlabs/puppetlabs-mysql/pull/1065) ([edestecd](https://github.com/edestecd))
+- Use puppet4 functions-api [\#1044](https://github.com/puppetlabs/puppetlabs-mysql/pull/1044) ([juliantodt](https://github.com/juliantodt))
+- Replaced 'DROP USER' with 'DROP USER IF EXISTS' [\#942](https://github.com/puppetlabs/puppetlabs-mysql/pull/942) ([libertamohamed](https://github.com/libertamohamed))
+
+### Fixed
+
+- \(MODULES-7353\) Enable service for Debian 9  [\#1094](https://github.com/puppetlabs/puppetlabs-mysql/pull/1094) ([david22swan](https://github.com/david22swan))
+- Update locales test for Debian 9 [\#1091](https://github.com/puppetlabs/puppetlabs-mysql/pull/1091) ([HelenCampbell](https://github.com/HelenCampbell))
+- \[FM-7045\] Fix to allow Debian 9 test's to run clean [\#1088](https://github.com/puppetlabs/puppetlabs-mysql/pull/1088) ([david22swan](https://github.com/david22swan))
+- \(MODULES-7198\) Fix DROP USER IF EXISTS on mariadb [\#1082](https://github.com/puppetlabs/puppetlabs-mysql/pull/1082) ([hunner](https://github.com/hunner))
+
+## 5.4.0
+
+### Added
+
+- \(PDOC-210\) Puppet Strings documentation [\#1068](https://github.com/puppetlabs/puppetlabs-mysql/pull/1068) ([hunner](https://github.com/hunner))
+- Compatibility for Alpine linux [\#1049](https://github.com/puppetlabs/puppetlabs-mysql/pull/1049) ([cisco87](https://github.com/cisco87))
+
+### Fixed
+
+- \(MODULES-6627\) Removed unused --host flag from mysqlcaller [\#1064](https://github.com/puppetlabs/puppetlabs-mysql/pull/1064) ([HelenCampbell](https://github.com/HelenCampbell))
+- Fixed archlinux compatibility [\#1057](https://github.com/puppetlabs/puppetlabs-mysql/pull/1057) ([bastelfreak](https://github.com/bastelfreak))
+- Changed input param option in export.json from sql to file [\#1054](https://github.com/puppetlabs/puppetlabs-mysql/pull/1054) ([cgoswami](https://github.com/cgoswami))
 
 ## Supported Release [5.3.0]
 ### Summary
@@ -878,8 +936,12 @@ configuration variables.
 ## 2011-06-03 - Dan Bode <dan@puppetlabs.com> - 0.0.1
 * initial commit
 
+[5.4.0]:https://github.com/puppetlabs/puppetlabs-mysql/compare/5.3.0...5.4.0
 [5.3.0]:https://github.com/puppetlabs/puppetlabs-mysql/compare/5.2.1...5.3.0
 [5.2.1]:https://github.com/puppetlabs/puppetlabs-mysql/compare/5.2.0...5.2.1
 [5.2.0]:https://github.com/puppetlabs/puppetlabs-mysql/compare/5.1.0...5.2.0
 [5.1.0]:https://github.com/puppetlabs/puppetlabs-mysql/compare/5.0.0...5.1.0
 [5.0.0]:https://github.com/puppetlabs/puppetlabs-mysql/compare/4.0.1...5.0.0
+
+
+\* *This Changelog was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*

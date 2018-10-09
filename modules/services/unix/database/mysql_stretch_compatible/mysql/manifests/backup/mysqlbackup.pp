@@ -1,4 +1,8 @@
-# See README.me for usage.
+# @summary
+#   Manage the mysqlbackup client.
+#
+# @api private
+#
 class mysql::backup::mysqlbackup (
   $backupuser         = '',
   $backuppassword     = '',
@@ -25,7 +29,7 @@ class mysql::backup::mysqlbackup (
 
   mysql_user { "${backupuser}@localhost":
     ensure        => $ensure,
-    password_hash => mysql_password($backuppassword),
+    password_hash => mysql::password($backuppassword),
     require       => Class['mysql::server::root_password'],
   }
 
@@ -88,7 +92,7 @@ class mysql::backup::mysqlbackup (
       'password'               => $backuppassword,
     }
   }
-  $options = mysql_deepmerge($default_options, $mysql::server::override_options)
+  $options = mysql::deepmerge($default_options, $mysql::server::override_options)
 
   file { 'mysqlbackup-config-file':
     path    => '/etc/mysql/conf.d/meb.cnf',

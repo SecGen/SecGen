@@ -59,4 +59,9 @@
   <conflict>
     <software_name>proftpd</software_name>
   </conflict>
+
+  <requires>
+    <type>update</type>
+  </requires>
+
 </vulnerability>
