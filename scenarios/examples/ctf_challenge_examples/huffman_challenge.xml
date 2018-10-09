@@ -21,7 +21,7 @@
 				<datastore access="0">huffman_challenge</datastore>
 			</input>
 			<input into="images_to_leak">
-				<datastore access="0">huffman_challenge</datastore>
+				<datastore access="1">huffman_challenge</datastore>
 			</input>
 		</vulnerability>
 

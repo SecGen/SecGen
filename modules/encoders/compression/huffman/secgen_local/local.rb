@@ -13,12 +13,12 @@ class HuffmanEncoder < StringEncoder
     Dir.mkdir '../tmp/' unless Dir.exists? '../tmp/'
   end
 
-  def encode(str)
+  def encode_all
     tree_path = "../tmp/tree_#{index}"
-    result = Huffman.encode_text(str, tree_picture: true, tree_path: tree_path)
+    result = Huffman.encode_text(strings_to_encode[0], tree_picture: true, tree_path: tree_path)
     self.index += 1
-    # Return an array with the compressed string, and the tree png encoded in base64
-    [result.first, Base64.strict_encode64(File.binread("#{tree_path}.png"))]
+    self.outputs << result.first
+    self.outputs << Base64.strict_encode64(File.binread("#{tree_path}.png"))
   end
 end
 
