@@ -70,6 +70,13 @@
   <msf_module>auxiliary/admin/smb/samba_symlink_traversal</msf_module>
 
   <conflict>
+    <name>.*Stretch.*</name>
+  </conflict>
+  <conflict>
+    <name>.*Kali.*</name>
+  </conflict>
+
+  <conflict>
     <module_path>vulnerabilities/unix/smb/samba_public_writable_share</module_path>
   </conflict>
 
