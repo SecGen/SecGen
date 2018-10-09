@@ -27,6 +27,7 @@ gem 'digest-sha3'
 gem 'digest-whirlpool'
 gem 'digest-siphash'
 gem 'scrypt'
+gem 'braille', :git => "http://github.com/nicanor/braille.git"
 
 #development only gems go here
 group :test, :development do

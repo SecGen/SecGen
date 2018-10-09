@@ -1,4 +1,10 @@
 GIT
+  remote: http://github.com/nicanor/braille.git
+  revision: 2c861ea0160d39aa96dc71d2f9779a4f984e0791
+  specs:
+    braille (0.1.0)
+
+GIT
   remote: http://github.com/robertjwhitney/programr.git
   revision: 9885f3870407f57c3e2ca1fe644ed10573629ca6
   specs:
@@ -113,6 +119,7 @@ PLATFORMS
 
 DEPENDENCIES
   bcrypt
+  braille!
   cinch
   credy
   digest-sha3
