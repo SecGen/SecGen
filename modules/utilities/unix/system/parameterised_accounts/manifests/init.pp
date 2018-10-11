@@ -10,8 +10,7 @@ class parameterised_accounts::init {
         username        => $username,
         password        => $account['password'],
         super_user      => str2bool($account['super_user']),
-        strings_to_leak => $account['strings_to_leak'],
-        leaked_filenames => $account['leaked_filenames']
+        data_to_leak    => $account['data_to_leak'],
       }
     }
   }

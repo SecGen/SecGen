@@ -17,9 +17,13 @@
 
   <system>
     <system_name>system</system_name>
-    <base platform="linux" type="desktop"/>
+    <base platform="linux" type="desktop" distro="Stretch"/>
 
-    <!-- 5x challenges per student -->
+    <input into_datastore="IP_addresses">
+      <value>172.16.0.12</value>
+    </input>
+
+    <!-- 6x challenges per student -->
     <!--1: random encoder -->
     <!--2: random encoder -->
     <!--3: random encoder -->
@@ -70,7 +74,7 @@
                 </encoder>
               </input>
             </encoder>
-            <encoder module_path=".*huffman.*" difficulty="high">
+            <encoder difficulty="high">
               <input into="strings_to_encode">
                 <generator type="flag_generator"/>
               </input>
@@ -81,7 +85,12 @@
     </utility>
 
     <!--TODO-->
-    <network module_path=".*private_network_1"/>
+    <network type="private_network">
+      <input into="IP_address">
+        <datastore access="0">IP_addresses</datastore>
+      </input>
+    </network>
+
     <!--<build type="cleanup">-->
     <!--<input into="root_password">-->
     <!--<generator type="strong_password_generator"/>-->

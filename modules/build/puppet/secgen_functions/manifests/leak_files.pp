@@ -1,4 +1,14 @@
-define secgen_functions::leak_files($leaked_filenames=[], $storage_directory, $strings_to_leak=[], $images_to_leak=[], $owner = 'root', $group = 'root', $mode = '0660', $leaked_from) {
+define secgen_functions::leak_files($leaked_filenames=[], $storage_directory, $strings_to_leak=[], $data_to_leak=[], $owner = 'root', $group = 'root', $mode = '0660', $leaked_from) {
+
+  # Have a check on $data_to_leak for whether the file is a string or json with {"secgen_leaked_data": {}}
+  $data_to_leak.each |$i, $data| {
+    if parsejson($data){
+      $json = parsejson($data)
+      notice ("[$i] Data to leak: $json")
+    } else {
+      notice("[$i] Data to leak: $data")
+    }
+  }
 
   # $leaked_from is a mandatory resource specifying where the file was being leaked (i.e. which module / user leaked it.)
   # This is to avoid resource clashes if two users get the same 'leaked_filenames' results
