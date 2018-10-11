@@ -125,6 +125,7 @@
     <xs:attribute name="description" type="xs:string"/>
     <xs:attribute name="type" type="xs:string"/>
     <xs:attribute name="platform" type="xs:string"/>
+    <xs:attribute name="difficulty" type="xs:string"/>
 
     <xs:attribute name="read_fact" type="xs:string"/>
 

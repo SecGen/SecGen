@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+
+<scenario xmlns="http://www.github/cliffe/SecGen/scenario"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+
+  <!--TODO-->
+  <name>Encoding Challenges</name>
+  <author>Thomas Shaw</author>
+  <description>Single system narrative-based CTF challenge.</description>
+
+  <type>ctf</type>
+  <type>attack-ctf</type>
+  <type>web-hints</type>
+  <difficulty>intermediate</difficulty>
+  <!--/TODO-->
+
+  <system>
+    <system_name>system</system_name>
+    <base platform="linux" type="desktop"/>
+
+    <!-- 5x challenges per student -->
+    <!--1: random encoder -->
+    <!--2: random encoder -->
+    <!--3: random encoder -->
+    <!--4: random encoder -->
+    <!--5: random encoder double encoded -->
+    <!--6: random high difficulty encoder -->
+
+    <!-- Either remote file storage system OR local challenges -->
+    <utility module_path=".*parameterised_accounts">
+      <input into="account">
+        <generator type="account">
+          <input into="username">
+            <value>challenger</value>
+          </input>
+          <input into="password">
+            <value>tiaspbiqe2r</value>
+          </input>
+          <input into="super_user">
+            <value>true</value>
+          </input>
+          <input into="data_to_leak" unique_module_list="unique_encoders">
+            <encoder type="ascii_reversible">
+              <input into="strings_to_encode">
+                <generator type="flag_generator"/>
+              </input>
+            </encoder>
+            <encoder type="alpha_reversible">
+              <input into="strings_to_encode">
+                <generator type="flag_generator"/>
+              </input>
+            </encoder>
+            <encoder type="ascii_reversible">
+              <input into="strings_to_encode">
+                <generator type="flag_generator"/>
+              </input>
+            </encoder>
+            <encoder type="ascii_reversible">
+              <input into="strings_to_encode">
+                <generator type="flag_generator"/>
+              </input>
+            </encoder>
+            <encoder type="ascii_reversible">
+              <input into="strings_to_encode">
+                <encoder type="ascii_reversible">
+                  <input into="strings_to_encode">
+                    <generator type="flag_generator"/>
+                  </input>
+                </encoder>
+              </input>
+            </encoder>
+            <encoder module_path=".*huffman.*" difficulty="high">
+              <input into="strings_to_encode">
+                <generator type="flag_generator"/>
+              </input>
+            </encoder>
+          </input>
+        </generator>
+      </input>
+    </utility>
+
+    <!--TODO-->
+    <network module_path=".*private_network_1"/>
+    <!--<build type="cleanup">-->
+    <!--<input into="root_password">-->
+    <!--<generator type="strong_password_generator"/>-->
+    <!--</input>-->
+    <!--</build>-->
+    <!--/TODO-->
+
+  </system>
+
+</scenario>

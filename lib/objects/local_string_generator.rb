@@ -30,6 +30,16 @@ class StringGenerator
 
   def read_arguments
     # Get command line arguments
+    begin
+      args_array = []
+      ARGF.each_line do |arg|
+        args_array << arg.strip
+      end
+      ARGV.unshift(*args_array)
+    rescue
+      # Do nothing...
+    end
+
     opts = get_options
 
     # process option arguments

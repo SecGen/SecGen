@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 require_relative '../../../../../lib/objects/local_string_encoder.rb'
 require 'braille'
+require 'braille/translator'
 
 class BrailleEncoder < StringEncoder
 

@@ -9,10 +9,10 @@
   <description>Encodes a string with Huffman compression. Outputs a huffman string and png.</description>
 
   <type>huffman_encoder</type>
-  <type>ascii_reversible</type>
-  <type>string_encoder</type>
+  <type>compression</type>
   <platform>linux</platform>
   <platform>windows</platform>
+  <difficulty>high</difficulty>
 
   <reference>https://github.com/nicanor/braille</reference>
 
