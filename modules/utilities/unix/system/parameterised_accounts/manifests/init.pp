@@ -11,6 +11,7 @@ class parameterised_accounts::init {
         password        => $account['password'],
         super_user      => str2bool($account['super_user']),
         data_to_leak    => $account['data_to_leak'],
+        leaked_filenames => $account['leaked_filenames'],
       }
     }
   }

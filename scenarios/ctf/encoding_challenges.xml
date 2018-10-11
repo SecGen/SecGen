@@ -33,7 +33,7 @@
 
     <!-- Either remote file storage system OR local challenges -->
     <utility module_path=".*parameterised_accounts">
-      <input into="account">
+      <input into="accounts">
         <generator type="account">
           <input into="username">
             <value>challenger</value>
@@ -44,41 +44,52 @@
           <input into="super_user">
             <value>true</value>
           </input>
+          <input into="leaked_filenames">
+            <value>ciphertext</value>
+          </input>
           <input into="data_to_leak" unique_module_list="unique_encoders">
-            <encoder type="ascii_reversible">
-              <input into="strings_to_encode">
-                <generator type="flag_generator"/>
-              </input>
-            </encoder>
-            <encoder type="alpha_reversible">
-              <input into="strings_to_encode">
-                <generator type="flag_generator"/>
-              </input>
-            </encoder>
-            <encoder type="ascii_reversible">
-              <input into="strings_to_encode">
-                <generator type="flag_generator"/>
-              </input>
-            </encoder>
-            <encoder type="ascii_reversible">
-              <input into="strings_to_encode">
-                <generator type="flag_generator"/>
-              </input>
-            </encoder>
-            <encoder type="ascii_reversible">
-              <input into="strings_to_encode">
-                <encoder type="ascii_reversible">
-                  <input into="strings_to_encode">
-                    <generator type="flag_generator"/>
-                  </input>
-                </encoder>
-              </input>
-            </encoder>
+            <!---->
+            <!--<encoder type="ascii_reversible">-->
+              <!--<input into="strings_to_encode">-->
+                <!--<generator type="flag_generator"/>-->
+              <!--</input>-->
+            <!--</encoder>-->
+            <!---->
+            <!--<encoder type="alpha_reversible">-->
+              <!--<input into="strings_to_encode">-->
+                <!--<generator type="flag_generator"/>-->
+              <!--</input>-->
+            <!--</encoder>-->
+            <!---->
+            <!--<encoder type="ascii_reversible">-->
+              <!--<input into="strings_to_encode">-->
+                <!--<generator type="flag_generator"/>-->
+              <!--</input>-->
+            <!--</encoder>-->
+            <!---->
+            <!--<encoder type="ascii_reversible">-->
+              <!--<input into="strings_to_encode">-->
+                <!--<generator type="flag_generator"/>-->
+              <!--</input>-->
+            <!--</encoder>-->
+            <!---->
+            <!--<encoder type="ascii_reversible">-->
+              <!--<input into="strings_to_encode">-->
+                <!--<encoder type="ascii_reversible">-->
+                  <!--<input into="strings_to_encode">-->
+                    <!--<generator type="flag_generator"/>-->
+                  <!--</input>-->
+                <!--</encoder>-->
+              <!--</input>-->
+            <!--</encoder>-->
+            <!---->
+
             <encoder difficulty="high">
               <input into="strings_to_encode">
                 <generator type="flag_generator"/>
               </input>
             </encoder>
+
           </input>
         </generator>
       </input>
