@@ -1,5 +1,6 @@
 require 'getoptlong'
 require 'fileutils'
+require 'nori'
 
 require_relative 'lib/helpers/constants.rb'
 require_relative 'lib/helpers/print.rb'
@@ -84,12 +85,12 @@ def build_config(scenario, out_dir, options)
   creator.write_files
 
   Print.info 'Project files created.'
-  return systems
 end
 
 # Builds the vm via the vagrant file in the project dir
 # @param project_dir
-def build_vms(scenario, project_dir, options, systems)
+def build_vms(project_dir, options)
+  scenario = project_dir + '/scenario.xml'
 
   Print.info "Building project: #{project_dir}"
   system = ''
@@ -172,9 +173,8 @@ def build_vms(scenario, project_dir, options, systems)
   end
   if successful_creation && options[:snapshot]
     Print.info 'Creating a snapshot of VM(s)'
-    if OVirtFunctions::provider_ovirt?(options) && systems
-      vm_names = get_vm_names(systems)
-      OVirtFunctions::create_snapshot(options, scenario, vm_names)
+    if OVirtFunctions::provider_ovirt?(options)
+      OVirtFunctions::create_snapshot(options, scenario, get_vm_names(scenario))
     else
       GemExec.exe('vagrant', project_dir, 'snapshot push')
     end
@@ -242,8 +242,8 @@ end
 
 # Runs methods to run and configure a new vm from the configuration file
 def run(scenario, project_dir, options)
-  systems = build_config(scenario, project_dir, options)
-  build_vms(scenario, project_dir, options, systems)
+  build_config(scenario, project_dir, options)
+  build_vms(project_dir, options)
 end
 
 def default_project_dir
@@ -277,9 +277,17 @@ def delete_all_projects
   FileUtils.rm_r(Dir.glob("#{PROJECTS_DIR}/*"))
 end
 
-def get_vm_names(systems)
+def get_vm_names(scenario)
   vm_names = []
-  systems.each { |system| vm_names << system.name }
+  parser = Nori.new
+  scenario_hash = parser.parse(File.read(scenario))['scenario']
+  if scenario_hash['system'].is_a? Array
+    scenario_hash['system'].each do |system|
+      vm_names << system['system_name']
+    end
+  else
+    vm_names << scenario_hash['system']['system_name']
+  end
   vm_names
 end
 
@@ -445,7 +453,7 @@ case ARGV[0]
     build_config(scenario, project_dir, options)
   when 'build-vms', 'v'
     if project_dir
-      build_vms(scenario, project_dir, options, nil)
+      build_vms(project_dir, options)
     else
       Print.err 'Please specify project directory to read'
       usage
@@ -456,12 +464,12 @@ case ARGV[0]
     image_type = options.has_key?(:forensic_image_type) ? options[:forensic_image_type] : 'raw';
 
     if project_dir
-      build_vms(scenario, project_dir, options, nil)
+      build_vms(project_dir, options)
       make_forensic_image(project_dir, nil, image_type)
     else
       project_dir = default_project_dir unless project_dir
       build_config(scenario, project_dir, options)
-      build_vms(scenario, project_dir, options, nil)
+      build_vms(project_dir, options)
       make_forensic_image(project_dir, nil, image_type)
     end
 
