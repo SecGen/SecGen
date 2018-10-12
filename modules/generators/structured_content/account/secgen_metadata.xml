@@ -36,9 +36,6 @@
   <default_input into="leaked_filenames">
     <generator type="filename_generator"/>
   </default_input>
-  <default_input into="data_to_leak">
-    <generator type="message_generator"/>
-  </default_input>
 
   <output_type>account</output_type>
 </generator>
