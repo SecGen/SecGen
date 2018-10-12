@@ -13,7 +13,7 @@ define secgen_functions::install_setgid_binary (
   $strings_to_leak = [''], # Optional: strings to leak (could contain instructions or a message)
 ) {
 
-  ensure_packages(['build-essentials','gcc-multilib'])
+  ensure_packages(['build-essential','gcc-multilib'])
 
   if !$account {
     err('install: account is required for setgid challenges')
