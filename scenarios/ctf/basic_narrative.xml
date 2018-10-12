@@ -300,7 +300,7 @@
       </input>
     </service>
 
-    <utility module_path=".*mail.*">
+    <utility module_path=".*system/mail.*">
       <input into="mail">
         <generator type="mail_message">
           <input into="sender_user">
@@ -399,7 +399,7 @@
     </utility>
 
     <!-- Account 3 vulnerability-->
-    <vulnerability module_path="modules/vulnerabilities/unix/system/ssh_leaked_keys">
+    <vulnerability module_path=".*ssh_leaked_keys">
       <input into="accounts">
         <datastore access="2">accounts</datastore>
       </input>
