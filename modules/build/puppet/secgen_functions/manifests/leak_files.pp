@@ -1,19 +1,36 @@
-define secgen_functions::leak_files($leaked_filenames=[], $storage_directory, $strings_to_leak=[], $data_to_leak=[], $images_to_leak=[], $owner = 'root', $group = 'root', $mode = '0660', $leaked_from) {
+define secgen_functions::leak_files (
+  $leaked_filenames = [],
+  $storage_directory,
+  $strings_to_leak  = [],
+  $data_to_leak     = [],
+  $images_to_leak   = [],
+  $owner            = 'root',
+  $group            = 'root',
+  $mode             = '0660',
+  $leaked_from
+) {
 
   # Have a check on $data_to_leak for whether the file is a string or json with {"secgen_leaked_data": {}}
   $data_to_leak.each |$i, $data_element| {
-    notice ('Looping through $data_to_leak ... ')
     if "secgen_leaked_data" in $data_element {
       $secgen_leaked_data = parsejson($data_element)
-      notice ("[$i] leaking secgen_leaked_data {} ... ")
 
       $data = $secgen_leaked_data['secgen_leaked_data']['data']
       $filename = $secgen_leaked_data['secgen_leaked_data']['filename']
       $ext = $secgen_leaked_data['secgen_leaked_data']['ext']
       $subdirectory = $secgen_leaked_data['secgen_leaked_data']['subdirectory']
 
-      $path_to_leak = "$storage_directory/$subdirectory/$filename.$ext"
+      $storage_dir = "$storage_directory/$subdirectory"
+      $path_to_leak = "$storage_dir/$filename.$ext"
       $leaked_file_resource = "$leaked_from-$path_to_leak"
+
+      unless $subdirectory == '' {
+        ::secgen_functions::create_directory { "create-$storage_dir-$i":
+          res => "create-$storage_dir-$i",
+          path   => $storage_dir,
+          notify => File[$path_to_leak]
+        }
+      }
 
       file { $path_to_leak:
         ensure  => present,

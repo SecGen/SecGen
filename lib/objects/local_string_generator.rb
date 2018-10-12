@@ -32,8 +32,10 @@ class StringGenerator
     # Get command line arguments
     begin
       args_array = []
-      ARGF.each_line do |arg|
-        args_array << arg.strip
+      ARGF.each do |arg|
+        arg.strip.split(' ').each do |split|
+          args_array << split
+        end
       end
       ARGV.unshift(*args_array)
     rescue
@@ -109,6 +111,9 @@ class StringGenerator
     end
 
     puts has_base64_inputs ? base64_encode_outputs : self.outputs
+
+    # TODO: Wrap data in {}
+
   end
 
   def base64_encode_outputs

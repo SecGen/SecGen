@@ -31,6 +31,45 @@
     <!--5: random encoder double encoded -->
     <!--6: random high difficulty encoder -->
 
+    <input into_datastore="challenges" unique_module_list="unique_encoders">
+
+      <encoder type="ascii_reversible">
+        <input into="strings_to_encode">
+          <generator type="flag_generator"/>
+        </input>
+      </encoder>
+
+      <encoder type="alpha_reversible">
+        <input into="strings_to_encode">
+          <generator type="flag_generator"/>
+        </input>
+      </encoder>
+
+      <encoder type="ascii_reversible">
+        <input into="strings_to_encode">
+          <generator type="flag_generator"/>
+        </input>
+      </encoder>
+
+      <encoder type="ascii_reversible">
+        <input into="strings_to_encode">
+          <generator type="flag_generator"/>
+        </input>
+      </encoder>
+
+
+      <encoder type="ascii_reversible">
+        <input into="strings_to_encode">
+          <encoder type="ascii_reversible">
+            <input into="strings_to_encode">
+              <generator type="flag_generator"/>
+            </input>
+          </encoder>
+        </input>
+      </encoder>
+
+    </input>
+
     <!-- Either remote file storage system OR local challenges -->
     <utility module_path=".*parameterised_accounts">
       <input into="accounts">
@@ -47,49 +86,75 @@
           <input into="leaked_filenames">
             <value>ciphertext</value>
           </input>
-          <input into="data_to_leak" unique_module_list="unique_encoders">
-            <!---->
-            <!--<encoder type="ascii_reversible">-->
-              <!--<input into="strings_to_encode">-->
-                <!--<generator type="flag_generator"/>-->
-              <!--</input>-->
-            <!--</encoder>-->
-            <!---->
-            <!--<encoder type="alpha_reversible">-->
-              <!--<input into="strings_to_encode">-->
-                <!--<generator type="flag_generator"/>-->
-              <!--</input>-->
-            <!--</encoder>-->
-            <!---->
-            <!--<encoder type="ascii_reversible">-->
-              <!--<input into="strings_to_encode">-->
-                <!--<generator type="flag_generator"/>-->
-              <!--</input>-->
-            <!--</encoder>-->
-            <!---->
-            <!--<encoder type="ascii_reversible">-->
-              <!--<input into="strings_to_encode">-->
-                <!--<generator type="flag_generator"/>-->
-              <!--</input>-->
-            <!--</encoder>-->
-            <!---->
-            <!--<encoder type="ascii_reversible">-->
-              <!--<input into="strings_to_encode">-->
-                <!--<encoder type="ascii_reversible">-->
-                  <!--<input into="strings_to_encode">-->
-                    <!--<generator type="flag_generator"/>-->
-                  <!--</input>-->
-                <!--</encoder>-->
-              <!--</input>-->
-            <!--</encoder>-->
-            <!---->
+          <input into="data_to_leak">
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="0">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>cipher</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_1</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="1">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>cipher</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_2</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="2">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>cipher</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_3</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="3">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>cipher</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_4</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="4">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>cipher</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_5</value>
+              </input>
+            </generator>
 
             <encoder difficulty="high">
               <input into="strings_to_encode">
                 <generator type="flag_generator"/>
               </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_6</value>
+              </input>
             </encoder>
-
           </input>
         </generator>
       </input>
