@@ -6,7 +6,7 @@
 
 	<name>Backups lab</name>
   <author>Z. Cliffe Schreuders</author>
-  <description>A Hackerbot lab. Work through the labsheet, then when prompted interact with Hackerbot. </description>
+  <description>A Hackerbot lab. Work through the labsheet, then when prompted interact with Hackerbot. Topics covered: Rsync, and backups and restoring data using differential and incremental backups.</description>
 
   <type>ctf-lab</type>
   <type>hackerbot-lab</type>
@@ -171,7 +171,7 @@
 	</system>
 
 	<system>
-		<system_name>server</system_name>
+		<system_name>backup_server</system_name>
 		<base platform="linux" distro="Debian 7.8"/>
 
 		<utility module_path=".*parameterised_accounts">
@@ -187,7 +187,7 @@
 		</vulnerability>
 
 		<!-- TODO: weechat config -->
-		<utility module_path=".*weechat"/>
+		<!-- <utility module_path=".*weechat"/> -->
 
 		<network type="private_network" >
 			<input into="IP_address">
@@ -197,7 +197,7 @@
 	</system>
 
 	<system>
-		<system_name>hb_server</system_name>
+		<system_name>hackerbot_server</system_name>
 		<base distro="Kali" name="MSF"/>
 
 		<service type="ircd"/>
