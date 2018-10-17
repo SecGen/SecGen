@@ -116,7 +116,7 @@ class StringEncoder
     Print.local module_name
 
     read_arguments
-    enforce_utf8(self.strings_to_encode)
+    enforce_utf8
 
     Print.local_verbose "Encoding '#{encoding_print_string}'"
     encode_all
@@ -131,12 +131,26 @@ class StringEncoder
       Print.local_verbose "(Displaying 1000/#{length} length output)"
     end
 
-    enforce_utf8(self.outputs)
+    enforce_utf8
     print_outputs
   end
 
-  def enforce_utf8(values)
-    values.map { |o| o.force_encoding('UTF-8') }
+  # Encode local instance variables as UTF-8
+  def enforce_utf8
+    self.instance_variables.each do |iv|
+      iv_value = self.instance_variable_get(iv)
+      if iv_value.is_a? Array
+        utf8 = []
+        iv_value.map {|element|
+          if element.is_a? String
+            utf8 << element.force_encoding('UTF-8')
+          end
+        }
+        self.instance_variable_set(iv, utf8)
+      elsif iv_value.is_a? String
+        self.instance_variable_set(iv, iv_value.force_encoding('UTF-8'))
+      end
+    end
   end
 
   def print_outputs
