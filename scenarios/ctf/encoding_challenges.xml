@@ -57,8 +57,7 @@
         </input>
       </encoder>
 
-
-      <encoder type="ascii_reversible">
+`      <encoder type="ascii_reversible">
         <input into="strings_to_encode">
           <encoder type="ascii_reversible">
             <input into="strings_to_encode">
@@ -70,9 +69,9 @@
 
     </input>
 
-    <!-- Either remote file storage system OR local challenges -->
+    <!-- Local challenges -->
     <utility module_path=".*parameterised_accounts">
-      <input into="accounts">
+      <input into="accounts" into_datastore="accounts">
         <generator type="account">
           <input into="username">
             <value>challenger</value>
@@ -160,19 +159,23 @@
       </input>
     </utility>
 
-    <!--TODO-->
+    <utility module_path=".*kde_minimal">
+      <input into="accounts">
+        <datastore>accounts</datastore>
+      </input>
+      <input into="autostart_konsole">
+        <value>true</value>
+      </input>
+      <input into="autologin_user">
+        <datastore access="0" access_json="['username']">accounts</datastore>
+      </input>
+    </utility>
+
     <network type="private_network">
       <input into="IP_address">
         <datastore access="0">IP_addresses</datastore>
       </input>
     </network>
-
-    <!--<build type="cleanup">-->
-    <!--<input into="root_password">-->
-    <!--<generator type="strong_password_generator"/>-->
-    <!--</input>-->
-    <!--</build>-->
-    <!--/TODO-->
 
   </system>
 
