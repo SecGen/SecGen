@@ -57,7 +57,7 @@
         </input>
       </encoder>
 
-`      <encoder type="ascii_reversible">
+      <encoder type="ascii_reversible">
         <input into="strings_to_encode">
           <encoder type="ascii_reversible">
             <input into="strings_to_encode">
