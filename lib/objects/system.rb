@@ -319,8 +319,6 @@ class System
         end
         # execute calculation script and format output to an array of Base64 strings
         Print.verbose "Running: ruby #{selected.local_calc_file} #{args_string[0..200]} ..."
-        $stdout.sync = true
-        $stderr.sync = true
         stdout, stderr, status = Open3.capture3("ruby #{selected.local_calc_file}", :stdin_data => args_string)
         puts stderr
         outputs = stdout.chomp

@@ -40,6 +40,7 @@ class StringEncoder
 
   def read_arguments
     # Get command line arguments
+    Print.local 'Reading args from STDIN'
     if ARGV.size == 0
       begin
         args_array = []
@@ -115,6 +116,7 @@ class StringEncoder
     Print.local module_name
 
     read_arguments
+    enforce_utf8(self.strings_to_encode)
 
     Print.local_verbose "Encoding '#{encoding_print_string}'"
     encode_all
@@ -129,6 +131,15 @@ class StringEncoder
       Print.local_verbose "(Displaying 1000/#{length} length output)"
     end
 
+    enforce_utf8(self.outputs)
+    print_outputs
+  end
+
+  def enforce_utf8(values)
+    values.map { |o| o.force_encoding('UTF-8') }
+  end
+
+  def print_outputs
     puts has_base64_inputs ? base64_encode_outputs : self.outputs
   end
 
