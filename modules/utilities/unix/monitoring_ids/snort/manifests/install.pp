@@ -1,6 +1,7 @@
 class snort::install {
 
-  package { ['bison', 'flex', 'libdaq2','libdumbnet1','libpcap0.8','snort-common-libraries','libpcre3-dev', 'libdumbnet-dev']:
+  package { ['bison', 'flex', 'libdaq2', 'libdumbnet1', 'libpcap0.8', 'snort-common-libraries', 'libpcre3-dev',
+    'libdumbnet-dev']:
     ensure => installed,
   }
 
@@ -43,30 +44,33 @@ class snort::install {
   }
 
   exec { 'install-libpcap':
-    cwd => '/usr/local/src/libpcap-1.9.0/',
+    cwd     => '/usr/local/src/libpcap-1.9.0/',
     command => '/usr/local/src/libpcap-1.9.0/configure --prefix=/usr && sudo make && sudo make install',
     require => Exec['unpack-libpcap']
   }
 
   exec { 'install-daq':
-    cwd => '/usr/local/src/daq-2.0.6/',
+    cwd     => '/usr/local/src/daq-2.0.6/',
     command => '/usr/local/src/daq-2.0.6/configure && sudo make && sudo make install',
     require => Exec['unpack-daq', 'install-libpcap']
   }
 
   exec { 'install-snort':
-    cwd => '/usr/local/src/snort-2.9.12/',
-    command => '/usr/local/src/snort-2.9.12/configure --enable-sourcefire --disable-open-appid && sudo make && sudo make install',
+    cwd     => '/usr/local/src/snort-2.9.12/',
+    command =>
+      '/usr/local/src/snort-2.9.12/configure --enable-sourcefire --disable-open-appid && sudo make && sudo make install'
+    ,
     require => Exec['unpack-snort', 'install-daq']
   }
 
-  # Create a service file?
-  file { 'install-service':
-    ensure => file,
+  # Create a service file
+  file { '/lib/systemd/system/snort.service':
+    ensure  => file,
     content => template('snort/snort.service.erb'),
   }
 
-  # package { ['snort']:
-  #   ensure => 'installed',
-  # }
+  exec { 'snort-reload-daemon':
+    command => 'systemctl daemon-reload',
+    require => [Exec['install-snort'], File['/lib/systemd/system/snort.service']],
+  }
 }
