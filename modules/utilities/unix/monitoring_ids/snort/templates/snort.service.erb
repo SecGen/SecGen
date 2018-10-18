@@ -1,0 +1,10 @@
+[Unit]
+Description=Snort NIDS Daemon
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/snort -q
+
+[Install]
+WantedBy=multi-user.target
