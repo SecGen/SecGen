@@ -12,8 +12,5 @@
   <platform>linux</platform>
 
   <!--TODO: Need to add configuration to use with Stretch as default config uses eth0 style interface naming -->
-  <conflict>
-    <name>.*Stretch.*</name>
-  </conflict>
 
 </utility>
