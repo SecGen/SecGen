@@ -1,5 +1,6 @@
 class snort::service{
-  service { 'snort':
-    ensure => running
-  }
+# TODO: use correct interface so snort can start
+#  service { 'snort':
+#    ensure => running
+#  }
 }
