@@ -177,8 +177,8 @@
 		</utility>
 		<utility module_path=".*handy_cli_tools"/>
 		<utility module_path=".*snort"/>
-		<utility module_path=".*wireshark"/>
-		<utility module_path=".*nmap"/>
+		<!--<utility module_path=".*wireshark"/>-->
+		<!--<utility module_path=".*nmap"/>-->
 
 		<vulnerability module_path=".*ssh_root_login">
 			<input into="root_password">
