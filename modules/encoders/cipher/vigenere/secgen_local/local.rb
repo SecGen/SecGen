@@ -31,17 +31,16 @@ class VigenereCipher < StringEncoder
     end
   end
 
-
-  def encode_all
-    self.strings_to_encode.each do |str|
-      self.outputs << encrypt(str, self.encryption_key)
-      self.outputs << "KEY: #{self.encryption_key}"
-    end
-  end
-
-  # def encode(str)
-  #   self.encryption_key + '_' + encrypt(str, self.encryption_key)
+  # def encode_all
+  #   self.strings_to_encode.each do |str|
+  #     self.outputs << encrypt(str, self.encryption_key)
+  #     self.outputs << "KEY: #{self.encryption_key}"
+  #   end
   # end
+
+  def encode(str)
+    self.encryption_key + '_' + encrypt(str, self.encryption_key)
+  end
 
   def process_options(opt, arg)
     super
