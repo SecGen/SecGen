@@ -45,4 +45,8 @@
   <conflict>
     <software_name>distcc</software_name>
   </conflict>
+  <requires>
+    <type>update</type>
+  </requires>
+
 </vulnerability>
