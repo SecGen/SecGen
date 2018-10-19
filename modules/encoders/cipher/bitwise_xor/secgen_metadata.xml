@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 
-<generator xmlns="http://www.github/cliffe/SecGen/generator"
+<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://www.github/cliffe/SecGen/generator">
-  <name>Bitwise XOR Challenge Generator</name>
+           xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+  <name>Bitwise XOR Challenge encoder</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
   <description>Binary bitwise XOR operation module. Takes a string input, generates a random bitstream of equal length.,
-    XOR's the 2 strings, outputs the binary streams.
+    XOR's the 2 strings, outputs the binary streams joined with an underscore.
   </description>
 
   <type>ctf_challenge</type>
-  <type>bitstream_generator</type>
-  <type>string_generator</type>
+  <type>ascii_reversible</type>
+  <type>string_encoder</type>
   <type>local_calculation</type>
   <platform>linux</platform>
   <platform>windows</platform>
@@ -23,11 +23,11 @@
     Decode the result into it's ASCII representation.
   </solution>
 
-  <read_fact>string_to_mask</read_fact>
+  <read_fact>string_to_encode</read_fact>
   <default_input into="string_to_mask">
     <generator type="flag_generator"/>
   </default_input>
 
   <output_type>generated_strings</output_type>
 
-</generator>
+</encoder>

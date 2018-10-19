@@ -29,17 +29,17 @@ class BitwiseXORChallengeGenerator < StringEncoder
     end
     generated_bit_stream = generated_bit_stream.join
 
-    # Add String B to self.outputs
-    self.outputs << generated_bit_stream
-
     # bitwise xor
     decimal_result = binary_string_to_mask.to_i(2) ^ generated_bit_stream.to_i(2)
 
     # Turn decimal result back into a string of bits
     binary_string_c = decimal_result.to_s(2)
 
-    # prepend leading 0's to the result and add String C to self.outputs
-    self.outputs << binary_string_c.to_s.rjust(number_of_bytes * 8, '0')
+    # prepend leading 0's to the result
+    result = binary_string_c.to_s.rjust(number_of_bytes * 8, '0')
+
+    # join the binary strings with an underscore
+    self.outputs << "#{generated_bit_stream}_#{result}"
   end
 
   def get_options_array
