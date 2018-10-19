@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+  <name>DNA Cipher</name>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>
+  </description>
+
+  <type>alpha_reversible</type>
+  <type>dna_encoder</type>
+  <type>cipher_encoder</type>
+  <platform>linux</platform>
+  <platform>windows</platform>
+
+  <reference>http://www.polestarltd.com/ttg/isspeeches/051403/slide14.jpg</reference>
+
+  <hint>Guanine, Adenine, Thymine and Cytosine</hint>
+  <solution>http://www.polestarltd.com/ttg/isspeeches/051403/slide14.jpg</solution>
+
+  <read_fact>strings_to_encode</read_fact>
+
+  <default_input into="strings_to_encode">
+    <generator type="flag_generator"/>
+  </default_input>
+
+  <output_type>encoded_string</output_type>
+</encoder>
