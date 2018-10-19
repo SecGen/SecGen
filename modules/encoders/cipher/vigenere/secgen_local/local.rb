@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 # Encryption algorithm code from http://rosettacode.org/wiki/Vigen%C3%A8re_cipher#Ruby
+# TODO: Add difficulty: easy returns key, medium returns key length, hard doesn't return either.
 require_relative '../../../../../lib/objects/local_string_encoder.rb'
 class VigenereCipher < StringEncoder
   attr_accessor :encryption_key
@@ -30,9 +31,17 @@ class VigenereCipher < StringEncoder
     end
   end
 
-  def encode(str)
-    self.encryption_key + '_' + encrypt(str, self.encryption_key)
+
+  def encode_all
+    self.strings_to_encode.each do |str|
+      self.outputs << encrypt(str, self.encryption_key)
+      self.outputs << "KEY: #{self.encryption_key}"
+    end
   end
+
+  # def encode(str)
+  #   self.encryption_key + '_' + encrypt(str, self.encryption_key)
+  # end
 
   def process_options(opt, arg)
     super
