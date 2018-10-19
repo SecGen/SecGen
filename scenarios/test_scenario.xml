@@ -6,15 +6,13 @@
 
   <!-- an example remote storage system, with a remotely exploitable vulnerability that can then be escalated to root -->
   <system>
-    <system_name>gitlist</system_name>
-    <base distro="Debian 7.8" type="server" />
+    <system_name>test</system_name>
+    <base distro="Kali" name="MSF" />
 
     <input into_datastore="IP_addresses">
       <value>172.16.0.2</value>
       <value>172.16.0.3</value>
     </input>
-
-    <vulnerability module_path=".*gitlist_040"/>
 
     <network type="private_network">
       <input into="IP_address">
@@ -22,16 +20,6 @@
       </input>
     </network>
 
-  </system>
-
-  <system>
-    <system_name>desktop</system_name>
-    <base distro="Debian 9" type="desktop" name="KDE"/>
-    <network type="private_network">
-      <input into="IP_address">
-        <datastore access="1">IP_addresses</datastore>
-      </input>
-    </network>
   </system>
 
 </scenario>

@@ -131,22 +131,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%   when 'network' -%>
 <%     if (selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp") and (!selected_module.received_inputs.include? 'IP_address' and !@options[:ip_ranges])-%>
   <%       if (@options.has_key? :ovirtnetwork) && (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)  %>
-      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", :ovirt__network_name => '<%= get_ovirt_network_name(system.name, @options[:ovirtnetwork]) %>'
   <%       else %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", auto_config: false
   <%       end %>
 <%     else -%>
   <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
-  <%         if @ovirt_template and (@ovirt_template.include? 'kali_linux_msf' or @ovirt_template.include? 'debian_server' )%>
+        <%         if @ovirt_template and (@ovirt_template.include? 'debian_server' )%>
       <%= system.name %>.vm.provision 'shell', inline: "echo \"auto lo\niface lo inet loopback\n\nauto eth0\niface eth0 inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
       <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
   <%         elsif @ovirt_template and @ovirt_template.include? 'debian_desktop_kde' %>
       <%= system.name %>.vm.provision 'shell', inline: "echo \"\nauto eth1\niface eth1 inet static\n\taddress <%= resolve_network(selected_module)%>\" >> /etc/network/interfaces"
       <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
-  <%         elsif @ovirt_template and ( @ovirt_template.include? 'debian_stretch_server_n' or @ovirt_template.include? 'debian_stretch_desktop_kde') %>
-      <%= system.name %>.vm.provision 'shell', inline: "echo \"\nauto ens3\niface ens3 inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
+          <%         elsif @ovirt_template and (@ovirt_template.include? 'kali_linux_msf'or @ovirt_template.include? 'debian_stretch_server_n' or @ovirt_template.include? 'debian_stretch_desktop_kde') %>
+            <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module)%>", :ovirt__network_name => '<%= get_ovirt_network_name(system.name, @options[:ovirtnetwork]) %>'
           <%         else %>
-      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module)%>", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
+      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module)%>", :ovirt__network_name => '<%= get_ovirt_network_name(system.name, @options[:ovirtnetwork]) %>'
   <%         end %>
   <%       else %>
       <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module)%>"
