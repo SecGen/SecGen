@@ -34,7 +34,7 @@ class DNACipher < StringEncoder
         'X' => 'CTA',
         'Y' => 'AAA',
         'Z' => 'CTT',
-        ' ' => 'ATA',
+        ' ' => 'CCC',
         ',' => 'TCG',
         '.' => 'GAT',
         ':' => 'GCT',
@@ -50,7 +50,7 @@ class DNACipher < StringEncoder
         '9' => 'GCG',
         '{' => '{',
         '}' => '}',
-        '_' => '_',
+        '_' => 'ATA',
     }
   end
 
