@@ -80,7 +80,7 @@ def build_config(scenario, out_dir, options)
   }
 
   Print.info "Creating project: #{out_dir}..."
-  # create's vagrant file / report a starts the vagrant installation'
+  # creates Vagrantfile and other outputs and starts the vagrant installation
   creator = ProjectFilesCreator.new(systems, out_dir, scenario, options)
   creator.write_files
 
@@ -177,12 +177,18 @@ def build_vms(project_dir, options)
     end
     retry_count -= 1
   end
-  if successful_creation && options[:snapshot]
-    Print.info 'Creating a snapshot of VM(s)'
-    if OVirtFunctions::provider_ovirt?(options)
-      OVirtFunctions::create_snapshot(options, scenario, get_vm_names(scenario))
-    else
-      GemExec.exe('vagrant', project_dir, 'snapshot push')
+  if successful_creation
+    if options[:snapshot]
+      Print.info 'Creating a snapshot of VM(s)'
+      if OVirtFunctions::provider_ovirt?(options)
+        OVirtFunctions::create_snapshot(options, scenario, get_vm_names(scenario))
+      else
+        GemExec.exe('vagrant', project_dir, 'snapshot push')
+      end
+    end
+    if options[:ovirtnetwork]
+      Print.info 'Assigning network(s) of VM(s)'
+      OVirtFunctions::assign_networks(options, scenario, get_vm_names(scenario))
     end
   end
 end

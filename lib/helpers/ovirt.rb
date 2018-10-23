@@ -163,6 +163,79 @@ class OVirtFunctions
     end
   end
 
+  def self.assign_networks(options, scenario_path, vm_names)
+    vms = []
+    ovirt_connection = get_ovirt_connection(options)
+    ovirt_vm_names = build_ovirt_names(scenario_path, options[:prefix], vm_names)
+    ovirt_vm_names.each do |vm_name|
+      vms << vms_service(ovirt_connection).list(search: "name=#{vm_name}")
+    end
+
+    network_name = options[:ovirtnetwork]
+    network_network = nil
+    network_profile = nil
+    # Replace 'network' with 'snoop' where the system name contains snoop
+    snoop_network_name = network_name.gsub(/network/, 'snoop')
+    snoop_profile = nil
+
+    # get the service that manages the nics
+    vnic_profiles_service = ovirt_connection.system_service.vnic_profiles_service
+
+    vnic_profiles_service.list.shuffle.each do |vnic_profile|
+
+      if vnic_profile.name =~ /#{network_name}/
+        puts vnic_profile.name
+        puts vnic_profile.network.id
+        network_profile = vnic_profile
+        network_network = vnic_profile.network
+
+        vnic_profiles_service.list.each do |vnic_snoop_profile|
+            if vnic_snoop_profile.name =~ /snoop/ && vnic_snoop_profile.network.id == network_network.id
+              puts vnic_snoop_profile.name
+              snoop_profile = vnic_snoop_profile
+            end
+        end
+
+        break
+      end
+    end
+
+
+    vms.each do |vm_list|
+      vm_list.each do |vm|
+        Print.std " VM: #{vm.name}"
+        Print.std "  Assigning network: #{vm.name}"
+        begin
+          # find the service that manages that vm
+          vm_service = vms_service(ovirt_connection).vm_service(vm.id)
+
+          # find the service that manages the nics of that vm
+          nics_service = vm_service.nics_service
+
+          nic = nics_service.list.last
+
+          puts "  #{nic.name}"
+          puts "  Updating nic"
+
+          update = {}
+
+          if vm.name =~ /snoop/
+            nic.vnic_profile = snoop_profile
+          else
+            nic.vnic_profile = network_profile
+          end
+
+          nics_service.nic_service(nic.id).update(nic, update)
+          puts "  #{nic.vnic_profile.name}"
+
+        rescue Exception => e
+          Print.err 'Error adding network:'
+          Print.err e.message
+        end
+      end
+    end
+  end
+
   def self.assign_permissions(options, scenario_path, vm_names)
     ovirt_connection = get_ovirt_connection(options)
     username = options[:prefix].chomp
