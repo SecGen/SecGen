@@ -188,6 +188,7 @@ def build_vms(scenario, project_dir, options)
 end
 
 def ovirt_post_build(options, scenario, project_dir)
+  Print.std 'Taking oVirt post-build actions...'
   if options[:snapshot]
     Print.info 'Creating a snapshot of VM(s)'
     if OVirtFunctions::provider_ovirt?(options)
@@ -497,7 +498,7 @@ case ARGV[0]
     end
 
   when 'ovirt-post-build'
-    ovirt_post_build(scenario, project_dir, options)
+    ovirt_post_build(options, scenario, project_dir)
     exit 0
 
   when 'list-scenarios'
