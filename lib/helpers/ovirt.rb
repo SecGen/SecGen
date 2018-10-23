@@ -203,30 +203,26 @@ class OVirtFunctions
 
     vms.each do |vm_list|
       vm_list.each do |vm|
-        Print.std " VM: #{vm.name}"
-        Print.std "  Assigning network: #{vm.name}"
+        Print.std "  Assigning network to: #{vm.name}"
         begin
           # find the service that manages that vm
           vm_service = vms_service(ovirt_connection).vm_service(vm.id)
 
           # find the service that manages the nics of that vm
           nics_service = vm_service.nics_service
-
+          # set the last nic
           nic = nics_service.list.last
 
-          puts "  #{nic.name}"
-          puts "  Updating nic"
-
-          update = {}
-
           if vm.name =~ /snoop/
+            Print.info "  Assigning network: #{snoop_network_name}"
             nic.vnic_profile = snoop_profile
           else
+            Print.info "  Assigning network: #{network_name}"
             nic.vnic_profile = network_profile
           end
 
+          update = {}
           nics_service.nic_service(nic.id).update(nic, update)
-          puts "  #{nic.vnic_profile.name}"
 
         rescue Exception => e
           Print.err 'Error adding network:'
