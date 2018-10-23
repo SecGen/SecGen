@@ -444,7 +444,7 @@ opts.each do |opt, arg|
     else
       Print.err "Argument not valid: #{arg}"
       usage
-      exit
+      exit 1
   end
 end
 
@@ -452,7 +452,7 @@ end
 if ARGV.length < 1
   Print.err 'Missing command'
   usage
-  exit
+  exit 1
 end
 
 # process command
@@ -469,7 +469,7 @@ case ARGV[0]
     else
       Print.err 'Please specify project directory to read'
       usage
-      exit
+      exit 1
     end
 
   when 'create-forensic-image'
@@ -501,5 +501,5 @@ case ARGV[0]
   else
     Print.err "Command not valid: #{ARGV[0]}"
     usage
-    exit
+    exit 1
 end
