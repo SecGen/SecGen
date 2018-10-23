@@ -52,6 +52,8 @@ def usage
    build-project, p: Builds project (vagrant and puppet config), but does not build VMs
    build-vms, v: Builds VMs from a previously generated project
               (use in combination with --project [dir])
+   ovirt-post-build: only performs the ovirt actions that normally follow a successful build
+              (snapshots and networking)
    create-forensic-image: Builds forensic images from a previously generated project
               (can be used in combination with --project [dir])
    list-scenarios: Lists all scenarios that can be used with the --scenario option
@@ -89,7 +91,7 @@ end
 
 # Builds the vm via the vagrant file in the project dir
 # @param project_dir
-def build_vms(project_dir, options)
+def build_vms(scenario, project_dir, options)
   unless project_dir.include? ROOT_DIR
     Print.info 'Relative path to project detected'
     project_dir = "#{ROOT_DIR}/#{project_dir}"
@@ -178,18 +180,25 @@ def build_vms(project_dir, options)
     retry_count -= 1
   end
   if successful_creation
-    if options[:snapshot]
-      Print.info 'Creating a snapshot of VM(s)'
-      if OVirtFunctions::provider_ovirt?(options)
-        OVirtFunctions::create_snapshot(options, scenario, get_vm_names(scenario))
-      else
-        GemExec.exe('vagrant', project_dir, 'snapshot push')
-      end
+    ovirt_post_build(options, scenario, project_dir)
+  else
+    Print.err "Failed to build VMs"
+    exit 1
+  end
+end
+
+def ovirt_post_build(options, scenario, project_dir)
+  if options[:snapshot]
+    Print.info 'Creating a snapshot of VM(s)'
+    if OVirtFunctions::provider_ovirt?(options)
+      OVirtFunctions::create_snapshot(options, scenario, get_vm_names(scenario))
+    else
+      GemExec.exe('vagrant', project_dir, 'snapshot push')
     end
-    if options[:ovirtnetwork]
-      Print.info 'Assigning network(s) of VM(s)'
-      OVirtFunctions::assign_networks(options, scenario, get_vm_names(scenario))
-    end
+  end
+  if options[:ovirtnetwork]
+    Print.info 'Assigning network(s) of VM(s)'
+    OVirtFunctions::assign_networks(options, scenario, get_vm_names(scenario))
   end
 end
 
@@ -255,7 +264,7 @@ end
 # Runs methods to run and configure a new vm from the configuration file
 def run(scenario, project_dir, options)
   build_config(scenario, project_dir, options)
-  build_vms(project_dir, options)
+  build_vms(scenario, project_dir, options)
 end
 
 def default_project_dir
@@ -467,7 +476,7 @@ case ARGV[0]
     build_config(scenario, project_dir, options)
   when 'build-vms', 'v'
     if project_dir
-      build_vms(project_dir, options)
+      build_vms(scenario, project_dir, options)
     else
       Print.err 'Please specify project directory to read'
       usage
@@ -478,14 +487,18 @@ case ARGV[0]
     image_type = options.has_key?(:forensic_image_type) ? options[:forensic_image_type] : 'raw';
 
     if project_dir
-      build_vms(project_dir, options)
+      build_vms(scenario, project_dir, options)
       make_forensic_image(project_dir, nil, image_type)
     else
       project_dir = default_project_dir unless project_dir
       build_config(scenario, project_dir, options)
-      build_vms(project_dir, options)
+      build_vms(scenario, project_dir, options)
       make_forensic_image(project_dir, nil, image_type)
     end
+
+  when 'ovirt-post-build'
+    ovirt_post_build(scenario, project_dir, options)
+    exit 0
 
   when 'list-scenarios'
     list_scenarios
