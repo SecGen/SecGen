@@ -302,7 +302,10 @@ end
 def get_vm_names(scenario)
   vm_names = []
   parser = Nori.new
-  scenario_hash = parser.parse(File.read(scenario))['scenario']
+  scenario_hash = parser.parse(File.read(scenario))
+  if scenario_hash.key?('scenario')
+    scenario_hash = scenario_hash['scenario']
+  end
   if scenario_hash['system'].is_a? Array
     scenario_hash['system'].each do |system|
       vm_names << system['system_name']
