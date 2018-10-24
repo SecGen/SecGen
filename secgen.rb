@@ -299,11 +299,12 @@ def delete_all_projects
   FileUtils.rm_r(Dir.glob("#{PROJECTS_DIR}/*"))
 end
 
+# returns an array containing the system names from the scenario
 def get_vm_names(scenario)
   vm_names = []
   parser = Nori.new
   scenario_hash = parser.parse(File.read(scenario))
-  if scenario_hash.key?('scenario')
+  if scenario_hash.key?('scenario') # work around for a parsing quirk
     scenario_hash = scenario_hash['scenario']
   end
   if scenario_hash['system'].is_a? Array
