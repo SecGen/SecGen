@@ -52,7 +52,7 @@ def usage
    build-project, p: Builds project (vagrant and puppet config), but does not build VMs
    build-vms, v: Builds VMs from a previously generated project
               (use in combination with --project [dir])
-   ovirt-post-build: only performs the ovirt actions that normally follow a successful build
+   ovirt-post-build: only performs the ovirt actions that normally follow a successful vm build
               (snapshots and networking)
    create-forensic-image: Builds forensic images from a previously generated project
               (can be used in combination with --project [dir])
