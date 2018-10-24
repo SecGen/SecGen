@@ -189,6 +189,10 @@ end
 
 def ovirt_post_build(options, scenario, project_dir)
   Print.std 'Taking oVirt post-build actions...'
+  if options[:ovirtnetwork]
+    Print.info 'Assigning network(s) of VM(s)'
+    OVirtFunctions::assign_networks(options, scenario, get_vm_names(scenario))
+  end
   if options[:snapshot]
     Print.info 'Creating a snapshot of VM(s)'
     if OVirtFunctions::provider_ovirt?(options)
@@ -196,10 +200,6 @@ def ovirt_post_build(options, scenario, project_dir)
     else
       GemExec.exe('vagrant', project_dir, 'snapshot push')
     end
-  end
-  if options[:ovirtnetwork]
-    Print.info 'Assigning network(s) of VM(s)'
-    OVirtFunctions::assign_networks(options, scenario, get_vm_names(scenario))
   end
 end
 
