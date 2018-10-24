@@ -15,7 +15,7 @@
   <platform>unix</platform>
   <distro>Kali Linux 2018.3</distro>
   <url>https://app.vagrantup.com/secgen/boxes/kali_light_msf/versions/1.0/providers/virtualbox.box</url>
-  <ovirt_template>kali_linux_msf_241018</ovirt_template>
+  <ovirt_template>kali_linux_msf</ovirt_template>
 
   <reference>https://app.vagrantup.com/secgen</reference>
   <software_license>various</software_license>
