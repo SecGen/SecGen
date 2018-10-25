@@ -46,6 +46,7 @@ def usage
    --ovirtauthz [ovirt authz]
    --ovirt-cluster [ovirt_cluster]
    --ovirt-network [ovirt_network_name]
+   --ovirt-affinity-group [ovirt_affinity_group_name]
 
    COMMANDS:
    run, r: Builds project and then builds the VMs
