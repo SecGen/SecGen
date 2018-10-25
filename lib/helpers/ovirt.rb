@@ -236,8 +236,7 @@ class OVirtFunctions
     ovirt_vm_names = build_ovirt_names(scenario_path, options[:prefix], vm_names)
     ovirt_vm_names.each do |vm_name|
       # python affinity group
-      if system "python #{ROOT_DIR}/lib/helpers/ovirt_affinity.py #{options[:ovirtaffinitygroup]} #{vm_name} #{options[:ovirturl]} #{options[:ovirtuser]}
-                   #{options[:ovirtpass]}"
+      if system "python #{ROOT_DIR}/lib/helpers/ovirt_affinity.py #{options[:ovirtaffinitygroup]} #{vm_name} #{options[:ovirturl]} #{options[:ovirtuser]} #{options[:ovirtpass]}"
         Print.std "Affinity group assigned"
       else
         Print.err "Failed to assign affinity group"
