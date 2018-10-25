@@ -184,14 +184,13 @@ class OVirtFunctions
     vnic_profiles_service.list.shuffle.each do |vnic_profile|
 
       if vnic_profile.name =~ /#{network_name}/
-        puts vnic_profile.name
-        puts vnic_profile.network.id
+        Print.info "Found: #{vnic_profile.name} (#{vnic_profile.network.id})"
         network_profile = vnic_profile
         network_network = vnic_profile.network
 
         vnic_profiles_service.list.each do |vnic_snoop_profile|
             if vnic_snoop_profile.name =~ /snoop/ && vnic_snoop_profile.network.id == network_network.id
-              puts vnic_snoop_profile.name
+              Print.info "Found: #{vnic_snoop_profile.name} (#{vnic_snoop_profile.network.id})"
               snoop_profile = vnic_snoop_profile
             end
         end

@@ -62,8 +62,8 @@ vms = vms_service.list(search='name=' + args.vm_name_search)
 affinitygroups = cluster_affinitygroups_service.list()
 
 for affinitygroup in affinitygroups:
-    print ("Affinity_Group: %s Affinity_Group ID: %s Description: %s Comment: %s"%(affinitygroup.name,affinitygroup.id,affinitygroup.description,affinitygroup.comment))
     if affinitygroup.name == args.affinitygroup:
+        print ("Affinity_Group: %s Affinity_Group ID: %s Description: %s Comment: %s"%(affinitygroup.name,affinitygroup.id,affinitygroup.description,affinitygroup.comment))
         group_service = cluster_affinitygroups_service.group_service(affinitygroup.id)
         group_vms_service = group_service.vms_service()
         for vm in vms:

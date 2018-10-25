@@ -188,6 +188,8 @@ def build_vms(project_dir, options)
   end
 end
 
+# actions on the VMs after vagrant has built them
+# this includes networking and snapshots
 def ovirt_post_build(options, scenario, project_dir)
   Print.std 'Taking oVirt post-build actions...'
   if options[:ovirtnetwork]
@@ -200,6 +202,7 @@ def ovirt_post_build(options, scenario, project_dir)
   end
   if options[:snapshot]
     Print.info 'Creating a snapshot of VM(s)'
+    sleep(20) # give oVirt/Virtualbox a chance to save any VM config changes before creating the snapshot
     if OVirtFunctions::provider_ovirt?(options)
       OVirtFunctions::create_snapshot(options, scenario, get_vm_names(scenario))
     else
