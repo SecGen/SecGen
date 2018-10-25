@@ -20,11 +20,6 @@ parser.add_argument("ovirt_url")
 parser.add_argument("ovirt_username")
 parser.add_argument("ovirt_password")
 args = parser.parse_args()
-print(args.vm_name)
-print(args.affinitygroup)
-
-
-# logging.basicConfig(level=logging.DEBUG, filename='example.log')
 
 # Create the connection to the server:
 connection = sdk.Connection(
@@ -45,6 +40,7 @@ cluster_affinitygroups_service = cluster_service.affinity_groups_service()
 cluster_service = clusters_service.cluster_service(cluster.id)
 cluster_affinitygroups_service = cluster_service.affinity_groups_service()
 
+# could create the affinity group?
 # cluster_affinitygroups_service.add(
 #      types.AffinityGroup(
 #         name='new_affinity_label10',
