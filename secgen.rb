@@ -193,6 +193,10 @@ def ovirt_post_build(options, scenario, project_dir)
     Print.info 'Assigning network(s) of VM(s)'
     OVirtFunctions::assign_networks(options, scenario, get_vm_names(scenario))
   end
+  if options[:ovirtaffinitygroup]
+    Print.info 'Assigning affinity group of VM(s)'
+    OVirtFunctions::assign_affinity_group(options, scenario, get_vm_names(scenario))
+  end
   if options[:snapshot]
     Print.info 'Creating a snapshot of VM(s)'
     if OVirtFunctions::provider_ovirt?(options)
@@ -363,6 +367,7 @@ opts = GetoptLong.new(
     ['--ovirtauthz', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirt-cluster', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirt-network', GetoptLong::REQUIRED_ARGUMENT],
+    ['--ovirt-affinity-group', GetoptLong::REQUIRED_ARGUMENT],
     ['--snapshot', GetoptLong::NO_ARGUMENT],
 )
 
@@ -451,6 +456,9 @@ opts.each do |opt, arg|
     when '--ovirt-network'
       Print.info "Ovirt Network Name : #{arg}"
       options[:ovirtnetwork] = arg
+    when '--ovirt-affinity-group'
+      Print.info "Ovirt Affinity Group : #{arg}"
+      options[:ovirtaffinitygroup] = arg
     when '--snapshot'
       Print.info "Taking snapshots when VMs are created"
       options[:snapshot] = true

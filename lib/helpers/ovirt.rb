@@ -200,7 +200,6 @@ class OVirtFunctions
       end
     end
 
-
     vms.each do |vm_list|
       vm_list.each do |vm|
         Print.std "  Assigning network to: #{vm.name}"
@@ -228,6 +227,21 @@ class OVirtFunctions
           Print.err 'Error adding network:'
           Print.err e.message
         end
+      end
+    end
+  end
+
+  def self.assign_affinity_group(options, scenario_path, vm_names)
+    vms = []
+    ovirt_vm_names = build_ovirt_names(scenario_path, options[:prefix], vm_names)
+    ovirt_vm_names.each do |vm_name|
+      # python affinity group
+      if system "python #{ROOT_DIR}/lib/helpers/ovirt_affinity.py #{options[:ovirtaffinitygroup]} #{vm_name} #{options[:ovirturl]} #{options[:ovirtuser]}
+                   #{options[:ovirtpass]}"
+        Print.std "Affinity group assigned"
+      else
+        Print.err "Failed to assign affinity group"
+        exit 1
       end
     end
   end
