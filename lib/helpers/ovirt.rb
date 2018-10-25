@@ -208,8 +208,8 @@ class OVirtFunctions
 
           # find the service that manages the nics of that vm
           nics_service = vm_service.nics_service
-          # set the last nic
-          nic = nics_service.list.last
+          # set the first nic
+          nic = nics_service.list.first
           selected_profile = nil
 
           if vm.name =~ /snoop/
@@ -227,13 +227,15 @@ class OVirtFunctions
 
           # check if changes saved
           nic_updated = nics_service.list.last
+          Print.info "#{nic_updated.vnic_profile.name}"
           if nic_updated.vnic_profile != selected_profile
-            Print.err "NIC profile has not saved correctly!"
+            Print.err "NIC profile may not have saved correctly... trying again."
             # try again!
             nics_service.nic_service(nic.id).update(nic, update)
             nics_service.nic_service(nic.id).update(nic, update)
+            nic_updated = nics_service.list.last
             if nic_updated.vnic_profile != selected_profile
-              Print.err "NIC profile has STILL not saved correctly!"
+              Print.err "NIC profile may STILL have not saved correctly!"
             end
           end
 
