@@ -201,7 +201,7 @@ class OVirtFunctions
 
     vms.each do |vm_list|
       vm_list.each do |vm|
-        Print.std "  Assigning network to: #{vm.name}"
+        Print.std " Assigning network to: #{vm.name}"
         begin
           # find the service that manages that vm
           vm_service = vms_service(ovirt_connection).vm_service(vm.id)
@@ -210,17 +210,33 @@ class OVirtFunctions
           nics_service = vm_service.nics_service
           # set the last nic
           nic = nics_service.list.last
+          selected_profile = nil
 
           if vm.name =~ /snoop/
             Print.info "  Assigning network: #{snoop_network_name}"
-            nic.vnic_profile = snoop_profile
+            selected_profile = snoop_profile
           else
             Print.info "  Assigning network: #{network_name}"
-            nic.vnic_profile = network_profile
+            selected_profile = network_profile
           end
 
+          # save profile changes
+          nic.vnic_profile = selected_profile
           update = {}
           nics_service.nic_service(nic.id).update(nic, update)
+
+          # check if changes saved
+          nic_updated = nics_service.list.last
+          if nic_updated.vnic_profile != selected_profile
+            Print.err "NIC profile has not saved correctly!"
+            # try again!
+            nics_service.nic_service(nic.id).update(nic, update)
+            nics_service.nic_service(nic.id).update(nic, update)
+            if nic_updated.vnic_profile != selected_profile
+              Print.err "NIC profile has STILL not saved correctly!"
+            end
+          end
+
 
         rescue Exception => e
           Print.err 'Error adding network:'
