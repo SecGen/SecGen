@@ -38,7 +38,7 @@
   $root_password = self.root_password
   $flags = self.flags
 
-  REQUIRED_FLAGS = 10
+  REQUIRED_FLAGS = 6
   while $flags.length < REQUIRED_FLAGS
     $flags << "flag{#{SecureRandom.hex}}"
     Print.err "Warning: Not enough flags provided to hackerbot_config generator, some flags won't be tracked/marked!"
