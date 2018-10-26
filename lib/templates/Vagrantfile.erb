@@ -141,7 +141,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%      # Static oVirt networking -%>
 <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) -%>
 <%         interface = 'ens3' -%>
-<%         if @ovirt_template and @ovirt_template ~= /kali|debian_desktop_kde/ -%>
+<%         if @ovirt_template and @ovirt_template =~ /kali|debian_desktop_kde/ -%>
 <%          interface = 'eth0' -%>
 <%         end -%>
            # use some shell scripting to identify the name of the network interface (eth0/ens3/...), and set the IP address statically
