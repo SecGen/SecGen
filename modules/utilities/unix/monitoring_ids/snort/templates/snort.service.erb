@@ -4,7 +4,7 @@ After=syslog.target network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/snort -q
+ExecStart=/usr/local/bin/snort -q -c /etc/snort/snort.conf 
 
 [Install]
 WantedBy=multi-user.target

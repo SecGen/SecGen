@@ -1,7 +1,7 @@
 class snort::install {
 
   package { ['build-essential','bison', 'zlib1g', 'zlib1g-dev', 'flex', 'libdaq2', 'libdumbnet1', 'snort-common-libraries', 'libpcre3-dev',
-    'libdumbnet-dev','snort-rules-default','snort-common']:
+    'libdumbnet-dev']:
     ensure => installed,
   }
 
@@ -72,5 +72,18 @@ class snort::install {
   exec { 'snort-reload-daemon':
     command => 'systemctl daemon-reload',
     require => [Exec['install-snort'], File['/lib/systemd/system/snort.service']],
+  }
+
+  # install rules and config via debian repo
+  package { ['snort-rules-default','snort-common']:
+    ensure => installed,
+  }
+
+  file{"/var/log/snort":
+    ensure  =>  directory,
+    mode    =>  0755,
+  }
+  file { '/var/log/snort/alert':
+    ensure => present,
   }
 }
