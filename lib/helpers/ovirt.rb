@@ -165,11 +165,15 @@ class OVirtFunctions
 
   def self.assign_networks(options, scenario_path, vm_names)
     vms = []
+    Print.debug vm_names.to_s
     ovirt_connection = get_ovirt_connection(options)
     ovirt_vm_names = build_ovirt_names(scenario_path, options[:prefix], vm_names)
     ovirt_vm_names.each do |vm_name|
+      Print.debug vm_name
       vms << vms_service(ovirt_connection).list(search: "name=#{vm_name}")
     end
+
+    Print.debug vms.to_s
 
     network_name = options[:ovirtnetwork]
     network_network = nil

@@ -138,6 +138,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%       end %>
 <%     # Static networking -%>
 <%     else -%>
+<%      # Static oVirt networking -%>
+<%      # TODO: instead use some shell scripting to identify the name of the network interface (eth0/ens3/...) -%>
 <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) -%>
 <%         if @ovirt_template and (@ovirt_template.include? 'kali_linux_msf' or @ovirt_template.include? 'debian_server' )%>
             <%= system.name %>.vm.provision 'shell', inline: "echo \"auto lo\niface lo inet loopback\n\nauto eth0\niface eth0 inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
@@ -145,12 +147,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%         elsif @ovirt_template and @ovirt_template.include? 'debian_desktop_kde' %>
             <%= system.name %>.vm.provision 'shell', inline: "echo \"\nauto eth1\niface eth1 inet static\n\taddress <%= resolve_network(selected_module)%>\" >> /etc/network/interfaces"
             <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
-<%         elsif @ovirt_template and ( @ovirt_template.include? 'debian_stretch_server_n' or @ovirt_template.include? 'debian_stretch_desktop_kde') %>
+<%         elsif @ovirt_template and ( @ovirt_template.include? 'debian_stretch_server' or @ovirt_template.include? 'debian_stretch_desktop_kde') %>
             <%= system.name %>.vm.provision 'shell', inline: "echo \"\nauto ens3\niface ens3 inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
             <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
-          <%         else -%>
+<%         else -%>
   <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module)%>", :ovirt__network_name => '<%= get_ovirt_network_name(system.name, @options[:ovirtnetwork]) %>'
 <%         end -%>
+<%       # Static Virtualbox networking -%>
 <%       else -%>
   <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module)%>"
 <%       end -%>
