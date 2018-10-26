@@ -100,17 +100,26 @@ We can also use tcpdump to do some simple monitoring of the network traffic to d
 
 ```bash
 kdesudo wireshark &
-
+```
+And in another command tab:
+```bash
 sudo tcpdump -A  -i eth1 | grep "GET"
 ```
 > For this exercise you can ignore the warning about running Wireshark as root, or read online to learn to use setcap to grant Wireshark more specific privileges.
 
-In Wireshark, choose the network interface card (such as eth1) then click the green start icon, to ==start monitoring traffic==. Generate some traffic and explore how to ==view it using Wireshark==.
+In Wireshark, choose the network interface card (such as eth1) then click the start icon, to ==start monitoring traffic==. Generate some traffic and explore how to ==view it using Wireshark==.
 
 You can also open the captured network traffic in Wireshark.
 
 Open a web browser **on the desktop VM**, and visit [*http://<%= $web_server_ip %>*](http://<%= $web_server_ip %>), note that tcpdump captures *most* network content, and grep can be used to filter it down to lines that are interesting to us.
+> If you don't see traffic generated from this, you may need to press Ctrl-F5 to force the browser not to use a local cache.
 
-Note that making sense of this information using tcpdump and/or Wireshark is possible (and is a common sys-admin task), but the output is too noisy to be constantly and effectively monitored by a human to detect security incidents. Therefore we can use an IDS such as Snort to monitor and analyse the network traffic to detect activity that it is configured to alert.
+==Right click on an HTTP request in Wireshark and "Follow", "TCP Stream".==
+
+==Right click the same HTTP request in Wireshark and "Follow", "HTTP Stream".==
+
+==In your log book explain the differences in output.==
+
+Note that making sense of all this information using tcpdump and/or Wireshark is possible (and is a common sys-admin task), but the output is too noisy to be constantly and effectively monitored by a human to detect security incidents. Therefore we can use an IDS such as Snort to monitor and analyse the network traffic to detect activity that it is configured to alert.
 
 Make sure tcpdump is stopped (Ctrl-C).
