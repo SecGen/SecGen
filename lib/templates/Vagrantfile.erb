@@ -140,8 +140,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 <%     else -%>
 <%      # Static oVirt networking -%>
 <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) -%>
+<%         interface = 'eth0' -%>
+<%         if @ovirt_template.include? 'stretch' -%>
+<%          interface = 'ens3' -%>
+<%         end -%>
            # use some shell scripting to identify the name of the network interface (eth0/ens3/...), and set the IP address statically
-           <%= system.name %>.vm.provision 'shell', inline: "echo -e \"auto lo\niface lo inet loopback\n\nauto `ip -o link show | awk '{print $2}' | grep '\(eno\|eth\|ens\)[0-9]\+' -o`\niface `ip -o link show | awk '{print $2}' | grep '\(eno\|eth\|ens\)[0-9]\+' -o` inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
+           <%= system.name %>.vm.provision 'shell', inline: "echo -e \"auto lo\niface lo inet loopback\n\nauto <%= interface %>\niface <%= interface %> inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
            <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
 <%       # Static Virtualbox networking -%>
 <%       else -%>

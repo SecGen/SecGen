@@ -1,7 +1,7 @@
 class snort::install {
 
   package { ['build-essential','bison', 'zlib1g', 'zlib1g-dev', 'flex', 'libdaq2', 'libdumbnet1', 'snort-common-libraries', 'libpcre3-dev',
-    'libdumbnet-dev']:
+    'libdumbnet-dev','snort-rules-default','snort-common']:
     ensure => installed,
   }
 
