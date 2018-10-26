@@ -2,9 +2,9 @@
 
 This section gives a quick overview of the basics of network monitoring, using tools such as Tcpdump and Wireshark. Keep in mind that these are important foundations, and we will quickly build on these.
 
-**From your ids_server VM.** (==Login to the ids_server VM==)
+**From your ids_snoop VM.** (==Login to the ids_snoop VM==)
 
-To view live network traffic, ==start tcpdump on the ids_server:==
+To view live network traffic, ==start tcpdump on the ids_snoop:==
 
 First, identify the network interface card (nic) to use:
 ```bash
@@ -17,7 +17,7 @@ sudo tcpdump -i eth1
 ```
 > Where **eth1**, is the name of the interface given in response to the above command.
 
-With tcpdump still running,  **from the desktop VM** ==perform a ping to the ids_server VM.==
+With tcpdump still running,  **from the desktop VM** ==perform a ping to the ids_snoop VM.==
 
 ```bash
 ping <%= $ids_server_ip %>
@@ -35,13 +35,13 @@ Test this, **from the desktop** ==ping the web_server==:
 ```bash
 ping <%= $web_server_ip %>
 ```
-> If your network is configured correctly, from the Tcpdump running on the ids_server you should see the pings between these separate VMs (the desktop, and the web_server). Take the time to confirm that this is working. If it is not showing this traffic, but did show the last output, you need to configure the ids_server to be able to view the network traffic.
+> If your network is configured correctly, from the Tcpdump running on the ids_snoop you should see the pings between these separate VMs (the desktop, and the web_server). Take the time to confirm that this is working. If it is not showing this traffic, but did show the last output, you need to configure the ids_snoop to be able to view the network traffic.
 
 Once you have seen tcpdump in action displaying these packets ==press Ctrl-C to exit.==
 
 Tcpdump can format the output in various ways, showing various levels of detail.
 
-**From the ids_server**, ==run:==
+**From the ids_snoop**, ==run:==
 
 ```bash
 sudo tcpdump -A  -i eth1
@@ -59,9 +59,9 @@ curl <%= $hackerbot_server_ip %>
 
 ==Ping the web_server again== and observe the output.
 
-Stop tcpdump (Ctrl-C) on the ids_server VM once you have observed the output.
+Stop tcpdump (Ctrl-C) on the ids_snoop VM once you have observed the output.
 
-==Run the following== command **on the ids_server:**
+==Run the following== command **on the ids_snoop:**
 
 ```bash
 sudo tcpdump -v  -i eth1
@@ -79,7 +79,7 @@ While that is running, ==access a web page from Firefox on the desktop VM== brow
 
 Then ==close tcpdump== (Ctrl-C).
 
-To view the file containing the tcpdump output on the ids_server VM type:
+To view the file containing the tcpdump output on the ids_snoop VM type:
 
 ```bash
 less /tmp/tcpdump-output
@@ -96,7 +96,7 @@ Run `man tcpdump` and read about the many options for output and filtering.
 
 We can also use tcpdump to do some simple monitoring of the network traffic to detect certain key words.
 
-**On the ids_server**, ==run:==
+**On the ids_snoop**, ==run:==
 
 ```bash
 kdesudo wireshark &

@@ -1,6 +1,6 @@
 ## Intrusion detection system (IDS) monitoring basics
 
-Continuing **on the ids_server VM:**
+Continuing **on the ids_snoop VM:**
 
 ==Make a backup== of the snort's configuration file in case anything goes wrong:
 
@@ -41,7 +41,7 @@ Snort should now be running, monitoring network traffic for activity.
 
 This should trigger an alert from Snort, which is stored in an alerts log file.
 
-**From the ids_server**, ==follow the Snort alert log== file by running (you may like to do this from a new tab):
+**From the ids_snoop**, ==follow the Snort alert log== file by running (you may like to do this from a new tab):
 
 ```bash
 sudo tail -f /var/log/snort/alert
@@ -76,7 +76,7 @@ You can use tcpdump's various flags to change the way it is displayed, or you co
 
 ##Configuring Snort
 
-**On the ids_server**, ==edit /etc/snort/snort.conf==; for example:
+**On the ids_snoop**, ==edit /etc/snort/snort.conf==; for example:
 
 ```bash
 vi /etc/snort/snort.conf
@@ -102,7 +102,7 @@ Add the following line below the other include rules (at the end of the file):
 `include $RULE_PATH/my.rules`
 
 Save your changes to snort.conf
-> (For example, in vi, press Esc, then type ":wq"). 
+> (For example, in vi, press Esc, then type ":wq").
 
 > Hint: you may find it easier to use Esc, then type ":w" to write your changes to disk and then type ":q" to exit (or "x" shorthand for "wq").
 
@@ -141,4 +141,3 @@ ping <%= $web_server_ip %>
 ```
 
 Check for the Snort alert. You should see that the ping was detected, and our new message was added to the alerts log file.
-
