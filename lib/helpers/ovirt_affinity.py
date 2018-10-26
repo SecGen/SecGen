@@ -63,10 +63,11 @@ affinitygroups = cluster_affinitygroups_service.list()
 
 for affinitygroup in affinitygroups:
     if affinitygroup.name == args.affinitygroup:
-        print ("Affinity_Group: %s Affinity_Group ID: %s Description: %s Comment: %s"%(affinitygroup.name,affinitygroup.id,affinitygroup.description,affinitygroup.comment))
+        print ("Using Affinity_Group: " + affinitygroup.name + " Affinity_Group ID: " + affinitygroup.id)
         group_service = cluster_affinitygroups_service.group_service(affinitygroup.id)
         group_vms_service = group_service.vms_service()
         for vm in vms:
+            print ("Adding VM: " + vm.name)
             group_vms_service.add(
                 vm=types.Vm(
                     id=vm.id,
