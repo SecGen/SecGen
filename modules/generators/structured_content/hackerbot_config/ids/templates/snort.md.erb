@@ -94,7 +94,7 @@ Scroll through the config file and, take notice of these details:
 
 -   Towards the end of the config file are "include" lines, which specify which of the rule files in RULE\_PATH are in effect. As is common, lines beginning with "\#" are ignored, which is used to list disabled rule files. There are rule files for detecting known exploits, attacks against services such as DNS and FTP, denial of service (DoS) attacks, and so on.
 
-Add the following line below the other include rules (at the end of the file):
+Add the following line *below the other include rules* (at the end of the file):
 
 `include $RULE_PATH/my.rules`
 
