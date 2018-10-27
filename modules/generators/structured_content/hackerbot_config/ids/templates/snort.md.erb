@@ -17,10 +17,11 @@ sudo vi /etc/snort/snort.conf
 
 > ":wq" to write changes and quit)
 
-==Add the following line:==
+==Add (or uncomment) the following lines:==
 `output alert_fast`
+`output log_tcpdump: tcpdump.log`
 
-==Change Snort's interface== to eth1 (or as you identified earlier), and set the local network to your IP address range (or "any"):
+==Change Snort's interface== to ens3 (or as you identified earlier), and set the local network to your IP address range (or "any"):
 
 ```bash
 sudo vi /etc/snort/snort.debian.conf
@@ -37,9 +38,13 @@ sudo service snort start
 
 Snort should now be running, monitoring network traffic for activity.
 
-==Have a chat with Hackerbot== (**from the desktop VM**).
+==Do an nmap port scan of the web_server== VM (from the desktop VM):
 
-This should trigger an alert from Snort, which is stored in an alerts log file.
+```bash
+nmap -sX <%= $web_server_ip %>
+```
+
+This should trigger a logged alert from Snort, which is stored in an alerts log file.
 
 **From the ids_snoop**, ==follow the Snort alert log== file by running (you may like to do this from a new tab):
 
@@ -48,17 +53,9 @@ sudo tail -f /var/log/snort/alert
 ```
 >The tail program will wait for new alerts to be written to the file, and will display them as they are logged. (Ctrl-C to exit)
 
-==Do an nmap port scan of the web_server== VM (from the desktop VM):
+==LogBook question: What does the `-sX` in the nmap command mean? Does the log match what happened? Are there any false positives (alerts that describe things that did not actually happen)?==
 
-```bash
-nmap <%= $web_server_ip %>
-```
-
-This should trigger another alert.
-
-==LogBook question: Does the log match what happened? Are there any false positives (alerts that describe things that did not actually happen)?==
-
-Try another type of port scan, such as an ==Xmas Tree scan from the desktop== VM (Hint: `man nmap`).
+==Try another type of port scan from the desktop== VM (Hint: `man nmap`).
 
 Press Ctrl-C to ==stop the alert tail process==, if it did not do so automatically.
 
