@@ -20,6 +20,7 @@ parser.add_argument("ovirt_url")
 parser.add_argument("ovirt_username")
 parser.add_argument("ovirt_password")
 args = parser.parse_args()
+print(args)
 
 # Create the connection to the server:
 connection = sdk.Connection(
@@ -62,6 +63,7 @@ vms = vms_service.list(search='name=' + args.vm_name_search)
 affinitygroups = cluster_affinitygroups_service.list()
 
 for affinitygroup in affinitygroups:
+    print (affinitygroup.name + '--' + args.affinitygroup)
     if affinitygroup.name == args.affinitygroup:
         print ("Using Affinity_Group: " + affinitygroup.name + " Affinity_Group ID: " + affinitygroup.id)
         group_service = cluster_affinitygroups_service.group_service(affinitygroup.id)

@@ -1,89 +1,14 @@
 class snort::install {
 
-  package { ['build-essential','bison', 'zlib1g', 'zlib1g-dev', 'flex', 'libdaq2', 'libdumbnet1', 'snort-common-libraries', 'libpcre3-dev',
-    'libdumbnet-dev']:
-    ensure => installed,
-  }
-
-  Exec { path => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'] }
-
-  file { '/usr/local/src/libpcap-1.9.0.tar.gz':
-    source => "puppet:///modules/snort/libpcap-1.9.0.tar.gz",
-    ensure => present,
-  }
-
-  file { '/usr/local/src/daq-2.0.6.tar.gz':
-    source => "puppet:///modules/snort/daq-2.0.6.tar.gz",
-    ensure => present,
-  }
-
-  file { '/usr/local/src/snort-2.9.12.tar.gz':
-    source => "puppet:///modules/snort/snort-2.9.12.tar.gz",
-    ensure => present,
-  }
-
-  exec { 'unpack-libpcap':
-    cwd     => '/usr/local/src/',
-    command => 'tar -xzvf libpcap-1.9.0.tar.gz',
-    creates => '/usr/local/src/libpcap-1.9.0/',
-    require => File['/usr/local/src/libpcap-1.9.0.tar.gz'],
-  }
-
-  exec { 'unpack-daq':
-    cwd     => '/usr/local/src/',
-    command => 'tar -xzvf daq-2.0.6.tar.gz',
-    creates => '/usr/local/src/daq-2.0.6/',
-    require => File['/usr/local/src/daq-2.0.6.tar.gz'],
-  }
-
-  exec { 'unpack-snort':
-    cwd     => '/usr/local/src/',
-    command => 'tar -xzvf snort-2.9.12.tar.gz',
-    creates => '/usr/local/src/snort-2.9.12/',
-    require => File['/usr/local/src/snort-2.9.12.tar.gz'],
-  }
-
-  exec { 'install-libpcap':
-    cwd     => '/usr/local/src/libpcap-1.9.0/',
-    command => '/usr/local/src/libpcap-1.9.0/configure --prefix=/usr && sudo make && sudo make install',
-    require => Exec['unpack-libpcap']
-  }
-
-  exec { 'install-daq':
-    cwd     => '/usr/local/src/daq-2.0.6/',
-    command => '/usr/local/src/daq-2.0.6/configure && sudo make && sudo make install',
-    require => Exec['unpack-daq', 'install-libpcap']
-  }
-
-  exec { 'install-snort':
-    cwd     => '/usr/local/src/snort-2.9.12/',
-    command =>
-      '/usr/local/src/snort-2.9.12/configure --enable-sourcefire --disable-open-appid && sudo make && sudo make install'
-    ,
-    require => Exec['unpack-snort', 'install-daq']
-  }
-
-  # Create a service file
-  file { '/lib/systemd/system/snort.service':
-    ensure  => file,
-    content => template('snort/snort.service.erb'),
-  }
-
-  exec { 'snort-reload-daemon':
-    command => 'systemctl daemon-reload',
-    require => [Exec['install-snort'], File['/lib/systemd/system/snort.service']],
-  }
-
   # install rules and config via debian repo
   package { ['snort-rules-default','snort-common']:
     ensure => installed,
-  }
+  } ->
 
-  file{"/var/log/snort":
-    ensure  =>  directory,
-    mode    =>  0755,
-  }
-  file { '/var/log/snort/alert':
-    ensure => present,
+  exec { 'install snort':
+    path     => [ '/bin/', '/sbin/' , '/usr/bin/', '/usr/sbin/' ],
+    command  => '/bin/true',
+    provider => shell,
+    onlyif   => 'apt-get install -y snort; systemctl disable snort',
   }
 }
