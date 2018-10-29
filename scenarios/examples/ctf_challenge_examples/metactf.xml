@@ -9,15 +9,31 @@
     <base platform="linux" type="server" distro="Stretch"/>
 
 
-    <utility module_path=".*metactf"/>
+    <!--<utility module_path=".*metactf"/>-->
 
-    <!--<utility type="parameterised_accounts">-->
-      <!--<input into="account" into_datastore="account">-->
-        <!--<generator type="account"/>-->
-      <!--</input>-->
-    <!--</utility>-->
-    <!---->
-    <!--<utility module_path=".*metactf" >-->
+    <utility module_path=".*parameterised_accounts">
+      <input into="account" into_datastore="account">
+        <generator type="account"/>
+      </input>
+    </utility>
+
+    <utility module_path=".*metactf">
+      <input into="challenge_list">
+        <value>src_angr/00_angr_find</value>
+        <value>src_angr/01_angr_avoid</value>
+        <value>src_angr/02_angr_find_condition</value>
+      </input>
+      <input into="groups">
+        <value>challenge01</value>
+        <value>challenge02</value>
+        <value>challenge03</value>
+      </input>
+      <input into="account">
+        <datastore>account</datastore>
+      </input>
+    </utility>
+
+    <!--<utility module_path=".*metactf">-->
       <!--<input into="challenge_list">-->
         <!--<generator type="metactf_challenge">-->
           <!--<input into="difficulty">-->

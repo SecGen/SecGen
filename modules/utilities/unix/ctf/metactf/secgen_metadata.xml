@@ -16,6 +16,32 @@
   <reference>https://thefengs.com/wuchang/papers/3gse15metactf.pdf</reference>
   <reference>https://bitbucket.org/wuchangfeng/metactf</reference>
 
+  <!-- Note - Scenarios must provide the same number of flags as challenges and groups in the challenge_list -->
+  <read_fact>challenge_list</read_fact>
+  <read_fact>flags</read_fact>
+  <read_fact>account</read_fact>
+
+  <default_input into="challenge_list">
+    <value>src_angr/00_angr_find</value>
+    <value>src_angr/01_angr_avoid</value>
+    <value>src_angr/02_angr_find_condition</value>
+    <!--<generator type="metactf_challenge"/>-->
+    <!--<generator type="metactf_challenge"/>-->
+    <!--<generator type="metactf_challenge"/>-->
+  </default_input>
+
+  <default_input into="flags">
+    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>
+  </default_input>
+
+  <default_input into="groups">
+    <value>challenge01</value>
+    <value>challenge02</value>
+    <value>challenge03</value>
+  </default_input>
+
   <conflict>
     <name>Wheezy</name>
   </conflict>

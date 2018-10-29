@@ -15,11 +15,13 @@ define secgen_functions::install_setgid_binary (
   if $account {
     $username = $account['username']
 
-    ::accounts::user { $username:
-      shell      => '/bin/bash',
-      password   => pw_hash($account['password'], 'SHA-512', 'mysalt'),
-      managehome => true,
-      home_mode  => '0755',
+    if ! User[$username] {
+      ::accounts::user { $username:
+        shell      => '/bin/bash',
+        password   => pw_hash($account['password'], 'SHA-512', 'mysalt'),
+        managehome => true,
+        home_mode  => '0755',
+      }
     }
 
     $storage_directory = "/home/$username"
@@ -43,11 +45,11 @@ define secgen_functions::install_setgid_binary (
   # Create challenge directory
   ::secgen_functions::create_directory { "create_$challenge_directory":
     path => $challenge_directory,
-    notify => File["create_$compile_directory"],
+    notify => File["create-$compile_directory-$challenge_name"],
   }
 
   # Move contents of the module's files directory into compile directory
-  file { "create_$compile_directory":
+  file { "create-$compile_directory-$challenge_name":
     path => $compile_directory,
     ensure  => directory,
     recurse => true,
@@ -58,7 +60,7 @@ define secgen_functions::install_setgid_binary (
   exec { "gcc_$challenge_name-$compile_directory":
     cwd     => $compile_directory,
     command => "/usr/bin/make",
-    require => File["create_$compile_directory"]
+    require => File["create-$compile_directory-$challenge_name"]
   }
 
   # Move the compiled binary into the challenge directory
