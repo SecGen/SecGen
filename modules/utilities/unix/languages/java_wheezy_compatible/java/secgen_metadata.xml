@@ -22,7 +22,11 @@
   <conflict>
     <software_name>java</software_name>
   </conflict>
-  
+
+  <conflict>
+    <name>Xenial</name>
+  </conflict>
+
   <conflict>
     <name>Stretch</name>
   </conflict>
