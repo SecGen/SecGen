@@ -8,7 +8,57 @@
     <system_name>metactf</system_name>
     <base platform="linux" type="server" distro="Stretch"/>
 
-    <utility module_path=".*metactf" />
+
+    <utility module_path=".*metactf"/>
+
+    <!--<utility type="parameterised_accounts">-->
+      <!--<input into="account" into_datastore="account">-->
+        <!--<generator type="account"/>-->
+      <!--</input>-->
+    <!--</utility>-->
+    <!---->
+    <!--<utility module_path=".*metactf" >-->
+      <!--<input into="challenge_list">-->
+        <!--<generator type="metactf_challenge">-->
+          <!--<input into="difficulty">-->
+            <!--<value>easy</value>-->
+          <!--</input>-->
+        <!--</generator>-->
+        <!--<generator type="metactf_challenge">-->
+          <!--<input into="difficulty">-->
+            <!--<value>easy</value>-->
+          <!--</input>-->
+        <!--</generator>-->
+        <!--<generator type="metactf_challenge">-->
+          <!--<input into="difficulty">-->
+            <!--<value>easy</value>-->
+          <!--</input>-->
+        <!--</generator>-->
+        <!--<generator type="metactf_challenge">-->
+          <!--<input into="difficulty">-->
+            <!--<value>medium</value>-->
+          <!--</input>-->
+        <!--</generator>-->
+        <!--<generator type="metactf_challenge">-->
+          <!--<input into="difficulty">-->
+            <!--<value>medium</value>-->
+          <!--</input>-->
+        <!--</generator>-->
+        <!--<generator type="metactf_challenge">-->
+          <!--<input into="difficulty">-->
+            <!--<value>medium</value>-->
+          <!--</input>-->
+        <!--</generator>-->
+        <!--<generator type="metactf_challenge">-->
+          <!--<input into="difficulty">-->
+            <!--<value>hard</value>-->
+          <!--</input>-->
+        <!--</generator>-->
+      <!--</input>-->
+      <!--<input into="account">-->
+        <!--<datastore>account</datastore>-->
+      <!--</input>-->
+    <!--</utility>-->
 
     <network type="private_network" range="dhcp"/>
   </system>
