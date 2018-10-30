@@ -4,88 +4,87 @@
 define secgen_functions::install_setgid_binary (
   $challenge_name, # Challenge name, used for the wrapper-directory
   $source_module_name, # Name of the module that calls this function
-  $binary_path, # Optional : Provide the path to a binary file that has already been compiled
   $group, # Name of group
   $account, # User account
   $flag, # ctf flag string
   $flag_name, # ctf flag name
+  $binary_path     = '', # Optional : Provide the path to a binary file that has already been compiled
   $storage_dir     = '', # Optional: Storage directory (takes precedent if supplied, e.g. nfs / smb share dir)
   $strings_to_leak = [''], # Optional: strings to leak (could contain instructions or a message)
 ) {
 
-  if $account {
-    $username = $account['username']
-
-    if ! User[$username] {
-      ::accounts::user { $username:
-        shell      => '/bin/bash',
-        password   => pw_hash($account['password'], 'SHA-512', 'mysalt'),
-        managehome => true,
-        home_mode  => '0755',
-      }
-    }
-
-    $storage_directory = "/home/$username"
-
-  } elsif $storage_dir {
-    $storage_directory = $storage_dir
-
-  } else {
-    err('install: either account or storage_dir is required')
+  if !$account {
+    err('install: account is required for setgid challenges')
     fail
   }
+
+  $username = $account['username']
+
+  ensure_resource('parameterised_accounts::account', "parameterised_$username",
+    { "username"         => $account['username'],
+      "password"         => $account['password'],
+      "super_user"       => $account['super_user'],
+      "strings_to_leak"  => $account['strings_to_leak'],
+      "leaked_filenames" => $account['leaked_filenames'], })
+
+  $storage_directory = "/home/$username"
 
   $challenge_directory = "$storage_directory/$challenge_name"
   $modules_source = "puppet:///modules/$source_module_name"
 
-  if $binary_path == undef or $binary_path == ''  {
-    # TODO : Unless binary path is provided ... CALL COMPILE_BINARY_MODULE!
-
-    # TODO: Remove compile directory
-    exec { "remove_$compile_directory":
-      command => "/bin/rm -rf $compile_directory",
-      require => [File["$challenge_directory/$challenge_name"]]
+  if $binary_path == '' {
+    $outer_bin_path = "/tmp/$challenge_name"
+    $bin_path = "$outer_bin_path/$challenge_name"
+    ::secgen_functions::compile_binary_module { "compile-$source_module_name-$challenge_name":
+      source_module_name => $source_module_name,
+      binary_directory   => $outer_bin_path,
+      challenge_name     => $challenge_name,
+      notify             => Secgen_functions::Create_directory["create_$challenge_directory"]
     }
   } else {
-
+    $bin_path = $binary_path
   }
 
-  #TODO : Set the binary path. If the path has been passed in, use that.
-  #TODO : Otherwise create a binary path to pass into the secgen compile_binary_module function and use that internally.
-  $binary_path
+  ensure_resource('group', $group, { 'ensure' => 'present' })
 
-  if ! Group[$group] {
-    group { $group:
-      ensure => present,
-    }
+  exec { "add $username $group membership":
+    unless  => "/bin/grep -q \"$group\\S*$username\" /etc/group",
+    command => "/usr/sbin/usermod -aG $group $username",
+    require => [Group[$group], Parameterised_accounts::Account["parameterised_$username"]]
   }
 
   # Create challenge directory
   ::secgen_functions::create_directory { "create_$challenge_directory":
-    path => $challenge_directory,
-    # notify => File["create-$compile_directory-$challenge_name"],
+    path   => $challenge_directory,
+    notify => File["$challenge_directory/$challenge_name"],
   }
 
   # Move the compiled binary into the challenge directory
   file { "$challenge_directory/$challenge_name":
-    ensure  => present,
-    owner   => 'root',
-    group   => $group,
-    mode    => '2771',
-    source  => "$binary_path",
+    ensure => present,
+    owner  => 'root',
+    group  => $group,
+    mode   => '2771',
+    source => $bin_path,
   }
 
   # Drop the flag file on the box and set permissions
-  ::secgen_functions::leak_files { "$username-file-leak":
+  ::secgen_functions::leak_files { "$challenge_directory/$challenge_name-flag-leak":
     storage_directory => "$challenge_directory",
     leaked_filenames  => [$flag_name],
     strings_to_leak   => [$flag],
     owner             => 'root',
     group             => $group,
-    mode              => '0440',
-    leaked_from       => "accounts_$username",
-    require           => [Group[$group], Exec["gcc_$challenge_name-$compile_directory"]],
-    notify            => Exec["remove_$compile_directory"],
+    mode              => '0400',
+    leaked_from       => "$source_module_name/$challenge_name",
+    require           => [Group[$group], File["$challenge_directory/$challenge_name"]],
+    # notify            => Exec["remove_$compile_directory"],
   }
+
+  # TODO: Remove compile directory  (may not be necessary, try reboot stretch vms + see if /tmp is cleared (or just remove $outer_bin_path if the variable exists).
+  # exec { "remove_$compile_directory":
+  #   command => "/bin/rm -rf $compile_directory",
+  #   require => [File["$challenge_directory/$challenge_name"]]
+  # }
 
 }
