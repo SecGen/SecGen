@@ -4,6 +4,7 @@
 define secgen_functions::install_setgid_binary (
   $challenge_name, # Challenge name, used for the wrapper-directory
   $source_module_name, # Name of the module that calls this function
+  $binary_path, # Optional : Provide the path to a binary file that has already been compiled
   $group, # Name of group
   $account, # User account
   $flag, # ctf flag string
@@ -34,33 +35,35 @@ define secgen_functions::install_setgid_binary (
     fail
   }
 
-  $compile_directory = "$storage_directory/tmp"
   $challenge_directory = "$storage_directory/$challenge_name"
   $modules_source = "puppet:///modules/$source_module_name"
 
-  group { $group:
-    ensure => present,
+  if $binary_path == undef or $binary_path == ''  {
+    # TODO : Unless binary path is provided ... CALL COMPILE_BINARY_MODULE!
+
+    # TODO: Remove compile directory
+    exec { "remove_$compile_directory":
+      command => "/bin/rm -rf $compile_directory",
+      require => [File["$challenge_directory/$challenge_name"]]
+    }
+  } else {
+
+  }
+
+  #TODO : Set the binary path. If the path has been passed in, use that.
+  #TODO : Otherwise create a binary path to pass into the secgen compile_binary_module function and use that internally.
+  $binary_path
+
+  if ! Group[$group] {
+    group { $group:
+      ensure => present,
+    }
   }
 
   # Create challenge directory
   ::secgen_functions::create_directory { "create_$challenge_directory":
     path => $challenge_directory,
-    notify => File["create-$compile_directory-$challenge_name"],
-  }
-
-  # Move contents of the module's files directory into compile directory
-  file { "create-$compile_directory-$challenge_name":
-    path => $compile_directory,
-    ensure  => directory,
-    recurse => true,
-    source  => $modules_source,
-  }
-
-  # Build the binary with gcc
-  exec { "gcc_$challenge_name-$compile_directory":
-    cwd     => $compile_directory,
-    command => "/usr/bin/make",
-    require => File["create-$compile_directory-$challenge_name"]
+    # notify => File["create-$compile_directory-$challenge_name"],
   }
 
   # Move the compiled binary into the challenge directory
@@ -69,8 +72,7 @@ define secgen_functions::install_setgid_binary (
     owner   => 'root',
     group   => $group,
     mode    => '2771',
-    source  => "$compile_directory/$challenge_name",
-    require => Exec["gcc_$challenge_name-$compile_directory"],
+    source  => "$binary_path",
   }
 
   # Drop the flag file on the box and set permissions
@@ -86,9 +88,4 @@ define secgen_functions::install_setgid_binary (
     notify            => Exec["remove_$compile_directory"],
   }
 
-  # Remove compile directory
-  exec { "remove_$compile_directory":
-    command => "/bin/rm -rf $compile_directory",
-    require => [File["$challenge_directory/$challenge_name"]]
-  }
 }
