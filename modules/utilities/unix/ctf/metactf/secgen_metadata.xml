@@ -19,6 +19,7 @@
   <!-- Note - Scenarios must provide the same number of flags as challenges and groups in the challenge_list -->
   <read_fact>challenge_list</read_fact>
   <read_fact>flags</read_fact>
+  <read_fact>groups</read_fact>
   <read_fact>account</read_fact>
 
   <default_input into="challenge_list">
