@@ -20,8 +20,6 @@ define secgen_functions::install_setgid_binary (
     fail
   }
 
-  $username = $account['username']
-
   if $account {
     $username = $account['username']
 
