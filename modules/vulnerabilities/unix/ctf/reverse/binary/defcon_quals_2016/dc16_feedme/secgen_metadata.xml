@@ -54,6 +54,10 @@
     <value>Reverse me / pwn the binary to get the flag.</value>
   </default_input>
 
+  <conflict>
+    <name>DefCon Quals 2016 - feedme</name>
+  </conflict>
+
   <requires>
     <type>update</type>
   </requires>

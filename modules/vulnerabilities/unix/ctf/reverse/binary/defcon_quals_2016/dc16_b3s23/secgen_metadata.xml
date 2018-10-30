@@ -54,6 +54,10 @@
     <value>Reverse me to find the solution</value>
   </default_input>
 
+  <conflict>
+    <name>DefCon Quals 2016 - b3s23</name>
+  </conflict>
+
   <requires>
     <type>update</type>
   </requires>
