@@ -27,7 +27,28 @@ class metactf::install {
     command => "/usr/bin/make",
   }
 
-  # TODO: Build src_csp
-  # TODO: Build src_malware
+  # Build src_csp
+  exec { 'src_csp chmod executable':
+    command => 'chmod -R +x */*/*.zsh',
+    cwd     => "$install_dir/src_csp/"
+  }
 
+  exec { 'build src_csp binaries':
+    cwd     => "$install_dir/src_csp/",
+    command => "/usr/bin/make",
+    require => Exec['src_csp chmod executable'],
+  }
+
+  # Build src_malware
+  exec { 'src_malware chmod executable':
+    command => 'chmod -R +x */*/*.zsh',
+    cwd     => "$install_dir/src_malware/"
+  }
+
+  # Build src_malware
+  exec { 'build src_malware binaries':
+    cwd     => "$install_dir/src_malware/",
+    command => "/usr/bin/make",
+    require => Exec['src_malware chmod executable'],
+  }
 }
