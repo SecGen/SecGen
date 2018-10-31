@@ -1,6 +1,6 @@
 class metactf::install {
   $secgen_params = secgen_functions::get_parameters($::base64_inputs_file)
-  $install_dir = '/opt/metactf'
+  $install_dir = '/tmp/metactf'
 
   Exec { path => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'] }
 

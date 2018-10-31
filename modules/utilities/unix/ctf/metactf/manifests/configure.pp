@@ -1,6 +1,6 @@
 class metactf::configure {
   $secgen_params = secgen_functions::get_parameters($::base64_inputs_file)
-  $install_dir = '/opt/metactf'
+  $install_dir = '/tmp/metactf'
   $challenge_list = $secgen_params['challenge_list']
   $flags = $secgen_params['flags']
   $groups = $secgen_params['groups']
@@ -34,6 +34,15 @@ class metactf::configure {
       $metactf_challenge_type = split($metactf_challenge_category, '_')[1]
       $challenge_name = $split_challenge[1]
       $binary_path = "$install_dir/$metactf_challenge_category/obj/secgen/$metactf_challenge_type/$challenge_name"
+
+      # TODO - Determine the path to the scaffold file + stick it in the challenge directory. Set permission read writable for all (0666).
+      if $include_scaffolding {
+        # Add scaffolding file
+        $challenge_number = split($challenge_name, '_')[0]
+        $scaffold_filename = "scaffold$challenge_number.py"
+
+      }
+
     } else {
       $challenge_outer_dir = $split_challenge[1]
       $challenge_name = $split_challenge[2]
@@ -54,10 +63,6 @@ class metactf::configure {
       strings_to_leak    => $secgen_params['strings_to_leak'],
     }
 
-    # TODO
-    if $include_scaffolding {
-      # Add scaffolding file
-    }
   }
 
 }
