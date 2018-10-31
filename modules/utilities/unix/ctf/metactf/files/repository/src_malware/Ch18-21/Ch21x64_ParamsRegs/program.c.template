@@ -37,6 +37,34 @@ int foo(char *a, char *b, char *c, char *d, char *e, char *f) {
     return flag;
 }
 
+void printflag()
+{
+	int fd;
+	int len;
+	unsigned char data[128];
+
+	fd = open("flag", O_RDONLY);
+
+	if ( fd <= 0 ) {
+		printf("Failed to open flag.\n");
+		return;
+	}
+
+	len = lseek( fd, 0, SEEK_END);
+	lseek(fd, 0, SEEK_SET);
+
+	if ( len > 128 ) {
+		len = 128;
+	}
+
+	memset(data, 0, 128);
+	read( fd, data, len);
+	close(fd);
+
+	printf("%s\n", data);
+	return;
+}
+
 int main() {
     char buff[12];
     char chaff0[] = "IeuxMect";
@@ -56,7 +84,7 @@ int main() {
     scanf("%11s", buff);
 
     if ( foo("TYdfExPX", "Ys1QXVxq", "uyQMBeoD", "Kr3Pp6kr", chaff10, buff)) {
-        printf ("Good Job.\n");
+        printflag();
     } else {
         printf("Try again.\n");
     }
