@@ -7,7 +7,7 @@ class RandomMetaCTFChallenge < StringGenerator
   def initialize
     super
     self.module_name = 'Random Wordpress Version Generator'
-    self.difficulty = 'easy'
+    self.difficulty = ''
   end
 
   def generate
@@ -29,7 +29,8 @@ class RandomMetaCTFChallenge < StringGenerator
         {:difficulty => 'easy', :name => 'src_angr/12_angr_veritesting'},
         {:difficulty => 'easy', :name => 'src_angr/13_angr_static_binary'},
         {:difficulty => 'easy', :name => 'src_angr/14_angr_shared_library'},
-        {:difficulty => 'easy', :name => 'src_angr/15_angr_arbitrary_read'},
+        # TODO: Replacing 'Good Job with a printflag(); call requires more thought for task 15
+        # '{:difficulty => 'easy', :name => 'src_angr/15_angr_arbitrary_read'},
         {:difficulty => 'easy', :name => 'src_angr/16_angr_arbitrary_write'},
         {:difficulty => 'easy', :name => 'src_angr/17_angr_arbitrary_jump'},
     ]
