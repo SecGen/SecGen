@@ -21,6 +21,7 @@
   <read_fact>flags</read_fact>
   <read_fact>groups</read_fact>
   <read_fact>account</read_fact>
+  <read_fact>include_scaffolding</read_fact>
 
   <default_input into="challenge_list">
     <value>src_angr/00_angr_find</value>
@@ -34,13 +35,18 @@
   <default_input into="flags">
     <generator type="flag_generator"/>
     <generator type="flag_generator"/>
-    <generator type="flag_generator"/>
+    <generator type="flag_generator"/>  
   </default_input>
 
   <default_input into="groups">
     <value>challenge01</value>
     <value>challenge02</value>
     <value>challenge03</value>
+  </default_input>
+
+  <!-- src_angr challenges have scaffolded example python files, optionally include them. -->
+  <default_input into="include_scaffolding">
+    <value>true</value>
   </default_input>
 
   <conflict>

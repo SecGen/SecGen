@@ -26,8 +26,8 @@
     <utility module_path=".*metactf">
       <input into="challenge_list">
         <value>src_angr/00_angr_find</value>
-        <value>src_angr/01_angr_avoid</value>
-        <value>src_angr/02_angr_find_condition</value>
+        <value>src_malware/Ch18-21/Ch21x64_ParamsStack</value>
+        <value>src_csp/Ch3.1-3.5/Ch3_00_GdbIntro</value>
       </input>
       <input into="groups">
         <value>challenge01</value>
