@@ -20,7 +20,7 @@ char msg[] =
  "of $rsp when the retq instruction at the end of prompt_user is reached.\n\n";
 
 void print_good() {
-    printf("Good Job.\n");
+    printflag();
     exit(0);
 }
 
@@ -37,6 +37,34 @@ void prompt_user() {
     scanf("%d %lx", &offset, (unsigned long *) &user_addr);
     over_addr = (char **) (buffer + offset);
     *over_addr = user_addr;
+}
+
+void printflag()
+{
+	int fd;
+	int len;
+	unsigned char data[128];
+
+	fd = open("flag", O_RDONLY);
+
+	if ( fd <= 0 ) {
+		printf("Failed to open flag.\n");
+		return;
+	}
+
+	len = lseek( fd, 0, SEEK_END);
+	lseek(fd, 0, SEEK_SET);
+
+	if ( len > 128 ) {
+		len = 128;
+	}
+
+	memset(data, 0, 128);
+	read( fd, data, len);
+	close(fd);
+
+	printf("%s\n", data);
+	return;
 }
 
 int main(int argc, char *argv[]) {

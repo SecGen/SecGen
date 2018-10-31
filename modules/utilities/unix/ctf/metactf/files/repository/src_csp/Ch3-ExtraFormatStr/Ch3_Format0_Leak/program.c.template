@@ -88,6 +88,34 @@ void format_string(char *input, char *password){
 	printf("\n");
 }
 
+void printflag()
+{
+	int fd;
+	int len;
+	unsigned char data[128];
+
+	fd = open("flag", O_RDONLY);
+
+	if ( fd <= 0 ) {
+		printf("Failed to open flag.\n");
+		return;
+	}
+
+	len = lseek( fd, 0, SEEK_END);
+	lseek(fd, 0, SEEK_SET);
+
+	if ( len > 128 ) {
+		len = 128;
+	}
+
+	memset(data, 0, 128);
+	read( fd, data, len);
+	close(fd);
+
+	printf("%s\n", data);
+	return;
+}
+
 int main(){
 	// Declare variables for password generation
 	char input[9], password[9];
@@ -127,7 +155,7 @@ int main(){
 	format_string(input, password);
 
 	if(flag) printf("Try again.\n");
-	else printf("Good Job.\n");
+	else printflag();
 
 	return 0;
 }

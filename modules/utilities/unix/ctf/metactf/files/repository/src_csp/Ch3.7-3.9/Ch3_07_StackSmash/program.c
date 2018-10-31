@@ -19,7 +19,7 @@ char msg[] =
  "the function you want to return to.\n\n";
 
 void print_good() {
-    printf("Good Job.\n");
+    printflag();
     exit(0);
 }
 void segv_handler(int sig) {
@@ -43,6 +43,33 @@ void print_msg() {
     printf("%s",msg);
   else
     printf("%s",msg);
+}
+void printflag()
+{
+	int fd;
+	int len;
+	unsigned char data[128];
+
+	fd = open("flag", O_RDONLY);
+
+	if ( fd <= 0 ) {
+		printf("Failed to open flag.\n");
+		return;
+	}
+
+	len = lseek( fd, 0, SEEK_END);
+	lseek(fd, 0, SEEK_SET);
+
+	if ( len > 128 ) {
+		len = 128;
+	}
+
+	memset(data, 0, 128);
+	read( fd, data, len);
+	close(fd);
+
+	printf("%s\n", data);
+	return;
 }
 int main () {
     signal(SIGSEGV, segv_handler);

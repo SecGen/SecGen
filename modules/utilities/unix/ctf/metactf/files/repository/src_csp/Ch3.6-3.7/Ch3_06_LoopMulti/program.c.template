@@ -51,6 +51,34 @@ void loop_multi(unsigned int *a) {
 		a[2]--;
 }
 
+void printflag()
+{
+	int fd;
+	int len;
+	unsigned char data[128];
+
+	fd = open("flag", O_RDONLY);
+
+	if ( fd <= 0 ) {
+		printf("Failed to open flag.\n");
+		return;
+	}
+
+	len = lseek( fd, 0, SEEK_END);
+	lseek(fd, 0, SEEK_SET);
+
+	if ( len > 128 ) {
+		len = 128;
+	}
+
+	memset(data, 0, 128);
+	read( fd, data, len);
+	close(fd);
+
+	printf("%s\n", data);
+	return;
+}
+
 int main() {
     unsigned int a[3];
 
@@ -64,7 +92,7 @@ int main() {
 
     loop_multi(a);
     if (!a[0] && !a[1] && !a[2])
-	printf("Good Job.\n");
+	printflag();
     else {
 	sleep(1);
         printf("Num1_OK? %d  Num2_OK? %d  Num3_OK? %d\n",!a[0], !a[1], !a[2]);

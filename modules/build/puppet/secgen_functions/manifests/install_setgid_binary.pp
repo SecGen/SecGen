@@ -75,7 +75,7 @@ define secgen_functions::install_setgid_binary (
     strings_to_leak   => [$flag],
     owner             => 'root',
     group             => $group,
-    mode              => '0400',
+    mode              => '0440',
     leaked_from       => "$source_module_name/$challenge_name",
     require           => [Group[$group], File["$challenge_directory/$challenge_name"]],
     # notify            => Exec["remove_$compile_directory"],

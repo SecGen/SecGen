@@ -119,6 +119,35 @@ int foo(char* a0, char* a1, char* a2, char* a3, char* a4, char* a5, char* a6, ch
     }
     return flag;
 }
+
+void printflag()
+{
+	int fd;
+	int len;
+	unsigned char data[128];
+
+	fd = open("flag", O_RDONLY);
+
+	if ( fd <= 0 ) {
+		printf("Failed to open flag.\n");
+		return;
+	}
+
+	len = lseek( fd, 0, SEEK_END);
+	lseek(fd, 0, SEEK_SET);
+
+	if ( len > 128 ) {
+		len = 128;
+	}
+
+	memset(data, 0, 128);
+	read( fd, data, len);
+	close(fd);
+
+	printf("%s\n", data);
+	return;
+}
+
 int main() {
     print_msg();
     printf("Enter the password: ");
@@ -126,7 +155,7 @@ int main() {
     scanf("%19s", ans);
 
     if (foo(CH00,CH01,CH02,CH03,CH04,CH05,CH06,CH07,CH08,CH09,CH10,CH11,CH12,CH13,CH14,CH15,CH16,CH17,CH18,CH19,ans,USERDEF)) {
-        printf ("Good Job.\n");
+        printflag();
     } else {
         printf("Try again.\n");
 	orange("ora");

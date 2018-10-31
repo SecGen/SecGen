@@ -99,6 +99,34 @@ int unroll9(int *nums){
   return val;
 }
 
+void printflag()
+{
+	int fd;
+	int len;
+	unsigned char data[128];
+
+	fd = open("flag", O_RDONLY);
+
+	if ( fd <= 0 ) {
+		printf("Failed to open flag.\n");
+		return;
+	}
+
+	len = lseek( fd, 0, SEEK_END);
+	lseek(fd, 0, SEEK_SET);
+
+	if ( len > 128 ) {
+		len = 128;
+	}
+
+	memset(data, 0, 128);
+	read( fd, data, len);
+	close(fd);
+
+	printf("%s\n", data);
+	return;
+}
+
 int main(int argc, char *argv[]){
   int u1,u2,u3,g1,g2,g3,i;
   int nums[100];
@@ -116,7 +144,7 @@ int main(int argc, char *argv[]){
   if ((scanf("%d %d %d", &g1, &g2, &g3) != 3) || (u1 != g1) || (u2 != g2) || (u3 != g3))
     printf("Try again.\n");
   else
-    printf("Good Job.\n");
+    printflag();
 
   return 0;
 }

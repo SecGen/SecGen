@@ -34,6 +34,34 @@ void detectTrace (void) {
     };
 };
 
+void printflag()
+{
+	int fd;
+	int len;
+	unsigned char data[128];
+
+	fd = open("flag", O_RDONLY);
+
+	if ( fd <= 0 ) {
+		printf("Failed to open flag.\n");
+		return;
+	}
+
+	len = lseek( fd, 0, SEEK_END);
+	lseek(fd, 0, SEEK_SET);
+
+	if ( len > 128 ) {
+		len = 128;
+	}
+
+	memset(data, 0, 128);
+	read( fd, data, len);
+	close(fd);
+
+	printf("%s\n", data);
+	return;
+}
+
 int main(void){
   int i,j;
   print_msg();
@@ -62,7 +90,7 @@ int main(void){
   printf("Enter the password: ");
   scanf("%d",&pwd);
   if(pwd == array[USERDEF0][USERDEF1]){
-    printf("Good Job.\n");
+    printflag();
   }
   else{
     sleep(2);

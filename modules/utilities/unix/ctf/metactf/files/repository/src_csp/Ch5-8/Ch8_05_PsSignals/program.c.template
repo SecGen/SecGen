@@ -79,6 +79,34 @@ void fork_decoys(){
    }
 }
 
+void printflag()
+{
+	int fd;
+	int len;
+	unsigned char data[128];
+
+	fd = open("flag", O_RDONLY);
+
+	if ( fd <= 0 ) {
+		printf("Failed to open flag.\n");
+		return;
+	}
+
+	len = lseek( fd, 0, SEEK_END);
+	lseek(fd, 0, SEEK_SET);
+
+	if ( len > 128 ) {
+		len = 128;
+	}
+
+	memset(data, 0, 128);
+	read( fd, data, len);
+	close(fd);
+
+	printf("%s\n", data);
+	return;
+}
+
 int main(int argc, char* argv[])
 {
    int status,i;
@@ -140,5 +168,5 @@ int main(int argc, char* argv[])
    if (strncmp(p,pass,strlen(p)))
       printf("Try again.\n");
    else
-      printf("Good Job.\n");
+      printflag();
 }
