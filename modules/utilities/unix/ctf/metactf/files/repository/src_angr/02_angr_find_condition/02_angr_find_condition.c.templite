@@ -30,6 +30,7 @@ def recursive_if_else(variable, value, depth):
 }$
 
 #include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 

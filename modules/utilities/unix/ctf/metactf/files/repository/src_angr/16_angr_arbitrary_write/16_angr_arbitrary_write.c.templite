@@ -12,6 +12,7 @@ def expanded_switch_statement(variable, miss_statement, hit_statement, samples):
 }$
 
 #include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>

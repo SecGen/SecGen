@@ -1,5 +1,6 @@
 // Level derived from Kevin Zerzan, New Beginnings 12/2016
 #include <stdio.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>

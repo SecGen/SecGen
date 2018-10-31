@@ -1,5 +1,6 @@
 /* Derived from CTF level by Lydia Simmons New Beginnings Fall 2015 */
 #include <stdio.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <sys/types.h>

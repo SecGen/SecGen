@@ -1,5 +1,6 @@
 /* Jason Graalum, New Beginnings 12/2016 */
 #include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>

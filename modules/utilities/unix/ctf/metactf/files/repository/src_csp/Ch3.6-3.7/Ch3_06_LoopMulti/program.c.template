@@ -1,5 +1,6 @@
 /* Derived from a level by Sascha Strand, New Beginnings 12/2016 */
 #include <stdio.h>
+#include <fcntl.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <limits.h>

@@ -7,6 +7,7 @@ userdef1 = ''.join([random.choice(userdef_charset) for _ in range(8)])
 }$
 
 #include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #define USERDEF0 "${ userdef0 }$"

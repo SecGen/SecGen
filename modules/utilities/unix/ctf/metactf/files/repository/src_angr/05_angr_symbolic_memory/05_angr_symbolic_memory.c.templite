@@ -7,6 +7,7 @@ userdef = repr(''.join(random.choice(userdef_charset) for _ in range(32)))[1:-1]
 }$
 
 #include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #define USERDEF "${ userdef }$"

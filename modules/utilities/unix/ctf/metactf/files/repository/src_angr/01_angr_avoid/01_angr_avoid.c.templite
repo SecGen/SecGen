@@ -24,6 +24,7 @@ def check_string_recursive(array0, array1, random_list, bit):
 
 #define _GNU_SOURCE
 #include <stdio.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

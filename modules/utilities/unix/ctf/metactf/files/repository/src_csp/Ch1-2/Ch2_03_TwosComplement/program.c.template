@@ -1,5 +1,6 @@
 /*  Derived from CTF level by Brandon Giatti New Beginnings Fall 2015 */
 #include <stdio.h>
+#include <fcntl.h>
 #include <string.h>
 #include <signal.h>
 #include <stdlib.h>
