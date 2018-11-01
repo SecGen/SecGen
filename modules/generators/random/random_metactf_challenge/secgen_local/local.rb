@@ -10,6 +10,19 @@ class RandomMetaCTFChallenge < StringGenerator
     self.difficulty = ''
   end
 
+
+  def get_options_array
+    super + [['--difficulty', GetoptLong::REQUIRED_ARGUMENT]]
+  end
+
+  def process_options(opt, arg)
+    super
+    case opt
+    when '--difficulty'
+      self.difficulty << arg;
+    end
+  end
+
   def generate
     # TODO : Adjust the difficulties
 
