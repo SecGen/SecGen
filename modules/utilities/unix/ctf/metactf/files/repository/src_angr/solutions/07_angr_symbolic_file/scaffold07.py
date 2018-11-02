@@ -88,7 +88,7 @@ def main(argv):
   # symbolic data.
   # (!)
   file_options = 'r'
-  password_file = angr.storage.SimFile(filename, file_options, content=???, size=symbolic_file_size_bytes)
+  password_file = angr.storage.SimFile(filename, content=???, size=symbolic_file_size_bytes)
 
   # We have already created the file and the memory that stores the data that
   # the file will stream to the program, but we now need to tell Angr where the
@@ -103,7 +103,7 @@ def main(argv):
   symbolic_filesystem = {
     filename : password_file
   }
-  initial_state.posix.fs = symbolic_filesystem
+  initial_state.fs.insert(filename, password_file)
 
   simulation = project.factory.simgr(initial_state)
 
