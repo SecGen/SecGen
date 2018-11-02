@@ -126,6 +126,9 @@
 		</utility>
 
 		<utility module_path=".*kde_minimal">
+			<input into="autologin_user">
+				<datastore access="0" access_json="['username']">accounts</datastore>
+			</input>
 			<input into="accounts">
 				<datastore>accounts</datastore>
 			</input>
