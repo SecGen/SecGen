@@ -96,6 +96,7 @@ int main(int argc, char* argv[]) {
     printf("Try again.\n");
     exit(1);
   } else {
+    printf("Good Job.\n");
     printflag();
     exit(0);
   }

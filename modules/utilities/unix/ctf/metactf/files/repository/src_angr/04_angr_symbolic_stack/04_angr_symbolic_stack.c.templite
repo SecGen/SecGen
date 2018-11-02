@@ -38,6 +38,7 @@ void handle_user() {
   if ((user_int0 ^ USERDEF0) || (user_int1 ^ USERDEF1)) {
     printf("Try again.\n");
   } else {
+    printf("Good Job.\n");
     printflag();
   }
 }

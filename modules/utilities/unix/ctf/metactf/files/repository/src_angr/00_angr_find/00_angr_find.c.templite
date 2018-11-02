@@ -73,6 +73,7 @@ int main(int argc, char* argv[]) {
     printf("Try again.\n");
   } else {
    printflag();
+  printf("Good Job.\n");
    // printflag();
   }
 }

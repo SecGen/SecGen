@@ -93,6 +93,7 @@ int main(int argc, char* argv[]) {
   if (!equals) {
     printf("Try again.\n");
   } else {
+    printf("Good Job.\n");
     printflag();
   }
 }

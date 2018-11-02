@@ -60,6 +60,7 @@ void avoid_me() {
 
 void maybe_good(char* compare0, char* compare1) {
   if (should_succeed && !strncmp(compare0, compare1, 8)) {
+    printf("Good Job.\n");
     printflag();
   } else {
     printf("Try again.\n");

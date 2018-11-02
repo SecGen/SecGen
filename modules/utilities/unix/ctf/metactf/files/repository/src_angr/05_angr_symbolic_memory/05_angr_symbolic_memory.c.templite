@@ -73,6 +73,7 @@ int main(int argc, char* argv[]) {
   if (strncmp(user_input, USERDEF, 32)) {
     printf("Try again.\n");
   } else {
+    printf("Good Job.\n");
     printflag();
   }
 }

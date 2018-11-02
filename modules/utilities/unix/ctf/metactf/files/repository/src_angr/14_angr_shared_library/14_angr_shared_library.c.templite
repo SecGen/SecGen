@@ -45,6 +45,7 @@ int main(int argc, char* argv[]) {
   printf("Enter the password: ");
   scanf("%8s", buffer);
   if (validate(buffer, 8)) {
+    printf("Good Job.\n");
     printflag();
   } else {
     printf("Try again.\n");
