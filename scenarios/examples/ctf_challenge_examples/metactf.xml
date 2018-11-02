@@ -8,7 +8,7 @@
     <system_name>metactf</system_name>
     <base platform="linux" type="server" distro="Stretch"/>
 
-    <utility type="reversing_tools"/>
+    <!--<utility type="reversing_tools"/>-->
 
     <utility module_path=".*parameterised_accounts">
       <input into="accounts" into_datastore="account">
@@ -33,14 +33,25 @@
         <value>challenge01</value>
         <value>challenge02</value>
         <value>challenge03</value>
+        <value>challenge04</value>
+        <value>challenge05</value>
       </input>
       <input into="flags">
+        <generator type="flag_generator"/>
+        <generator type="flag_generator"/>
         <generator type="flag_generator"/>
         <generator type="flag_generator"/>
         <generator type="flag_generator"/>
       </input>
       <input into="account">
         <datastore>account</datastore>
+      </input>
+      <input into="include_chapters">
+        <value>true</value>
+      </input>
+      <input into="include_scaffolding">
+        <value>true</value>
+        <!--<value>false</value>-->
       </input>
     </utility>
 

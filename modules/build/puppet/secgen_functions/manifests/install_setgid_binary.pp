@@ -23,11 +23,15 @@ define secgen_functions::install_setgid_binary (
   ensure_resource('parameterised_accounts::account', "parameterised_$username",
     { "username"         => $account['username'],
       "password"         => $account['password'],
-      "super_user"       => $account['super_user'],
+      "super_user"       => str2bool($account['super_user']),
       "strings_to_leak"  => $account['strings_to_leak'],
       "leaked_filenames" => $account['leaked_filenames'], })
 
-  $storage_directory = "/home/$username"
+  if $storage_dir {
+    $storage_directory = $storage_dir
+  } else {
+    $storage_directory = "/home/$username"
+  }
 
   $challenge_directory = "$storage_directory/$challenge_name"
   $modules_source = "puppet:///modules/$source_module_name"
@@ -47,17 +51,9 @@ define secgen_functions::install_setgid_binary (
 
   ensure_resource('group', $group, { 'ensure' => 'present' })
 
-  exec { "add $username $group membership":
-    unless  => "/bin/grep -q \"$group\\S*$username\" /etc/group",
-    command => "/usr/sbin/usermod -aG $group $username",
-    require => [Group[$group], Parameterised_accounts::Account["parameterised_$username"]]
-  }
-
   # Create challenge directory
-  ::secgen_functions::create_directory { "create_$challenge_directory":
-    path   => $challenge_directory,
-    notify => File["$challenge_directory/$challenge_name"],
-  }
+  ensure_resource('file', $storage_directory, { 'ensure' => 'directory'})
+  ensure_resource('file', $challenge_directory, { 'ensure' => 'directory'})
 
   # Move the compiled binary into the challenge directory
   file { "$challenge_directory/$challenge_name":
@@ -66,6 +62,7 @@ define secgen_functions::install_setgid_binary (
     group  => $group,
     mode   => '2771',
     source => $bin_path,
+    require => File[$challenge_directory]
   }
 
   # Drop the flag file on the box and set permissions
@@ -78,13 +75,6 @@ define secgen_functions::install_setgid_binary (
     mode              => '0440',
     leaked_from       => "$source_module_name/$challenge_name",
     require           => [Group[$group], File["$challenge_directory/$challenge_name"]],
-    # notify            => Exec["remove_$compile_directory"],
   }
-
-  # TODO: Remove compile directory  (may not be necessary, try reboot stretch vms + see if /tmp is cleared (or just remove $outer_bin_path if the variable exists).
-  # exec { "remove_$compile_directory":
-  #   command => "/bin/rm -rf $compile_directory",
-  #   require => [File["$challenge_directory/$challenge_name"]]
-  # }
 
 }
