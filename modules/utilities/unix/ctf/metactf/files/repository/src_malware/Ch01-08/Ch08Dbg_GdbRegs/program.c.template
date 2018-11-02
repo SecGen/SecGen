@@ -17,6 +17,7 @@ char msg[] =
  "retval_in_rax().  Use the print command to reveal it (e.g. p $rax)\n\n";
 
 void print_good() {
+	printf("Good Job.\n");
     printflag();
     exit(0);
 }

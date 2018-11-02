@@ -67,6 +67,7 @@ int main() {
 	case USERDEF+2:
 		printf("Try again.\n"); break;
 	case USERDEF+3:
+    	printf("Good Job.\n");
 		printflag(); break;
 	default: printf("Try again.\n");
     }

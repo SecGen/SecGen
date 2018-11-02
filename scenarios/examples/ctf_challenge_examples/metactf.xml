@@ -47,11 +47,10 @@
         <datastore>account</datastore>
       </input>
       <input into="include_chapters">
-        <value>true</value>
+        <value>false</value>
       </input>
       <input into="include_scaffolding">
-        <value>true</value>
-        <!--<value>false</value>-->
+        <value>false</value>
       </input>
     </utility>
 
