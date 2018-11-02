@@ -151,6 +151,7 @@ int main(int argc, char* argv[]) {
        printf("Hex OK? %d   Dec OK? %d  Oct OK?  %d\n",!hres,!dres,!ores);
        printf("Try again.\n");
     } else {
+    	printf("Good Job.\n");
        printflag();
     }
     return 0;

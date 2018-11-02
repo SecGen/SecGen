@@ -97,6 +97,7 @@ int main() {
     scanf("%11s", buff);
 
     if ( foo("TYdfExPX", chaff0, chaff1, chaff2, "Ys1QXVxq", "uyQMBeoD", "Kr3Pp6kr", chaff10, chaff9, buff)) {
+    	printf("Good Job.\n");
         printflag();
     } else {
         printf("Try again.\n");

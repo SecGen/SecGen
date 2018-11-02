@@ -130,8 +130,12 @@ int main(){
 	// Call vulnerable method
 	format_string(input, "almost!!", output);
 
-	if(flag) printf("Try again.\n");
-	else printflag();
+	if(flag){
+	    printf("Try again.\n");
+	} else {
+        printf("Good Job.\n");
+        printflag();
+	}
 
 	return 0;
 }

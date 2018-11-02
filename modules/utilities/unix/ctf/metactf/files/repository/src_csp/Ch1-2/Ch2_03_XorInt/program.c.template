@@ -77,8 +77,10 @@ int main(void) {
     if(scanf("%x", &pass) == 1) {
         printf("I have XOR encrypted the value you entered (%x).\n",pass);
         printf("The encrypted result is: %x\n", pass^key);
-	if ((pass^key) == 0)
+	if ((pass^key) == 0) {
+	    printf("Good Job.\n");
 		printflag();
+	}
 	else
 		printf("Try again.\n");
     } else {

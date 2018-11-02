@@ -119,6 +119,7 @@ int main() {
 
 	// Check if key has been hijacked
 	if(key == USERDEF){
+    	printf("Good Job.\n");
 		printflag();
 	} else {
 		printf("Try again.\n");

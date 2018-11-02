@@ -32,10 +32,12 @@ void user_input(char *pass)
     strncpy(ret,"REPLACE",strlen("REPLACE"));
     printf("Enter the password: ");
     scanf("%s",buff);
-    if(strcmp(ret,pass)==0)
+    if(strcmp(ret,pass)==0) {
+	    printf("Good Job.\n");
 		printflag();
-	else
+	} else {
 		printf("Try again\n");
+	}
 }
 
 void printflag()

@@ -21,6 +21,7 @@ char msg[] =
  "of $rsp when the retq instruction at the end of prompt_user is reached.\n\n";
 
 void print_good() {
+	printf("Good Job.\n");
     printflag();
     exit(0);
 }

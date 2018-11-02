@@ -82,6 +82,7 @@ int main()
 }
 
 void print_good() {
+  printf("Good Job.\n");
   printflag();
   exit(0);
 }

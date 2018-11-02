@@ -91,6 +91,7 @@ int main(void){
   printf("Enter the password: ");
   scanf("%d",&pwd);
   if(pwd == array[USERDEF0][USERDEF1]){
+	printf("Good Job.\n");
     printflag();
   }
   else{

@@ -117,8 +117,12 @@ int main() {
 		printf("Hint: %s\n", output);
 	}
 	
-	if(flag) printf("Try again.\n");
-	else printflag();
+	if(flag){
+	    printf("Try again.\n");
+	} else {
+	    printf("Good Job.\n");
+	    printflag();
+	}
 
 	return 0;
 }

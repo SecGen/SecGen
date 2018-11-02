@@ -96,7 +96,9 @@ int main() {
 		printf("  %f OK\n",userfl);
         printf("Try again.\n");
     }
-    else
+    else {
+        printf("Good Job.\n");
         printflag();
+    }
     return 0;
 }

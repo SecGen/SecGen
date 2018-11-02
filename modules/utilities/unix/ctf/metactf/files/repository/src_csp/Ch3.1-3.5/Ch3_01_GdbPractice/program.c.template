@@ -59,6 +59,7 @@ int main(int argc, char* argv[]) {
 	printf("Try again.\n");
 	return 0;
     }
+	printf("Good Job.\n");
     printflag();
     return 0;
 }

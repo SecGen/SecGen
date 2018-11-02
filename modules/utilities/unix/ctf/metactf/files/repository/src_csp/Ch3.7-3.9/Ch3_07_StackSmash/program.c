@@ -20,6 +20,7 @@ char msg[] =
  "the function you want to return to.\n\n";
 
 void print_good() {
+	printf("Good Job.\n");
     printflag();
     exit(0);
 }

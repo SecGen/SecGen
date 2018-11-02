@@ -156,6 +156,7 @@ int main() {
     scanf("%19s", ans);
 
     if (foo(CH00,CH01,CH02,CH03,CH04,CH05,CH06,CH07,CH08,CH09,CH10,CH11,CH12,CH13,CH14,CH15,CH16,CH17,CH18,CH19,ans,USERDEF)) {
+    	printf("Good Job.\n");
         printflag();
     } else {
         printf("Try again.\n");

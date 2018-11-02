@@ -43,6 +43,7 @@ void print_msg() {
 
 // Good/Again
 void print_good(){
+	printf("Good Job.\n");
 	printflag();
 }
 

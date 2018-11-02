@@ -21,6 +21,7 @@ char msg[] =
  "  scanf(\"%lx \%lx\");\n\n";
 
 void print_good() {
+	printf("Good Job.\n");
     printflag();
     exit(0);
 }

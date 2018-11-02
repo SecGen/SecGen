@@ -168,6 +168,8 @@ int main(int argc, char* argv[])
    p[strlen(USERDEF)] = 0;
    if (strncmp(p,pass,strlen(p)))
       printf("Try again.\n");
-   else
+   else {
+	  printf("Good Job.\n");
       printflag();
+   }
 }

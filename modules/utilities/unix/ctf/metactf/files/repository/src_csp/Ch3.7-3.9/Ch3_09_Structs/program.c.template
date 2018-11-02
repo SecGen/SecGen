@@ -35,6 +35,7 @@ void segv_handler(int sig) {
 }
 
 void print_good() {
+	printf("Good Job.\n");
     printflag();
     exit(0);
 }

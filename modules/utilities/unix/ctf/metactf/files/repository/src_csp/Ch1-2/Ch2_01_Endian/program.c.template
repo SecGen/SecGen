@@ -101,6 +101,7 @@ int main() {
 
 	// Compare user input with USERDEF
 	if (!strncmp(answer,USERDEF,8)) {
+    	printf("Good Job.\n");
         printflag();
 	} else {
 		printf("Try again.\n");

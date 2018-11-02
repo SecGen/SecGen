@@ -104,6 +104,7 @@ int main() {
 	printf("The key is equal to %d.\n", key);
 
 	if(key == USERDEF){
+    	printf("Good Job.\n");
 		printflag();
 	} else {
 		printf("Try again.\n");

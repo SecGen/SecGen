@@ -92,9 +92,10 @@ int main() {
     }
 
     loop_multi(a);
-    if (!a[0] && !a[1] && !a[2])
-	printflag();
-    else {
+    if (!a[0] && !a[1] && !a[2]) {
+	    printf("Good Job.\n");
+	    printflag();
+    } else {
 	sleep(1);
         printf("Num1_OK? %d  Num2_OK? %d  Num3_OK? %d\n",!a[0], !a[1], !a[2]);
 	printf("Try again.\n");

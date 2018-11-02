@@ -61,6 +61,7 @@ void print_pswd(unsigned long long int key) {
 }
 
 void print_good(void) {
+  printf("Good Job.\n");
   printflag();
 }
 

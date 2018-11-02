@@ -86,6 +86,7 @@ int main(int argc, char* argv[]) {
     if (input!=f) {
         printf ("Try again.\n");
     } else {
+    	printf("Good Job.\n");
         printflag();
     }
     return 0;

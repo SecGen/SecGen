@@ -93,9 +93,10 @@ int main() {
     }
 
     c+= addc; s+=adds; i+=addi;
-    if (!c && !s && !i)
-	printflag();
-    else {
+    if (!c && !s && !i) {
+	    printf("Good Job.\n");
+	    printflag();
+    } else {
 	sleep(1);
         printf("isZero(char)? %d  isZero(short)? %d  isZero(int)? %d\n",!c, !s, !i);
 	printf("Try again.\n");

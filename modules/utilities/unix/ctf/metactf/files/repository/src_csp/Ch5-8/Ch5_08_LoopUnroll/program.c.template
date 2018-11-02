@@ -144,8 +144,9 @@ int main(int argc, char *argv[]){
   printf("Enter the password: ");
   if ((scanf("%d %d %d", &g1, &g2, &g3) != 3) || (u1 != g1) || (u2 != g2) || (u3 != g3))
     printf("Try again.\n");
-  else
+  else {
+	printf("Good Job.\n");
     printflag();
-
+  }
   return 0;
 }
