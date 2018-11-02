@@ -6,7 +6,7 @@
 		<post_command>echo 'not read only!' > /etc/you_were_hacked; adduser --disabled-password --gecos "" yourehacked</post_command>
 		<condition>
 			<output_matches>Read-only file system</output_matches>
-			<message>:) Well done! <%= $flags.pop %></message>
+			<message>:) Well done! <%= $flags.pop %> (Don't forget to 'sudo umount /etc/' to reverse this after you complete this challenge!)</message>
 			<trigger_next_attack />
 		</condition>
 		<condition>
@@ -18,4 +18,3 @@
 		</else_condition>
 
 	</attack>
-
