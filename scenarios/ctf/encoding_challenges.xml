@@ -4,16 +4,13 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-  <!--TODO-->
   <name>Encoding Challenges</name>
   <author>Thomas Shaw</author>
-  <description>Single system narrative-based CTF challenge.</description>
+  <description>Single system basic crypto CTF challenge.</description>
 
   <type>ctf</type>
-  <type>attack-ctf</type>
-  <type>web-hints</type>
-  <difficulty>intermediate</difficulty>
-  <!--/TODO-->
+  <type>crypto-ctf</type>
+  <difficulty>easy</difficulty>
 
   <system>
     <system_name>system</system_name>
@@ -24,11 +21,11 @@
     </input>
 
     <!-- 6x encoding challenges per challenger -->
-    <!-- 1: random encoder -->
-    <!-- 2: random encoder -->
-    <!-- 3: random encoder -->
-    <!-- 4: random encoder -->
-    <!-- 5: random encoder double encoded -->
+    <!-- 1: random encoder: ascii_reversible -->
+    <!-- 2: random encoder: alpha_reversible -->
+    <!-- 3: random encoder: ascii reversible -->
+    <!-- 4: random encoder: ascii_reversible -->
+    <!-- 5: random encoder double encoded: ascii_reversible => ascii_reversible -->
     <!-- 6: random high difficulty encoder -->
 
     <!-- 9x hash challenges per challenger -->
