@@ -82,14 +82,22 @@
 			<!--Number - unsalted-->
 			<encoder type="hash">
 				<input into="strings_to_encode">
-					<generator type="random_number_generator"/>
+					<generator type="random_number_generator">
+						<input into="maximum">
+							<value>10000000</value>
+						</input>
+					</generator>
 				</input>
 			</encoder>
 
 			<!--Number - dictionary salt - salt provided-->
 			<encoder type="hash">
 				<input into="strings_to_encode">
-					<generator type="random_number_generator"/>
+					<generator type="random_number_generator">
+						<input into="maximum">
+							<value>100</value>
+						</input>
+					</generator>
 				</input>
 				<input into="salt">
 					<generator type="random_word_generator"/>
@@ -102,7 +110,11 @@
 			<!-- Number - dictionary salt - salt not provided-->
 			<encoder type="hash">
 				<input into="strings_to_encode">
-					<generator type="random_number_generator"/>
+					<generator type="random_number_generator">
+						<input into="maximum">
+							<value>100</value>
+						</input>
+					</generator>
 				</input>
 				<input into="salt">
 					<generator type="random_word_generator"/>
