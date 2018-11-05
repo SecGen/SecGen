@@ -33,6 +33,7 @@ gem 'huffman'
 gem 'ruby-graphviz'
 gem 'smbhash'
 gem 'digest-sha3'
+gem 'digest-whirlpool'
 
 #development only gems go here
 group :test, :development do
