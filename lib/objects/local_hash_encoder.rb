@@ -32,11 +32,8 @@ class HashEncoder < StringEncoder
         end
       end
 
-      self.outputs << hash_function(combined_string)
-    end
-
-    if self.return_salts
-      self.outputs += self.salt
+      self.outputs[i] = hash_function(combined_string)
+      self.outputs[i] += "\n salt:#{self.salt[i]}" if self.return_salts
     end
   end
 
@@ -59,9 +56,9 @@ class HashEncoder < StringEncoder
 
   def encoding_print_string
     print_string = 'strings_to_encode: ' + self.strings_to_encode.to_s + print_string_padding +
-    'salt: ' + self.salt.to_s
+        'salt: ' + self.salt.to_s
     if self.salt.size > 0
-      print_string +=  print_string_padding
+      print_string += print_string_padding
       print_string += "return_salts: #{self.return_salts.to_s} #{print_string_padding}"
       print_string += "salt_position: #{self.salt_position.to_s}"
     end

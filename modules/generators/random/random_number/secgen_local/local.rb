@@ -8,8 +8,6 @@ class NumberGenerator < StringGenerator
   def initialize
     super
     self.module_name = 'Random NumberGenerator'
-    self.minimum = 0
-    self.maximum = 10
   end
 
   def generate

@@ -23,40 +23,58 @@
       <value>172.16.0.12</value>
     </input>
 
-    <!-- 6x challenges per student -->
-    <!--1: random encoder -->
-    <!--2: random encoder -->
-    <!--3: random encoder -->
-    <!--4: random encoder -->
-    <!--5: random encoder double encoded -->
-    <!--6: random high difficulty encoder -->
+    <!-- 6x encoding challenges per challenger -->
+    <!-- 1: random encoder -->
+    <!-- 2: random encoder -->
+    <!-- 3: random encoder -->
+    <!-- 4: random encoder -->
+    <!-- 5: random encoder double encoded -->
+    <!-- 6: random high difficulty encoder -->
+
+    <!-- 9x hash challenges per challenger -->
+    <!-- 7:  Unsalted dictionary word -->
+    <!-- 8:  Unsalted password -->
+    <!-- 9:  Dictionary word - dictionary salt - salt provided -->
+    <!-- 10: Dictionary word - dictionary salt - salt not provided -->
+    <!-- 11: Random password - dictionary salt - salt provided -->
+    <!-- 12: Random password - dictionary salt - salt not provided -->
+    <!-- 13: Number - unsalted -->
+    <!-- 14: Dictionary word - numerical salt - salt provided -->
+    <!-- 15: Dictionary word - numerical salt - salt not provided -->
+
+
+    <!--Datastore contains all challenges except #6 -->
 
     <input into_datastore="challenges" unique_module_list="unique_encoders">
-
+      <!-- 1: random encoder -->
       <encoder type="ascii_reversible">
         <input into="strings_to_encode">
           <generator type="flag_generator"/>
         </input>
       </encoder>
 
+      <!-- 2: random encoder -->
       <encoder type="alpha_reversible">
         <input into="strings_to_encode">
           <generator type="flag_generator"/>
         </input>
       </encoder>
 
+      <!-- 3: random encoder -->
       <encoder type="ascii_reversible">
         <input into="strings_to_encode">
           <generator type="flag_generator"/>
         </input>
       </encoder>
 
+      <!-- 4: random encoder -->
       <encoder type="ascii_reversible">
         <input into="strings_to_encode">
           <generator type="flag_generator"/>
         </input>
       </encoder>
 
+      <!-- 5: random encoder double encoded -->
       <encoder type="ascii_reversible">
         <input into="strings_to_encode">
           <encoder type="ascii_reversible">
@@ -64,6 +82,116 @@
               <generator type="flag_generator"/>
             </input>
           </encoder>
+        </input>
+      </encoder>
+
+      <!-- 7: Unsalted dictionary word -->
+      <encoder type="hash">
+        <input into="strings_to_encode">
+          <generator type="random_word_generator"/>
+        </input>
+      </encoder>
+      <!-- 8: Unsalted password -->
+      <encoder type="hash">
+        <input into="strings_to_encode">
+          <generator type="password_generator"/>
+        </input>
+      </encoder>
+
+      <!-- 9: Dictionary word - dictionary salt - salt provided-->
+      <encoder type="hash">
+        <input into="strings_to_encode">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="salt">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="return_salts">
+          <value>true</value>
+        </input>
+      </encoder>
+
+      <!-- 10: Dictionary word - dictionary salt - salt not provided-->
+      <encoder type="hash">
+        <input into="strings_to_encode">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="salt">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="return_salts">
+          <value>false</value>
+        </input>
+      </encoder>
+
+      <!-- 11: Random password - dictionary salt - salt provided-->
+      <encoder type="hash">
+        <input into="strings_to_encode">
+          <generator type="password_generator"/>
+        </input>
+        <input into="salt">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="return_salts">
+          <value>true</value>
+        </input>
+      </encoder>
+
+      <!-- 12: Random password - dictionary salt - salt not provided-->
+      <encoder type="hash">
+        <input into="strings_to_encode">
+          <generator type="password_generator"/>
+        </input>
+        <input into="salt">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="return_salts">
+          <value>false</value>
+        </input>
+      </encoder>
+
+      <!-- 13: Number - unsalted-->
+      <encoder type="hash">
+        <input into="strings_to_encode">
+          <generator type="random_number_generator">
+            <input into="maximum">
+              <value>10000000</value>
+            </input>
+          </generator>
+        </input>
+      </encoder>
+
+      <!-- 14: Dictionary word - numerical salt - salt provided-->
+      <encoder type="hash">
+        <input into="strings_to_encode">
+          <generator type="random_number_generator">
+            <input into="maximum">
+              <value>100</value>
+            </input>
+          </generator>
+        </input>
+        <input into="salt">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="return_salts">
+          <value>true</value>
+        </input>
+      </encoder>
+
+      <!-- 15: Dictionary word - numerical salt - salt not provided-->
+      <encoder type="hash">
+        <input into="strings_to_encode">
+          <generator type="random_number_generator">
+            <input into="maximum">
+              <value>100</value>
+            </input>
+          </generator>
+        </input>
+        <input into="salt">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="return_salts">
+          <value>false</value>
         </input>
       </encoder>
 
@@ -82,8 +210,11 @@
           <input into="super_user">
             <value>true</value>
           </input>
+          <input into="strings_to_leak">
+            <value/>
+          </input>
           <input into="leaked_filenames">
-            <value>ciphertext</value>
+            <value/>
           </input>
           <input into="data_to_leak">
             <generator type="leaked_data">
@@ -94,7 +225,7 @@
                 <value>cipher</value>
               </input>
               <input into="subdirectory">
-                <value>challenges/challenge_1</value>
+                <value>challenges/challenge_01</value>
               </input>
             </generator>
 
@@ -106,7 +237,7 @@
                 <value>cipher</value>
               </input>
               <input into="subdirectory">
-                <value>challenges/challenge_2</value>
+                <value>challenges/challenge_02</value>
               </input>
             </generator>
 
@@ -118,7 +249,7 @@
                 <value>cipher</value>
               </input>
               <input into="subdirectory">
-                <value>challenges/challenge_3</value>
+                <value>challenges/challenge_03</value>
               </input>
             </generator>
 
@@ -130,7 +261,7 @@
                 <value>cipher</value>
               </input>
               <input into="subdirectory">
-                <value>challenges/challenge_4</value>
+                <value>challenges/challenge_04</value>
               </input>
             </generator>
 
@@ -142,22 +273,135 @@
                 <value>cipher</value>
               </input>
               <input into="subdirectory">
-                <value>challenges/challenge_5</value>
+                <value>challenges/challenge_05</value>
               </input>
             </generator>
 
+            <!--6: random high difficulty encoder -->
             <encoder difficulty="high">
               <input into="strings_to_encode">
                 <generator type="flag_generator"/>
               </input>
               <input into="subdirectory">
-                <value>challenges/challenge_6</value>
+                <value>challenges/challenge_06</value>
               </input>
             </encoder>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="5">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_07</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="6">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_08</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="7">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_09</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="8">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_10</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="9">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_11</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="10">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_12</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="11">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_13</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="12">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_14</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="13">challenges</datastore>
+              </input>
+              <input into="filename">
+                <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_15</value>
+              </input>
+            </generator>
+
           </input>
         </generator>
       </input>
     </utility>
+
+    <utility module_path=".*hashcat"/>
+    <utility module_path=".*johntheripper"/>
 
     <utility module_path=".*kde_minimal">
       <input into="accounts">

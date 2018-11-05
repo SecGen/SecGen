@@ -34,9 +34,9 @@ define parameterised_accounts::account (
 
   # sort groups if sudo add to conf
   if $super_user {
-    exec { "add-$username-to-sudoers":
-      path    => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'],
-      command => "echo '$username ALL=(ALL) ALL' >> /etc/sudoers",
+    file_line  { "add-$username-to-sudoers":
+      path => '/etc/sudoers',
+      line => "$username ALL=(ALL) ALL",
     }
   }
 

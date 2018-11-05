@@ -9,7 +9,11 @@ class LMEncoder < HashEncoder
 
   def hash_function(string)
     require 'smbhash'
-    Smbhash.lm_hash(string)
+    string_to_hash = string
+    if string.length > 14
+      string_to_hash = string[0..13]
+    end
+    Smbhash.lm_hash(string_to_hash)
   end
 end
 
