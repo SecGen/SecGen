@@ -1,15 +1,15 @@
 #!/usr/bin/ruby
 require_relative '../../../../../lib/objects/local_hash_encoder.rb'
 
-class SHA512Encoder < HashEncoder
+class SHA3_256_Encoder < HashEncoder
   def initialize
     super
-    self.module_name = 'SHA512 Encoder'
+    self.module_name = 'SHA3-256 Encoder'
   end
 
   def hash_function(string)
-    Digest::SHA512.hexdigest(string)
+    Digest::SHA3.hexdigest('foo', 256)
   end
 end
 
-SHA512Encoder.new.run
+SHA3_256_Encoder.new.run

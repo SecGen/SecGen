@@ -3,13 +3,13 @@
 <encoder xmlns="http://www.github/cliffe/SecGen/encoder"
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
-  <name>SHA1 Encoder</name>
+  <name>SHA3-512 Encoder</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>Generates an SHA1 hash for each of the strings.</description>
+  <description>Generates an SHA3-512 hash for each of the strings.</description>
 
   <type>hash</type>
-  <type>sha1</type>
+  <type>sha3_512</type>
   <platform>linux</platform>
   <platform>windows</platform>
 
