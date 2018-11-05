@@ -32,6 +32,7 @@ gem 'bases'
 gem 'huffman'
 gem 'ruby-graphviz'
 gem 'smbhash'
+gem 'digest-sha3'
 
 #development only gems go here
 group :test, :development do
