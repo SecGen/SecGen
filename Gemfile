@@ -25,6 +25,7 @@ gem 'duplicate'
 gem 'smbhash'
 gem 'digest-sha3'
 gem 'digest-whirlpool'
+gem 'digest-siphash'
 
 #development only gems go here
 group :test, :development do
