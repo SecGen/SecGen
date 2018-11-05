@@ -27,6 +27,10 @@ GEM
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
     fast_gettext (1.1.2)
+    ffi (1.9.25)
+    ffi-compiler (1.0.1)
+      ffi (>= 1.0.0)
+      rake
     forgery (0.7.0)
     gettext (3.2.9)
       locale (>= 2.0.5)
@@ -88,6 +92,8 @@ GEM
       chunky_png (~> 1.0)
     rsync (1.0.9)
     rubyzip (1.2.2)
+    scrypt (3.0.6)
+      ffi-compiler (>= 1.0, < 2.0)
     semantic_puppet (1.0.2)
     smbhash (1.0.2)
     spidr (0.6.0)
@@ -130,6 +136,7 @@ DEPENDENCIES
   redcarpet
   rmagick
   rqrcode
+  scrypt
   smbhash
   sshkey
   wordlist

@@ -26,6 +26,7 @@ gem 'smbhash'
 gem 'digest-sha3'
 gem 'digest-whirlpool'
 gem 'digest-siphash'
+gem 'scrypt'
 
 #development only gems go here
 group :test, :development do
