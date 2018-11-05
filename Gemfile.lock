@@ -14,6 +14,7 @@ GEM
     credy (0.2.1)
       thor (~> 0.19.1)
     digest-sha3 (1.1.0)
+    digest-whirlpool (1.0.3)
     duplicate (1.1.1)
     facter (2.5.1)
     faker (1.9.1)
@@ -106,6 +107,7 @@ DEPENDENCIES
   cinch
   credy
   digest-sha3
+  digest-whirlpool
   duplicate
   faker
   forgery
