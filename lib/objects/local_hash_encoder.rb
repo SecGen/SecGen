@@ -5,6 +5,7 @@ require 'digest'
 class HashEncoder < StringEncoder
   attr_accessor :salt
   attr_accessor :return_salts
+  attr_accessor :salt_position
 
   def initialize
     super
@@ -12,6 +13,7 @@ class HashEncoder < StringEncoder
     self.strings_to_encode = []
     self.salt = []
     self.return_salts = false
+    self.salt_position = %w(before after).sample
   end
 
   def hash_function(str)
@@ -21,8 +23,13 @@ class HashEncoder < StringEncoder
     self.strings_to_encode.each_with_index do |string, i|
 
       combined_string = string
+
       if self.salt[i]
-        combined_string += self.salt[i]
+        if salt_position == 'before'
+          combined_string = self.salt[i] + combined_string
+        elsif salt_position == 'after'
+          combined_string = combined_string + self.salt[i]
+        end
       end
 
       self.outputs << hash_function(combined_string)
@@ -51,8 +58,13 @@ class HashEncoder < StringEncoder
   end
 
   def encoding_print_string
-    'strings_to_encode: ' + self.strings_to_encode.to_s + print_string_padding +
-    'salt: ' + self.salt.to_s + print_string_padding +
-    'return_salts: ' + self.return_salts.to_s
+    print_string = 'strings_to_encode: ' + self.strings_to_encode.to_s + print_string_padding +
+    'salt: ' + self.salt.to_s
+    if self.salt.size > 0
+      print_string +=  print_string_padding
+      print_string += "return_salts: #{self.return_salts.to_s} #{print_string_padding}"
+      print_string += "salt_position: #{self.salt_position.to_s}"
+    end
+    print_string
   end
 end

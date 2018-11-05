@@ -22,6 +22,7 @@ gem 'programr', :git => "http://github.com/robertjwhitney/programr.git"
 gem 'process_helper'
 gem 'ovirt-engine-sdk'
 gem 'duplicate'
+gem 'smbhash'
 
 #development only gems go here
 group :test, :development do
