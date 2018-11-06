@@ -4,22 +4,111 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-  <!-- an example remote storage system, with a remotely exploitable vulnerability that can then be escalated to root -->
   <system>
-    <system_name>test_stanif_clone</system_name>
-    <base distro="Kali" name="MSF" />
+    <system_name>metactf</system_name>
+    <base platform="linux" type="server" distro="Stretch"/>
 
-    <input into_datastore="IP_addresses">
-      <value>172.16.0.2</value>
-      <value>172.16.0.3</value>
-    </input>
+    <utility type="reversing_tools"/>
 
-    <network type="private_network">
-      <input into="IP_address">
-        <datastore access="0">IP_addresses</datastore>
+    <utility module_path=".*parameterised_accounts">
+      <input into="accounts" into_datastore="account">
+        <generator type="account">
+          <input into="username">
+            <value>challenger</value>
+          </input>
+          <input into="password">
+            <value>password</value>
+          </input>
+          <input into="strings_to_leak">
+            <value/>
+          </input>
+          <input into="leaked_filenames">
+            <value/>
+          </input>
+          <input into="super_user">
+            <value>false</value>
+          </input>
+        </generator>
       </input>
-    </network>
+    </utility>
 
+    <!--<utility module_path=".*metactf">-->
+    <!--<input into="challenge_list">-->
+    <!--<value>src_angr/00_angr_find</value>-->
+    <!--<value>src_angr/01_angr_avoid</value>-->
+    <!--<value>src_angr/02_angr_find_condition</value>-->
+    <!--<value>src_csp/Ch1-2/Ch2_03_TwosComplement</value>-->
+    <!--<value>src_csp/Ch1-2/Ch2_03_XorInt</value>-->
+    <!--</input>-->
+    <!--<input into="groups">-->
+    <!--<value>challenge01</value>-->
+    <!--<value>challenge02</value>-->
+    <!--<value>challenge03</value>-->
+    <!--<value>challenge04</value>-->
+    <!--<value>challenge05</value>-->
+    <!--</input>-->
+    <!--<input into="flags">-->
+    <!--<generator type="flag_generator"/>-->
+    <!--<generator type="flag_generator"/>-->
+    <!--<generator type="flag_generator"/>-->
+    <!--<generator type="flag_generator"/>-->
+    <!--<generator type="flag_generator"/>-->
+    <!--</input>-->
+    <!--<input into="account">-->
+    <!--<datastore>account</datastore>-->
+    <!--</input>-->
+    <!--<input into="include_chapters">-->
+    <!--<value>false</value>-->
+    <!--</input>-->
+    <!--<input into="include_scaffolding">-->
+    <!--<value>false</value>-->
+    <!--</input>-->
+    <!--</utility>-->
+
+    <!--<utility module_path=".*metactf">-->
+    <!--<input into="challenge_list">-->
+    <!--<generator type="metactf_challenge">-->
+    <!--<input into="difficulty">-->
+    <!--<value>easy</value>-->
+    <!--</input>-->
+    <!--</generator>-->
+    <!--<generator type="metactf_challenge">-->
+    <!--<input into="difficulty">-->
+    <!--<value>easy</value>-->
+    <!--</input>-->
+    <!--</generator>-->
+    <!--<generator type="metactf_challenge">-->
+    <!--<input into="difficulty">-->
+    <!--<value>easy</value>-->
+    <!--</input>-->
+    <!--</generator>-->
+    <!--<generator type="metactf_challenge">-->
+    <!--<input into="difficulty">-->
+    <!--<value>medium</value>-->
+    <!--</input>-->
+    <!--</generator>-->
+    <!--<generator type="metactf_challenge">-->
+    <!--<input into="difficulty">-->
+    <!--<value>medium</value>-->
+    <!--</input>-->
+    <!--</generator>-->
+    <!--<generator type="metactf_challenge">-->
+    <!--<input into="difficulty">-->
+    <!--<value>medium</value>-->
+    <!--</input>-->
+    <!--</generator>-->
+    <!--<generator type="metactf_challenge">-->
+    <!--<input into="difficulty">-->
+    <!--<value>hard</value>-->
+    <!--</input>-->
+    <!--</generator>-->
+    <!--</input>-->
+    <!--<input into="account">-->
+    <!--<datastore>account</datastore>-->
+    <!--</input>-->
+    <!--</utility>-->
+
+    <network type="private_network" range="dhcp"/>
   </system>
 
 </scenario>

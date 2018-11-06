@@ -8,7 +8,7 @@
     <system_name>metactf</system_name>
     <base platform="linux" type="server" distro="Stretch"/>
 
-    <!--<utility type="reversing_tools"/>-->
+    <utility type="reversing_tools"/>
 
     <utility module_path=".*parameterised_accounts">
       <input into="accounts" into_datastore="account">
@@ -25,77 +25,52 @@
 
     <utility module_path=".*metactf">
       <input into="challenge_list">
-        <value>src_angr/00_angr_find</value>
-        <value>src_malware/Ch18-21/Ch21x64_ParamsStack</value>
-        <value>src_csp/Ch3.1-3.5/Ch3_00_GdbIntro</value>
-      </input>
-      <input into="groups">
-        <value>challenge01</value>
-        <value>challenge02</value>
-        <value>challenge03</value>
-        <value>challenge04</value>
-        <value>challenge05</value>
-      </input>
-      <input into="flags">
-        <generator type="flag_generator"/>
-        <generator type="flag_generator"/>
-        <generator type="flag_generator"/>
-        <generator type="flag_generator"/>
-        <generator type="flag_generator"/>
+        <generator type="metactf_challenge">
+          <input into="difficulty">
+            <value>easy</value>
+          </input>
+        </generator>
+        <generator type="metactf_challenge">
+          <input into="difficulty">
+            <value>easy</value>
+          </input>
+        </generator>
+        <generator type="metactf_challenge">
+          <input into="difficulty">
+            <value>easy</value>
+          </input>
+        </generator>
+        <generator type="metactf_challenge">
+          <input into="difficulty">
+            <value>medium</value>
+          </input>
+        </generator>
+        <generator type="metactf_challenge">
+          <input into="difficulty">
+            <value>medium</value>
+          </input>
+        </generator>
+        <generator type="metactf_challenge">
+          <input into="difficulty">
+            <value>medium</value>
+          </input>
+        </generator>
+        <generator type="metactf_challenge">
+          <input into="difficulty">
+            <value>hard</value>
+          </input>
+        </generator>
       </input>
       <input into="account">
         <datastore>account</datastore>
       </input>
+      <input into="include_scaffolding">
+        <value>true</value>
+      </input>
       <input into="include_chapters">
         <value>false</value>
       </input>
-      <input into="include_scaffolding">
-        <value>false</value>
-      </input>
     </utility>
-
-    <!--<utility module_path=".*metactf">-->
-      <!--<input into="challenge_list">-->
-        <!--<generator type="metactf_challenge">-->
-          <!--<input into="difficulty">-->
-            <!--<value>easy</value>-->
-          <!--</input>-->
-        <!--</generator>-->
-        <!--<generator type="metactf_challenge">-->
-          <!--<input into="difficulty">-->
-            <!--<value>easy</value>-->
-          <!--</input>-->
-        <!--</generator>-->
-        <!--<generator type="metactf_challenge">-->
-          <!--<input into="difficulty">-->
-            <!--<value>easy</value>-->
-          <!--</input>-->
-        <!--</generator>-->
-        <!--<generator type="metactf_challenge">-->
-          <!--<input into="difficulty">-->
-            <!--<value>medium</value>-->
-          <!--</input>-->
-        <!--</generator>-->
-        <!--<generator type="metactf_challenge">-->
-          <!--<input into="difficulty">-->
-            <!--<value>medium</value>-->
-          <!--</input>-->
-        <!--</generator>-->
-        <!--<generator type="metactf_challenge">-->
-          <!--<input into="difficulty">-->
-            <!--<value>medium</value>-->
-          <!--</input>-->
-        <!--</generator>-->
-        <!--<generator type="metactf_challenge">-->
-          <!--<input into="difficulty">-->
-            <!--<value>hard</value>-->
-          <!--</input>-->
-        <!--</generator>-->
-      <!--</input>-->
-      <!--<input into="account">-->
-        <!--<datastore>account</datastore>-->
-      <!--</input>-->
-    <!--</utility>-->
 
     <network type="private_network" range="dhcp"/>
   </system>
