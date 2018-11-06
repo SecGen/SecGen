@@ -12,7 +12,6 @@
   <type>MD4</type>
   <platform>linux</platform>
   <platform>windows</platform>
-
   <difficulty>low</difficulty>
 
   <read_fact>strings_to_encode</read_fact>
