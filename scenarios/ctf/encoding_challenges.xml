@@ -4,7 +4,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-  <name>Encoding Challenges</name>
+  <name>Data Encoding and Hash Challenges</name>
   <author>Thomas Shaw</author>
   <description>Single system basic crypto CTF challenge.</description>
 
@@ -21,51 +21,52 @@
     </input>
 
     <!-- 6x encoding challenges per challenger -->
-    <!-- 1: random encoder: ascii_reversible -->
-    <!-- 2: random encoder: alpha_reversible -->
-    <!-- 3: random encoder: ascii reversible -->
-    <!-- 4: random encoder: ascii_reversible -->
-    <!-- 5: random encoder double encoded: ascii_reversible => ascii_reversible -->
-    <!-- 6: random high difficulty encoder -->
+    <!-- 1: random encoder: ascii_reversible difficulty="low"-->
+    <!-- 2: random encoder: alpha_reversible difficulty="low"-->
+    <!-- 3: random encoder: ascii reversible difficulty="low"-->
+    <!-- 4: random encoder: ascii_reversible difficulty="medium"-->
+    <!-- 5: random encoder double encoded: ascii_reversible => ascii_reversible (no difficulty as double wrap is medium) -->
+    <!-- 6: random encoder difficulty="high"-->
 
     <!-- 9x hash challenges per challenger -->
     <!-- 7:  Unsalted dictionary word -->
     <!-- 8:  Unsalted password -->
-    <!-- 9:  Dictionary word - dictionary salt - salt provided -->
-    <!-- 10: Dictionary word - dictionary salt - salt not provided -->
+    <!-- 9:  Dictionary word - dictionary salt - salt not provided -->
+    <!-- 10: Dictionary word - dictionary salt - salt provided -->
     <!-- 11: Random password - dictionary salt - salt provided -->
     <!-- 12: Random password - dictionary salt - salt not provided -->
     <!-- 13: Number - unsalted -->
     <!-- 14: Dictionary word - numerical salt - salt provided -->
     <!-- 15: Dictionary word - numerical salt - salt not provided -->
 
+    <!-- Automatic installation of handy_cli_utilities, hash_tools, hashcat and john the ripper. -->
 
     <!--Datastore contains all challenges except #6 -->
 
     <input into_datastore="challenges" unique_module_list="unique_encoders">
       <!-- 1: random encoder -->
-      <encoder type="ascii_reversible">
+      <encoder type="ascii_reversible" difficulty="low">
         <input into="strings_to_encode">
           <generator type="flag_generator"/>
         </input>
       </encoder>
 
       <!-- 2: random encoder -->
-      <encoder type="alpha_reversible">
+      <encoder type="alpha_reversible" difficulty="low">
         <input into="strings_to_encode">
           <generator type="flag_generator"/>
         </input>
       </encoder>
 
       <!-- 3: random encoder -->
-      <encoder type="ascii_reversible">
+      <encoder type="ascii_reversible" difficulty="low">
         <input into="strings_to_encode">
           <generator type="flag_generator"/>
         </input>
       </encoder>
 
       <!-- 4: random encoder -->
-      <encoder type="ascii_reversible">
+      <encoder type="ascii_reversible" difficulty="medium">
         <input into="strings_to_encode">
           <generator type="flag_generator"/>
         </input>
@@ -83,33 +84,21 @@
       </encoder>
 
       <!-- 7: Unsalted dictionary word -->
-      <encoder type="hash">
+      <encoder type="hash" difficulty="low">
         <input into="strings_to_encode">
           <generator type="random_word_generator"/>
         </input>
       </encoder>
+
       <!-- 8: Unsalted password -->
-      <encoder type="hash">
+      <encoder type="hash" difficulty="low">
         <input into="strings_to_encode">
           <generator type="password_generator"/>
         </input>
       </encoder>
 
-      <!-- 9: Dictionary word - dictionary salt - salt provided-->
-      <encoder type="hash">
-        <input into="strings_to_encode">
-          <generator type="random_word_generator"/>
-        </input>
-        <input into="salt">
-          <generator type="random_word_generator"/>
-        </input>
-        <input into="return_salts">
-          <value>true</value>
-        </input>
-      </encoder>
-
-      <!-- 10: Dictionary word - dictionary salt - salt not provided-->
-      <encoder type="hash">
+      <!-- 09: Dictionary word - dictionary salt - salt not provided-->
+      <encoder type="hash" difficulty="low">
         <input into="strings_to_encode">
           <generator type="random_word_generator"/>
         </input>
@@ -121,8 +110,21 @@
         </input>
       </encoder>
 
+      <!-- 10: Dictionary word - dictionary salt - salt provided-->
+      <encoder type="hash" difficulty="medium">
+        <input into="strings_to_encode">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="salt">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="return_salts">
+          <value>true</value>
+        </input>
+      </encoder>
+
       <!-- 11: Random password - dictionary salt - salt provided-->
-      <encoder type="hash">
+      <encoder type="hash" difficulty="medium">
         <input into="strings_to_encode">
           <generator type="password_generator"/>
         </input>
@@ -135,7 +137,7 @@
       </encoder>
 
       <!-- 12: Random password - dictionary salt - salt not provided-->
-      <encoder type="hash">
+      <encoder type="hash" difficulty="medium">
         <input into="strings_to_encode">
           <generator type="password_generator"/>
         </input>
@@ -148,7 +150,7 @@
       </encoder>
 
       <!-- 13: Number - unsalted-->
-      <encoder type="hash">
+      <encoder type="hash" difficulty="high">
         <input into="strings_to_encode">
           <generator type="random_number_generator">
             <input into="maximum">
@@ -159,7 +161,7 @@
       </encoder>
 
       <!-- 14: Dictionary word - numerical salt - salt provided-->
-      <encoder type="hash">
+      <encoder type="hash" difficulty="high">
         <input into="strings_to_encode">
           <generator type="random_number_generator">
             <input into="maximum">
@@ -176,7 +178,7 @@
       </encoder>
 
       <!-- 15: Dictionary word - numerical salt - salt not provided-->
-      <encoder type="hash">
+      <encoder type="hash" difficulty="high">
         <input into="strings_to_encode">
           <generator type="random_number_generator">
             <input into="maximum">
@@ -191,7 +193,6 @@
           <value>false</value>
         </input>
       </encoder>
-
     </input>
 
     <!-- Local challenges -->
@@ -397,6 +398,8 @@
       </input>
     </utility>
 
+    <utility module_path=".*handy_cli_tools"/>
+    <utility module_path=".*hash_tools"/>
     <utility module_path=".*hashcat"/>
     <utility module_path=".*johntheripper"/>
 
