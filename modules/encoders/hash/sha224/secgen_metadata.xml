@@ -12,6 +12,7 @@
   <type>sha224</type>
   <platform>linux</platform>
   <platform>windows</platform>
+  <difficulty>medium</difficulty>
 
   <read_fact>strings_to_encode</read_fact>
   <read_fact>salt</read_fact>
