@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 require_relative '../../../../../lib/objects/local_string_generator.rb'
+require_relative '../../../../../lib/helpers/blacklist.rb'
 
 class WordGenerator < StringGenerator
   attr_accessor :wordlist
@@ -23,8 +24,17 @@ class WordGenerator < StringGenerator
   end
 
   def generate
-    word = File.readlines("#{WORDLISTS_DIR}/#{self.wordlist.sample.chomp}").sample.chomp
-    self.outputs << word.gsub(/[^\w]/, '')
+    blacklist = Blacklist.new
+    flag_word = ''
+
+    until flag_word != ''
+      selected_word = File.readlines("#{WORDLISTS_DIR}/#{self.wordlist.sample.chomp}").sample.chomp
+      unless blacklist.is_blacklisted? selected_word
+        flag_word = selected_word.gsub(/[^\w]/, '')
+      end
+    end
+
+    self.outputs << flag_word
   end
 end
 

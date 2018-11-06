@@ -41,6 +41,7 @@ DOCUMENTATION_DIR = "#{ROOT_DIR}/documentation/yard/doc"
 
 # Path to resources
 WORDLISTS_DIR = "#{ROOT_DIR}/lib/resources/wordlists"
+BLACKLISTED_WORDS_FILE = "#{ROOT_DIR}/lib/resources/blacklisted_words/blacklist.txt"
 IMAGES_DIR = "#{ROOT_DIR}/lib/resources/images"
 
 # Path to build puppet modules
