@@ -13,6 +13,7 @@
   <type>string_encoder</type>
   <platform>linux</platform>
   <platform>windows</platform>
+  <difficulty>medium</difficulty>
 
   <reference>https://github.com/nicanor/braille</reference>
 

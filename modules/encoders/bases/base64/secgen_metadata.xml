@@ -13,6 +13,7 @@
   <type>alpha_reversible</type>
   <platform>linux</platform>
   <platform>windows</platform>
+  <difficulty>low</difficulty>
 
   <solution>Encoded using Base64. Decoding tools available online e.g. https://www.base64decode.org/</solution>
 

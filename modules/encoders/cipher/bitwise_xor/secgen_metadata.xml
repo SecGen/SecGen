@@ -16,6 +16,7 @@
   <type>local_calculation</type>
   <platform>linux</platform>
   <platform>windows</platform>
+  <difficulty>high</difficulty>
 
   <hint>Perform a bitwise XOR on both strings - https://www.youtube.com/watch?v=YtghBxoBxpA</hint>
   <solution>Example bitwise XOR tool:
