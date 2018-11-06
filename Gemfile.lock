@@ -107,6 +107,7 @@ GEM
     rmagick (2.16.0)
     rqrcode (0.10.1)
       chunky_png (~> 1.0)
+    rsa (0.1.4)
     rsync (1.0.9)
     ruby-graphviz (1.2.3)
     rubyzip (1.2.2)
@@ -160,6 +161,7 @@ DEPENDENCIES
   redcarpet
   rmagick
   rqrcode
+  rsa
   ruby-graphviz
   scrypt
   smbhash
