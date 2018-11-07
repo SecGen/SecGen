@@ -85,22 +85,22 @@
 
       <!-- 7: Unsalted dictionary word -->
       <encoder type="hash" difficulty="low">
-        <input into="strings_to_encode">
+        <input into="strings_to_encode" into_datastore="hash_flags">
           <generator type="random_word_generator"/>
         </input>
       </encoder>
 
       <!-- 8: Unsalted password -->
       <encoder type="hash" difficulty="low">
-        <input into="strings_to_encode">
-          <generator type="password_generator"/>
+        <input into="strings_to_encode" into_datastore="hash_flags">
+          <generator type="crackable_password_generator"/>
         </input>
       </encoder>
 
       <!-- 09: Dictionary word - dictionary salt - salt not provided-->
       <encoder type="hash" difficulty="low">
-        <input into="strings_to_encode">
-          <generator type="random_word_generator"/>
+        <input into="strings_to_encode" into_datastore="hash_flags">
+          <generator type="random_word_generator" />
         </input>
         <input into="salt">
           <generator type="random_word_generator"/>
@@ -112,7 +112,7 @@
 
       <!-- 10: Dictionary word - dictionary salt - salt provided-->
       <encoder type="hash" difficulty="medium">
-        <input into="strings_to_encode">
+        <input into="strings_to_encode" into_datastore="hash_flags">
           <generator type="random_word_generator"/>
         </input>
         <input into="salt">
@@ -125,8 +125,8 @@
 
       <!-- 11: Random password - dictionary salt - salt provided-->
       <encoder type="hash" difficulty="medium">
-        <input into="strings_to_encode">
-          <generator type="password_generator"/>
+        <input into="strings_to_encode" into_datastore="hash_flags">
+          <generator type="crackable_password_generator"/>
         </input>
         <input into="salt">
           <generator type="random_word_generator"/>
@@ -138,8 +138,8 @@
 
       <!-- 12: Random password - dictionary salt - salt not provided-->
       <encoder type="hash" difficulty="medium">
-        <input into="strings_to_encode">
-          <generator type="password_generator"/>
+        <input into="strings_to_encode" into_datastore="hash_flags">
+          <generator type="crackable_password_generator"/>
         </input>
         <input into="salt">
           <generator type="random_word_generator"/>
@@ -151,7 +151,7 @@
 
       <!-- 13: Number - unsalted-->
       <encoder type="hash" difficulty="high">
-        <input into="strings_to_encode">
+        <input into="strings_to_encode" into_datastore="hash_flags">
           <generator type="random_number_generator">
             <input into="maximum">
               <value>10000000</value>
@@ -162,15 +162,15 @@
 
       <!-- 14: Dictionary word - numerical salt - salt provided-->
       <encoder type="hash" difficulty="high">
-        <input into="strings_to_encode">
-          <generator type="random_number_generator">
-            <input into="maximum">
-              <value>100</value>
-            </input>
-          </generator>
+        <input into="strings_to_encode" into_datastore="hash_flags">
+          <generator type="random_word_generator"/>
         </input>
         <input into="salt">
-          <generator type="random_word_generator"/>
+          <generator type="random_number_generator">
+          <input into="maximum">
+            <value>100</value>
+          </input>
+          </generator>
         </input>
         <input into="return_salts">
           <value>true</value>
@@ -179,20 +179,69 @@
 
       <!-- 15: Dictionary word - numerical salt - salt not provided-->
       <encoder type="hash" difficulty="high">
-        <input into="strings_to_encode">
+        <input into="strings_to_encode" into_datastore="hash_flags">
+          <generator type="random_word_generator"/>
+        </input>
+        <input into="salt">
           <generator type="random_number_generator">
             <input into="maximum">
               <value>100</value>
             </input>
           </generator>
         </input>
-        <input into="salt">
-          <generator type="random_word_generator"/>
-        </input>
         <input into="return_salts">
           <value>false</value>
         </input>
       </encoder>
+    </input>
+
+    <!-- Wrap hash_flags in flag{} so marker.xml picks them up -->
+    <input into_datastore="wrapped_hash_flags">
+      <generator type="concat_flag.*">
+        <input into="strings_to_join">
+          <datastore access="0">hash_flags</datastore>
+        </input>
+      </generator>
+      <generator type="concat_flag.*">
+        <input into="strings_to_join">
+          <datastore access="1">hash_flags</datastore>
+        </input>
+      </generator>
+      <generator type="concat_flag.*">
+        <input into="strings_to_join">
+          <datastore access="2">hash_flags</datastore>
+        </input>
+      </generator>
+      <generator type="concat_flag.*">
+        <input into="strings_to_join">
+          <datastore access="3">hash_flags</datastore>
+        </input>
+      </generator>
+      <generator type="concat_flag.*">
+        <input into="strings_to_join">
+          <datastore access="4">hash_flags</datastore>
+        </input>
+      </generator>
+      <generator type="concat_flag.*">
+        <input into="strings_to_join">
+          <datastore access="5">hash_flags</datastore>
+        </input>
+      </generator>
+      <generator type="concat_flag.*">
+        <input into="strings_to_join">
+          <datastore access="6">hash_flags</datastore>
+        </input>
+      </generator>
+      <generator type="concat_flag.*">
+        <input into="strings_to_join">
+          <datastore access="7">hash_flags</datastore>
+        </input>
+      </generator>
+      <generator type="concat_flag.*">
+        <input into="strings_to_join">
+          <datastore access="8">hash_flags</datastore>
+        </input>
+      </generator>
     </input>
 
     <!-- Local challenges -->
@@ -209,10 +258,40 @@
             <value>true</value>
           </input>
           <input into="strings_to_leak">
-            <value/>
+            <value>
+              Welcome! This scenario involves solving a series of crypto / encoding / hash based challenges to find flags.
+              The challenges can be found in the /home/challenger/challenges/ directory.
+
+              The password for the challenger account is: tiaspbiqe2r
+
+              Tools provided that you may find useful: hashcat, john the ripper
+                `sudo john`
+                `hashcat`
+
+              For challenges 07 - 15 you will need to wrap the hashed word within the braces in the format 'flag{}'.
+              Some inputs to the hash functions have been salted, when submitting the flag please omit the salt within your 'flag{}' string.
+
+              Examples:
+
+              Input asdf to md5
+              [challenger@localhost ~]$ echo "asdf" | md5sum
+              2b00042f7481c7b056c4b410d28f33cf  -
+
+              Input asdf with an appended random salt of 1234 to md5sum(asdf1234)
+              [challenger@localhost ~]$ echo "asdf1234" | md5sum
+              622d1280547ccb5b88e05a6540665ca0  -
+
+              Input asdf with a prepended random salt of 1234 to md5sum(1234asdf)
+              [challenger@localhost ~]$ echo "1234asdf" | md5sum
+              885ac5cfada75f388bd79f3615d3f9c8  -
+
+              The expected flag for all of the above is: flag{asdf}
+
+              Good luck, have fun.
+            </value>
           </input>
           <input into="leaked_filenames">
-            <value/>
+            <value>instructions.txt</value>
           </input>
           <input into="data_to_leak">
             <generator type="leaked_data">
@@ -275,8 +354,8 @@
               </input>
             </generator>
 
-            <!--6: random high difficulty encoder -->
-            <encoder difficulty="high">
+            <!--6: random misc high difficulty encoder -->
+            <encoder type="compression" difficulty="high">
               <input into="strings_to_encode">
                 <generator type="flag_generator"/>
               </input>

@@ -8,6 +8,7 @@
   <module_license>MIT</module_license>
   <description>Selects a random word or name 6 characters long and appends 2 random digits.</description>
 
+  <type>crackable_password_generator</type>
   <type>medium_password_generator</type>
   <type>password_generator</type>
   <type>local_calculation</type>

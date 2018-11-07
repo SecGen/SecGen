@@ -10,6 +10,7 @@
 
   <type>huffman_encoder</type>
   <type>compression</type>
+  <type>misc</type>
   <platform>linux</platform>
   <platform>windows</platform>
   <difficulty>high</difficulty>
