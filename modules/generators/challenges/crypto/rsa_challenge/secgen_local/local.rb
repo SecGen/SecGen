@@ -12,6 +12,9 @@ class RSAChallenge < StringEncoder
 
   def encode(str)
 
+    # For a challenge ee want to return n, e and c    or   p, q, e and c and to have the challenger feed this into the RSA algorithm to decrypt the ciphertext.
+
+
     # 1. Choose two distinct prime numbers p and q.
 
     # For security purposes, the integers p and q should be chosen at random, and should be of similar bit-length.
