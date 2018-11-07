@@ -1,0 +1,175 @@
+// DIE's signature file
+
+// 16:27 26.01.2013 detect improved //ajax
+//  2:30 27.01.2013 bugfixes
+// 14:14 27.01.2013 bugfixes
+
+init("protector","VMProtect");
+
+function detectVMP(sSectionName)
+{
+    if(PE.section[sSectionName])
+    {
+        nCharacteristics=PE.section[sSectionName].Characteristics;
+        if((nCharacteristics==0x60000060)||(nCharacteristics==0xE0000060)||(nCharacteristics==0xE0000040))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+function detectVMP2()
+{
+    if(PE.section.length>7)
+    {
+        var nCount=5;
+        var nResource=PE.getResourceSection();
+        var nRelocs=PE.getRelocsSection();
+
+        if(nResource>PE.section.length-nCount)
+        {
+            nCount++;
+        }
+        if(nRelocs>PE.section.length-nCount)
+        {
+            nCount++;
+        }
+
+        var nDetectCount=0;
+        var nLastVMPSection=0;
+
+        for(var nSection=PE.section.length-nCount;nSection<PE.section.length;nSection++)
+        {
+            if((nSection==nResource)||(nSection==nRelocs))
+            {
+                continue;
+            }
+            if((PE.section[nSection].FileSize==0)&&(PE.section[nSection].FileOffset==0))
+            {
+                nDetectCount++;
+            }
+
+            if((PE.section[nSection].FileSize!=0)&&(PE.section[nSection].FileOffset!=0))
+            {
+                nLastVMPSection=nSection;
+            }
+        }
+
+        if(nDetectCount>=3)
+        {
+            if(PE.getEntryPointSection()==nLastVMPSection)
+            {
+                if(PE.section[nLastVMPSection].Characteristics==0xE0000060)
+                {
+                    if(PE.calculateEntropy(PE.section[nLastVMPSection].FileOffset,PE.section[nLastVMPSection].FileSize)>7.6)
+                    {
+                        return 1;
+                    }
+                }
+                else if(PE.section[nLastVMPSection].Characteristics&0x20000000) // Fix sent Deniskore
+                {
+                    var nSectionOffset=PE.section[nLastVMPSection].FileOffset;
+                    var nSectionSize=PE.section[nLastVMPSection].FileSize;
+                    var nOffset=nSectionOffset;
+                    var nSize=nSectionSize;
+                    var nCount=0;
+                    var nSignatureOffset;
+                    while(nSize>0)
+                    {
+                        nSignatureOffset=PE.findSignature(nOffset,nSize,"9c8d64");
+                        if(nSignatureOffset==-1)
+                            break;
+                        nCount++;
+                        nOffset=nSignatureOffset+3;
+                        nSize=nSectionSize-(nSignatureOffset-nSectionOffset);
+                        if(nCount>=2)
+                        {
+                            return 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+function detect(bShowType,bShowVersion,bShowOptions)
+{
+    var nSectionNumber=0;
+    var nCharacteristics=0;
+    var collision="";
+
+    if(PE.section[".vmp0"]&&(PE.compareEP("68........E9")||PE.compareEP("68........E8")))
+    {
+        sVersion="1.60-2.05";
+        bDetected=1;
+    }
+    else if(detectVMP(".vmp0"))
+    {
+        bDetected=1;
+    }
+    else if(detectVMP(".vmp1"))
+    {
+        bDetected=1;
+    }
+    else if(detectVMP(".vmp2"))
+    {
+        bDetected=1;
+    }
+    else if(PE.compareEP("54c70424........9c60c74424..........c64424....887424..60"))
+    {
+        sVersion="2.06";
+        bDetected=1;
+    }
+    else
+    {
+        collision=PE.getSectionNameCollision("0","1");
+
+        if(collision!="")
+        {
+            if((PE.compareEP("68........E9")||PE.compareEP("68........E8")))
+            {
+                sVersion="1.X";
+                bDetected=1;
+            }
+            else if((PE.compareEP("9cE9")||PE.compareEP("9cFF")))
+            {
+                sVersion="2.X";
+                bDetected=1;
+            }
+            else if(detectVMP(collision+"0")&&detectVMP(collision+"1"))
+            {
+                bDetected=1;
+            }
+        }
+        if(!bDetected)
+        {
+            if(detectVMP2())
+            {
+                sVersion="2.X";
+                bDetected=1;
+            }
+        }
+    }
+
+    if(bDetected)
+    {
+        if(PE.section.length<3)
+        {
+            bDetected=0;
+        }
+        else if(PE.section.length==3)
+        {
+            if(PE.section[0].FileSize==0)
+            {
+                bDetected=0;
+            }
+        }
+    }
+
+    return result(bShowType,bShowVersion,bShowOptions);
+}

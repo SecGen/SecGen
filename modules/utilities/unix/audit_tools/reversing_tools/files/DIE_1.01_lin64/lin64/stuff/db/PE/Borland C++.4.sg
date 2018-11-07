@@ -1,0 +1,25 @@
+// DIE's signature file
+
+init("compiler","Borland C++");
+
+includeScript("Borland");
+
+function detect(bShowType,bShowVersion,bShowOptions)
+{
+    bDetected=bBorlandC;
+    if(bDetected==2)
+    {
+        sVersion="1999";
+        bDetected=1;
+    }
+
+    if(bDetected)
+    {
+        if(PE.resource["PACKAGEINFO"]||PE.resource["DVCLAL"])
+        {
+            sVersion="Builder";
+        }
+    }
+
+    return result(bShowType,bShowVersion,bShowOptions);
+}

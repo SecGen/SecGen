@@ -1,0 +1,22 @@
+// DIE's signature file
+
+init("protector","SLVc0deProtector");
+
+function detect(bShowType,bShowVersion,bShowOptions)
+{
+    var nLastSection=PE.nLastSection;
+    if(PE.section[nLastSection].Characteristics==0xA0000020)
+    {
+        if((PE.section[nLastSection].VirtualSize&0xFF)
+         &&(PE.section[nLastSection].FileSize&0xFF))
+        {
+            if(PE.section[nLastSection].VirtualAddress==PE.getAddressOfEntryPoint())
+            {
+                sVersion="0.61";
+                bDetected=1;
+            }
+        }
+    }
+
+    return result(bShowType,bShowVersion,bShowOptions);
+}

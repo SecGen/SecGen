@@ -1,0 +1,19 @@
+// DIE's signature file
+// Author: hors
+
+init("protector","Safengine Shielden");
+
+function detect(bShowType,bShowVersion,bShowOptions)
+{
+    if(PE.compareEP("E8........5361"))
+    {
+        if(PE.section[PE.nLastSection].FileSize==0x1000
+         &&PE.section[PE.nLastSection].VirtualSize==0x1000)
+        {
+            sVersion="2.X";
+            bDetected=1;
+        }
+    }
+
+    return result(bShowType,bShowVersion,bShowOptions);
+}

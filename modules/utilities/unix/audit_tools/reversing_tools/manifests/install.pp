@@ -30,6 +30,8 @@ class reversing_tools::install {
     command => 'make install',
   }
 
+  # Install Detect It Easy from directory (TODO)
+
   # Install angr (TODO)
 
   # Install AFL?(TODO)
