@@ -1,7 +1,7 @@
 class reversing_tools::install {
 
   Exec { path => ['/bin', '/usr/bin', '/usr/local/bin', '/sbin', '/usr/sbin'] }
-  ensure_packages(['gdb','git', 'ltrace', 'strace'])
+  ensure_packages(['gdb','git', 'ltrace', 'strace', 'pax-utils'])
 
   # Install Radare2
 
