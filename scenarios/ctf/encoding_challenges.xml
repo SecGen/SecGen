@@ -23,7 +23,7 @@
     <!-- 6x encoding challenges per challenger -->
     <!-- 1: random encoder: ascii_reversible difficulty="low"-->
     <!-- 2: random encoder: alpha_reversible difficulty="low"-->
-    <!-- 3: random encoder: ascii reversible difficulty="low"-->
+    <!-- 3: random encoder: asymmetric cipher difficulty="low"-->
     <!-- 4: random encoder: ascii_reversible difficulty="medium"-->
     <!-- 5: random encoder double encoded: ascii_reversible => ascii_reversible (no difficulty as double wrap is medium) -->
     <!-- 6: random encoder difficulty="high"-->
@@ -59,7 +59,7 @@
       </encoder>
 
       <!-- 3: random encoder -->
-      <encoder type="ascii_reversible" difficulty="low">
+      <encoder type="asymmetric" difficulty="low">
         <input into="strings_to_encode">
           <generator type="flag_generator"/>
         </input>
@@ -318,21 +318,18 @@
               </input>
             </generator>
 
-            <generator type="leaked_data">
-              <input into="data">
-                <datastore access="2">challenges</datastore>
-              </input>
-              <input into="filename">
-                <value>cipher</value>
+            <encoder type="asymmetric" difficulty="low">
+              <input into="strings_to_encode">
+                <generator type="flag_generator"/>
               </input>
               <input into="subdirectory">
                 <value>challenges/challenge_03</value>
               </input>
-            </generator>
+            </encoder>
 
             <generator type="leaked_data">
               <input into="data">
-                <datastore access="3">challenges</datastore>
+                <datastore access="2">challenges</datastore>
               </input>
               <input into="filename">
                 <value>cipher</value>
@@ -344,7 +341,7 @@
 
             <generator type="leaked_data">
               <input into="data">
-                <datastore access="4">challenges</datastore>
+                <datastore access="3">challenges</datastore>
               </input>
               <input into="filename">
                 <value>cipher</value>

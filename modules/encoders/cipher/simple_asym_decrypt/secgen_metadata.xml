@@ -15,13 +15,25 @@
   <platform>linux</platform>
   <platform>windows</platform>
 
-
+  <difficulty>low</difficulty>
 
   <read_fact>strings_to_encode</read_fact>
-  <read_fact>gpg_key</read_fact>
+  <read_fact>gpg_key_pair</read_fact>
+  <read_fact>subdirectory</read_fact>
 
-  <default_input into="gpg_key">
-    <generator type="gpg_keypair"/>
+  <default_input into="strings_to_encode">
+    <generator type="flag_generator"/>
+    <generator type="message_generator"/>
+    <generator type="message_generator"/>
+    <generator type="message_generator"/>
+  </default_input>
+
+  <default_input into="gpg_key_pair">
+    <generator type="gpg_key_pair"/>
+  </default_input>
+
+  <default_input into="subdirectory">
+    <generator type="challenges"/>
   </default_input>
 
   <output_type>array</output_type>
