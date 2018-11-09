@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<encoder xmlns="http://www.github/cliffe/SecGen/encoder"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
+  <name>Simple Asymmetric Decryption Challenge Encoder</name>
+  <author>Thomas Shaw</author>
+  <module_license>MIT</module_license>
+  <description>Returns a private key and some encrypted ciphertext.</description>
+
+  <type>asymmetric</type>
+  <type>challenge_generator</type>
+  <type>crypto_challenge_generator</type>
+  <type>local_calculation</type>
+  <platform>linux</platform>
+  <platform>windows</platform>
+
+
+
+  <read_fact>strings_to_encode</read_fact>
+  <read_fact>gpg_key</read_fact>
+
+  <default_input into="gpg_key">
+    <generator type="gpg_keypair"/>
+  </default_input>
+
+  <output_type>array</output_type>
+</encoder>

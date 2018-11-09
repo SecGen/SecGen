@@ -7,13 +7,16 @@ class RSAChallenge < StringEncoder
   def initialize
     super
     self.module_name = 'RSA Challenge Generator'
-    self.strings_to_encode = ['flag']
+    self.strings_to_encode = ['150']
   end
 
   def encode(str)
 
-    # For a challenge ee want to return n, e and c    or   p, q, e and c and to have the challenger feed this into the RSA algorithm to decrypt the ciphertext.
-
+    # For a challenge ee want to return n, e and c or   p, q, e and c and to have the challenger feed this into the RSA algorithm to decrypt the ciphertext.
+    #
+    #
+    # n should be small enough to be cracked. prime factorization of n will return p and q
+    #
 
     # 1. Choose two distinct prime numbers p and q.
 
@@ -41,12 +44,12 @@ class RSAChallenge < StringEncoder
 
     output_data = "Solve the challenge using RSA!\n"
 
+    value = str.to_i
     key_pair = RSA::KeyPair.generate(60)
 
     e = key_pair.public_key.exponent
     n = key_pair.public_key.modulus
-    ciphertext = key_pair.encrypt(str)
-    c = Integer("0x#{ciphertext.unpack("H*")[0].upcase}")
+    c = key_pair.encrypt(value)
 
     output_data += "e: #{e}\n"
     output_data += "n: #{n}\n"

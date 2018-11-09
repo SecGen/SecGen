@@ -37,6 +37,7 @@ gem 'digest-whirlpool'
 gem 'digest-siphash'
 gem 'scrypt'
 gem 'rsa'
+gem 'gpgmeh'
 
 #development only gems go here
 group :test, :development do
