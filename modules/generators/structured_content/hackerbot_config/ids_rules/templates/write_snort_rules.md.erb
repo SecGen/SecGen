@@ -147,6 +147,13 @@ sudo tail /var/log/snort/alert
 
 > The output should include the alert, with <%= $random_string %>. Note that Hackerbot will instruct you to include random strings such as this, in the alerts.
 > In this case, the website may have resulted in a few HTTP connections, therefore triggering the rule a few times.
+> If you do not see the alert, try creating a rule that triggers on all IP traffic, to confirm Snort is working correctly.
+
+To view the alerts in real-time you can run this command in a console tab:
+```bash
+sudo tail -f /var/log/snort/alert
+```
+> -f outputs appended data as the file grows
 
 ==LabBook Question: Browse the existing rules in `/etc/snort/rules` and describe how one of the existing rules works.==
 
