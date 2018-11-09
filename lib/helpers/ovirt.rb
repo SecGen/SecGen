@@ -227,7 +227,6 @@ class OVirtFunctions
           # save profile changes
           nic.vnic_profile = selected_profile
           update = {}
-          update[:interface] = OvirtSDK4::NicInterface::E1000
           nic.interface = OvirtSDK4::NicInterface::E1000
           # if the vm is up we need to unplug the nic while we change the interface
           if vm.status != 'down'
