@@ -227,6 +227,14 @@ class OVirtFunctions
           # save profile changes
           nic.vnic_profile = selected_profile
           update = {}
+          update[:interface] = OvirtSDK4::NicInterface::E1000
+          nic.interface = OvirtSDK4::NicInterface::E1000
+          # if the vm is up we need to unplug the nic while we change the interface
+          if vm.status != 'down'
+            nic.plugged = false
+            nics_service.nic_service(nic.id).update(nic, update)
+          end
+          nic.plugged = true
           nics_service.nic_service(nic.id).update(nic, update)
 
           # check if changes saved
@@ -242,7 +250,6 @@ class OVirtFunctions
               Print.err "NIC profile may STILL have not saved correctly!"
             end
           end
-
 
         rescue Exception => e
           Print.err 'Error adding network:'
