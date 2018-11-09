@@ -3,7 +3,7 @@
 <encoder xmlns="http://www.github/cliffe/SecGen/encoder"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://www.github/cliffe/SecGen/encoder">
-  <name>Simple Asymmetric Decryption Challenge Encoder</name>
+  <name>Simple GPG Decryption Challenge</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
   <description>Returns a private key and some encrypted ciphertext.</description>

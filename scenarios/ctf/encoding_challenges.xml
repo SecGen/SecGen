@@ -58,13 +58,6 @@
         </input>
       </encoder>
 
-      <!-- 3: random encoder -->
-      <encoder type="asymmetric" difficulty="low">
-        <input into="strings_to_encode">
-          <generator type="flag_generator"/>
-        </input>
-      </encoder>
-
       <!-- 4: random encoder -->
       <encoder type="ascii_reversible" difficulty="medium">
         <input into="strings_to_encode">

@@ -1,17 +1,17 @@
 #!/usr/bin/ruby
-require_relative '../../../../../lib/objects/local_string_encoder.rb'
+require_relative '../../../../../../lib/objects/local_string_encoder.rb'
 require 'json'
 require 'open3'
 require 'fileutils'
 
-class SimpleAsymDecryptEncoder < StringEncoder
+class SimpleGPGDecrypt < StringEncoder
   attr_accessor :gpg_key_pair
   attr_accessor :tmp_path
   attr_accessor :subdirectory
 
   def initialize
     super
-    self.module_name = 'Asymmetric Challenge Encoder'
+    self.module_name = 'Simple SSH Decryption Challenge'
     self.subdirectory = ''
     self.gpg_key_pair = {}
     self.tmp_path = File.expand_path(File.dirname(__FILE__)).split("/")[0...-1].join('/') + '/tmp/'
@@ -78,4 +78,4 @@ class SimpleAsymDecryptEncoder < StringEncoder
   end
 end
 
-SimpleAsymDecryptEncoder.new.run
+SimpleGPGDecrypt.new.run
