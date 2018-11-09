@@ -118,15 +118,19 @@ And bringing all this together a Snort rule could read:
 
 **On the ids_snoop VM:**
 
-Add the rule, and reload Snort:
+==Add this rule== to /etc/snort/rules/local.rules:
 
 ```bash
-echo 'alert tcp any any -> <%= $web_server_ip %> 80 (msg: "Website access  <%= $random_string %>"; content: "GET /"; sid:1000001; rev:1;)' >> /etc/snort/rules/local.rules
-
-sudo service snort restart
+alert tcp any any -> <%= $web_server_ip %> 80 (msg: "Website access  <%= $random_string %>"; content: "GET /"; sid:1000001; rev:1;)
 ```
 
-> The above echo command simply puts the new rule line at the end of the file. You can then edit it using `vi /etc/snort/rules/local.rules`.
+> Run `vi /etc/snort/rules/local.rules` Remember press 'i' to enter insert mode, make your changes, press Esc, then type ':wq' to write your changes and quit vi.
+
+==Restart snort==:
+
+```bash
+sudo service snort restart
+```
 
 ==Test the new rule...==
 
