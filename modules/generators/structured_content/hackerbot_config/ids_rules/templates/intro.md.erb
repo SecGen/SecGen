@@ -48,15 +48,13 @@ sudo vi /etc/snort/snort.conf
 ==Add the following line:==
 `output alert_fast`
 
-==Create a new rules file:==
-
-Let us edit the local rules file without sudo:
+==Let us edit the local rules file without sudo:==
 
 ```bash
 sudo chown <%= $main_user %> /etc/snort/rules/local.rules
 ```
 
-==Change Snort's interface== to the interface with IP address <%= $ids_server_ip %> (likely eth1), and set the local network to your IP address range (or "any"):
+==Change Snort's interface== to the interface with IP address <%= $ids_server_ip %> (likely changing eth0 to ens3), and set the local network to your IP address range (or "any"):
 
 ```bash
 sudo vi /etc/snort/snort.debian.conf
@@ -74,4 +72,4 @@ sudo service snort start
 
 Snort should now be running, monitoring network traffic for activity.
 
-It can be helpful to monitor network traffic while writing IDS rules. You can start Wireshark with `kdesudo wireshark &`
+It can be helpful to monitor network traffic while writing IDS rules. You can start Wireshark with `kdesudo wireshark`
