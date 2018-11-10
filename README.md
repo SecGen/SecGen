@@ -31,7 +31,7 @@ You will need to install the following:
 - ImageMagick: https://www.imagemagick.org/
 - And the required Ruby Gems (including Nokogiri and Librarian-puppet)
 
-### On Ubuntu these commands will get you up and running
+### On Ubuntu (16.04) these commands will get you up and running
 Install all the required packages:
 ```bash
 # install a recent version of vagrant
