@@ -23,7 +23,6 @@ class SimpleSSHDecrypt < StringEncoder
 
   def encode_all
     begin
-      public_ascii = self.ssh_key_pair['public']
       private_ascii = self.ssh_key_pair['private']
 
       privkey_path = "#{self.tmp_path}/id_rsa"
