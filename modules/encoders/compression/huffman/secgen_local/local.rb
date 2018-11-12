@@ -11,7 +11,7 @@ class HuffmanEncoder < StringEncoder
     super
     self.module_name = 'Huffman Encoder'
     self.subdirectory = ''
-    self.strings_to_encode = ['test']
+    self.strings_to_encode = []
     self.tmp_path = File.expand_path(File.dirname(__FILE__)).split("/")[0...-1].join('/') + '/tmp/'
     Dir.mkdir self.tmp_path unless Dir.exists? self.tmp_path
     self.tmp_path += Time.new.strftime("%Y%m%d_%H%M%S")

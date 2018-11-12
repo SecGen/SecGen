@@ -9,6 +9,7 @@
   <description>Returns a private key and some encrypted ciphertext.</description>
 
   <type>asymmetric</type>
+  <type>asymmetric_cipher</type>
   <type>challenge_generator</type>
   <type>crypto_challenge_generator</type>
   <type>local_calculation</type>

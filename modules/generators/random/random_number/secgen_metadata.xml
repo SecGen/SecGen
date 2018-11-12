@@ -17,6 +17,7 @@
 
   <read_fact>minimum</read_fact>
   <read_fact>maximum</read_fact>
+  <read_fact>zero_padding</read_fact>
 
   <default_input into="minimum">
     <value>0</value>
@@ -24,6 +25,10 @@
 
   <default_input into="maximum">
     <value>1000000</value>
+  </default_input>
+
+  <default_input into="zero_padding">
+    <value>false</value>
   </default_input>
 
   <output_type>number</output_type>
