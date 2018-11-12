@@ -227,6 +227,8 @@ class OVirtFunctions
           # save profile changes
           nic.vnic_profile = selected_profile
           update = {}
+          nics_service.nic_service(nic.id).update(nic, update)
+
           nic.interface = OvirtSDK4::NicInterface::E1000
           # if the vm is up we need to unplug the nic while we change the interface
           if vm.status != 'down'
@@ -237,7 +239,7 @@ class OVirtFunctions
           nics_service.nic_service(nic.id).update(nic, update)
 
           # check if changes saved
-          nic_updated = nics_service.list.last
+          nic_updated = nics_service.list.first
           Print.info "#{nic_updated.vnic_profile.name}"
           if nic_updated.vnic_profile != selected_profile
             Print.err "NIC profile may not have saved correctly... trying again."
