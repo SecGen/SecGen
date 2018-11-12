@@ -288,7 +288,7 @@ Good luck, have fun.
               </input>
             </generator>
 
-            <encoder module_path=".*simple_ssh.*" type="asymmetric_cipher" difficulty="low">
+            <encoder type="asymmetric_cipher" difficulty="low">
               <input into="strings_to_encode">
                 <generator type="flag_generator"/>
               </input>
