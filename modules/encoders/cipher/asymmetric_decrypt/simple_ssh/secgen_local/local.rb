@@ -26,41 +26,25 @@ class SimpleSSHDecrypt < StringEncoder
       public_ascii = self.ssh_key_pair['public']
       private_ascii = self.ssh_key_pair['private']
 
-
       # save strings_to_encode to a file
-      File.open("#{self.tmp_path}/ciphertext", "w+") do |file|
+      File.open("#{self.tmp_path}/strings_to_encode", "w+") do |file|
         self.strings_to_encode.each do |line|
-          file.write(line + "\n")
+          file.write(line)
         end
         file.close
       end
 
       # Save ascii pubkey to file
-      File.open("#{self.tmp_path}/pub_key", "w+") do |file|
-        file.write(public_ascii)
+      File.open("#{self.tmp_path}/id_rsa.pub", "w+") do |file|
+        file.write(public_ascii.chomp)
       end
 
       # Convert public key to PEM so OpenSSL can consume it
-      #
-      stdout, stderr, status = Open3.capture3("ssh-keygen -f #{self.tmp_path}/pub_key -e -m pem > #{self.tmp_path}/pub_key.pem")
+      _, _, _ = Open3.capture3("ssh-keygen -f #{self.tmp_path}/id_rsa.pub -e -m pem > #{self.tmp_path}/id_rsa.pem.pub")
+      ciphertext, _, _ = Open3.capture3("cat #{self.tmp_path}/strings_to_encode | openssl rsautl -encrypt -pubin -inkey #{self.tmp_path}/id_rsa.pem.pub")
 
-
-
-      public_key = OpenSSL::PKey::RSA.new(File.read("#{self.tmp_path}/pub_key.pem"))
-      encrypted_string = Base64.encode64(public_key.public_encrypt(self.strings_to_encode.join("\n")))
-
-
-      # # generate a binary key file from our ascii input and save it in ../tmp/binary_pub.key.
-      # _, _, _ = Open3.capture3("gpg --dearmor #{self.tmp_path}/pub_key")
-      #
-      # # Use the binary key to encode some cipher text
-      # _, _, _ = Open3.capture3("gpg --no-default-keyring --keyring #{self.tmp_path}/pub_key.gpg --trust-model always -ear secgen@localhost  #{self.tmp_path}/ciphertext")
-
-      # Read the ciphertext.asc file in and feed it into the outputs
-      ciphertext = File.read("#{self.tmp_path}/ciphertext.asc")
-
-      self.outputs << {:secgen_leaked_data => {:data => Base64.strict_encode64(ciphertext), :filename => 'cipher', :ext => 'txt', :subdirectory => self.subdirectory}}.to_json
-      self.outputs << {:secgen_leaked_data => {:data => Base64.strict_encode64(private_ascii), :filename => 'private', :ext => 'key', :subdirectory => self.subdirectory}}.to_json
+      self.outputs << {:secgen_leaked_data => {:data => Base64.strict_encode64(ciphertext.chomp), :filename => 'cipher', :ext => 'txt', :subdirectory => self.subdirectory}}.to_json
+      self.outputs << {:secgen_leaked_data => {:data => Base64.strict_encode64(private_ascii), :filename => 'id_rsa', :ext => 'txt', :subdirectory => self.subdirectory}}.to_json
     ensure
       # Delete the local key files to avoid batch clashes
       # FileUtils.rm_r self.tmp_path
