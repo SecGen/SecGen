@@ -54,7 +54,7 @@ class SimpleSSHDecrypt < StringEncoder
       self.outputs << {:secgen_leaked_data => {:data => Base64.strict_encode64(File.binread(privkey_path)), :filename => 'id_rsa', :ext => 'txt', :subdirectory => self.subdirectory}}.to_json
     ensure
       # Delete the local key files to avoid batch clashes
-      # FileUtils.rm_r self.tmp_path
+      FileUtils.rm_r self.tmp_path
     end
   end
 
