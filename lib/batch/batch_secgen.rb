@@ -196,7 +196,7 @@ def start(options)
 
         # execute secgen
         puts "Running job_id(#{job_id}): secgen.rb #{secgen_args}"
-        stdout, stderr, status = Open3.capture3("ruby secgen.rb #{secgen_args}")
+        stdout, stderr, status = Open3.capture3("bundle exec ruby secgen.rb #{secgen_args}")
 
         # Update job status and back-up paths
         if status.exitstatus == 0
