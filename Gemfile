@@ -32,12 +32,12 @@ gem 'bases'
 gem 'huffman'
 gem 'ruby-graphviz'
 gem 'smbhash'
-gem 'digest-sha3'
 gem 'digest-whirlpool'
 gem 'digest-siphash'
 gem 'scrypt'
 gem 'rsa'
 gem 'gpgmeh'
+gem 'digest-sha3', :git => "http://github.com/izetex/digest-sha3-ruby"
 
 #development only gems go here
 group :test, :development do
