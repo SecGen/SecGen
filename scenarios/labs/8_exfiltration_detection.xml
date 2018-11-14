@@ -232,7 +232,7 @@
 
 		<vulnerability module_path=".*distcc_exec"/>
 
-		<!--<service module_path=".*vsftpd"/>-->
+		<service module_path=".*vsftpd"/>
 
 		<service type="pop3"/>
 
