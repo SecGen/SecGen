@@ -231,9 +231,11 @@ Tools provided that you may find useful: hashcat, john the ripper
 `sudo john`
 `hashcat`
 
-For challenges 07 - 15 you will need to wrap the hashed word within the braces in the format 'flag{}'.
-Some inputs to the hash functions have been salted, when submitting the flag please omit the salt within
-your 'flag{}' string.
+For challenges 07 - 15 you will need to wrap the hashed word within the braces in the format 'flag{}' before submitting
+to Hacktivity.
+
+Some inputs to the hash functions have been salted, when submitting the flag please omit the salt within your 'flag{}'
+string.
 
 Examples:
 
