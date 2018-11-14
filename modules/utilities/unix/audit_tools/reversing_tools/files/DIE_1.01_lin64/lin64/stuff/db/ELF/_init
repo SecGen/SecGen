@@ -1,3 +1,0 @@
-var File=ELF;
-
-includeScript("result-general");

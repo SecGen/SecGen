@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Detect It Easy
-Comment=DIE is a program for determining types of files.
-Path=%%path%%
-Exec=%%path%%/die
-Icon=%%path%%/desktop/die.png
-Terminal=false
-Type=Application
-Categories=System;

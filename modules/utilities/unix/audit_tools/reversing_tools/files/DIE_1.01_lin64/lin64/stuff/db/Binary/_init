@@ -1,4 +1,0 @@
-var File=Binary;
-
-includeScript("result-minimal");
-includeScript("read");
