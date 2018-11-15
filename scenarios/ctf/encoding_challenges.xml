@@ -212,7 +212,8 @@
 
     <input into_datastore="hash_instructions">
       <value>For this challenge you will need to wrap the hashed word within the braces in the format 'flag{}' before submitting
-        to Hacktivity.</value>
+to Hacktivity.
+</value>
       <value>
 Some inputs to the hash functions have been salted, when submitting the flag please omit the salt within your 'flag{}'
 string.
@@ -236,7 +237,8 @@ Input asdf with a prepended random salt of 1234 to md5sum(1234asdf)
 
 The expected flag for all of the above is: flag{asdf}
 
-Good luck, have fun.</value>
+Good luck, have fun.
+</value>
       <value>Hint: This challenge applied a weak numerical salt to the string before it was fed into the hash function (between 000-999).
       </value>
     </input>
@@ -244,7 +246,7 @@ Good luck, have fun.</value>
     <input into_datastore="simple_encoding">
        <value>
 A flag has been encoded with a simple encoding method that you may be able to reverse to reveal the flag.
-       </value>
+</value>
     </input>
 
     <!-- Local challenges -->
@@ -271,7 +273,7 @@ The password for the challenger account is: tiaspbiqe2r
 Tools provided that you may find useful: hashcat, john the ripper
 `sudo john`
 `hashcat`
-            </value>
+</value>
           </input>
           <input into="leaked_filenames">
             <value>instructions.txt</value>
@@ -451,7 +453,7 @@ Tools provided that you may find useful: hashcat, john the ripper
                 <datastore access="1">hash_instructions</datastore>
               </input>
               <input into="filename">
-                <value>instructions.txt</value>
+                <value>hint</value>
               </input>
               <input into="subdirectory">
                 <value>challenges/challenge_09</value>
