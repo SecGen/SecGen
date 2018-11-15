@@ -77,7 +77,11 @@
         <input into="strings_to_encode" into_datastore="hash_flags">
           <encoder type="string_selector">
             <input into="strings_to_encode">
-              <generator type="random_word_generator"/>
+              <generator type="random_word_generator">
+                <input into="max_length">
+                  <value>13</value>
+                </input>
+              </generator>
               <generator type="crackable_password_generator"/>
             </input>
           </encoder>
