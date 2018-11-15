@@ -210,6 +210,43 @@
       </generator>
     </input>
 
+    <input into_datastore="hash_instructions">
+      <value>For this challenge you will need to wrap the hashed word within the braces in the format 'flag{}' before submitting
+        to Hacktivity.</value>
+      <value>
+Some inputs to the hash functions have been salted, when submitting the flag please omit the salt within your 'flag{}'
+string.
+
+Examples:
+
+Input asdf to md5
+
+[challenger@localhost ~]$ echo "asdf" | md5sum
+2b00042f7481c7b056c4b410d28f33cf -
+
+Input asdf with an appended random salt of 1234 to md5sum(asdf1234)
+
+[challenger@localhost ~]$ echo "asdf1234" | md5sum
+622d1280547ccb5b88e05a6540665ca0 -
+
+Input asdf with a prepended random salt of 1234 to md5sum(1234asdf)
+
+[challenger@localhost ~]$ echo "1234asdf" | md5sum
+885ac5cfada75f388bd79f3615d3f9c8 -
+
+The expected flag for all of the above is: flag{asdf}
+
+Good luck, have fun.</value>
+      <value>Hint: This challenge applied a weak numerical salt to the string before it was fed into the hash function (between 000-999).
+      </value>
+    </input>
+
+    <input into_datastore="simple_encoding">
+       <value>
+A flag has been encoded with a simple encoding method that you may be able to reverse to reveal the flag.
+       </value>
+    </input>
+
     <!-- Local challenges -->
     <utility module_path=".*parameterised_accounts">
       <input into="accounts" into_datastore="accounts">
@@ -234,33 +271,6 @@ The password for the challenger account is: tiaspbiqe2r
 Tools provided that you may find useful: hashcat, john the ripper
 `sudo john`
 `hashcat`
-
-For challenges 07 - 15 you will need to wrap the hashed word within the braces in the format 'flag{}' before submitting
-to Hacktivity.
-
-Some inputs to the hash functions have been salted, when submitting the flag please omit the salt within your 'flag{}'
-string.
-
-Examples:
-
-Input asdf to md5
-
-[challenger@localhost ~]$ echo "asdf" | md5sum
-2b00042f7481c7b056c4b410d28f33cf -
-
-Input asdf with an appended random salt of 1234 to md5sum(asdf1234)
-
-[challenger@localhost ~]$ echo "asdf1234" | md5sum
-622d1280547ccb5b88e05a6540665ca0 -
-
-Input asdf with a prepended random salt of 1234 to md5sum(1234asdf)
-
-[challenger@localhost ~]$ echo "1234asdf" | md5sum
-885ac5cfada75f388bd79f3615d3f9c8 -
-
-The expected flag for all of the above is: flag{asdf}
-
-Good luck, have fun.
             </value>
           </input>
           <input into="leaked_filenames">
@@ -282,12 +292,37 @@ Good luck, have fun.
               </input>
             </generator>
 
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="0">simple_encoding</datastore>
+              </input>
+              <input into="filename">
+                <value>hint</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_01</value>
+              </input>
+            </generator>
+
             <generator type="leaked_data">
               <input into="data">
                 <datastore access="1">challenges</datastore>
               </input>
               <input into="filename">
                 <value>cipher</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_02</value>
+              </input>
+            </generator>
+
+             <generator type="leaked_data">
+              <input into="data">
+                <datastore access="0">simple_encoding</datastore>
+              </input>
+              <input into="filename">
+                <value>hints</value>
               </input>
               <input into="subdirectory">
                 <value>challenges/challenge_02</value>
@@ -340,10 +375,34 @@ Good luck, have fun.
 
             <generator type="leaked_data">
               <input into="data">
+                <datastore access="0">hash_instructions</datastore>
+              </input>
+              <input into="filename">
+                <value>hint</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_06</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
                 <datastore access="4">challenges</datastore>
               </input>
               <input into="filename">
                 <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_07</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="0">hash_instructions</datastore>
+              </input>
+              <input into="filename">
+                <value>hint</value>
               </input>
               <input into="subdirectory">
                 <value>challenges/challenge_07</value>
@@ -364,10 +423,35 @@ Good luck, have fun.
 
             <generator type="leaked_data">
               <input into="data">
+                <datastore access="0">hash_instructions</datastore>
+              </input>
+              <input into="filename">
+                <value>hint</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_08</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
                 <datastore access="6">challenges</datastore>
               </input>
               <input into="filename">
                 <value>hash</value>
+              </input>
+              <input into="subdirectory">
+                <value>challenges/challenge_09</value>
+              </input>
+            </generator>
+
+            <generator type="leaked_data">
+              <input into="data">
+                <datastore access="0">hash_instructions</datastore>
+                <datastore access="1">hash_instructions</datastore>
+              </input>
+              <input into="filename">
+                <value>instructions.txt</value>
               </input>
               <input into="subdirectory">
                 <value>challenges/challenge_09</value>
@@ -388,7 +472,9 @@ Good luck, have fun.
 
             <generator type="leaked_data">
               <input into="data">
-                <value>Hint: This challenge applied a weak numerical salt to the string before it was fed into the hash function (between 000-999).</value>
+                <datastore access="2">hash_instructions</datastore>
+                <datastore access="0">hash_instructions</datastore>
+                <datastore access="1">hash_instructions</datastore>
               </input>
               <input into="filename">
                 <value>hint</value>
@@ -397,6 +483,7 @@ Good luck, have fun.
                 <value>challenges/challenge_10</value>
               </input>
             </generator>
+
           </input>
         </generator>
       </input>
@@ -406,6 +493,20 @@ Good luck, have fun.
     <utility module_path=".*hash_tools"/>
     <utility module_path=".*hashcat"/>
     <utility module_path=".*johntheripper"/>
+
+    <!-- TODO: Move a file from home directory to /var/www/ -->
+
+    <utility module_path=".*iceweasel">
+      <input into="accounts">
+        <datastore>accounts</datastore>
+      </input>
+      <input into="autostart">
+        <value>true</value>
+      </input>
+      <input into="start_page">
+        <value>/home/challenger/instructions.txt</value>
+      </input>
+    </utility>
 
     <utility module_path=".*kde_minimal">
       <input into="accounts">
