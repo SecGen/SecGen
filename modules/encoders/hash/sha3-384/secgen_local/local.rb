@@ -8,7 +8,7 @@ class SHA3_384_Encoder < HashEncoder
   end
 
   def hash_function(string)
-    Digest::SHA3.hexdigest('foo', 384)
+    Digest::SHA3.hexdigest(string, 384)
   end
 end
 
