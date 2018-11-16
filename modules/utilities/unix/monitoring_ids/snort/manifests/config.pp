@@ -10,7 +10,7 @@ class snort::config{
 
   # enable the alerts file output
   file_line { 'Append a line to /etc/snort/snort.conf':
-    path => '/etc/snort/snort.debian.conf',
+    path => '/etc/snort/snort.conf',
     line => 'output alert_fast',
   }
 
