@@ -50,7 +50,7 @@ class SimpleSSHDecrypt < StringEncoder
       _, _, _ = Open3.capture3("cat #{strings_to_encode_path} | openssl rsautl -encrypt -pubin -inkey #{pubkey_pem_path} > #{ciphertext_path}")
 
       self.outputs << {:secgen_leaked_data => {:data => Base64.strict_encode64(File.binread(ciphertext_path)), :filename => 'cipher', :ext => 'txt', :subdirectory => self.subdirectory}}.to_json
-      self.outputs << {:secgen_leaked_data => {:data => Base64.strict_encode64(File.binread(privkey_path)), :filename => 'id_rsa', :ext => 'txt', :subdirectory => self.subdirectory}}.to_json
+      self.outputs << {:secgen_leaked_data => {:data => Base64.strict_encode64(File.binread(privkey_path)), :filename => 'id_rsa', :ext => '', :subdirectory => self.subdirectory}}.to_json
     ensure
       # Delete the local key files to avoid batch clashes
       FileUtils.rm_r self.tmp_path

@@ -236,8 +236,6 @@ Input asdf with a prepended random salt of 1234 to md5sum(1234asdf)
 885ac5cfada75f388bd79f3615d3f9c8 -
 
 The expected flag for all of the above is: flag{asdf}
-
-Good luck, have fun.
 </value>
       <value>Hint: This challenge applied a weak numerical salt to the string before it was fed into the hash function (between 000-999).
       </value>
@@ -263,8 +261,8 @@ A flag has been encoded with a simple encoding method that you may be able to re
             <value>true</value>
           </input>
           <input into="strings_to_leak">
-            <value>
-Welcome!
+            <value>Welcome!
+
 This scenario involves solving a series of crypto / encoding / hash based challenges to find flags.
 The challenges can be found in the /home/challenger/challenges/ directory.
 
@@ -273,6 +271,10 @@ The password for the challenger account is: tiaspbiqe2r
 Tools provided that you may find useful: hashcat, john the ripper
 `sudo john`
 `hashcat`
+
+Any flags you find whilst solving challenges should be submitted to Hacktivity to claim your points.
+
+Good luck and have fun!
 </value>
           </input>
           <input into="leaked_filenames">
@@ -331,7 +333,7 @@ Tools provided that you may find useful: hashcat, john the ripper
               </input>
             </generator>
 
-            <encoder type="asymmetric_cipher" difficulty="low">
+            <encoder module_path=".*ssh.*" type="asymmetric_cipher" difficulty="low">
               <input into="strings_to_encode">
                 <generator type="flag_generator"/>
               </input>
@@ -495,8 +497,6 @@ Tools provided that you may find useful: hashcat, john the ripper
     <utility module_path=".*hash_tools"/>
     <utility module_path=".*hashcat"/>
     <utility module_path=".*johntheripper"/>
-
-    <!-- TODO: Move a file from home directory to /var/www/ -->
 
     <utility module_path=".*iceweasel">
       <input into="accounts">

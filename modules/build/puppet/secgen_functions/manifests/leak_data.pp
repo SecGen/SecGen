@@ -16,8 +16,14 @@ define secgen_functions::leak_data (
       $ext = $secgen_leaked_data['secgen_leaked_data']['ext']
       $subdirectory = $secgen_leaked_data['secgen_leaked_data']['subdirectory']
 
+      if $ext != '' {
+        $full_filename = "$filename.$ext"
+      } else {
+        $full_filename = $filename
+      }
+
       $storage_dir = "$storage_directory/$subdirectory"
-      $path_to_leak = "$storage_dir/$filename.$ext"
+      $path_to_leak = "$storage_dir/$full_filename"
       $leaked_file_resource = "$leaked_from-$path_to_leak"
 
       unless $subdirectory == '' {
