@@ -1,7 +1,4 @@
 class snort::config{
-  $secgen_parameters = secgen_functions::get_parameters($::base64_inputs_file)
-  $leaked_filenames = $secgen_parameters['leaked_filenames']
-  $strings_to_leak = $secgen_parameters['strings_to_leak']
 
   file { '/etc/snort/snort.debian.conf':
     ensure  => present,
