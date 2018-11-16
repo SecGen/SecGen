@@ -8,7 +8,7 @@ This week's lab is entirely problem-based.
 ==Start these VMs== (if you haven't already):
 
 - hackerbot_server (leave it running, you don't log into this)
-- ids_snoop (IP address: <%= $ids_snoop_ip %>)
+- ids_snoop (IP address: <%= $ids_server_ip %>)
 - web_server (IP address: <%= $web_server_ip %>, leave it running, you don't log into this through the gui console, you may ssh to it later in the lab)
 - desktop
 
@@ -38,7 +38,7 @@ Work through the below exercises, completing the Hackerbot challenges as noted.
 
 **On the ids_snoop VM:**
 
-==Change Snort's output== to something more readable:
+==Ensure Snort's output== includes something more readable:
 
 ```bash
 sudo vi /etc/snort/snort.conf
@@ -47,10 +47,10 @@ sudo vi /etc/snort/snort.conf
 
 > ":wq" to write changes and quit)
 
-==Add the following lines:==
+==Check for the following line:==
 `output alert_fast`
 
-==Change Snort's interface== to the interface with IP address <%= $ids_snoop_ip %> (likely ens3), and set the local network to your IP address range (or "any"):
+==Ensure Snort's interface is correctly configured== to the interface with IP address <%= $ids_server_ip %> (likely ens3), and set the local network to your IP address range (or "any"):
 
 ```bash
 sudo vi /etc/snort/snort.debian.conf
