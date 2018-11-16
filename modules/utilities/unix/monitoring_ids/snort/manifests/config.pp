@@ -5,7 +5,7 @@ class snort::config{
     owner   => 'root',
     group   => 'root',
     mode    => '0777',
-    content  => template('snort/debian.conf.erb')
+    content  => template('snort/snort.debian.conf.erb')
   }
 
   # enable the alerts file output
