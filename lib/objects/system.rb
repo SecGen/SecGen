@@ -319,13 +319,11 @@ class System
         end
         # execute calculation script and format output to an array of Base64 strings
         Print.verbose "Running: ruby #{selected.local_calc_file} #{args_string[0..200]} ..."
-        stdout, stderr, status = Open3.capture3("ruby #{selected.local_calc_file}", :stdin_data => args_string)
+        command = "bundle exec ruby #{selected.local_calc_file}"
+        stdout, stderr, status = Open3.capture3(command, :stdin_data => args_string)
         puts stderr
         outputs = stdout.chomp
 
-        # command = "ruby #{selected.local_calc_file} #{args_string}"
-        # Print.verbose "Running: #{command}"
-        # outputs = `#{command}`.chomp
         unless status
           Print.err "Module failed to run (#{command})"
           # TODO: this works, but subsequent attempts at resolving the scenario always fail ("Error can't add no data...")

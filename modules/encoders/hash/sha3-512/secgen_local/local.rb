@@ -1,5 +1,6 @@
 #!/usr/bin/ruby
 require_relative '../../../../../lib/objects/local_hash_encoder.rb'
+require 'digest/sha3'
 
 class SHA3_512_Encoder < HashEncoder
   def initialize

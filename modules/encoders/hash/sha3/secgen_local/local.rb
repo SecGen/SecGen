@@ -1,7 +1,8 @@
 #!/usr/bin/ruby
 require_relative '../../../../../lib/objects/local_hash_encoder.rb'
+require 'digest/sha3'
 
-class SHA1Encoder < HashEncoder
+class SHA3Encoder < HashEncoder
   def initialize
     super
     self.module_name = 'SHA1 Encoder'
@@ -12,4 +13,4 @@ class SHA1Encoder < HashEncoder
   end
 end
 
-SHA1Encoder.new.run
+SHA3Encoder.new.run
