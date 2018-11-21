@@ -8,19 +8,17 @@
 
 require_relative '../../../../../lib/objects/local_string_encoder.rb'
 class BitwiseXORChallengeGenerator < StringEncoder
-  attr_accessor :string_to_mask
 
   def initialize
     super
     self.module_name = 'Bitwise XOR Challenge Generator'
-    self.string_to_mask = ''
   end
 
-  def encode_all
-    number_of_bytes = self.string_to_mask.length
+  def encode(str)
+    number_of_bytes = str.length
 
     # String A: Convert input that we're hiding into binary
-    binary_string_to_mask = self.string_to_mask.unpack('B*')[0]
+    binary_string_to_mask = str.unpack('B*')[0]
 
     # String B: Generate bitstream
     generated_bit_stream = []
@@ -42,21 +40,6 @@ class BitwiseXORChallengeGenerator < StringEncoder
     self.outputs << "#{generated_bit_stream}_#{result}"
   end
 
-  def get_options_array
-    super + [['--string_to_mask', GetoptLong::REQUIRED_ARGUMENT]]
-  end
-
-  def process_options(opt, arg)
-    super
-    case opt
-      when '--string_to_mask'
-        self.string_to_mask << arg;
-    end
-  end
-
-  def encoding_print_string
-    'String to mask: ' + self.string_to_mask
-  end
 end
 
 BitwiseXORChallengeGenerator.new.run
