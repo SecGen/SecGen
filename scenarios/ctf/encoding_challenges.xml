@@ -43,6 +43,18 @@
 
     <input into_datastore="challenges" unique_module_list="unique_encoders">
 
+      <!--
+      [0]: Challenge 1: ascii|alpha reversible: low
+      [1]: Challenge 2: ascii|alpha reversible: medium
+      [2]: Challenge 4: double encoded ascii reversible: medium
+      [3]: Challenge 6: Unsalted word / common password (low)
+      [4]: Challenge 7: Unsalted word / common password (medium)
+      [5]: Challenge 8: Unsalted word / common password (high)
+      [6]: Challenge 9: word/ password with hexadecimal salt provided
+      [7]: Challenge 10: word / password without salt provided
+      [8]: n/a
+      -->
+
       <!-- Encoders -->
 
       <!-- 1: random easy encoder -->
@@ -344,7 +356,7 @@ Good luck and have fun!
 
             <generator type="leaked_data">
               <input into="data">
-                <datastore access="3">challenges</datastore>
+                <datastore access="2">challenges</datastore>
               </input>
               <input into="filename">
                 <value>cipher</value>
