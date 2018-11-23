@@ -6,7 +6,9 @@
   <name>Alias rootkit</name>
   <author>Z. Cliffe Schreuders</author>
   <module_license>MIT</module_license>
-  <description>A simple bash-based rootkit based on using aliases to hide output from commands.</description>
+  <description>A simple bash-based rootkit based on using aliases to hide output from commands.
+    This has to be defined in the scenario BEFORE accounts are created, since it modifies all user accounts via /etc/skel.
+  </description>
 
   <type>userspace_rootkit</type>
   <platform>linux</platform>
