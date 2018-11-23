@@ -164,7 +164,7 @@
 
 		<utility module_path=".*hackerbot">
 			<input into="hackerbot_configs">
-				<generator module_path=".*dead_analysis">
+				<generator module_path=".*dead_analysis_v2">
 					<input into="accounts">
 						<datastore>accounts</datastore>
 					</input>
