@@ -159,7 +159,7 @@ class ProjectFilesCreator
             f.print ctfd_file_content
           }
         end
-        zipfile.mkdir("uploads")
+        # zipfile.mkdir("uploads")
         # TODO: could add a logo image
         # zipfile.mkdir("uploads/uploads") # empty as in examples
         # zipfile.mkdir("uploads/fca9b07e1f3699e07870b86061815b1c")
