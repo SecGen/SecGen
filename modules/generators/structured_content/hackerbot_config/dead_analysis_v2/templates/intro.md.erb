@@ -39,8 +39,6 @@ mkdir /mnt/compromised
 mount -O ro -o loop evidence/hda1.img /mnt/compromised
 ```
 
-> Troubleshooting: If you used a VMware VM in the live analysis lab, you may need to replace hda1.img with sda1.img
-
 Confirm that you can now see the files that were on the compromised system:
 
 ```bash
@@ -49,7 +47,7 @@ ls /mnt/compromised
 
 ## Preparing for analysis of the integrity of files
 
-Fortunately the "system administrator" of the Red Hat server had run a file integrity tool to generate hashes before the system was compromised. Start by saving a copy of the hashes recorded of the system when it was in a clean state...
+Fortunately the system administrator of the Red Hat server had run a file integrity tool to generate hashes before the system was compromised. Start by saving a copy of the hashes recorded of the system when it was in a clean state...
 
 <a href="data:<%= File.read self.templates_path + 'md5sum-url-encoded' %>">Click here to download the md5 hashes of the system before it was compromised</a>
 
@@ -148,10 +146,10 @@ Next, we investigate what sslstop.tar.gz is used for. A quick Google brings up a
 
 ---
 
-Refer to your previously collected evidence to ==identify whether any of the new executables were those with open ports== when live information was collected. Two of these have particularly interesting file names: `/usr/bin/smbd -D` and `/usr/bin/(swapd)`. These names are designed to be deceptive: for example, the inclusion of ` -D` is designed to trick system administrators into thinking that any processes were started with the "-D" command line argument flag.
+Two of these have particularly interesting file names: `/usr/bin/smbd -D` and `/usr/bin/(swapd)`. These names are designed to be deceptive: for example, the inclusion of ` -D` is designed to trick system administrators into thinking that any processes were started with the "-D" command line argument flag.
 
 Note that /lib/.x/ contains a number of new executables, including one called "hide". These are likely part of a rootkit.
-> **Hint:** to view these files you will have to look in /mnt/compromised/lib/.x. The .x folder is a hidden folder (all folders and file in Linux that begin with a "." ar hidden files). Therefore, you will have to use the -a switch when using the ls command in a terminal or tell the graphical file manager to display hidden files ( View &gt; Show Hidden Files or Ctrl+H).
+> **Hint:** to view these files you will have to look in /mnt/compromised/lib/.x. The .x folder is a hidden folder (all folders and file in Linux that begin with a "." ar hidden files). Therefore, you will have to use the -a switch when using the ls command in a terminal or tell the graphical file manager to display hidden files ( View / Show Hidden Files or Ctrl+H).
 
 ==Using Autopsy "File Analysis" mode, browse to "/lib/.x/"==. **Explicit language warning: if you are easily offended, then skip this next step.** View the contents of "install.log".
 > **Hint:** you will have to click **../** to move up the directory tree until you can see the lib directory in the root directory /.
