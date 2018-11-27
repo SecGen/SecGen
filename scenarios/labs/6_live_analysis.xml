@@ -195,7 +195,7 @@
 		<system_name>compromised_server</system_name>
 		<base distro="Debian 9" type="desktop" name="KDE"/>
 
-		<vulnerability module_path=".*ncat_backdoor"/>
+		<vulnerability module_path=".*nc_backdoor"/>
 
 		<!-- has to be defined before accounts -->
 		<utility module_path=".*alias_rootkit"/>
