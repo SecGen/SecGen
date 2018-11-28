@@ -7,7 +7,6 @@
 ==Start these VMs== (if you haven't already):
 
 - hackerbot-server (leave it running, you don't log into this)
-- desktop
 - kali (user: root, password: toor)
 
 All of these VMs need to be running to complete the lab.
@@ -19,11 +18,11 @@ Once you have collected information from a compromised computer (as you have don
 This lab reinforces what you have learned about integrity management and log analysis, and introduces a number of new concepts and tools.
 
 ## IMG of a compromised server
+**On Kali Linux**:
 
 In /root/evidence/ you will find a copy of an image copied from a live system, that was connected to the Internet and attacked. The image is a few years old, but is still an excellent example of the kinds of evidence you can find.
 
 ## Mounting the image read-only
-**On Kali Linux**:
 
 It is possible to mount the partition image directly as a [*loop device*](http://en.wikipedia.org/wiki/Loop_device), and access the files directly. However, doing so should be done with caution (and is generally a bad idea, unless you are very careful), since there is some chance that it may result in changes to your evidence, and you risk infecting the analysis machine with any malware on the system being analysed. However, this technique is worth exploring, since it does make accessing files particularly convenient.
 
@@ -47,16 +46,14 @@ ls /mnt/compromised
 
 ## Preparing for analysis of the integrity of files
 
-Fortunately the system administrator of the Red Hat server had run a file integrity tool to generate hashes before the system was compromised. Start by saving a copy of the hashes recorded of the system when it was in a clean state...
+Fortunately the system administrator of the Red Hat server had run a file integrity tool to generate hashes before the system was compromised.
 
-<a href="data:<%= File.read self.templates_path + 'md5sum-url-encoded' %>">Click here to download the md5 hashes of the system before it was compromised</a>
+`/root/evidence/md5s` contains the md5 hashes of the system before it was compromised
 
-==Save the hashes in the evidence directory of the Kali VM, name the file "md5s".==
-
-==View the file==, to confirm all went well:
+==View the file==:
 
 ```bash
-less evidence/md5s
+less /root/evidence/md5s
 ```
 > 'q' to quit
 
@@ -84,7 +81,7 @@ A terminal window should be displayed.
 
 ==Click the "Add Host" button.==
 
-In section "6. Path of Ignore Hash Database", ==enter /root/linux-suspended-md5s==
+In section "6. Path of Ignore Hash Database", ==enter /root/evidence/md5s==
 
 ==Click the "Add Host" button== at the bottom of the page
 
