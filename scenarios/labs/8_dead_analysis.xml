@@ -199,6 +199,7 @@
 		<utility module_path=".*handy_cli_tools"/>
 		<utility module_path=".*nmap"/>
 		<utility module_path=".*autopsy"/>
+		<utility module_path=".*dead_image"/>
 
 		<network type="private_network" >
 			<input into="IP_address">
