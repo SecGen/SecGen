@@ -9,9 +9,15 @@ class pidgin::config {
     $accounts.each |$raw_account| {
       $account = parsejson($raw_account)
       $username = $account['username']
-      $conf_dir = "/home/$username/.purple"
+      # set home directory
+      if $username == 'root' {
+        $home_dir = "/root"
+      } else {
+        $home_dir = "/home/$username"
+      }
+      $conf_dir = "$home_dir/.purple"
 
-      file { ["/home/$username/",
+      file { ["$home_dir/",
         "$conf_dir",
         "$conf_dir/smileys/",
         "$conf_dir/icons/",
@@ -57,13 +63,13 @@ class pidgin::config {
 
       # autostart script
       if $autostart {
-        file { ["/home/$username/.config/", "/home/$username/.config/autostart/"]:
+        file { ["$home_dir/.config/", "$home_dir/.config/autostart/"]:
           ensure => directory,
           owner  => $username,
           group  => $username,
         }
 
-        file { "/home/$username/.config/autostart/pidgin.desktop":
+        file { "$home_dir/.config/autostart/pidgin.desktop":
           ensure => file,
           source => 'puppet:///modules/pidgin/pidgin.desktop',
           owner  => $username,
