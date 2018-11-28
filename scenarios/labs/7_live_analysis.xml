@@ -21,6 +21,7 @@
 		<input into_datastore="IP_addresses">
 			<value>172.16.0.2</value>
 			<value>172.16.0.3</value>
+			<value>172.16.0.4</value>
 		</input>
 
 		<!--generate two accounts, YOU and someone else-->
@@ -211,9 +212,9 @@
 		<service type="pop3"/>
 
 		<service module_path="services/unix/http/parameterised_website">
-			<input into="organisation">
+			<!-- <input into="organisation">
 				<datastore>organisation</datastore>
-			</input>
+			</input> -->
 		</service>
 
 		<vulnerability module_path=".*ssh_root_login">
