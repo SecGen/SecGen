@@ -6,7 +6,7 @@
   <name>Dead HDD image</name>
   <author>Z. Cliffe Schreuders</author>
   <module_license>MIT</module_license>
-  <description>A disk image taken from a compromised Redhat 7.2 system (from the Honeynet Project).
+  <description>A disk image taken from a compromised Redhat 7.2 system (from the Honeynet Project). This module drops the image in /root/evidence/
   </description>
 
   <type>forensic_artifact</type>

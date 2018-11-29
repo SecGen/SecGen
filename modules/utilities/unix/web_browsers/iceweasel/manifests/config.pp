@@ -9,10 +9,11 @@ class iceweasel::config {
   $accounts.each |$raw_account| {
     $account = parsejson($raw_account)
     $username = $account['username']
+    # set home directory
     if $username == 'root' {
       $home_dir = "/root"
     } else {
-      $home_dir = "$home_dir"
+      $home_dir = "/home/$username"
     }
 
     # add user profile
