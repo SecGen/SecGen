@@ -1,6 +1,6 @@
 ## Logs analysis
 
-As you learned in the Log Management topic, the most common logging system on Unix systems is Syslog, which is typically configured in /etc/syslog.conf (or similar, such as rsyslog). Within the Autopsy File Analysis browser, ==navigate to this configuration file and view its contents.== Note that most logging is configured to go to /var/log/messages. Some security messages are logged to /var/log/secure. Boot messages are logged to /var/log/boot.log.
+The most common logging system on Unix systems is Syslog, which is typically configured in /etc/syslog.conf (or similar, such as rsyslog). Within the Autopsy File Analysis browser, ==navigate to this configuration file and view its contents.== Note that most logging is configured to go to /var/log/messages. Some security messages are logged to /var/log/secure. Boot messages are logged to /var/log/boot.log.
 
 ==Make a note of where mail messages are logged==, you will use this later:
 
@@ -35,7 +35,7 @@ whois *IP-address*
 
 ---
 
-Within Autopsy, ==view the /var/log/boot.log file==. At the top of this file Syslog reports starting at August 10 at 13:33:57. 
+Within Autopsy, ==view the /var/log/boot.log file==. At the top of this file Syslog reports starting at August 10 at 13:33:57.
 
 ==LogBook Question: Given what we have learned about this system during timeline analysis, what is suspicious about Syslog restarting on August 10th? Was the system actually restarted at that time?==
 
@@ -66,4 +66,3 @@ Note that the Apache config has been altered by sslstop, by changing the "HAVE\_
 This configuration also specifies that Apache logs are stored in /etc/httpd/logs, and upon investigation this location is symlinked to /var/log/httpd/. This is a common Apache configuration.
 
 Unfortunately the /var/log/httpd/ directory does not exist, so clearly the attacker has attempted to cover their tracks by deleting Apache's log files.
- 
