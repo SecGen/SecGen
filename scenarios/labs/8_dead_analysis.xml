@@ -195,11 +195,37 @@
 		<system_name>kali</system_name>
 		<base distro="Kali" name="MSF"/>
 
+		<input into_datastore="kali_root_account">
+			<value>{"username":"root","password":"toor","super_user":"","strings_to_leak":[],"leaked_filenames":[]}</value>
+		</input>
+
 		<utility module_path=".*metasploit_framework"/>
 		<utility module_path=".*handy_cli_tools"/>
 		<utility module_path=".*nmap"/>
 		<utility module_path=".*autopsy"/>
 		<utility module_path=".*dead_image"/>
+
+
+		<utility module_path=".*iceweasel">
+			<input into="accounts">
+				<datastore>kali_root_account</datastore>
+			</input>
+			<input into="autostart">
+				<value>true</value>
+			</input>
+			<input into="start_page">
+				<datastore access="1">IP_addresses</datastore>
+			</input>
+		</utility>
+
+		<utility module_path=".*pidgin">
+			<input into="server_ip">
+				<datastore access="1">IP_addresses</datastore>
+			</input>
+			<input into="accounts">
+				<datastore>kali_root_account</datastore>
+			</input>
+		</utility>
 
 		<network type="private_network" >
 			<input into="IP_address">

@@ -9,7 +9,7 @@ class dead_image::install {
   file { '/root/evidence/hda1.img':
           source => "$url_path/hda1.img"
   } ->
-  file { '/root/md5s':
+  file { '/root/evidence/md5s':
           source => "$url_path/md5s"
   }
 
