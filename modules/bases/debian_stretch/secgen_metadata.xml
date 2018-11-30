@@ -15,7 +15,7 @@
   <platform>unix</platform>
   <distro>Debian 9.5.0 Stretch amd64</distro>
   <url>https://app.vagrantup.com/secgen/boxes/debian_stretch_server/versions/1.1/providers/virtualbox.box</url>
-  <ovirt_template>debian_stretch_server_n</ovirt_template>
+  <ovirt_template>debian_stretch_server_291118</ovirt_template>
 
   <software_license>various</software_license>
 </base>
