@@ -2,13 +2,19 @@
 
 After suspecting a compromise, before powering down the server for offline analysis, the first step is typically to perform some initial investigation of the live system. Live analysis aims to investigate suspicions that a compromise has occurred, and gather volatile information, which may potentially include evidence that would be lost by powering down the computer.
 
-**On the compromised VM (Redhat7.2):** To keep a record of what we are doing on the system, start the script command:
+**On the desktop VM,** ==ssh into the compromised server==
+
+```bash
+ssh <%= $compromised_server_ip %>
+```
+
+**On the compromised_server VM:** To keep a record of what we are doing on the system, start the script command:
 
 ```bash
 mkdir /tmp/evid
 script -f /tmp/evid/invst.log
 ```
-> Note: *if you do this lab over multiple sessions*, be sure to save the log of your progress (/tmp/evid/invst.log), and restart `script`.
+> Note: *if you do this lab over multiple sessions*, be sure to save a copy of the log of your progress (/tmp/evid/invst.log), and restart `script`.
 
 ==LogBook question: Make a note of the risks and benefits associated with storing a record of what we are doing locally on the computer that we are investigating.==
 
@@ -16,12 +22,20 @@ Consider the advantages of *handwritten* documentation of what investigators are
 
 Many of the commands used to investigate what is happening on a system are standard Unix commands. However, it is advisable to run these from a read-only source, since software on your system may have been tampered with. Also, using read-only media minimises the changes made to your local filesystem, such as executable file access times.
 
-During preparation, you configured the compromised VM to have access to the FIRE (Forensic and Incident Response Environment) CD/DVD ISO (which is equivalent to inserting the optical disk into your server's DVD-tray). FIRE is an example of a Linux Live Disk that includes tools for forensic investigation. In addition to being able to boot to a version of Linux for offline investigation of evidence, the disk contains Linux tools for live analysis.
+### Using a Live CD/DVD
 
-**On the compromised VM (Redhat7.2)**, ==mount the disk==, so that we can access its contents:
+Next you will configure the compromised VM to have access to the FIRE (Forensic and Incident Response Environment) CD/DVD ISO (which is equivalent to inserting the optical disk into your server's DVD-tray). FIRE is an example of a Linux Live Disk that includes tools for forensic investigation. In addition to tools to boot to a version of Linux for offline investigation of evidence, the disk contains Linux tools for live analysis.
+
+Add the FIRE IR CD disk:
+
+In hacktivity, click on the VM's settings (gear) icon and choose ==Change CD/DVD==.
+
+==Select the "fire-0.3.5b.iso"== file from the dropdown box. ==Click "Attach disk"==
+
+**Continuing on the compromised_server VM**, ==mount the disk==, so that we can access its contents:
 
 ```bash
-mount /dev/hdc /mnt/cdrom/
+sudo mount /media/cdrom0/ -o exec
 ```
 
 On a typical system, many binary executables are dynamically linked; that is, these programs do not physically contain all the libraries (shared code) they use, and instead load that code from shared library files when the program runs. On Unix systems the shared code is typically contained in ".so" files, while on Windows ".dll" files contain shared code. The risks associated with using dynamically linked executables to investigate security breaches is that access times on the shared objects will be updated, and the shared code may also have been tampered with. For this reason it is safest to use programs that are statically linked; that is, have been compiled to physically contain a copy of all of the shared code that it uses.

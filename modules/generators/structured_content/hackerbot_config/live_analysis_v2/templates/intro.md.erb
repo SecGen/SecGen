@@ -7,30 +7,16 @@
 
 - hackerbot-server (leave it running, you don't log into this)
 - desktop
-- server-compromised
+- server-compromised (<%= $compromised_server_ip %>)
 
 All of these VMs need to be running to complete the lab.
 
-Once you have your compromised server VM, ==add the FIRE IR CD disk==.
-
-In hacktivity, click on the VM's settings and choose **Change CD/DVD**.
-
-==Select the "fire-0.3.5b.iso"== file from the dropdown box.
-
-
-==Log in as the user specified.==
-
 ### Your login details for the VMs
 
-**Desktop:**
+**Desktop and Compromised-Server:**
 
 User: <%= $main_user %>
 Password: tiaspbiqe2r (**t**his **i**s **a** **s**ecure **p**assword **b**ut **i**s **q**uite **e**asy **2** **r**emember)
-
-**Compromised-Server:**
-
-User: root
-Password: toor
 
 You won't login to the hackerbot_server, but all the VMs need to be running to complete the lab.
 
@@ -45,28 +31,11 @@ This exercise involves interacting with Hackerbot, a chatbot who will task you t
 
 Work through the below exercises, completing the Hackerbot challenges as noted.
 
-## Note IP addresses
-
-**On the Red Hat 7.2 VM:**
-==Login to the Red Hat 7.2 VM with root and toor.==
-
-Run "dhcpcd eth0" on the VM to renew its IP address:
-```bash
-dhcpcd eth0
-```
-
-Note the IP addresses of the redhat and your Desktop VMs. Make a note of the two IP addresses, which should be on the same subnet (starting the same): for example, if both systems include IP addresses starting with 192.168.201 they are on the same network. You will need these IP addresses later.
-> Check IP addresses using `ifconfig` or `ip a s`
-
-## Reminder to save
-
-Remember to **save any evidence you collect**, as this will be used as the basis for the next lab. **You cannot complete the following lab (part 2) without saving the evidence you collect during this lab.** Saving to your Desktop VM should be sufficient.
-
 ---
 
 ## Introduction
 
-So you have reason to believe one of your servers has experienced a security compromise... What next? For this lab you investigate a real Linux server that was connected to the Internet, and attacked and compromised by unknown remote attackers.
+So you have reason to believe one of your servers has experienced a security compromise... What next? For this lab you investigate a server that has been compromised.
 
 The investigation of a potential security compromise is closely related to digital forensics topics. As with forensic investigations, we also aim to maintain the integrity of our "evidence", *wherever possible* not modifying access times or other information. However, in a business incident response setting maintaining a chain of evidence may not be our highest priority, since we may be more concerned with other business objectives, such as assuring the confidentiality, integrity, and availability of data and services.
 

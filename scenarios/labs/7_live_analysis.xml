@@ -175,6 +175,9 @@
 					<input into="hackerbot_server_ip">
 						<datastore access="1">IP_addresses</datastore>
 					</input>
+					<input into="compromised_server_ip">
+						<datastore access="2">IP_addresses</datastore>
+					</input>
 				</generator>
 			</input>
 		</utility>
