@@ -1,14 +1,14 @@
 #!/usr/bin/ruby
 require_relative '../../../../../../lib/objects/local_hackerbot_config_generator.rb'
 
-class IDS < HackerbotConfigGenerator
+class HBC < HackerbotConfigGenerator
 
   attr_accessor :compromised_server_ip
   attr_accessor :hackerbot_server_ip
 
   def initialize
     super
-    self.module_name = 'Hackerbot Config Generator IDS'
+    self.module_name = 'Hackerbot Config Generator Live'
     self.title = 'Live Analysis'
 
     self.local_dir = File.expand_path('../../',__FILE__)
@@ -31,10 +31,10 @@ class IDS < HackerbotConfigGenerator
       when '--compromised_server_ip'
         self.compromised_server_ip << arg;
       when '--hackerbot_server_ip'
-        self.ids_server_ip << arg;
+        self.hackerbot_server_ip << arg;
     end
   end
 
 end
 
-IDS.new.run
+HBC.new.run
