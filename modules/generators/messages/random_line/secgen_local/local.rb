@@ -2,6 +2,7 @@
 require_relative '../../../../../lib/objects/local_string_generator.rb'
 
 class LineGenerator < StringGenerator
+  attr_accessor :linelist
 
   def initialize
     super
