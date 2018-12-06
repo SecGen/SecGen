@@ -19,8 +19,11 @@
 
 
 		<input into_datastore="IP_addresses">
+			<!-- desktop -->
 			<value>172.16.0.2</value>
+			<!-- hackerbot -->
 			<value>172.16.0.3</value>
+			<!-- compromised -->
 			<value>172.16.0.4</value>
 		</input>
 
@@ -41,10 +44,18 @@
 					<value>true</value>
 				</input>
 				<input into="leaked_filenames">
-					<value></value>
+					<value>u_r_powned-hme</value>
+					<value>.a_hidden_flag-hme</value>
+					<value>a_flag-hme</value>
 				</input>
 				<input into="strings_to_leak">
-					<value></value>
+					<generator type="random_line_generator">
+						<input into="linelist">
+							<value>powned_messages</value>
+						</input>
+					</generator>
+					<generator type="flag_generator" />
+					<generator type="flag_generator" />
 				</input>
 			</generator>
 			<generator type="account">
@@ -160,7 +171,7 @@
 			</input>
 		</vulnerability>
 
-		<!-- has to be defined before accounts -->
+		<!-- rootkit has to be defined before accounts are created -->
 		<utility module_path=".*alias_rootkit"/>
 
 		<utility module_path=".*parameterised_accounts">
