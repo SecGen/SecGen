@@ -5,6 +5,7 @@ class HBC < HackerbotConfigGenerator
 
   attr_accessor :compromised_server_ip
   attr_accessor :hackerbot_server_ip
+  attr_accessor :hidden_port
 
   def initialize
     super
@@ -18,11 +19,13 @@ class HBC < HackerbotConfigGenerator
 
     self.compromised_server_ip = []
     self.hackerbot_server_ip = []
+    self.hidden_port = '4444'
   end
 
   def get_options_array
     super + [['--compromised_server_ip', GetoptLong::REQUIRED_ARGUMENT],
-             ['--hackerbot_server_ip', GetoptLong::REQUIRED_ARGUMENT]]
+             ['--hackerbot_server_ip', GetoptLong::REQUIRED_ARGUMENT],
+             ['--hidden_port', GetoptLong::REQUIRED_ARGUMENT]]
   end
 
   def process_options(opt, arg)
@@ -32,6 +35,8 @@ class HBC < HackerbotConfigGenerator
         self.compromised_server_ip << arg;
       when '--hackerbot_server_ip'
         self.hackerbot_server_ip << arg;
+      when '--hidden_port'
+        self.hidden_port << arg;
     end
   end
 
