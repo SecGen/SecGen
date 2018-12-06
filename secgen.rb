@@ -112,7 +112,7 @@ def build_vms(scenario, project_dir, options)
   end
 
   # if deploying to ovirt, when things fail to build, set the retry_count
-  retry_count = OVirtFunctions::provider_ovirt?(options) ? 10 : 0
+  retry_count = OVirtFunctions::provider_ovirt?(options) ? 2 : 0
   successful_creation = false
 
   while retry_count and !successful_creation
