@@ -8,7 +8,7 @@
   <module_license>MIT</module_license>
   <description>A random port number between 1025 and 65,535.</description>
 
-  <type>number_range</type>
+  <type>random_number_generator</type>
   <platform>linux</platform>
   <platform>windows</platform>
 
