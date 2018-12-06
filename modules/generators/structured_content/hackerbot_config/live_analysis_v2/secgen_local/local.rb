@@ -19,7 +19,7 @@ class HBC < HackerbotConfigGenerator
 
     self.compromised_server_ip = []
     self.hackerbot_server_ip = []
-    self.hidden_port = '4444'
+    self.hidden_port = []
   end
 
   def get_options_array
