@@ -17,7 +17,6 @@
 		<system_name>desktop</system_name>
 		<base distro="Debian 9" type="desktop" name="KDE"/>
 
-
 		<input into_datastore="IP_addresses">
 			<value>172.16.0.2</value>
 			<value>172.16.0.3</value>

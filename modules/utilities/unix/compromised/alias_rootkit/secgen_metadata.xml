@@ -13,4 +13,10 @@
   <type>userspace_rootkit</type>
   <platform>linux</platform>
 
+  <read_fact>hidden_port</read_fact>
+
+  <default_input into="hidden_port">
+    <value>4444</value>
+  </default_input>
+
 </utility>

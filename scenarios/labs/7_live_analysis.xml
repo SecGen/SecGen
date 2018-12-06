@@ -166,13 +166,17 @@
 		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<vulnerability module_path=".*nc_backdoor">
-			<input into="port" into_datastore="nc_port">
+			<input into="port" into_datastore="hidden_port">
 				<generator module_path=".*random_unregistered_port" />
 			</input>
 		</vulnerability>
 
 		<!-- rootkit has to be defined before accounts are created -->
-		<utility module_path=".*alias_rootkit"/>
+		<utility module_path=".*alias_rootkit">
+			<input into="hidden_port">
+				<datastore>hidden_port</datastore>
+			</input>
+		</utility>
 
 		<utility module_path=".*parameterised_accounts">
 			<input into="accounts">
@@ -231,6 +235,9 @@
 						</input>
 						<input into="compromised_server_ip">
 							<datastore access="2">IP_addresses</datastore>
+						</input>
+						<input into="hidden_port">
+							<datastore>IP_addresses</datastore>
 						</input>
 					</generator>
 				</input>
