@@ -5,7 +5,7 @@ class LineGenerator < StringGenerator
 
   def initialize
     super
-    self.line_list = []
+    self.linelist = []
     self.module_name = 'Random Word Generator'
   end
 
@@ -17,7 +17,7 @@ class LineGenerator < StringGenerator
     super
     case opt
     when '--linelist'
-        self.line_list << arg;
+        self.linelist << arg;
     end
   end
 
