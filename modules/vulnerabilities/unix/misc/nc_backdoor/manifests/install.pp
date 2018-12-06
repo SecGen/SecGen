@@ -4,7 +4,7 @@ class nc_backdoor::install {
   # }
 
   $secgen_parameters = secgen_functions::get_parameters($::base64_inputs_file)
-  $port = $secgen_parameters['port'].first
+  $port = $secgen_parameters['port'][0]
 
   # run on each boot via cron
   cron { 'backdoor':
