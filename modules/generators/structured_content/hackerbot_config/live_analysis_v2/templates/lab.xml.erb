@@ -10,27 +10,9 @@
   end
 
   $first_account = JSON.parse(self.accounts.first)
-  $second_account = JSON.parse(self.accounts[1])
-
-  $files = []
-  $log_files = []
-  if $second_account.key?("leaked_filenames") &&  $second_account['leaked_filenames'].size > 0
-    $files = $second_account['leaked_filenames']
-    $log_files = $second_account['leaked_filenames'].grep(/log/)
-  end
-
-  if $files.empty?
-    $files = ['myfile', 'afile', 'filee', 'thefile']
-  end
-  if $log_files.empty?
-    $log_files = ['log', 'thelog', 'logs', 'frogonalog']
-  end
 
   $main_user = $first_account['username'].to_s
   $main_user_pass = $first_account['password'].to_s
-  $second_user = $second_account['username'].to_s
-  $example_file = "/home/#{$second_user}/#{$files.sample}"
-  $example_dir = "/home/#{$second_user}/personal_secrets/"
 
   $compromised_server_ip = self.compromised_server_ip.first
   $hidden_port = self.hidden_port.first
