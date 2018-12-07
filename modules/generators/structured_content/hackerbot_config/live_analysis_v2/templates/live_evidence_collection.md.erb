@@ -326,17 +326,7 @@ less /home/<%= $main_user %>/evidence/chkrootkit_out
 
 From the output, identify files or directories reported as "INFECTED", or suspicious.
 
-Also, note that the .bash_history is reportedly linked to another file.
-
-At this stage you should be convinced that this system is definitely compromised, and infected with some form of rootkit.
-
-# TODO: REMOVE?
-
-Save a record of your activity to your Desktop VM:
-
-```bash
-cat /tmp/evid/invst.log | ssh <%= $main_user %>@*Desktop-IP-address* "cat > evidence/script_log"
-```
+At this stage you should be convinced that this system is compromised, and infected with some form of rootkit.
 
 **On the compromised_server VM (ssh console tab)**
 
@@ -353,7 +343,7 @@ Why might we want to force a power off (effectively "pulling the plug"), rather 
 
 ## Offline analysis of live data collection
 
-Note that even though the bash\_history was not saved (as we discovered above), we can still recover commands that were run while the computer was running. This is possible by searching through the saved RAM (the kcore ELF dump we saved earlier).
+Note that even if the bash\_history was not saved, we can still recover commands that were run while the computer was running. This is possible by searching through the saved RAM (the kcore ELF dump we saved earlier).
 
 **On your Desktop VM**, run:
 
