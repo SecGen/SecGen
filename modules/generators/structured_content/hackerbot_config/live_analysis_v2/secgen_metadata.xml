@@ -22,6 +22,7 @@
   <read_fact>compromised_server_ip</read_fact>
   <read_fact>hackerbot_server_ip</read_fact>
   <read_fact>hidden_port</read_fact>
+  <read_fact>hidden_string</read_fact>
 
   <!--TODO: require input, such as accounts, or fail?-->
 
