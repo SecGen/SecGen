@@ -61,7 +61,7 @@
 					<value>tiaspbiqe2r</value>
 				</input>
 				<input into="super_user">
-					<value>true</value>
+					<value>false</value>
 				</input>
 				<input into="leaked_filenames">
 					<value>u_r_powned-hme</value>
@@ -147,6 +147,9 @@
 			<input into="port" into_datastore="nc_port">
 				<generator module_path=".*random_unregistered_port" />
 			</input>
+			<input into="strings_to_leak">
+				<generator type="flag_generator" />
+			</input>
 		</vulnerability>
 
 		<!-- rootkit has to be defined before accounts are created -->
@@ -159,6 +162,8 @@
 				<datastore>hidden_string</datastore>
 			</input>
 		</utility>
+
+		<utility module_path=".*adore_rootkit_static"/>
 
 		<utility module_path=".*parameterised_accounts">
 			<input into="accounts">

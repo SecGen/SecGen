@@ -15,16 +15,12 @@
   <read_fact>accounts</read_fact>
   <read_fact>flags</read_fact>
   <read_fact>root_password</read_fact>
-  <!-- TODO: remove params not used -->
-  <!-- <read_fact>web_server_ip</read_fact> -->
-  <!-- <read_fact>ids_server_ip</read_fact> -->
 
   <read_fact>compromised_server_ip</read_fact>
   <read_fact>hackerbot_server_ip</read_fact>
   <read_fact>hidden_port</read_fact>
   <read_fact>hidden_string</read_fact>
 
-  <!--TODO: require input, such as accounts, or fail?-->
 
   <default_input into="accounts">
     <generator type="account">
