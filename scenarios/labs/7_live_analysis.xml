@@ -166,7 +166,7 @@
 		</utility>
 
 		<!-- TODO: these executables don't work on Stretch -->
-		<!-- <utility module_path=".*adore_rootkit_static"/> -->
+		<utility module_path=".*adore_rootkit_static"/>
 
 		<utility module_path=".*parameterised_accounts">
 			<input into="accounts">
