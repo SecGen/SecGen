@@ -6,9 +6,10 @@
   <name>Netcat Backdoor</name>
   <author>Z. Cliffe Schreuders</author>
   <module_license>MIT</module_license>
-  <description>A netcat backdoor (listens on a port and serves a shell).</description>
+  <description>A netcat backdoor (acts as a bind shell -- listens on a port and serves a shell).</description>
 
   <type>simple_backdoor</type>
+  <type>bind_shell</type>
   <privilege>root_rwx</privilege>
   <access>remote</access>
   <platform>unix</platform>
@@ -20,11 +21,10 @@
   </default_input>
 
 
-<!-- TODO -- leak strings! -->
-  <!-- <read_fact>strings_to_leak</read_fact> -->
-  <!-- <read_fact>leaked_filenames</read_fact> -->
+  <read_fact>strings_to_leak</read_fact> -->
+  <read_fact>leaked_filenames</read_fact>
 
-  <!-- <default_input into="strings_to_leak">
+  <default_input into="strings_to_leak">
     <generator type="message_generator"/>
     <generator type="message_generator"/>
   </default_input>
@@ -32,7 +32,7 @@
   <default_input into="leaked_filenames">
     <generator type="filename_generator"/>
     <generator type="filename_generator"/>
-  </default_input> -->
+  </default_input>
 
   <!--optional vulnerability details-->
   <difficulty>low</difficulty>
