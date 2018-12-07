@@ -10,6 +10,7 @@
     This module has to be included in the scenario BEFORE accounts are created, since it modifies all user accounts via /etc/skel.
   </description>
 
+  <type>rootkit</type>
   <type>userspace_rootkit</type>
   <platform>linux</platform>
 

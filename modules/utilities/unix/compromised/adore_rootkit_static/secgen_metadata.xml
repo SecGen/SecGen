@@ -3,12 +3,13 @@
 <utility xmlns="http://www.github/cliffe/SecGen/utility"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/utility">
-  <name>Adore rootkit</name>
+  <name>Adore rootkit binaries</name>
   <author>Z. Cliffe Schreuders</author>
   <module_license>MIT</module_license>
   <description>Some static rootkit binaries from the Adore rootkit. (Not compiled by SecGen.)
   </description>
 
+  <type>rootkit</type>
   <type>userspace_rootkit</type>
   <platform>linux</platform>
 
