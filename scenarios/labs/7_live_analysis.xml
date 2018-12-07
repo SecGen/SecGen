@@ -61,7 +61,7 @@
 					<value>tiaspbiqe2r</value>
 				</input>
 				<input into="super_user">
-					<value>false</value>
+					<value>true</value>
 				</input>
 				<input into="leaked_filenames">
 					<value>u_r_powned-hme</value>
