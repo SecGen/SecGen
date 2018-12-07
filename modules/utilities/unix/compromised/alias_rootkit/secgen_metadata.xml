@@ -6,17 +6,23 @@
   <name>Alias rootkit</name>
   <author>Z. Cliffe Schreuders</author>
   <module_license>MIT</module_license>
-  <description>A simple bash-based rootkit based on using aliases to hide output from commands.
-    This has to be defined in the scenario BEFORE accounts are created, since it modifies all user accounts via /etc/skel.
+  <description>A new simple bash-based rootkit based on using aliases to hide output from commands.
+    This module has to be included in the scenario BEFORE accounts are created, since it modifies all user accounts via /etc/skel.
   </description>
 
   <type>userspace_rootkit</type>
   <platform>linux</platform>
 
-  <read_fact>hidden_port</read_fact>
+  <read_fact>hidden_ports</read_fact>
+  <read_fact>hidden_strings</read_fact>
 
-  <default_input into="hidden_port">
+  <default_input into="hidden_ports">
     <value>4444</value>
+    <value>12345</value>
+  </default_input>
+  <default_input into="hidden_strings">
+    <value>hideme</value>
+    <value>hme</value>
   </default_input>
 
 </utility>

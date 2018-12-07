@@ -17,6 +17,13 @@
 		<system_name>desktop</system_name>
 		<base distro="Debian 9" type="desktop" name="KDE"/>
 
+		<input into_datastore="main_username">
+			<generator type="random_word_generator">
+				<input into="wordlist">
+					<value>mythical_creatures</value>
+				</input>
+			</generator>
+		</input>
 
 		<input into_datastore="IP_addresses">
 			<!-- desktop -->
@@ -27,15 +34,28 @@
 			<value>172.16.0.4</value>
 		</input>
 
-		<!--generate two accounts, YOU and someone else-->
 		<input into_datastore="accounts">
 			<generator type="account">
 				<input into="username">
-					<generator type="random_word_generator">
-						<input into="wordlist">
-							<value>mythical_creatures</value>
-						</input>
-					</generator>
+					<datastore>main_username</datastore>
+				</input>
+				<input into="password">
+					<value>tiaspbiqe2r</value>
+				</input>
+				<input into="super_user">
+					<value>true</value>
+				</input>
+			</generator>
+		</input>
+
+		<input into_datastore="hidden_string">
+			<generator module_path=".*random_hex"/>
+		</input>
+
+		<input into_datastore="accounts_compromised">
+			<generator type="account">
+				<input into="username">
+					<datastore>main_username</datastore>
 				</input>
 				<input into="password">
 					<value>tiaspbiqe2r</value>
@@ -46,7 +66,7 @@
 				<input into="leaked_filenames">
 					<value>u_r_powned-hme</value>
 					<value>.a_hidden_flag-hme</value>
-					<value>a_flag-hme</value>
+					<datastore>hidden_string</datastore>
 				</input>
 				<input into="strings_to_leak">
 					<generator type="random_line_generator">
@@ -56,48 +76,6 @@
 					</generator>
 					<generator type="flag_generator" />
 					<generator type="flag_generator" />
-				</input>
-			</generator>
-			<generator type="account">
-				<input into="username">
-					<generator type="random_word_generator">
-						<input into="wordlist">
-							<value>mythical_creatures</value>
-						</input>
-					</generator>
-				</input>
-				<input into="password">
-					<value>test</value>
-				</input>
-				<input into="super_user">
-					<value>false</value>
-				</input>
-				<input into="leaked_filenames">
-					<value></value>
-				</input>
-				<input into="strings_to_leak">
-					<value></value>
-				</input>
-			</generator>
-			<generator type="account">
-				<input into="username">
-					<generator type="random_word_generator">
-						<input into="wordlist">
-							<value>mythical_creatures</value>
-						</input>
-					</generator>
-				</input>
-				<input into="password">
-					<value>test</value>
-				</input>
-				<input into="super_user">
-					<value>false</value>
-				</input>
-				<input into="leaked_filenames">
-					<value></value>
-				</input>
-				<input into="strings_to_leak">
-					<value></value>
 				</input>
 			</generator>
 		</input>
@@ -166,21 +144,25 @@
 		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<vulnerability module_path=".*nc_backdoor">
-			<input into="port" into_datastore="hidden_port">
+			<input into="port" into_datastore="nc_port">
 				<generator module_path=".*random_unregistered_port" />
 			</input>
 		</vulnerability>
 
 		<!-- rootkit has to be defined before accounts are created -->
 		<utility module_path=".*alias_rootkit">
-			<input into="hidden_port">
-				<datastore>hidden_port</datastore>
+			<input into="hidden_ports">
+				<datastore>nc_port</datastore>
+			</input>
+			<input into="hidden_strings">
+				<value>nc</value>
+				<datastore>hidden_string</datastore>
 			</input>
 		</utility>
 
 		<utility module_path=".*parameterised_accounts">
 			<input into="accounts">
-				<datastore>accounts</datastore>
+				<datastore>accounts_compromised</datastore>
 			</input>
 		</utility>
 
@@ -237,7 +219,10 @@
 							<datastore access="2">IP_addresses</datastore>
 						</input>
 						<input into="hidden_port">
-							<datastore>IP_addresses</datastore>
+							<datastore>nc_port</datastore>
+						</input>
+						<input into="hidden_string">
+							<datastore>hidden_string</datastore>
 						</input>
 					</generator>
 				</input>
