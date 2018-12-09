@@ -191,9 +191,9 @@ ssh -t <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux2.2_x86/c
 We can take a snapshot of the live state of the computer by dumping the entire contents of memory (what is in RAM/swap) into a file. On a Linux system /proc/kcore contains an ELF-formatted core dump of the kernel. Save a snapshot of the kernel state:
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/dd if=/proc/kcore conv=noerror,sync" > evidence/kcore
+ssh -t <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux2.2_x86/dd if=/proc/kcore conv=noerror,sync" | tee evidence/kcore
 ```
-> After 10 seconds or so press Ctrl-C to stop.
+==After 10 seconds or so press Ctrl-C to stop.==
 
 Next, we can copy entire partitions to our other system, to preserve the exact state of stored data, and so that we can conduct offline analysis without modifying the filesystem.
 
@@ -210,7 +210,7 @@ Note that on this system the root partition (mounted on "/"), is /dev/sda1.
 Then **you could** (see the tip below) copy byte-for-byte the contents of the entire root ("/") partition over the network (where /dev/sda1 was identified from the previous command):
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/dd if=/dev/sda1 conv=noerror,sync" | tee evidence/sda1.img
+ssh -t <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/dd if=/dev/sda1 conv=noerror,sync" | tee evidence/sda1.img
 ```
 > Tip: Feel free to ==skip this step==. Running this will take some time, so you may wish to continue with the next step while the copying runs.
 
@@ -245,7 +245,7 @@ Exit viewing the script (press q).
 Run the data collection script, redirecting output to your Desktop VM:
 
 ```bash
-ssh -t <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux-ir.sh" | tee evidence/ir_out
+ssh -t <%= $compromised_server_ip %> "cd /media/cdrom0/statbins; sudo /media/cdrom0/statbins/linux-ir.sh" | tee evidence/ir_out
 ```
 
 **On your Desktop VM**, have a look at the output from the script:

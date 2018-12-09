@@ -168,6 +168,8 @@
 
 		<!-- TODO: these executables don't work on Stretch -->
 		<utility module_path=".*adore_rootkit_static"/>
+		<!-- required for chkrootkit -->
+		<utility module_path=".*binary_tools"/>
 
 		<utility module_path=".*parameterised_accounts">
 			<input into="accounts">
