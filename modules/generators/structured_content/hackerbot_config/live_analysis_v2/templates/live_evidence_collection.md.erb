@@ -8,9 +8,9 @@ After suspecting a compromise, before powering down the server for offline analy
 ssh <%= $compromised_server_ip %>
 ```
 
-> Because the same users exist on both systems you can leave off the user name (normally *username*@*server_ip*)
+> Because the same users exist on both systems you can leave off the user name (normally ssh *username*@*server_ip*)
 
-**On the compromised_server VM:** To keep a record of what we are doing on the system, start the script command:
+**On the compromised_server VM (ssh):** To keep a record of what we are doing on the system, start the script command:
 
 ```bash
 mkdir /tmp/evid
@@ -42,7 +42,7 @@ sudo mount /media/cdrom0/ -o exec
 
 On a typical system, many binary executables are dynamically linked; that is, these programs do not physically contain all the libraries (shared code) they use, and instead load that code from shared library files when the program runs. On Unix systems the shared code is typically contained in ".so" files, while on Windows ".dll" files contain shared code. The risks associated with using dynamically linked executables to investigate security breaches is that access times on the shared objects will be updated, and the shared code may also have been tampered with. For this reason it is safest to use programs that are statically linked; that is, have been compiled to physically contain a copy of all of the shared code that it uses.
 
-**On your Desktop VM** ==look at which libraries are dynamically loaded== when you run a typical command:
+**On your Desktop VM (in a separate console tab)** ==look at which libraries are dynamically loaded== when you run a typical command:
 
 ```bash
 ldd /bin/ls
@@ -50,7 +50,7 @@ ldd /bin/ls
 
 Examine the output, and determine how many external libraries are involved.
 
-**On the compromised_server VM ssh)**: The FIRE disk contains a number of statically compiled programs to be used for investigations.
+**On the compromised_server VM (ssh console)**: The FIRE disk contains a number of statically compiled programs to be used for investigations.
 
 ==Look at the commands available:==
 
@@ -96,12 +96,12 @@ mkdir evidence
 
 ### Saving output from the compromised server to your desktop
 
-**On the desktop VM (not sshed)**, ==test sending the results of some commands over SSH to your Desktop VM==:
+**On the desktop VM (not from the sshed server)**, ==test sending the results of some commands over SSH to your Desktop VM==:
 
 ```bash
 ssh <%= $compromised_server_ip %> "echo this command is running on the server"
 
-ssh <%= $compromised_server_ip %> "echo this command is running on the server" > evidence/test_output
+ssh <%= $compromised_server_ip %> "echo this command is running on the server" | tee evidence/test_output
 
 ls evidence
 
@@ -109,13 +109,14 @@ cat evidence/test_output
 ```
 
 > Take the time to make sure you understand which system each command above is running on.
+> tee prints to the screen as well as saving the output to disk (you can instead redirect the output to a file with `>`, but you won't see the output while the program runs.)
 
 ### Comparing process lists
 
-Collect results of a process listing using ps over SSH to your Desktop VM:
+Collect results of a process listing using ps over SSH to the compromised VM:
 
 ```bash
-ssh <%= $compromised_server_ip %> "ps aux" > evidence/local_ps_output
+ssh -t <%= $compromised_server_ip %> "sudo ps aux" | tee evidence/local_ps_output
 ```
 
 **On your Desktop VM**, find the newly created files and view the contents.
@@ -127,7 +128,7 @@ Run the statically compiled version of ls from the incident response disk to lis
 Run the command:
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/ls /proc" > evidence/proc_ls_static
+ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/ls /proc" | tee evidence/proc_ls_static
 ```
 
 **On your Desktop VM**, find the newly created files and ==compare the list of pids (numbers representing processes) output from the previous commands==. This is the second column of output in the ps\_out, with the numbers in proc\_ls\_static.
@@ -140,63 +141,49 @@ Are the same processes shown each time? Can you explain why the outputs from dif
 
 ## Gathering live state using statically compiled programs
 
-**On the compromised_server VM**, save a copy of a list of inodes of removed files that are still open or executing:
-
-```bash
-ssh -t <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux2.2_x86/ils -o /dev/sda1" > evidence/deleted_out
-```
-> Tip: on some VMs, you may need to replace "hda1" for "sda1".
-> Also, there might not be any output if there are no deleted files being accessed.
-
 Save a list of the files currently being accessed by programs:
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/lsof" > evidence/lsof_out
+ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/lsof" | tee evidence/lsof_out
 ```
-
-**On your Desktop VM**, open evidence/lsof\_out.
-
-==LogBook question: Are any of these marked as "(deleted)"? If so, how does this compare to the ils output? What does this indicate?== (The answer may be that they are the same.)
-
-**On the compromised_server VM**,
 
 Save a list of network connections:
 
 ```bash
-ssh <%= $compromised_server_ip %> "netstat -a" > evidence/netstat_out
+ssh -t <%= $compromised_server_ip %> "sudo netstat -apn" | tee evidence/netstat_out
 
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/netstat -a" > evidence/netstat_static_out
+ssh -t <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux2.2_x86/netstat -apn" | tee evidence/netstat_static_out
 ```
 > (Some commands such as this one may take awhile to run, wait until the Bash prompt returns)
 
 Save a list of the network resources currently being accessed by programs:
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/lsof -P -i -n" > evidence/lsof_net_out
+ssh -t <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux2.2_x86/lsof -P -i -n" | tee evidence/lsof_net_out
 ```
 
 Save a copy of the routing table:
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/route" > evidence/route_out
+ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/route" | tee evidence/route_out
 ```
 
 Save a copy of the ARP cache:
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/arp -a" > evidence/arp_out
+ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/arp -a" | tee evidence/arp_out
 ```
 
 Save a list of the kernel modules currently loaded (as reported by the kernel):
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/cat /proc/modules" > evidence/lsmod_out
+ssh -t <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux2.2_x86/cat /proc/modules" | tee evidence/lsmod_out
 ```
 
 Save a copy of the Bash history:
 
 ```bash
-ssh <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux2.2_x86/cat /root/.bash_history" > evidence/bash_history
+ssh -t <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux2.2_x86/cat /root/.bash_history" | tee evidence/bash_history
 ```
 
 **Creating images of the system state**
@@ -206,6 +193,7 @@ We can take a snapshot of the live state of the computer by dumping the entire c
 ```bash
 ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/dd if=/proc/kcore conv=noerror,sync" > evidence/kcore
 ```
+> After 10 seconds or so press Ctrl-C to stop.
 
 Next, we can copy entire partitions to our other system, to preserve the exact state of stored data, and so that we can conduct offline analysis without modifying the filesystem.
 
@@ -217,14 +205,14 @@ df
 
 Note that on this system the root partition (mounted on "/"), is /dev/sda1.
 
-> Help: on some VMs, you may need to replace "hda1" with "sda1".
+> Help: on some VMs, you may need to replace "sda1" with "hda1".
 
 Then **you could** (see the tip below) copy byte-for-byte the contents of the entire root ("/") partition over the network (where /dev/sda1 was identified from the previous command):
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/dd if=/dev/sda1 conv=noerror,sync" > evidence/sda1.img
+ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux2.2_x86/dd if=/dev/sda1 conv=noerror,sync" | tee evidence/sda1.img
 ```
-> Tip: Feel free to skip this step. Running this will take some time, so you may wish to continue with the next step while the copying runs.
+> Tip: Feel free to ==skip this step==. Running this will take some time, so you may wish to continue with the next step while the copying runs.
 
 This command could be repeated for each partition including swap partitions. For now, let's accept that we have all we need.
 
@@ -234,11 +222,7 @@ This command could be repeated for each partition including swap partitions. For
 ls -la /home/<%= $main_user %>/evidence
 ```
 
-At this stage take a closer look through some of the information you have collected. For example:
-
-```bash
-less /home/<%= $main_user %>/evidence/lsof_net_out
-```
+At this stage ==take a closer look through== some of the information you have collected.
 
 ==LogBook Task:== Examine the contents of the various output files and identify anything that may indicate that the computer has been compromised by an attacker. Hint: does the network usage seem suspicious?
 
@@ -261,7 +245,7 @@ Exit viewing the script (press q).
 Run the data collection script, redirecting output to your Desktop VM:
 
 ```bash
-ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/linux-ir.sh" > evidence/ir_out
+ssh -t <%= $compromised_server_ip %> "sudo /media/cdrom0/statbins/linux-ir.sh" | tee evidence/ir_out
 ```
 
 **On your Desktop VM**, have a look at the output from the script:
@@ -316,7 +300,7 @@ This should report the path to our static binary on the FIRE disk.
 It is now safe to run chkrootkit[^1]:
 
 ```bash
-export PATH=$static:$PATH ssh <%= $compromised_server_ip %> "/media/cdrom0/statbins/chkrootkit-linux/chkrootkit" > evidence/chkrootkit_out
+ssh <%= $compromised_server_ip %> "PATH=$static:$PATH sudo /media/cdrom0/statbins/chkrootkit-linux/chkrootkit" | tee evidence/chkrootkit_out
 ```
 > Help: you may get a message in the terminal before you type the password. You should still type the password for the script to run. The script should not take long to run.
 
@@ -332,7 +316,7 @@ At this stage you should be convinced that this system is compromised, and infec
 
 **On the compromised_server VM (ssh console tab)**
 
-Power down the compromised system, so that we can continue analysis offline:
+**You could**, power down the compromised system, so that we can continue analysis offline:
 
 ```bash
 /media/cdrom0/statbins/linux2.2_x86/sync; /media/cdrom0/statbins/linux2.2_x86/sync

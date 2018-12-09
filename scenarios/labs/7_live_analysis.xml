@@ -72,6 +72,7 @@
 			</input>
 		</utility>
 		<utility module_path=".*handy_cli_tools"/>
+		<utility module_path=".*binary_tools"/>
 		<utility module_path=".*nmap"/>
 
 		<utility module_path=".*iceweasel">
