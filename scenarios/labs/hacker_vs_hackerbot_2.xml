@@ -309,6 +309,9 @@
 					<input into="web_server_ip">
 						<datastore access="2">IP_addresses</datastore>
 					</input>
+					<input into="compromised_server_ip">
+						<datastore access="4">IP_addresses</datastore>
+					</input>
 					<input into="hackerbot_server_ip">
 						<datastore access="3">IP_addresses</datastore>
 					</input>

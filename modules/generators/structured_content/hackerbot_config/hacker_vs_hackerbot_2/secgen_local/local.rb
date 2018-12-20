@@ -6,13 +6,14 @@ class IDS < HackerbotConfigGenerator
   attr_accessor :backup_server_ip
   attr_accessor :ids_server_ip
   attr_accessor :web_server_ip
+  attr_accessor :compromised_server_ip
   attr_accessor :desktop_ip
   attr_accessor :hackerbot_server_ip
 
   def initialize
     super
-    self.module_name = 'Hackerbot Config Generator HvHB1'
-    self.title = 'HvHB1'
+    self.module_name = 'Hackerbot Config Generator HvHB2'
+    self.title = 'HvHB2'
 
     self.local_dir = File.expand_path('../../',__FILE__)
     self.templates_path = "#{self.local_dir}/templates/"
@@ -21,6 +22,7 @@ class IDS < HackerbotConfigGenerator
 
     self.backup_server_ip = []
     self.web_server_ip = []
+    self.compromised_server_ip = []
     self.ids_server_ip = []
     self.desktop_ip = []
     self.hackerbot_server_ip = []
@@ -31,6 +33,7 @@ class IDS < HackerbotConfigGenerator
              ['--desktop_ip', GetoptLong::REQUIRED_ARGUMENT],
              ['--ids_server_ip', GetoptLong::REQUIRED_ARGUMENT],
              ['--web_server_ip', GetoptLong::REQUIRED_ARGUMENT],
+             ['--compromised_server_ip', GetoptLong::REQUIRED_ARGUMENT],
              ['--hackerbot_server_ip', GetoptLong::REQUIRED_ARGUMENT]]
   end
 
@@ -43,6 +46,8 @@ class IDS < HackerbotConfigGenerator
         self.ids_server_ip << arg;
       when '--web_server_ip'
         self.web_server_ip << arg;
+      when '--compromised_server_ip'
+        self.compromised_server_ip << arg;
       when '--desktop_ip'
         self.desktop_ip << arg;
       when '--hackerbot_server_ip'
