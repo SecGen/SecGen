@@ -31,7 +31,7 @@
 		<!--generate two accounts, YOU and someone else-->
 		<input into_datastore="accounts">
 			<generator type="account">
-				<input into="username">
+				<input into="username" into_datastore="main_username">
 					<generator type="random_word_generator">
 						<input into="wordlist">
 							<value>mythical_creatures</value>
