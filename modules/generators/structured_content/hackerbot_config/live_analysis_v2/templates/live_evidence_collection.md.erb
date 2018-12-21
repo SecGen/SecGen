@@ -13,10 +13,10 @@ ssh <%= $compromised_server_ip %>
 **On the compromised_server VM (ssh):** To keep a record of what we are doing on the system, start the script command:
 
 ```bash
-mkdir /tmp/evid
-script -f /tmp/evid/invst.log
+mkdir evid
+script -f evid/invst.log
 ```
-> Note: *if you do this lab over multiple sessions*, be sure to save a copy of the log of your progress (/tmp/evid/invst.log), and restart `script`.
+> Note: *if you do this lab over multiple sessions*, be sure to save a copy of the log of your progress (evid/invst.log), and restart `script`.
 
 ==LogBook question: Make a note of the risks and benefits associated with storing a record of what we are doing locally on the computer that we are investigating.==
 
