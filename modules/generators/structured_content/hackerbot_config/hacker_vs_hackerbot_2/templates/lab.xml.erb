@@ -33,7 +33,7 @@
   $example_dir = "/home/#{$second_user}/personal_secrets/"
 
   $web_server_ip = self.web_server_ip.first
-  $compromised_server_ip = self.web_server_ip.first
+  $compromised_server_ip = self.compromised_server_ip.first
   $ids_server_ip = self.ids_server_ip.first
   $backup_server_ip = self.backup_server_ip.first
   $desktop_ip = self.desktop_ip.first
@@ -83,8 +83,8 @@
 		<previous>Ok, backing up.</previous>
 		<goto>Ok, skipping it along.</goto>
 		<goto>Let me see what I can do to goto that attack.</goto>
-		<last_attack>There may be some flags to be found on the compromised server (End.)</last_attack>
-    <last_attack>There may be some flags to be found on the compromised server (The End.)</last_attack>
+		<last_attack>There are also some flags to be found on the compromised server (End.)</last_attack>
+    <last_attack>There are also some flags to be found on the compromised server (The End.)</last_attack>
 		<first_attack>You are back to the beginning!</first_attack>
 		<first_attack>This is where it all began.</first_attack>
 		<getting_shell>Doing my thing...</getting_shell>
