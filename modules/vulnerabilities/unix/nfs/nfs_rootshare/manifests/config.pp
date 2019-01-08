@@ -31,6 +31,7 @@ class nfs_rootshare::config {
     strings_to_leak => $strings_to_leak,
     images_to_leak => $images_to_leak,
     leaked_from => "nfs_rootshare",
+    mode => '0666',
   }
 }
 
