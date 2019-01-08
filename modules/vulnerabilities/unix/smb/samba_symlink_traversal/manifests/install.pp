@@ -47,6 +47,7 @@ class samba_symlink_traversal::install {
       strings_to_leak   => [$strings_to_leak[1]],
       images_to_leak    => $images_to_leak,
       leaked_from       => 'samba_symlink_traversal',
+      mode              => '0664'
     }
   }
 }

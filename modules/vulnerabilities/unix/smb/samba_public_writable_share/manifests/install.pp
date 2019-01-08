@@ -30,5 +30,6 @@ class samba_public_writable_share::install {
     strings_to_leak   => $strings_to_leak,
     images_to_leak    => $images_to_leak,
     leaked_from       => 'samba_public_writable_share',
+    mode              => '0666'
   }
 }
