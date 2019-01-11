@@ -1,13 +1,13 @@
 ## Networking concepts (potentially revision)
 ### The Internet protocol suite
-Modern network traffic (such as the Internet) typically uses the Internet protocol suite set of communications protocols. 
+Modern network traffic (such as the Internet) typically uses the Internet protocol suite set of communications protocols.
 
 The Internet protocol suite has four abstraction layers:
 
 > * "**The application layer** is the scope within which applications create user data and communicate this data to other applications on another or the same host. The applications, or processes, make use of the services provided by the underlying, lower layers, especially the Transport Layer which provides reliable or unreliable pipes to other processes. The communications partners are characterized by the application architecture, such as the client-server model and peer-to-peer networking. This is the layer in which all higher level protocols, such as SMTP, FTP, SSH, HTTP, operate. Processes are addressed via ports which essentially represent services.
 > * **The transport layer** performs host-to-host communications on either the same or different hosts and on either the local network or remote networks separated by routers. It provides a channel for the communication needs of applications. UDP is the basic transport layer protocol, providing an unreliable datagram service. The Transmission Control Protocol provides flow-control, connection establishment, and reliable transmission of data.
 > * **The internet layer** has the task of exchanging datagrams across network boundaries. It provides a uniform networking interface that hides the actual topology (layout) of the underlying network connections. It is therefore also referred to as the layer that establishes internetworking, indeed, it defines and establishes the Internet. This layer defines the addressing and routing structures used for the TCP/IP protocol suite. The primary protocol in this scope is the Internet Protocol, which defines IP addresses. Its function in routing is to transport datagrams to the next IP router that has the connectivity to a network closer to the final data destination.
-> * **The link layer** defines the networking methods within the scope of the local network link on which hosts communicate without intervening routers. This layer includes the protocols used to describe the local network topology and the interfaces needed to effect transmission of Internet layer datagrams to next-neighbor hosts." 
+> * **The link layer** defines the networking methods within the scope of the local network link on which hosts communicate without intervening routers. This layer includes the protocols used to describe the local network topology and the interfaces needed to effect transmission of Internet layer datagrams to next-neighbor hosts."
 (https://en.wikipedia.org/wiki/Internet_protocol_suite#Abstraction_layers)
 
 ### Common services and (application layer) protocols
@@ -32,8 +32,8 @@ In order to make sense of network traffic, it is important to be aware of common
 | tcp     | 989/990 | FTP over TLS/SSL (RFC 4217) |
 | tcp     | 6660-6669 | Internet Relay Chat (IRC) |
 
-Please ensure you understand what each of these ports are used for. If you are not aware of what these protocols are, do some online reading. 
-> This may be a useful resource: http://www.pearsonitcertification.com/articles/article.aspx?p=1868080
+Please ensure you understand what each of these ports are used for. If you are not aware of what these protocols are, do some online reading.
+> This may be a useful overview resource: http://www.pearsonitcertification.com/articles/article.aspx?p=1868080
 
 Keep in mind that in recent years more and more network based functionality is moving to be hosted via Web protocols (HTTP and HTTPS).
 
@@ -41,27 +41,27 @@ Keep in mind that in recent years more and more network based functionality is m
 
 Note that in Wireshark you can view individual packets, including IP and TCP headers. Wireshark also has support for viewing TCP streams, so that you can view the traffic at the application layer as it is sent between the two computers (such as, client and server). (Simply right-click on a TCP entry and select *Follow > TCP Stream*.)
 
-**On the ids_server VM:**
+**On the ids_snoop VM:**
 
 ==Start Wireshark:==
 
 ```bash
-kdesudo wireshark &
+kdesudo wireshark
 ```
 > For this exercise you can ignore the warnings about running Wireshark as root, or read online to learn to use setcap to grant Wireshark more specific privileges.
 
-Start capturing, listening to the interface with IP address <%= $ids_server_ip %>.
+Start capturing, listening to the interface with IP address <%= $ids_snoop_ip %>.
 > If you are not sure, list the interfaces with `ifconfig` or `ip a s`
 
 **On the desktop VM:**
 
 While Wireshark is listening, ==access a web page from Firefox, browse to [*http://<%= $web_server_ip %>*](http://<%= $web_server_ip %>)== (In a new tab.)
 
-**On the ids_server VM:**
+**On the ids_snoop VM:**
 
 Note that Wireshark uses colouring to make it easier to view traffic at a glance. ==View the colouring rules== via *View > Coloring Rules*.
 
-In Wireshark ==use display filters== to narrow down the packets displayed. At the top of the Wireshark window, enter `tcp.port == 80`, and press Enter. 
+In Wireshark ==use display filters== to narrow down the packets displayed. At the top of the Wireshark window, enter `tcp.port == 80`, and press Enter.
 
 Right click the Web traffic, and select *Follow TCP Stream*.
 
@@ -101,7 +101,7 @@ To set the type of alert:
 
 > `classtype:misc-attack`
 >
-> (where *misc-attack* is defined in `/etc/snort/classification.conf`)
+> (where *misc-attack* is defined in `/etc/snort/classification.config`)
 
 To give a unique identifier and revision version number:
 
@@ -116,13 +116,19 @@ So for example the body could be:
 And bringing all this together a Snort rule could read:
 > `alert tcp any any -> <%= $web_server_ip %> 80 (msg: "Website access <%= $random_string %>"; content: "GET /"; sid:1000001; rev:1;)`
 
-**On the ids_server VM:**
+**On the ids_snoop VM:**
 
-Add the rule, and reload Snort:
+==Add this rule== to /etc/snort/rules/local.rules:
 
 ```bash
-echo 'alert tcp any any -> <%= $web_server_ip %> 80 (msg: "Website access  <%= $random_string %>"; content: "GET /"; sid:1000001; rev:1;)' >> /etc/snort/rules/my.rules
+alert tcp any any -> <%= $web_server_ip %> 80 (msg: "Website access  <%= $random_string %>"; content: "GET /"; sid:1000001; rev:1;)
+```
 
+> Run `vi /etc/snort/rules/local.rules` Remember press 'i' to enter insert mode, make your changes, press Esc, then type ':wq' to write your changes and quit vi.
+
+==Restart snort==:
+
+```bash
 sudo service snort restart
 ```
 
@@ -132,7 +138,7 @@ sudo service snort restart
 
 While Wireshark is listening, ==access a web page from Firefox == browse to ==[*http://<%= $web_server_ip %>*](http://<%= $web_server_ip %>)== (In a new tab.)
 
-**On the ids_server VM:**
+**On the ids_snoop VM:**
 ==View the Snort alert file, to confirm your new rule generated an alert==
 
 ```bash
@@ -141,9 +147,16 @@ sudo tail /var/log/snort/alert
 
 > The output should include the alert, with <%= $random_string %>. Note that Hackerbot will instruct you to include random strings such as this, in the alerts.
 > In this case, the website may have resulted in a few HTTP connections, therefore triggering the rule a few times.
+> If you do not see the alert, try creating a rule that triggers on all IP traffic, to confirm Snort is working correctly.
+
+To view the alerts in real-time you can run this command in a console tab:
+```bash
+sudo tail -f /var/log/snort/alert
+```
+> -f outputs appended data as the file grows
 
 ==LabBook Question: Browse the existing rules in `/etc/snort/rules` and describe how one of the existing rules works.==
 
-Tips: 
+Tips:
 * **Don't forget to reload Snort each time you change your rules.**
 * Use unique sid values for each rule.

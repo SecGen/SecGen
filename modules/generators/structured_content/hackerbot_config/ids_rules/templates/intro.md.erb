@@ -6,15 +6,15 @@
 ==Start these VMs== (if you haven't already):
 
 - hackerbot_server (leave it running, you don't log into this)
-- ids_server (IP address: <%= $ids_server_ip %>)
+- ids_snoop (IP address: <%= $ids_server_ip %>)
 - web_server (IP address: <%= $web_server_ip %>, leave it running, you don't log into this)
 - desktop
 
 All of these VMs need to be running to complete the lab.
 
-**Ensure the ids_server VM is allowed promiscuous mode.** If you are completing this lab on Leeds Beckett oVirt infrastructure, this should be sorted. Otherwise, if you have used SecGen to spin up VMs, you need to ensure your VMs have permission to monitor networks using promiscuous mode. On the Leeds Beckett oVirt infrastructure we have snoop networks, which mirror all the traffic between systems. On Virtualbox, you would need to go to Advanced network settings for the host-only network on the ids_server and enable promiscious mode. 
+**Ensure the ids_snoop VM is allowed promiscuous mode.** If you are completing this lab on Leeds Beckett oVirt infrastructure, this should be sorted. Otherwise, if you have used SecGen to spin up VMs, you need to ensure your VMs have permission to monitor networks using promiscuous mode. On the Leeds Beckett oVirt infrastructure we have snoop networks, which mirror all the traffic between systems. On Virtualbox, you would need to go to Advanced network settings for the host-only network on the ids_snoop and enable promiscious mode.
 
-### Your login details for the "desktop" and "ids_server" VMs
+### Your login details for the "desktop" and "ids_snoop" VMs
 User: <%= $main_user %>
 Password: tiaspbiqe2r (**t**his **i**s **a** **s**ecure **p**assword **b**ut **i**s **q**uite **e**asy **2** **r**emember)
 
@@ -34,7 +34,7 @@ Work through the below exercises, completing the Hackerbot challenges as noted.
 ---
 ## Getting Snort up and running
 
-**On the ids_server VM:**
+**On the ids_snoop VM:**
 
 ==Change Snort's output== to something more readable:
 
@@ -45,24 +45,10 @@ sudo vi /etc/snort/snort.conf
 
 > ":wq" to write changes and quit)
 
-==Add the following lines:==
+==Add the following line:==
 `output alert_fast`
 
-`include $RULE_PATH/my.rules`
-
-==Create a new rules file:==
-
-```bash
-sudo touch /etc/snort/rules/my.rules
-```
-
-Let us edit the rules file without sudo:
-
-```bash
-sudo chown <%= $main_user %> /etc/snort/rules/my.rules
-```
-
-==Change Snort's interface== to the interface with IP address <%= $ids_server_ip %> (likely eth1), and set the local network to your IP address range (or "any"):
+==Change Snort's interface== to the interface with IP address <%= $ids_server_ip %> (likely changing eth0 to ens3), and set the local network to your IP address range (or "any"):
 
 ```bash
 sudo vi /etc/snort/snort.debian.conf
@@ -80,4 +66,4 @@ sudo service snort start
 
 Snort should now be running, monitoring network traffic for activity.
 
-It can be helpful to monitor network traffic while writing IDS rules. You can start Wireshark with `kdesudo wireshark &`
+It can be helpful to monitor network traffic while writing IDS rules. You can start Wireshark with `kdesudo wireshark`

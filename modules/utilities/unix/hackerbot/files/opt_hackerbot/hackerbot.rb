@@ -209,7 +209,7 @@ def read_bots (irc_server_ip_address)
           end
 
           if quiz != nil
-            correct_answer = quiz['answer']
+            correct_answer = quiz['answer'].clone
             if bots[bot_name]['attacks'][current].key?('post_command_output')
               correct_answer.gsub!(/{{post_command_output}}/, (bots[bot_name]['attacks'][current]['post_command_output']||''))
             end
@@ -220,6 +220,7 @@ def read_bots (irc_server_ip_address)
               correct_answer.gsub!(/{{pre_shell_command_output_first_line}}/, (bots[bot_name]['attacks'][current]['get_shell_command_output']||'').split("\n").first)
             end
             correct_answer.chomp!
+            Print.debug "#{correct_answer}====#{answer}"
 
             if answer.match(/#{correct_answer}/i)
               m.reply bots[bot_name]['messages']['correct_answer']

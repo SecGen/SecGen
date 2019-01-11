@@ -108,9 +108,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 <%= selected_module.to_s_comment -%>
 <% if selected_module.module_type == 'network' and selected_module.received_inputs.include? 'IP_address' %>
-<%= '    # This module has a datastore entry for IP_address, using that instead of the default.' -%>
+<%= '    # This module has a datastore entry for IP_address, using that instead of the default.' %>
 <% elsif selected_module.module_type == 'network' and @options.has_key? :ip_ranges -%>
-<%= '    # This module has a command line ip_range, using that instead of the default.'  -%>
+<%= '    # This module has a command line ip_range, using that instead of the default.'  %>
 <% end -%>
 <%   case selected_module.module_type
      when 'base' -%>
@@ -129,28 +129,28 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     <%= system.name %>.vm.network :forwarded_port, guest: 5985, host: 5985, id: "winrm", auto_correct: true
     <% end %>
 <%   when 'network' -%>
+<%     # DHCP networking -%>
 <%     if (selected_module.attributes['range'].first.nil? || selected_module.attributes['range'].first == "dhcp") and (!selected_module.received_inputs.include? 'IP_address' and !@options[:ip_ranges])-%>
-  <%       if (@options.has_key? :ovirtnetwork) && (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)  %>
-      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
-  <%       else %>
-      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", auto_config: false
-  <%       end %>
+<%       if (@options.has_key? :ovirtnetwork) && (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass)  %>
+    <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", :ovirt__network_name => '<%= get_ovirt_network_name(system.name, @options[:ovirtnetwork]) %>'
+<%       else %>
+    <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, type: "dhcp", auto_config: false
+<%       end %>
+<%     # Static networking -%>
 <%     else -%>
-  <%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) %>
-  <%         if @ovirt_template and (@ovirt_template.include? 'kali_linux_msf' or @ovirt_template.include? 'debian_server' )%>
-      <%= system.name %>.vm.provision 'shell', inline: "echo \"auto lo\niface lo inet loopback\n\nauto eth0\niface eth0 inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
-      <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
-  <%         elsif @ovirt_template and @ovirt_template.include? 'debian_desktop_kde' %>
-      <%= system.name %>.vm.provision 'shell', inline: "echo \"\nauto eth1\niface eth1 inet static\n\taddress <%= resolve_network(selected_module)%>\" >> /etc/network/interfaces"
-      <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
-  <%         elsif @ovirt_template and ( @ovirt_template.include? 'debian_stretch_server_n' or @ovirt_template.include? 'debian_stretch_desktop_kde') %>
-      <%= system.name %>.vm.provision 'shell', inline: "echo \"\nauto ens3\niface ens3 inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
-          <%         else %>
-      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, :ovirt__ip => "<%= resolve_network(selected_module)%>", :ovirt__network_name => '<%= "#{@options[:ovirtnetwork]}" %>'
-  <%         end %>
-  <%       else %>
-      <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module)%>"
-  <%       end %>
+<%      # Static oVirt networking -%>
+<%       if (@options.has_key? :ovirtuser) && (@options.has_key? :ovirtpass) -%>
+<%         interface = 'ens3' -%>
+<%         if @ovirt_base_template and @ovirt_base_template =~ /kali|debian_desktop_kde/ -%>
+<%          interface = 'eth0' -%>
+<%         end -%>
+           # use some shell scripting to identify the name of the network interface (eth0/ens3/...), and set the IP address statically
+           <%= system.name %>.vm.provision 'shell', inline: "echo -e \"auto lo\niface lo inet loopback\n\nauto <%= interface %>\niface <%= interface %> inet static\n\taddress <%= resolve_network(selected_module)%>\" > /etc/network/interfaces"
+           <%= system.name %>.vm.provision 'shell', inline: "echo '' > /etc/environment"
+<%       # Static Virtualbox networking -%>
+<%       else -%>
+  <%= system.name %>.vm.network :<%= selected_module.attributes['type'].first %>, ip: "<%= resolve_network(selected_module)%>"
+<%       end -%>
 <%     end -%>
 <%   when 'vulnerability', 'service', 'utility', 'build' -%>
 <%     module_name = selected_module.module_path_name -%>

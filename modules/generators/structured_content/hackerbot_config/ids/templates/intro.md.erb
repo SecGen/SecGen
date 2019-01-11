@@ -6,15 +6,15 @@
 ==Start these VMs== (if you haven't already):
 
 - hackerbot_server (leave it running, you don't log into this)
-- ids_server (IP address: <%= $ids_server_ip %>)
+- ids_snoop (IP address: <%= $ids_server_ip %>)
 - web_server (IP address: <%= $web_server_ip %>)
 - desktop
 
 All of these VMs need to be running to complete the lab.
 
-**Ensure the ids_server VM is allowed promiscuous mode.** If you are completing this lab on Leeds Beckett oVirt infrastructure, this should be sorted. Otherwise, if you have used SecGen to spin up VMs, you need to ensure your VMs have permission to monitor networks using promiscuous mode. On the Leeds Beckett oVirt infrastructure we have snoop networks, which mirror all the traffic between systems. On Virtualbox, you would need to go to Advanced network settings for the host-only network on the ids_server and enable promiscious mode. 
+**Ensure the ids_snoop VM is allowed promiscuous mode.** If you are completing this lab on Leeds Beckett oVirt infrastructure, this should be sorted. Otherwise, if you have used SecGen to spin up VMs, you need to ensure your VMs have permission to monitor networks using promiscuous mode. On the Leeds Beckett oVirt infrastructure we have snoop networks, which mirror all the traffic between systems. On Virtualbox, you would need to go to Advanced network settings for the host-only network on the ids_snoop and enable promiscious mode.
 
-### Your login details for the "desktop" and "ids_server" VMs
+### Your login details for the "desktop" and "ids_snoop" VMs
 User: <%= $main_user %>
 Password: tiaspbiqe2r (**t**his **i**s **a** **s**ecure **p**assword **b**ut **i**s **q**uite **e**asy **2** **r**emember)
 

@@ -1,7 +1,7 @@
 
 	<attack>
-<% $rand_alert0 = SecureRandom.hex(3)
-   $rand_tmp_restingplace = "/tmp/#{SecureRandom.hex(3)}" %>
+	<% $rand_alert0 = SecureRandom.hex(3)
+	 $rand_tmp_restingplace = "/tmp/#{SecureRandom.hex(3)}" %>
 		<!--get the snort alerts before-->
 		<!--and make a copy of the file to a new location -->
 		<pre_shell>sshpass -p <%= $root_password %> ssh -oStrictHostKeyChecking=no root@<%= $web_server_ip %> 'cp <%= $sensitive_files_location %>clients.csv <%= $rand_tmp_restingplace %>; chmod 644 <%= $rand_tmp_restingplace %>'; stat0=$?; echo -$stat0; sshpass -p <%= $root_password %> scp -prv -oStrictHostKeyChecking=no root@<%= $ids_server_ip %>:/var/log/snort/alert /tmp/snort_alert_before; echo --$?</pre_shell>
@@ -10,14 +10,14 @@
 		<!--trigger the rule by sending the data-->
 		<post_command>cat <%= $rand_tmp_restingplace %>; echo --$?</post_command>
 		<!--get the snort alerts after, and diff for new alerts generated-->
-		<post_shell>sshpass -p <%= $root_password %> scp -prv -oStrictHostKeyChecking=no root@<%= $ids_server_ip %>:/var/log/snort/alert /tmp/snort_alert_after; echo --$?; diff -n /tmp/snort_alert_before /tmp/snort_alert_after | tail -n 5 | grep <%= $rand_alert0 %> >/dev/null; echo triggered:$?; sshpass -p <%= $root_password %> scp -prv -oStrictHostKeyChecking=no root@<%= $ids_server_ip %>:/etc/snort/rules/my.rules /tmp/snort_rules; echo rules:$?; grep '^alert.*msg:".*<%= $rand_alert0 %>.*".*content:"' /tmp/snort_rules >/dev/null; echo good_rule:$? </post_shell>
+		<post_shell>sshpass -p <%= $root_password %> scp -prv -oStrictHostKeyChecking=no root@<%= $ids_server_ip %>:/var/log/snort/alert /tmp/snort_alert_after; echo --$?; diff -n /tmp/snort_alert_before /tmp/snort_alert_after | tail -n 5 | grep <%= $rand_alert0 %> >/dev/null; echo triggered:$?; sshpass -p <%= $root_password %> scp -prv -oStrictHostKeyChecking=no root@<%= $ids_server_ip %>:/etc/snort/rules/local.rules /tmp/snort_rules; echo rules:$?; grep '^alert' /tmp/snort_rules | grep '<%= $rand_alert0 %>' | grep -E 'content ?: ?"' >/dev/null; echo good_rule:$? </post_shell>
 		<suppress_command_output_feedback />
 
 		<prompt>You need to monitor your sensitive list of clients. The file contains credit card details and national insurance numbers. You have a copy in <%= $sensitive_files_location %>clients.csv Use one or more Snort rules to detect unencrypted transport of the file. The alert must include the message "<%= $rand_alert0 %>". (This attack may take a while.)</prompt>
 
 		<condition>
 			<output_matches>good_rule:1</output_matches>
-			<message>:( Couldn't find your snort rule on the IDS server in /etc/snort/rules/my.rules. You are missing content matching or the message from your rule.</message>
+			<message>:( Couldn't find your snort rule on the IDS server in /etc/snort/rules/local.rules. You are missing content matching or the message from your rule.</message>
 		</condition>
 		<condition>
 			<output_matches>triggered:1</output_matches>
@@ -45,4 +45,3 @@
 		</else_condition>
 
 	</attack>
-

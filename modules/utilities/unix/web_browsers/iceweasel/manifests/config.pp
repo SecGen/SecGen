@@ -9,16 +9,22 @@ class iceweasel::config {
   $accounts.each |$raw_account| {
     $account = parsejson($raw_account)
     $username = $account['username']
+    # set home directory
+    if $username == 'root' {
+      $home_dir = "/root"
+    } else {
+      $home_dir = "/home/$username"
+    }
 
     # add user profile
-    file { ["/home/$username/", "/home/$username/.mozilla/",
-      "/home/$username/.mozilla/firefox",
-      "/home/$username/.mozilla/firefox/user.default"]:
+    file { ["$home_dir/", "$home_dir/.mozilla/",
+      "$home_dir/.mozilla/firefox",
+      "$home_dir/.mozilla/firefox/user.default"]:
       ensure => directory,
       owner  => $username,
       group  => $username,
     }->
-    file { "/home/$username/.mozilla/firefox/profiles.ini":
+    file { "$home_dir/.mozilla/firefox/profiles.ini":
       ensure => file,
       source => 'puppet:///modules/iceweasel/profiles.ini',
       owner  => $username,
@@ -26,7 +32,7 @@ class iceweasel::config {
     }->
 
     # set start page via template:
-    file { "/home/$username/.mozilla/firefox/user.default/user.js":
+    file { "$home_dir/.mozilla/firefox/user.default/user.js":
       ensure => file,
       content => template('iceweasel/user.js.erb'),
       owner  => $username,
@@ -35,14 +41,14 @@ class iceweasel::config {
 
     # autostart script
     if $autostart {
-      file { ["/home/$username/.config/", "/home/$username/.config/autostart/"]:
+      file { ["$home_dir/.config/", "$home_dir/.config/autostart/"]:
         ensure => directory,
         owner  => $username,
         group  => $username,
-        require => File["/home/$username/"],
+        require => File["$home_dir/"],
       }
 
-      file { "/home/$username/.config/autostart/iceweasel.desktop":
+      file { "$home_dir/.config/autostart/iceweasel.desktop":
         ensure => file,
         source => 'puppet:///modules/iceweasel/iceweasel.desktop',
         owner  => $username,

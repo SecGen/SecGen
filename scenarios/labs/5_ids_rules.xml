@@ -158,7 +158,7 @@
 	</system>
 
 	<system>
-		<system_name>ids_server</system_name>
+		<system_name>ids_snoop</system_name>
 		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<utility module_path=".*parameterised_accounts">
@@ -198,7 +198,8 @@
 
 	<system>
 		<system_name>web_server</system_name>
-		<base platform="linux" distro="Debian 7.8" name="Server"/>
+		<!-- FIXME: server base was not receiving an IP address (right network?) -->
+		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<utility module_path=".*parameterised_accounts">
 			<input into="accounts">
@@ -209,7 +210,7 @@
 		<vulnerability module_path=".*distcc_exec"/>
 
 		<!--TODO: FIXME ftp modules are currently broken-->
-		<!--<service module_path=".*vsftpd"/>-->
+		<service module_path=".*vsftpd"/>
 
 		<service type="pop3"/>
 

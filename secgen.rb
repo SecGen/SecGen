@@ -46,12 +46,15 @@ def usage
    --ovirtauthz [ovirt authz]
    --ovirt-cluster [ovirt_cluster]
    --ovirt-network [ovirt_network_name]
+   --ovirt-affinity-group [ovirt_affinity_group_name]
 
    COMMANDS:
    run, r: Builds project and then builds the VMs
    build-project, p: Builds project (vagrant and puppet config), but does not build VMs
    build-vms, v: Builds VMs from a previously generated project
               (use in combination with --project [dir])
+   ovirt-post-build: only performs the ovirt actions that normally follow a successful vm build
+              (snapshots and networking)
    create-forensic-image: Builds forensic images from a previously generated project
               (can be used in combination with --project [dir])
    list-scenarios: Lists all scenarios that can be used with the --scenario option
@@ -80,7 +83,7 @@ def build_config(scenario, out_dir, options)
   }
 
   Print.info "Creating project: #{out_dir}..."
-  # create's vagrant file / report a starts the vagrant installation'
+  # creates Vagrantfile and other outputs and starts the vagrant installation
   creator = ProjectFilesCreator.new(systems, out_dir, scenario, options)
   creator.write_files
 
@@ -89,14 +92,14 @@ end
 
 # Builds the vm via the vagrant file in the project dir
 # @param project_dir
-def build_vms(project_dir, options)
+def build_vms(scenario, project_dir, options)
   unless project_dir.include? ROOT_DIR
     Print.info 'Relative path to project detected'
     project_dir = "#{ROOT_DIR}/#{project_dir}"
     Print.info "Using #{project_dir}"
   end
 
-  scenario = project_dir + '/scenario.xml'
+  project_dir + '/scenario.xml'
 
   Print.info "Building project: #{project_dir}"
   system = ''
@@ -109,7 +112,7 @@ def build_vms(project_dir, options)
   end
 
   # if deploying to ovirt, when things fail to build, set the retry_count
-  retry_count = OVirtFunctions::provider_ovirt?(options) ? 10 : 0
+  retry_count = OVirtFunctions::provider_ovirt?(options) ? 2 : 0
   successful_creation = false
 
   while retry_count and !successful_creation
@@ -167,18 +170,39 @@ def build_vms(project_dir, options)
           end
         else   # TODO:  elsif vagrant_output[:exception].type == ProcessHelper::TimeoutError   >destroy individually broken vms as above?
           Print.err 'Vagrant up timeout, destroying VMs and retrying...'
-          GemExec.exe('vagrant', project_dir, 'destroy -f')
+          # GemExec.exe('vagrant', project_dir, 'destroy -f')
         end
       else
         Print.err 'Error provisioning VMs, destroying VMs and exiting SecGen.'
-        GemExec.exe('vagrant', project_dir, 'destroy -f')
+        # GemExec.exe('vagrant', project_dir, 'destroy -f')
         exit 1
       end
     end
     retry_count -= 1
   end
-  if successful_creation && options[:snapshot]
+  if successful_creation
+    ovirt_post_build(options, scenario, project_dir)
+  else
+    Print.err "Failed to build VMs"
+    exit 1
+  end
+end
+
+# actions on the VMs after vagrant has built them
+# this includes networking and snapshots
+def ovirt_post_build(options, scenario, project_dir)
+  Print.std 'Taking oVirt post-build actions...'
+  if options[:ovirtnetwork]
+    Print.info 'Assigning network(s) of VM(s)'
+    OVirtFunctions::assign_networks(options, scenario, get_vm_names(scenario))
+  end
+  if options[:ovirtaffinitygroup]
+    Print.info 'Assigning affinity group of VM(s)'
+    OVirtFunctions::assign_affinity_group(options, scenario, get_vm_names(scenario))
+  end
+  if options[:snapshot]
     Print.info 'Creating a snapshot of VM(s)'
+    sleep(20) # give oVirt/Virtualbox a chance to save any VM config changes before creating the snapshot
     if OVirtFunctions::provider_ovirt?(options)
       OVirtFunctions::create_snapshot(options, scenario, get_vm_names(scenario))
     else
@@ -249,7 +273,7 @@ end
 # Runs methods to run and configure a new vm from the configuration file
 def run(scenario, project_dir, options)
   build_config(scenario, project_dir, options)
-  build_vms(project_dir, options)
+  build_vms(scenario, project_dir, options)
 end
 
 def default_project_dir
@@ -283,17 +307,25 @@ def delete_all_projects
   FileUtils.rm_r(Dir.glob("#{PROJECTS_DIR}/*"))
 end
 
+# returns an array containing the system names from the scenario
 def get_vm_names(scenario)
   vm_names = []
   parser = Nori.new
-  scenario_hash = parser.parse(File.read(scenario))['scenario']
+  scenario_hash = parser.parse(File.read(scenario))
+  Print.debug "scenario_hash: #{scenario_hash}"
+  if scenario_hash.key?('scenario') # work around for a parsing quirk
+    scenario_hash = scenario_hash['scenario']
+  end
   if scenario_hash['system'].is_a? Array
     scenario_hash['system'].each do |system|
       vm_names << system['system_name']
     end
-  else
+  elsif scenario_hash['system'].is_a? Hash
     vm_names << scenario_hash['system']['system_name']
+  else
+    Print.debug "Not an array or hash?: #{scenario_hash['system']}"
   end
+  Print.debug vm_names.to_s
   vm_names
 end
 
@@ -343,6 +375,7 @@ opts = GetoptLong.new(
     ['--ovirtauthz', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirt-cluster', GetoptLong::REQUIRED_ARGUMENT],
     ['--ovirt-network', GetoptLong::REQUIRED_ARGUMENT],
+    ['--ovirt-affinity-group', GetoptLong::REQUIRED_ARGUMENT],
     ['--snapshot', GetoptLong::NO_ARGUMENT],
 )
 
@@ -431,6 +464,9 @@ opts.each do |opt, arg|
     when '--ovirt-network'
       Print.info "Ovirt Network Name : #{arg}"
       options[:ovirtnetwork] = arg
+    when '--ovirt-affinity-group'
+      Print.info "Ovirt Affinity Group : #{arg}"
+      options[:ovirtaffinitygroup] = arg
     when '--snapshot'
       Print.info "Taking snapshots when VMs are created"
       options[:snapshot] = true
@@ -438,7 +474,7 @@ opts.each do |opt, arg|
     else
       Print.err "Argument not valid: #{arg}"
       usage
-      exit
+      exit 1
   end
 end
 
@@ -446,7 +482,7 @@ end
 if ARGV.length < 1
   Print.err 'Missing command'
   usage
-  exit
+  exit 1
 end
 
 # process command
@@ -459,25 +495,29 @@ case ARGV[0]
     build_config(scenario, project_dir, options)
   when 'build-vms', 'v'
     if project_dir
-      build_vms(project_dir, options)
+      build_vms(scenario, project_dir, options)
     else
       Print.err 'Please specify project directory to read'
       usage
-      exit
+      exit 1
     end
 
   when 'create-forensic-image'
     image_type = options.has_key?(:forensic_image_type) ? options[:forensic_image_type] : 'raw';
 
     if project_dir
-      build_vms(project_dir, options)
+      build_vms(scenario, project_dir, options)
       make_forensic_image(project_dir, nil, image_type)
     else
       project_dir = default_project_dir unless project_dir
       build_config(scenario, project_dir, options)
-      build_vms(project_dir, options)
+      build_vms(scenario, project_dir, options)
       make_forensic_image(project_dir, nil, image_type)
     end
+
+  when 'ovirt-post-build'
+    ovirt_post_build(options, scenario, project_dir)
+    exit 0
 
   when 'list-scenarios'
     list_scenarios
@@ -495,5 +535,5 @@ case ARGV[0]
   else
     Print.err "Command not valid: #{ARGV[0]}"
     usage
-    exit
+    exit 1
 end

@@ -46,7 +46,7 @@ class XmlScenarioGenerator
     # (we just output the end result in terms of literal values)
     if selected_module.write_to_module_with_id != ''
       xml.comment "Used to calculate values: #{selected_module.module_path}"
-      xml.comment "  (inputs: #{selected_module.received_inputs.inspect}, outputs: #{selected_module.output.inspect})"
+      xml.comment "  (inputs: #{selected_module.received_inputs.inspect.encode(:xml => :text).gsub('--', '-')}, outputs: #{selected_module.output.inspect.encode(:xml => :text).gsub('--', '-')})"
       return
     end
     case selected_module.module_type

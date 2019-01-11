@@ -163,6 +163,117 @@ class OVirtFunctions
     end
   end
 
+  def self.assign_networks(options, scenario_path, vm_names)
+    vms = []
+    Print.debug vm_names.to_s
+    ovirt_connection = get_ovirt_connection(options)
+    ovirt_vm_names = build_ovirt_names(scenario_path, options[:prefix], vm_names)
+    ovirt_vm_names.each do |vm_name|
+      Print.debug vm_name
+      vms << vms_service(ovirt_connection).list(search: "name=#{vm_name}")
+    end
+
+    Print.debug vms.to_s
+
+    network_name = options[:ovirtnetwork]
+    network_network = nil
+    network_profile = nil
+    # Replace 'network' with 'snoop' where the system name contains snoop
+    snoop_network_name = network_name.gsub(/network/, 'snoop')
+    snoop_profile = nil
+
+    # get the service that manages the nics
+    vnic_profiles_service = ovirt_connection.system_service.vnic_profiles_service
+
+    vnic_profiles_service.list.shuffle.each do |vnic_profile|
+
+      if vnic_profile.name =~ /#{network_name}/
+        Print.info "Found: #{vnic_profile.name} (#{vnic_profile.network.id})"
+        network_profile = vnic_profile
+        network_network = vnic_profile.network
+
+        vnic_profiles_service.list.each do |vnic_snoop_profile|
+            if vnic_snoop_profile.name =~ /snoop/ && vnic_snoop_profile.network.id == network_network.id
+              Print.info "Found: #{vnic_snoop_profile.name} (#{vnic_snoop_profile.network.id})"
+              snoop_profile = vnic_snoop_profile
+            end
+        end
+
+        break
+      end
+    end
+
+    vms.each do |vm_list|
+      vm_list.each do |vm|
+        Print.std " Assigning network to: #{vm.name}"
+        begin
+          # find the service that manages that vm
+          vm_service = vms_service(ovirt_connection).vm_service(vm.id)
+
+          # find the service that manages the nics of that vm
+          nics_service = vm_service.nics_service
+          # set the first nic
+          nic = nics_service.list.first
+          selected_profile = nil
+
+          if vm.name =~ /snoop/
+            Print.info "  Assigning network: #{snoop_network_name}"
+            selected_profile = snoop_profile
+          else
+            Print.info "  Assigning network: #{network_name}"
+            selected_profile = network_profile
+          end
+
+          # save profile changes
+          nic.vnic_profile = selected_profile
+          update = {}
+          nics_service.nic_service(nic.id).update(nic, update)
+
+          nic.interface = OvirtSDK4::NicInterface::E1000
+          # if the vm is up we need to unplug the nic while we change the interface
+          if vm.status != 'down'
+            nic.plugged = false
+            nics_service.nic_service(nic.id).update(nic, update)
+          end
+          nic.plugged = true
+          nics_service.nic_service(nic.id).update(nic, update)
+
+          # check if changes saved
+          nic_updated = nics_service.list.first
+          Print.info "#{nic_updated.vnic_profile.name}"
+          if nic_updated.vnic_profile != selected_profile
+            Print.err "NIC profile may not have saved correctly... trying again."
+            # try again!
+            nics_service.nic_service(nic.id).update(nic, update)
+            nics_service.nic_service(nic.id).update(nic, update)
+            nic_updated = nics_service.list.last
+            if nic_updated.vnic_profile != selected_profile
+              Print.err "NIC profile may STILL have not saved correctly!"
+            end
+          end
+
+        rescue Exception => e
+          Print.err 'Error adding network:'
+          Print.err e.message
+        end
+      end
+    end
+  end
+
+  def self.assign_affinity_group(options, scenario_path, vm_names)
+    vms = []
+    ovirt_vm_names = build_ovirt_names(scenario_path, options[:prefix], vm_names)
+    ovirt_vm_names.each do |vm_name|
+      # python affinity group
+      if system "python #{ROOT_DIR}/lib/helpers/ovirt_affinity.py #{options[:ovirtaffinitygroup]} #{vm_name} #{options[:ovirturl]} #{options[:ovirtuser]} #{options[:ovirtpass]}"
+        Print.std "Affinity group assigned"
+      else
+        Print.err "Failed to assign affinity group"
+        exit 1
+      end
+    end
+  end
+
   def self.assign_permissions(options, scenario_path, vm_names)
     ovirt_connection = get_ovirt_connection(options)
     username = options[:prefix].chomp

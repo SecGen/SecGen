@@ -4,7 +4,7 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-	<name>Hacker vs hacker 1</name>
+	<name>Hacker vs Hackerbot 1</name>
   <author>Z. Cliffe Schreuders</author>
   <description>A Hackerbot test.</description>
 
@@ -14,7 +14,7 @@
 
 	<system>
 		<system_name>desktop</system_name>
-		<base distro="Debian 7.8" type="desktop" name="KDE"/>
+		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<input into_datastore="IP_addresses">
 			<value>172.16.0.2</value>
@@ -37,7 +37,7 @@
 					</generator>
 				</input>
 				<input into="password" into_datastore="desktop_login_password">
-					<generator type="strong_password_generator"/>
+					<value>tiaspbiqe2r</value>
 				</input>
 				<input into="super_user">
 					<value>true</value>
@@ -79,7 +79,7 @@
 					</generator>
 				</input>
 				<input into="password">
-					<generator type="strong_password_generator"/>
+					<value>tiaspbiqe2r</value>
 				</input>
 				<input into="super_user">
 					<value>false</value>
@@ -126,6 +126,9 @@
 		</utility>
 
 		<utility module_path=".*kde_minimal">
+			<input into="autologin_user">
+				<datastore access="0" access_json="['username']">accounts</datastore>
+			</input>
 			<input into="accounts">
 				<datastore>accounts</datastore>
 			</input>
@@ -175,7 +178,8 @@
 
 	<system>
 		<system_name>backup_server</system_name>
-		<base platform="linux" distro="Debian 7.8"/>
+		<!-- TODO: server template not working -->
+		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<utility module_path=".*parameterised_accounts">
 			<input into="accounts">

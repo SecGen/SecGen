@@ -4,7 +4,7 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-	<name>Hacker vs hacker 2</name>
+	<name>Hacker vs Hackerbot 2</name>
 	<author>Z. Cliffe Schreuders</author>
 	<description>A Hackerbot test.</description>
 
@@ -14,13 +14,14 @@
 
 	<system>
 		<system_name>desktop</system_name>
-		<base distro="Debian 7.8" type="desktop" name="KDE"/>
+		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<input into_datastore="IP_addresses">
 			<value>172.16.0.2</value>
 			<value>172.16.0.3</value>
 			<value>172.16.0.4</value>
 			<value>172.16.0.5</value>
+			<value>172.16.0.6</value>
 		</input>
 
 		<input into_datastore="organisation">
@@ -30,7 +31,7 @@
 		<!--generate two accounts, YOU and someone else-->
 		<input into_datastore="accounts">
 			<generator type="account">
-				<input into="username">
+				<input into="username" into_datastore="main_username">
 					<generator type="random_word_generator">
 						<input into="wordlist">
 							<value>mythical_creatures</value>
@@ -38,7 +39,7 @@
 					</generator>
 				</input>
 				<input into="password" into_datastore="desktop_login_password">
-					<generator type="strong_password_generator"/>
+					<value>tiaspbiqe2r</value>
 				</input>
 				<input into="super_user">
 					<value>true</value>
@@ -136,6 +137,9 @@
 		</utility>
 
 		<utility module_path=".*kde_minimal">
+			<input into="autologin_user">
+				<datastore access="0" access_json="['username']">accounts</datastore>
+			</input>
 			<input into="accounts">
 				<datastore>accounts</datastore>
 			</input>
@@ -183,8 +187,8 @@
 
 
 	<system>
-		<system_name>ids_server</system_name>
-		<base distro="Debian 7.8" type="desktop" name="KDE"/>
+		<system_name>ids_snoop</system_name>
+		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<utility module_path=".*parameterised_accounts">
 			<input into="accounts">
@@ -247,7 +251,7 @@
 
 	<system>
 		<system_name>web_server</system_name>
-		<base platform="linux" distro="Debian 7.8" name="Server"/>
+		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<utility module_path=".*parameterised_accounts">
 			<input into="accounts">
@@ -308,6 +312,9 @@
 					<input into="web_server_ip">
 						<datastore access="2">IP_addresses</datastore>
 					</input>
+					<input into="compromised_server_ip">
+						<datastore access="4">IP_addresses</datastore>
+					</input>
 					<input into="hackerbot_server_ip">
 						<datastore access="3">IP_addresses</datastore>
 					</input>
@@ -326,6 +333,71 @@
 				<generator type="strong_password_generator"/>
 			</input>
 		</build>
+	</system>
+
+  <!-- no interaction with Hackerbot, just some hidden flags -->
+	<system>
+		<system_name>compromised_server</system_name>
+		<base distro="Debian 9" type="desktop" name="KDE"/>
+
+		<input into_datastore="hidden_string">
+			<generator module_path=".*random_hex"/>
+		</input>
+
+		<input into_datastore="accounts_compromised">
+			<generator type="account">
+				<input into="username">
+					<datastore>main_username</datastore>
+				</input>
+				<input into="password">
+					<value>tiaspbiqe2r</value>
+				</input>
+				<input into="super_user">
+					<value>true</value>
+				</input>
+				<input into="leaked_filenames">
+					<value>u_r_powned-hme</value>
+					<value>.hidden_flag-hme</value>
+					<datastore>hidden_string</datastore>
+				</input>
+				<input into="strings_to_leak">
+					<generator type="random_line_generator">
+						<input into="linelist">
+							<value>powned_messages</value>
+						</input>
+					</generator>
+					<generator type="flag_generator" />
+					<generator type="flag_generator" />
+				</input>
+			</generator>
+		</input>
+
+		<!-- rootkit has to be defined before accounts are created -->
+		<utility module_path=".*alias_rootkit">
+			<input into="hidden_strings">
+				<value>nc</value>
+				<value>hme</value>
+				<datastore>hidden_string</datastore>
+			</input>
+		</utility>
+
+		<utility module_path=".*parameterised_accounts">
+			<input into="accounts">
+				<datastore>accounts_compromised</datastore>
+			</input>
+		</utility>
+
+		<vulnerability module_path=".*ssh_root_login">
+			<input into="root_password">
+				<datastore>hackerbot_access_root_password</datastore>
+			</input>
+		</vulnerability>
+
+		<network type="private_network" >
+			<input into="IP_address">
+				<datastore access="4">IP_addresses</datastore>
+			</input>
+		</network>
 	</system>
 
 </scenario>

@@ -2,32 +2,24 @@
 
 ## Troubleshooting with oVirt during the test
 
-In the unlikely event you experience technical issues with our infrastructure during the test, please keep the following in mind.
-
-* If your Snort alert file fills with "BAD TRAFFIC" alerts, let us know asap and we can fix that for you by changing the network interface type.
-
-* If copy and paste stops working, simply copy your flags to a text file rather than the submission site, and let us know when you finish the test so we can help you submit these before you leave.
-
-* If a VM looses its IP addresses (particularly the IDS server), simply run `sudo ifconfig eth1 *IP_ADDRESS*`, where `*IP_ADDRESS*` is the expected IP address (listed in the section below).
-
-* If you experience any technical issues, which you believe to be outside your control, let us know before you leave the room. However, keep in mind we won't give hints for the actual test challenges.
+In the unlikely event you experience technical issues with our infrastructure during the test, which you believe to be outside your control, let us know before you leave the room. However, keep in mind we won't give hints for the actual test challenges.
 
 ## Getting started
-### VMs in this lab
+### VMs in this test
 
 ==Start these VMs== (if you haven't already):
 
 - hackerbot_server (leave it running, you don't log into this)
 - ids_server (IP address: <%= $ids_server_ip %>)
 - web_server (IP address: <%= $web_server_ip %>)
+- compromised_server (IP address: <%= $compromised_server_ip %>)
 - desktop
 
-All of these VMs need to be running to complete the lab.
+All of these VMs need to be running to complete the test.
 
-### Your login details for the "desktop" and "backup_server" VMs
+### Your login details for the "desktop" and server VMs
 User: <%= $main_user %>
 Password: <%= $main_password %>
-(You can copy-paste this password!)
 
 You won't login to the hackerbot_server, but all the VMs need to be running to complete the lab.
 
@@ -63,16 +55,16 @@ Some commands you may find useful include:
 * `lsof`
 * `top`
 
-Remember you can learn more about the commands by running: 
+Remember you can learn more about the commands by running:
 ```bash
 man *command*
 ```
 
 ## Getting Snort up and running
 
-**On the ids_server VM:**
+**On the ids_snoop VM:**
 
-==Change Snort's output== to something more readable:
+==Ensure Snort's output== includes something more readable:
 
 ```bash
 sudo vi /etc/snort/snort.conf
@@ -81,24 +73,10 @@ sudo vi /etc/snort/snort.conf
 
 > ":wq" to write changes and quit)
 
-==Add the following lines:==
+==Check for the following line:==
 `output alert_fast`
 
-`include $RULE_PATH/my.rules`
-
-==Create a new rules file:==
-
-```bash
-sudo touch /etc/snort/rules/my.rules
-```
-
-Let us edit the rules file without sudo:
-
-```bash
-sudo chown <%= $main_user %> /etc/snort/rules/my.rules
-```
-
-==Change Snort's interface== to the interface with IP address <%= $ids_server_ip %> (likely eth1), and set the local network to your IP address range (or "any"):
+==Ensure Snort's interface is correctly configured== to the interface with IP address <%= $ids_server_ip %> (likely ens3), and set the local network to your IP address range (or "any"):
 
 ```bash
 sudo vi /etc/snort/snort.debian.conf

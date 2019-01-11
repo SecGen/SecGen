@@ -38,4 +38,7 @@
   <!--</attack>-->
   <!--<attack_command>sshpass -p {{root_password}} ssh -oStrictHostKeyChecking=no root@{{IP_address}}</attack_command>-->
 
+  <requires>
+    <type>update</type>
+  </requires>
 </vulnerability>

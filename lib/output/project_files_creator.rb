@@ -65,7 +65,7 @@ class ProjectFilesCreator
       Print.std "Creating Puppet modules librarian-puppet file: #{pfile}"
       template_based_file_write(PUPPET_TEMPLATE_FILE, pfile)
       Print.std 'Preparing puppet modules using librarian-puppet'
-      librarian_output = GemExec.exe('librarian-puppet', path, 'install')
+      librarian_output = GemExec.exe('librarian-puppet', path, 'install --verbose')
       if librarian_output[:status] != 0
         Print.err 'Failed to prepare puppet modules!'
         abort
@@ -142,14 +142,14 @@ class ProjectFilesCreator
       Print.err "Error writing file: #{e.message}"
       abort
     end
-    
+
     # Create the CTFd zip file for import
     ctfdfile = "#{@out_dir}/CTFd_importable.zip"
     Print.std "Creating CTFd configuration: #{ctfdfile}"
-    
+
     ctfd_generator = CTFdGenerator.new(@systems, @scenario, @time)
     ctfd_files = ctfd_generator.ctfd_files
-    
+
     # zip up the CTFd export
     begin
       Zip::ZipFile.open(ctfdfile, Zip::ZipFile::CREATE) { |zipfile|
@@ -171,8 +171,8 @@ class ProjectFilesCreator
       Print.err "Error writing zip file: #{e.message}"
       abort
     end
-    
-    
+
+
     Print.std "VM(s) can be built using 'vagrant up' in #{@out_dir}"
 
   end
@@ -234,6 +234,13 @@ class ProjectFilesCreator
     # Replace the last octet in our split_ip array and return the IP
     split_ip[3] = last_octet.to_s
     split_ip.join('.')
+  end
+
+  # Replace 'network' with 'snoop' where the system name contains snoop
+  def get_ovirt_network_name(system_name, network_name)
+    split_name = network_name.split('-')
+    split_name[1] = 'snoop' if system_name.include? 'snoop'
+    split_name.join('-')
   end
 
 # Returns binding for erb files (access to variables in this classes scope)
