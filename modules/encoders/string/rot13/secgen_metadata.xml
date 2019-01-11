@@ -13,6 +13,7 @@
   <type>alpha_reversible</type>
   <platform>linux</platform>
   <platform>windows</platform>
+  <difficulty>low</difficulty>
 
   <!--optional hints-->
   <hint>Alphabet rotation cipher by 13 positions.

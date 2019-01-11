@@ -16,6 +16,7 @@
   <type>ascii_reversible</type>
   <platform>linux</platform>
   <platform>windows</platform>
+  <difficulty>medium</difficulty>
 
   <hint>Encoded with a rotation cipher based on the ASCII value using a random key. Uses the 94 printable ascii
     characters.

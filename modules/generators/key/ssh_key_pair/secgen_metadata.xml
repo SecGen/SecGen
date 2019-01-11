@@ -9,6 +9,7 @@
   <description>Generates a pair of RSA 2048 ssh keys.</description>
 
   <type>ssh_key_generator</type>
+  <type>ssh_key_pair</type>
   <platform>linux</platform>
 
   <output_type>ssh_key_pair</output_type>

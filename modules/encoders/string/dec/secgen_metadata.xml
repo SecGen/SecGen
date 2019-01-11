@@ -13,6 +13,7 @@
   <type>string_encoder</type>
   <platform>linux</platform>
   <platform>windows</platform>
+  <difficulty>low</difficulty>
 
   <solution>Convert the decimal (base 10) string into its ASCII value, character by character in sets of 3.
     Use an ascii table e.g. http://www.asciitable.com OR an online converter e.g. https://www.branah.com/ascii-converter

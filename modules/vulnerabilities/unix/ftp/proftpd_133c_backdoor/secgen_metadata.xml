@@ -15,6 +15,7 @@
   <privilege>root_rwx</privilege>
   <access>remote</access>
   <platform>linux</platform>
+  <difficulty>low</difficulty>
 
   <read_fact>server_name</read_fact>
   <read_fact>strings_to_leak</read_fact>
@@ -42,7 +43,6 @@
   </default_input>
 
   <!--optional vulnerability details-->
-  <difficulty>low</difficulty>
   <!--<cve></cve>-->
   <cvss_base_score>10</cvss_base_score>
   <cvss_vector>AV:N/AC:L/Au:N/C:C/I:C/A:C</cvss_vector>

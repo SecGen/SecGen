@@ -19,20 +19,6 @@
 
   <read_fact>accounts</read_fact>
 
-  <default_input into="accounts">
-    <generator type="account">
-      <input into="username">
-        <generator module_path=".*username.*"/>
-      </input>
-      <input into="password">
-        <generator type="strong_password_generator"/>
-      </input>
-      <input into="super_user">
-        <value>false</value>
-      </input>
-    </generator>
-  </default_input>
-
   <requires>
     <module_path>utilities/unix/system/accounts</module_path>
   </requires>

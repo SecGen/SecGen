@@ -9,6 +9,8 @@
   <description>Uses Ruby's SecureRandom to generate a message made up of hex digits (a-f0-9).</description>
 
   <type>string_generator</type>
+  <type>hex_generator</type>
+  <type>random_hex</type>
   <type>local_calculation</type>
   <platform>linux</platform>
   <platform>windows</platform>

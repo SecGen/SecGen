@@ -15,6 +15,7 @@
   <type>cipher_encoder</type>
   <platform>linux</platform>
   <platform>windows</platform>
+  <difficulty>low</difficulty>
 
   <hint>Encoded with a rotation/shift cipher using a random key. Watch: https://www.youtube.com/watch?v=o6TPx1Co_wg</hint>
   <solution>Decoding tools are available online e.g. http://www.dcode.fr/rot-cipher</solution>

@@ -22,6 +22,17 @@ gem 'programr', :git => "http://github.com/robertjwhitney/programr.git"
 gem 'process_helper'
 gem 'ovirt-engine-sdk'
 gem 'duplicate'
+gem 'smbhash'
+gem 'digest-whirlpool'
+gem 'digest-siphash'
+gem 'scrypt'
+gem 'braille', :git => "http://github.com/nicanor/braille.git"
+gem 'bases'
+gem 'huffman'
+gem 'ruby-graphviz'
+gem 'rsa'
+gem 'gpgmeh'
+gem 'digest-sha3', :git => "http://github.com/izetex/digest-sha3-ruby"
 
 #development only gems go here
 group :test, :development do

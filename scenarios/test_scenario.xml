@@ -1,25 +1,22 @@
 <?xml version="1.0"?>
 
 <scenario xmlns="http://www.github/cliffe/SecGen/scenario"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
 
-  <!-- an example remote storage system, with a remotely exploitable vulnerability that can then be escalated to root -->
-  <system>
-    <system_name>test_stanif_clone</system_name>
-    <base distro="Kali" name="MSF" />
+	<!-- an example remote storage system, with a remotely exploitable vulnerability that can then be escalated to root -->
+	<system>
+		<system_name>userspice</system_name>
+		<base distro="Debian 9" type="desktop" name="KDE"/>
 
-    <input into_datastore="IP_addresses">
-      <value>172.16.0.2</value>
-      <value>172.16.0.3</value>
-    </input>
+		<service module_path=".*samba"/>
 
-    <network type="private_network">
-      <input into="IP_address">
-        <datastore access="0">IP_addresses</datastore>
-      </input>
-    </network>
+		<network type="private_network">
+			<input into="IP_address">
+				<value>172.16.0.3</value>
+			</input>
+		</network>
 
-  </system>
+	</system>
 
 </scenario>

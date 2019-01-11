@@ -40,6 +40,21 @@ class StringEncoder
 
   def read_arguments
     # Get command line arguments
+    Print.local 'Reading args from STDIN'
+    if ARGV.size == 0
+      begin
+        args_array = []
+        ARGF.each do |arg|
+          arg.strip.split(' ').each do |split|
+            args_array << split
+          end
+        end
+        ARGV.unshift(*args_array)
+      rescue
+        # Do nothing...
+      end
+    end
+
     opts = get_options
 
     # process option arguments
@@ -101,6 +116,7 @@ class StringEncoder
     Print.local module_name
 
     read_arguments
+    enforce_utf8
 
     Print.local_verbose "Encoding '#{encoding_print_string}'"
     encode_all
@@ -115,6 +131,29 @@ class StringEncoder
       Print.local_verbose "(Displaying 1000/#{length} length output)"
     end
 
+    enforce_utf8
+    print_outputs
+  end
+
+  # Encode local instance variables as UTF-8
+  def enforce_utf8
+    self.instance_variables.each do |iv|
+      iv_value = self.instance_variable_get(iv)
+      if iv_value.is_a? Array
+        utf8 = []
+        iv_value.map {|element|
+          if element.is_a? String
+            utf8 << element.force_encoding('UTF-8')
+          end
+        }
+        self.instance_variable_set(iv, utf8)
+      elsif iv_value.is_a? String
+        self.instance_variable_set(iv, iv_value.force_encoding('UTF-8'))
+      end
+    end
+  end
+
+  def print_outputs
     puts has_base64_inputs ? base64_encode_outputs : self.outputs
   end
 

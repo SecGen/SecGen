@@ -170,18 +170,18 @@ def build_vms(scenario, project_dir, options)
           end
         else   # TODO:  elsif vagrant_output[:exception].type == ProcessHelper::TimeoutError   >destroy individually broken vms as above?
           Print.err 'Vagrant up timeout, destroying VMs and retrying...'
-          # GemExec.exe('vagrant', project_dir, 'destroy -f')
+          GemExec.exe('vagrant', project_dir, 'destroy -f')
         end
       else
         Print.err 'Error provisioning VMs, destroying VMs and exiting SecGen.'
-        # GemExec.exe('vagrant', project_dir, 'destroy -f')
+        GemExec.exe('vagrant', project_dir, 'destroy -f')
         exit 1
       end
     end
     retry_count -= 1
   end
   if successful_creation
-    ovirt_post_build(options, scenario, project_dir)
+    ovirt_post_build(options, scenario, project_dir) if OVirtFunctions.provider_ovirt?(options)
   else
     Print.err "Failed to build VMs"
     exit 1

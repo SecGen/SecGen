@@ -13,6 +13,7 @@
   <privilege>info_leak</privilege>
   <access>remote</access>
   <platform>linux</platform>
+  <difficulty>low</difficulty>
 
   <read_fact>strings_to_leak</read_fact>
   <read_fact>leaked_filenames</read_fact>
@@ -62,9 +63,6 @@
   <default_input into="guests_allowed">
     <value>true</value>
   </default_input>
-
-  <!--optional vulnerability details-->
-  <difficulty>low</difficulty>
 
   <!--optional details-->
   <reference>http://allarsblog.com/2015/11/07/Setting-Up-Samba-No-Security/</reference>

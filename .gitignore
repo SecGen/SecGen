@@ -9,6 +9,7 @@ batch/failed
 batch/successful
 lib/test/tmp
 modules/generators/challenges/exif/secgen_local/tmp.jpg
-modules/generators/challenges/compression/zip/secgen_local/archive.zip
+modules/generators/challenges/compression/zip/tmp
 modules/generators/challenges/image/random_jpg/secgen_local/tmp.jpg
 secgen.conf
+modules/encoders/compression/huffman/tmp

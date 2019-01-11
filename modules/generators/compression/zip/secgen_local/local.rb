@@ -14,10 +14,11 @@ class ZipGenerator < StringEncoder
     self.file_name = ''
     self.strings_to_leak = []
     self.password = ''
+    Dir.mkdir '../tmp/' unless Dir.exists? '../tmp/'
   end
 
   def encode_all
-    zip_file_path = GENERATORS_DIR + 'compression/zip/secgen_local/archive.zip'
+    zip_file_path = GENERATORS_DIR + 'compression/zip/tmp/archive.zip'
     file_contents = ''
     data = self.strings_to_leak.join("\n")
 
