@@ -27,9 +27,9 @@ class EncodingFunctions
       if element.is_a? String
         utf8 << element.force_encoding('UTF-8')
       elsif element.is_a? Hash
-        utf8 << EncodingFunctions::hash_to_utf8(value)
+        utf8 << EncodingFunctions::hash_to_utf8(element)
       elsif element.is_a? Array
-        array_to_utf8(value)
+        array_to_utf8(element)
       end
     }
     utf8
