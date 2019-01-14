@@ -4,7 +4,7 @@ define parameterised_accounts::account (
   $super_user,
   $strings_to_leak,
   $leaked_filenames,
-  $data_to_leak
+  $data_to_leak = []
 ) {
   # ::accounts::user changes permissions on group, passwd, shadow etc. so needs to run before
   if defined('writable_groups::config') {
@@ -58,12 +58,14 @@ define parameterised_accounts::account (
     leaked_from       => "accounts_$username",
   }
 
-  ::secgen_functions::leak_data { "$username-data-leak":
-    storage_directory => "/home/$username/",
-    data_to_leak      => $data_to_leak,
-    owner             => $username,
-    group             => $username,
-    mode              => '0444',
-    leaked_from       => "accounts_$username",
+  unless $data_to_leak == undef or $data_to_leak == [] or $data_to_leak == [''] {
+    ::secgen_functions::leak_data { "$username-data-leak":
+      storage_directory => "/home/$username/",
+      data_to_leak      => $data_to_leak,
+      owner             => $username,
+      group             => $username,
+      mode              => '0444',
+      leaked_from       => "accounts_$username",
+    }
   }
 }
