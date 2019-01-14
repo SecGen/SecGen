@@ -1,5 +1,6 @@
 require 'getoptlong'
 require_relative '../helpers/constants'
+require_relative './local_encoding_functions.rb'
 require 'json'
 require 'base64'
 
@@ -140,15 +141,11 @@ class StringEncoder
     self.instance_variables.each do |iv|
       iv_value = self.instance_variable_get(iv)
       if iv_value.is_a? Array
-        utf8 = []
-        iv_value.map {|element|
-          if element.is_a? String
-            utf8 << element.force_encoding('UTF-8')
-          end
-        }
-        self.instance_variable_set(iv, utf8)
+        self.instance_variable_set(iv, EncodingFunctions::array_to_utf8(iv_value))
+      elsif iv_value.is_a? Hash
+        self.instance_variable_set(iv, EncodingFunctions::hash_to_utf8(iv_value))
       elsif iv_value.is_a? String
-        self.instance_variable_set(iv, iv_value.force_encoding('UTF-8'))
+        self.instance_variable_set(iv, EncodingFunctions::string_to_utf8(iv_value))
       end
     end
   end
