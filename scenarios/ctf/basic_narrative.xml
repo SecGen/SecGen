@@ -233,6 +233,9 @@
     </vulnerability>
 
     <service name="Random Parameterised Website">
+      <input into="theme">
+        <value>journal.min.css</value>
+      </input>
       <input into="main_page_paragraph_content">
         <generator type="html_snippet_generator">
           <input into="heading">
