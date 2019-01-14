@@ -42,7 +42,7 @@ class parameterised_website::install {
 
   $white_text = $secgen_parameters['white_text']
 
-  if $intro_paragraph != '' {
+  if $intro_paragraph != [] and $intro_paragraph != '' {
     $main_page_paragraph_content = $intro_paragraph
   } else {
     $main_page_paragraph_content = $secgen_parameters['main_page_paragraph_content']

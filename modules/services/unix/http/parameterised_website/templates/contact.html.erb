@@ -28,20 +28,20 @@
           <p><%= @manager_profile['email_address'] %></p>
         </div>
       </div>
+      <% if @employees and @employees.length > 0 -%>
       <div class="col-lg-12" id="employees">
         <h2>Employees</h2>
           <% @employees.each do |employee| -%>
-            <div class="col-lg-4">
-            <div class="employee">
-              <p><strong><%= employee['name'] %></strong></p>
-              <p><%= employee['phone_number'] %></p>
-              <p><%= employee['email_address'] %></p>
-            </div>
-            </div>
-          <% end %>
+        <div class="col-lg-4">
+          <div class="employee">
+            <p><strong><%= employee['name'] %></strong></p>
+            <p><%= employee['phone_number'] %></p>
+            <p><%= employee['email_address'] %></p>
           </div>
         </div>
+        <% end %>
       </div>
+      <% end -%>
     </div>
   </div>
   <%= scope.function_template(['parameterised_website/subtemplates/scripts.html.erb']) %>
