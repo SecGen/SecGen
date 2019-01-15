@@ -4,7 +4,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/utility">
   <name>Git VCS</name>
-  <author>Puppetlabs</author>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
   <description>Git version control / source code management system.</description>
@@ -16,11 +15,9 @@
   <reference>https://git-scm.com/</reference>
   <software_name>git</software_name>
 
-  <read_fact>user</read_fact>
-
-  <default_input into="user">
-    <generator type="person"/>
-  </default_input>
+  <conflict>
+    <name>Stretch</name>
+  </conflict>
 
   <requires>
     <type>update</type>
