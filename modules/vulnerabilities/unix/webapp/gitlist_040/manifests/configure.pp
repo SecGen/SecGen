@@ -49,8 +49,10 @@ class gitlist_040::configure {
     before            => Exec['initial_commit_leaked_files_repo']
   }
 
+  $git_args = '-c user.name="gitlist" -c user.email="git@list.com"'
+
   exec { 'initial_commit_leaked_files_repo':
     cwd     => $leaked_files_path,
-    command => "git add *; git commit -a -m 'initial commit'",
+    command => "git $git_args add *; git $git_args commit -a -m 'initial commit'",
   }
 }
