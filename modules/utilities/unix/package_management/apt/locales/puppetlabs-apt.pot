@@ -1,0 +1,177 @@
+# #-#-#-#-#  puppetlabs-apt.pot (puppetlabs-apt 6.0.0-27-gbb0f842)  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2018 Puppet, Inc.
+# This file is distributed under the same license as the puppetlabs-apt package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+# #-#-#-#-#  puppetlabs-apt_metadata.pot (PACKAGE VERSION)  #-#-#-#-#
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"#-#-#-#-#  puppet.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-21 09:17:33 +0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 2.0.0\n"
+"#-#-#-#-#  puppetlabs-apt.pot (puppetlabs-apt 6.0.0-27-gbb0f842)  #-#-#-#-#\n"
+"Project-Id-Version: puppetlabs-apt 6.0.0-27-gbb0f842\n"
+"\n"
+"Report-Msgid-Bugs-To: docs@puppet.com\n"
+"POT-Creation-Date: 2018-09-21 09:27+0100\n"
+"PO-Revision-Date: 2018-09-21 09:27+0100\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"#-#-#-#-#  puppetlabs-apt_metadata.pot (PACKAGE VERSION)  #-#-#-#-#\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To:\n"
+"POT-Creation-Date: 2018-09-21T09:17:39+01:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 2.0.0\n"
+
+#. ./manifests/backports.pp:69
+msgid ""
+"If not on Debian or Ubuntu, you must explicitly pass location, release, "
+"repos, and key"
+msgstr ""
+
+#. ./manifests/backports.pp:95
+msgid "pin must be either a string, number or hash"
+msgstr ""
+
+#. ./manifests/conf.pp:25
+msgid "Need to pass in content parameter"
+msgstr ""
+
+#. ./manifests/init.pp:143 ./manifests/params.pp:8
+msgid "This module only works on Debian or derivatives like Ubuntu"
+msgstr ""
+
+#. ./manifests/key.pp:47
+msgid "key with id %{_id} already ensured as absent"
+msgstr ""
+
+#. ./manifests/key.pp:81
+msgid "key with id %{_id} already ensured as present"
+msgstr ""
+
+#. ./manifests/key.pp:97
+msgid "Invalid 'ensure' value '%{_ensure}' for apt::key"
+msgstr ""
+
+#. ./manifests/params.pp:100
+msgid "Unable to determine value for fact os[\"name\"]"
+msgstr ""
+
+#. ./manifests/pin.pp:84
+msgid "parameters release, origin, and version are mutually exclusive"
+msgstr ""
+
+#. ./manifests/pin.pp:88
+msgid "parameter version cannot be used in general form"
+msgstr ""
+
+#. ./manifests/pin.pp:91
+msgid "parameters release and origin are mutually exclusive"
+msgstr ""
+
+#. ./manifests/ppa.pp:30 ./manifests/source.pp:79
+msgid "lsbdistcodename fact not available: release parameter required"
+msgstr ""
+
+#. ./manifests/ppa.pp:34
+msgid "apt::ppa is not currently supported on Debian."
+msgstr ""
+
+#. ./manifests/setting.pp:31
+msgid "apt::setting cannot have both content and source"
+msgstr ""
+
+#. ./manifests/setting.pp:35
+msgid "apt::setting needs either of content or source"
+msgstr ""
+
+#. ./manifests/setting.pp:43
+msgid ""
+"apt::setting resource name/title must start with either 'conf-', 'pref-' or "
+"'list-'"
+msgstr ""
+
+#. ./manifests/setting.pp:49
+msgid "apt::setting priority must be an integer or a zero-padded integer"
+msgstr ""
+
+#. ./manifests/source.pp:87
+msgid "cannot create a source entry without specifying a location"
+msgstr ""
+
+#. ./manifests/source.pp:101
+msgid "key hash must contain at least an id entry"
+msgstr ""
+
+#. ./manifests/source.pp:140
+msgid "Received invalid value for pin parameter"
+msgstr ""
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:124
+msgid "The file %{_value} does not exist"
+msgstr ""
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:144
+msgid "%{_e} for %{_resource}"
+msgstr ""
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:146
+msgid "could not resolve %{_resource}"
+msgstr ""
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:173
+msgid ""
+"The id in your manifest %{_resource} and the fingerprint from content/source "
+"don't match. Check for an error in the id and content/source is legitimate."
+msgstr ""
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:191
+#: ../lib/puppet/provider/apt_key/apt_key.rb:227
+msgid ""
+"an unexpected condition occurred while trying to add the key: %{_resource}"
+msgstr ""
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:243
+msgid "This is a read-only property."
+msgstr ""
+
+#: ../lib/puppet/type/apt_key.rb:27
+msgid "ensure => absent and refresh => true are mutually exclusive"
+msgstr ""
+
+#: ../lib/puppet/type/apt_key.rb:30
+msgid "The properties content and source are mutually exclusive."
+msgstr ""
+
+#: ../lib/puppet/type/apt_key.rb:33
+msgid "The id should be a full fingerprint (40 characters), see README."
+msgstr ""
+
+#. metadata.json
+#: .summary
+msgid ""
+"Provides an interface for managing Apt source, key, and definitions with "
+"Puppet"
+msgstr ""

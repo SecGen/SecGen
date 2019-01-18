@@ -1,0 +1,155 @@
+# #-#-#-#-#  puppetlabs-apt.pot (puppetlabs-apt 6.0.0-27-gbb0f842)  #-#-#-#-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2018 Puppet, Inc.
+# This file is distributed under the same license as the puppetlabs-apt package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+# 
+# #-#-#-#-#  puppetlabs-apt_metadata.pot (PACKAGE VERSION)  #-#-#-#-#
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-21T09:17:39+01:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Eriko Kashiwagi <eriko.55@d5.dion.ne.jp>, 2018\n"
+"Language-Team: Japanese (Japan) (https://www.transifex.com/puppet/teams/41915/ja_JP/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja_JP\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Translate Toolkit 2.0.0\n"
+
+#. ./manifests/backports.pp:69
+msgid ""
+"If not on Debian or Ubuntu, you must explicitly pass location, release, "
+"repos, and key"
+msgstr "DebianまたはUbuntu以外の場合、場所、リリース、リポジトリ、およびキーを明示的に渡す必要があります。"
+
+#. ./manifests/backports.pp:95
+msgid "pin must be either a string, number or hash"
+msgstr "pinは、文字列、数値またはハッシュのいずれかである必要があります。"
+
+#. ./manifests/conf.pp:25
+msgid "Need to pass in content parameter"
+msgstr "contentパラメータを渡す必要があります。"
+
+#. ./manifests/init.pp:143 ./manifests/params.pp:8
+msgid "This module only works on Debian or derivatives like Ubuntu"
+msgstr "本モジュールは、DebianまたはUbuntuなどの派生OSでのみ動作します。"
+
+#. ./manifests/key.pp:47
+msgid "key with id %{_id} already ensured as absent"
+msgstr "id %{_id}のキーは、存在しないことが既に確認されています。"
+
+#. ./manifests/key.pp:81
+msgid "key with id %{_id} already ensured as present"
+msgstr "id %{_id}のキーは、存在することが既に確認されています。"
+
+#. ./manifests/key.pp:97
+msgid "Invalid 'ensure' value '%{_ensure}' for apt::key"
+msgstr "apt::keyの'%{_ensure}'の'ensure'の値が無効です。"
+
+#. ./manifests/params.pp:100
+msgid "Unable to determine value for fact os[\"name\"]"
+msgstr "fact os[\"name\"]の値を特定できません。"
+
+#. ./manifests/pin.pp:84
+msgid "parameters release, origin, and version are mutually exclusive"
+msgstr "パラメータrelease、origin、versionは相互に排他的です。"
+
+#. ./manifests/pin.pp:88
+msgid "parameter version cannot be used in general form"
+msgstr "パラメータのバージョンは、一般的な形式では使用できません"
+
+#. ./manifests/pin.pp:91
+msgid "parameters release and origin are mutually exclusive"
+msgstr "パラメータreleaseとoriginは相互に排他的です。"
+
+#. ./manifests/ppa.pp:30 ./manifests/source.pp:79
+msgid "lsbdistcodename fact not available: release parameter required"
+msgstr "lsbdistcodenameのfactが使用できません。releaseパラメータが必要です。"
+
+#. ./manifests/ppa.pp:34
+msgid "apt::ppa is not currently supported on Debian."
+msgstr "apt::ppaは、現在Debianではサポートされていません。"
+
+#. ./manifests/setting.pp:31
+msgid "apt::setting cannot have both content and source"
+msgstr "apt::settingがcontentとsourceの両方を持つことはできません。"
+
+#. ./manifests/setting.pp:35
+msgid "apt::setting needs either of content or source"
+msgstr "apt::settingには、contentまたはsourceのいずれかが必要です。"
+
+#. ./manifests/setting.pp:43
+msgid ""
+"apt::setting resource name/title must start with either 'conf-', 'pref-' or "
+"'list-'"
+msgstr "apt::settingのリソース名/タイトルの先頭は、'conf-'、'pref-'、'list-'にする必要があります。"
+
+#. ./manifests/setting.pp:49
+msgid "apt::setting priority must be an integer or a zero-padded integer"
+msgstr "apt::settingのpriorityは、整数またはゼロパディングされた整数にする必要があります。"
+
+#. ./manifests/source.pp:87
+msgid "cannot create a source entry without specifying a location"
+msgstr "場所を指定せずにソースエントリを作成することはできません。"
+
+#. ./manifests/source.pp:101
+msgid "key hash must contain at least an id entry"
+msgstr "キーハッシュには、少なくともidエントリを含める必要があります。"
+
+#. ./manifests/source.pp:140
+msgid "Received invalid value for pin parameter"
+msgstr "pinパラメータに無効な値を受信しました。"
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:124
+msgid "The file %{_value} does not exist"
+msgstr "ファイル%{_value}が存在しません。"
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:144
+msgid "%{_e} for %{_resource}"
+msgstr "%{_resource}の%{_e}"
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:146
+msgid "could not resolve %{_resource}"
+msgstr "%{_resource}を解決できませんでした。"
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:173
+msgid ""
+"The id in your manifest %{_resource} and the fingerprint from content/source"
+" don't match. Check for an error in the id and content/source is legitimate."
+msgstr ""
+"マニフェスト%{_resource}に含まれるidと、content/sourceのフィンガープリントが一致しません。idに間違いがないか、content/sourceが正当であるかを確認してください。"
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:191
+#: ../lib/puppet/provider/apt_key/apt_key.rb:227
+msgid ""
+"an unexpected condition occurred while trying to add the key: %{_resource}"
+msgstr "キー%{_resource}の追加中に、予期しない状況が発生しました。"
+
+#: ../lib/puppet/provider/apt_key/apt_key.rb:243
+msgid "This is a read-only property."
+msgstr "これは、読み込み専用のプロパティです。"
+
+#: ../lib/puppet/type/apt_key.rb:27
+msgid "ensure => absent and refresh => true are mutually exclusive"
+msgstr "ensure => absentとrefresh => trueは相互に排他的です。"
+
+#: ../lib/puppet/type/apt_key.rb:30
+msgid "The properties content and source are mutually exclusive."
+msgstr "プロパティcontentとsourceは相互に排他的です。 are mutually exclusive."
+
+#: ../lib/puppet/type/apt_key.rb:33
+msgid "The id should be a full fingerprint (40 characters), see README."
+msgstr "idは完全なフィンガープリント(40文字)である必要があります。READMEを参照してください。"
+
+#. metadata.json
+#: .summary
+msgid ""
+"Provides an interface for managing Apt source, key, and definitions with "
+"Puppet"
+msgstr "Aptソース、キー、および定義をPuppetで管理するためのインターフェースを提供します。"

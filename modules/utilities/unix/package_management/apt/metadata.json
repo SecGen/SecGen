@@ -1,0 +1,47 @@
+{
+  "name": "puppetlabs-apt",
+  "version": "6.2.1",
+  "author": "puppetlabs",
+  "summary": "Provides an interface for managing Apt source, key, and definitions with Puppet",
+  "license": "Apache-2.0",
+  "source": "https://github.com/puppetlabs/puppetlabs-apt",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-apt",
+  "issues_url": "https://tickets.puppetlabs.com/browse/MODULES",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.16.0 < 6.0.0"
+    },
+    {
+      "name": "puppetlabs/translate",
+      "version_requirement": ">= 1.0.0 < 2.0.0"
+    }
+  ],
+  "data_provider": null,
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "8",
+        "9"
+      ]
+    },
+    {
+      "operatingsystem": "Ubuntu",
+      "operatingsystemrelease": [
+        "14.04",
+        "16.04",
+        "18.04"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.8.0 < 7.0.0"
+    }
+  ],
+  "template-url": "https://github.com/puppetlabs/pdk-templates",
+  "template-ref": "heads/master-0-gabccfb1",
+  "pdk-version": "1.7.0"
+}

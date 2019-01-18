@@ -1,0 +1,5 @@
+<% if $apt::auth_conf_entries != [] { -%>
+<% $apt::auth_conf_entries.each | $auth_conf_entry | { -%>
+machine <%= $auth_conf_entry['machine'] %> login <%= $auth_conf_entry['login'] %> password <%= $auth_conf_entry['password'] %>
+<% } -%>
+<% } -%>
