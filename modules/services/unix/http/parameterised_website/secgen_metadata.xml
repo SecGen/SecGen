@@ -56,12 +56,12 @@
     <generator type="website_theme"/>
   </default_input>
 
-  <default_input into="theme">
-    <generator type="website_theme"/>
-  </default_input>
-
   <conflict>
     <module_path>.*parameterised_website</module_path>
+  </conflict>
+
+  <conflict>
+    <type>webapp</type>
   </conflict>
 
   <requires>
