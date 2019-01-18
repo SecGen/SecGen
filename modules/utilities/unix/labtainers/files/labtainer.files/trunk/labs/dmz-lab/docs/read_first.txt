@@ -1,0 +1,6 @@
+The lab manual is at 
+   file://LAB_DOCS/dmz-lab.pdf
+
+You may open these by right clicking
+and select "Open Link".
+

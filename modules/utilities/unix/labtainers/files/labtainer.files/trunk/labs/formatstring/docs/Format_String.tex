@@ -1,0 +1,492 @@
+\input{header}
+
+%\documentclass{article} 
+%\usepackage{graphicx}
+%\usepackage{color}
+%\usepackage[latin1]{inputenc}
+%\usepackage{lgrind}
+
+%\input {highlight.sty}
+
+\lhead{\bfseries SEED Labs -- Format String Vulnerability Lab}
+
+
+\begin{document}
+
+\begin{center}
+{\LARGE Format String Vulnerability Lab}
+\end{center}
+
+\copyrightnotice
+
+
+\section{Lab Overview}
+
+The learning objective of this lab is for students to gain the first-hand
+experience on format-string vulnerability by putting what they have learned 
+about the vulnerability from class into actions.
+The format-string vulnerability is caused by code like 
+{\tt printf(user\_input)}, where the contents of variable
+of {\tt user\_input} is provided by users. 
+This {\tt printf}
+statement can become dangerous, because it can lead to one of the following
+consequences: (1) crash the 
+program, (2) read from an arbitrary memory place, and (3) modify
+the values of an arbitrary memory location. The last consequence
+is very dangerous because it can allow users to modify internal
+variables of the program, and thus change the behavior
+of the program.  
+
+
+In this lab, students will be given a program with a format-string
+vulnerability; their task is to develop a scheme to exploit
+the vulnerability.  In addition to the
+attacks, students will be guided to walk through a protection
+scheme that can be used to defeat this type of attacks. 
+Students need to evaluate
+whether the scheme work or not and explain why.
+
+
+\subsection{Getting Started}
+The lab is started from the Labtainer working 
+directory on your Docker-enabled host, e.g., a Linux VM.
+From there, issue the command:
+\begin{verbatim}
+    labtainer formatstring
+\end{verbatim}
+
+The resulting virtual terminal will include 
+a bash shell.  The vuln\_prog.c 
+described below be in your home directory.
+
+\section{Lab Tasks}
+
+\subsection{Task 1: Exploit the vulnerability}
+Before beginning this task, nsure that Address Space Layout Randomization (ASLR) is enabled:
+\begin{verbatim}
+      sudo sysctl -w kernel.randomize_va_space=2
+\end{verbatim}
+In the following program, you will be asked to provide an input, which
+will be saved in a buffer called {\tt user\_input}. 
+The program then prints out the buffer using {\tt printf}.
+Unfortunately, there is a format-string vulnerability in the way
+the {\tt printf} is called on the user inputs. We want to exploit
+this vulnerability and see what we can achieve.
+
+The program has two secret values stored in its memory,
+and you are interested in these secret values. However, 
+the secret values are unknown to you, nor can you find them from reading the 
+binary code (for the sake of simplicity, we hardcode the secrets 
+using constants 0x$44$ and 0x$55$). 
+Although you do not know the secret values, in practice, 
+it is not so difficult to find out 
+the memory address (the range or the exact value) of them (they are 
+in consecutive addresses), because
+for many operating systems, the addresses are exactly the same anytime you 
+run the program. 
+In this lab, we just assume that you have already known the exact addresses. 
+To achieve this,
+the program ``intentionally'' prints out the addresses for you. With such
+knowledge, your goal is to achieve the followings (not necessarily at the 
+same time): 
+\begin{itemize} 
+\item Crash the program.
+\item Print out the secret[1] value.
+\item Modify the secret[1] value.
+\item Modify the secret[1] value to equal 0xa.
+\end{itemize} 
+
+For this lab task, you are not to modify the code. Namely, you need to achieve
+the above objectives without modifying the vulnerable code.
+However, you do have a copy of the source code, which can help 
+you design your attacks.
+ 
+\begin{lstlisting}
+/* vul_prog.c */
+#include<stdio.h>
+#include<stdlib.h>
+
+#define SECRET1 0x44
+#define SECRET2 0x55
+
+int main(int argc, char *argv[])
+{
+    char user_input[100];
+    int *secret;
+    int int_input;
+    int a, b, c, d; /* other variables, not used here.*/
+    
+    /* The secret value is stored on the heap */
+    secret = (int *) malloc(2*sizeof(int));
+    
+    /* getting the secret */
+    secret[0] = SECRET1; secret[1] = SECRET2;
+    
+    printf("The variable secret's address is 0x%8x (on stack)\n", 
+                        (unsigned int)&secret);
+    printf("The variable secret's value is 0x%8x (on heap)\n", 
+                        (unsigned int)secret);
+    printf("secret[0]'s address is 0x%8x (on heap)\n", 
+                        (unsigned int)&secret[0]);
+    printf("secret[1]'s address is 0x%8x (on heap)\n", 
+                        (unsigned int)&secret[1]);
+    
+    printf("Please enter a decimal integer\n");
+    scanf("%d", &int_input);  /* getting an input from user */
+    printf("Please enter a string\n");
+    scanf("%s", user_input); /* getting a string from user */
+    
+    /* Vulnerable place */
+    printf(user_input);
+    printf("\n");
+    
+    /* Verify whether your attack is successful */
+    printf("The original secrets: 0x%x -- 0x%x\n", SECRET1, SECRET2);
+    printf("The new secrets:      0x%x -- 0x%x\n", secret[0], secret[1]);
+    return 0;
+}
+\end{lstlisting}
+
+
+\paragraph{Hints:}
+From the printout, you will find out that {\tt secret[0]} and 
+{\tt secret[1]} are located on the heap, i.e., the actual
+secrets are stored on the heap. We also know that 
+the address of the first secret (i.e., the value of 
+the variable {\tt secret}) can be found on the stack, because
+the variable {\tt secret} is allocated on the stack. 
+In other words, if you want to overwrite {\tt secret[0]}, its address 
+is already on the stack; your format string can  take advantage 
+of this information. However, although {\tt secret[1]} is just
+right after {\tt secret[0]}, its address is not available on the 
+stack. This poses a major challenge for your format-string exploit, 
+which needs to have the exact address right on the stack in order 
+to read or write to that address.
+ 
+
+
+\subsection{Task 2: Memory randomization}
+
+If the first scanf statement ({\tt scanf("\%d", int\_input)})
+does not exist, i.e., the program does not ask you to
+enter an integer, the attack in Task 1 become more difficult 
+for those operating systems that have implemented address 
+randomization. Pay attention to the address of secret[0] (or secret[1]). 
+When you run the program once again, will you get the same
+address?
+
+Address randomization is introduced to make a number of 
+attacks difficult, such as buffer overflow, format string, etc. 
+To appreciate the idea of address randomization, we will turn
+off the address randomization in this task, and see whether the 
+format string attack on the previous vulnerable program (without
+the first scanf statement) is still difficult. You can use the following
+command to turn off the address randomization:
+
+\begin{verbatim}
+   sudo sysctl -w kernel.randomize_va_space=0
+\end{verbatim}
+
+
+After turning off the address randomization, your task is to 
+repeat the same task described in Task 1, but you have to 
+remove the first scanf statement ({\tt scanf("\%d", int\_input)})
+from the vulnerable program, and recompile it using:
+
+\begin{verbatim}
+    gcc -m32 -fno-stack-protector -g -o vul_prog vul_prog.c
+\end{verbatim}
+
+\paragraph{How to let {\tt scanf} accept an arbitrary number?}
+Usually, {\tt scanf} is going to pause for you to type inputs. 
+Sometimes, you want the program to take a number 0x05 (not the 
+character `5'). Unfortunately, when you type `5' at the input, {\tt scanf}
+actually takes in the ASCII value of `5', which is 0x$35$, rather
+than 0x$05$. The challenge is that in ASCII, 0x$05$ is not a typable
+character, so there is no way we can type in this value. 
+One way to solve this problem is to use a file. 
+We can easily write a C program that stores 0x05 (again, not `5')  
+to a file (let us call it {\tt mystring}), then we can run the vulnerable program (let us 
+call it {\tt a.out}) with its input being redirected to {\tt mystring}; 
+namely, we run {\tt "a.out < mystring"}. This way, {\tt scanf} will take its 
+input from the file {\tt mystring}, instead of from the keyboard.
+
+You need to pay attention to some special numbers, such as 0x$0A$ (newline), 
+0x$0C$ (form feed), 0x$0D$ (return), and 0x$20$ (space). 
+{\tt scanf} considers them as separator, and will stop reading anything
+after these special characters if we have only one {\tt "\%s"} in
+{\tt scanf}.  If one of these special numbers are in the address, 
+you have to find ways to get around this.
+To simplify your task, if you are unlucky and the secret's address 
+happen to have those special numbers in it, we allow you to add another {\tt malloc}
+statement before you allocate memory for {\tt secret[2]}. This extra
+{\tt malloc} can cause the address of secret values to change. If you
+give the {\tt malloc} an appropriate value, you can 
+create a ``lucky'' situation, where the addresses of secret do not 
+contain those special numbers. 
+
+The following program writes a format string into a file called {\tt mystring}.
+The first four bytes consist of an arbitrary number that you want 
+to put in this format string, followed by the rest of format string 
+that you typed in from your keyboard.
+
+\begin{lstlisting}
+/* write_string.c */
+
+#include <sys/types.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+int main()
+{
+    char buf[1000];
+    int fp, size;
+    unsigned int *address;
+    
+    /* Putting any number you like at the beginning of the format string */
+    address = (unsigned int *) buf;
+    *address = 0x804b01c;
+    
+    /* Getting the rest of the format string */
+    scanf("%s", buf+4);
+    size = strlen(buf+4) + 4;
+    printf("The string length is %d\n", size);
+    
+    /* Writing buf to "mystring" */
+    fp = open("mystring", O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+    if (fp != -1) {
+        write(fp, buf, size);
+        close(fp);
+    } else {
+        printf("Open failed!\n");
+    }
+}
+\end{lstlisting}
+
+
+\section{Guidelines} 
+
+
+\subsection{What is a format string?}
+
+\begin{verbatim}
+             printf ("The magic number is: %d\n", 1911);
+\end{verbatim}
+
+The text to be printed is ``The magic number is:'', followed by a format
+parameter `\%d', which is replaced with the parameter (1911) in the output.
+Therefore the output looks like: The magic number is: 1911. In addition to
+\%d,
+there are several other format parameters, each having different meaning.
+The
+following table summarizes these format parameters:
+\begin{Verbatim}[frame=single]
+Parameter       Meaning                               Passed as
+-------------------------------------------------------------------
+   %d        decimal (int)                              value
+   %u        unsigned decimal (unsigned int)            value
+   %x        hexadecimal (unsigned int)                 value
+   %s        string ((const) (unsigned) char *)         reference
+   %n        number of bytes written so far, (* int)    reference
+\end{Verbatim}
+
+\subsection{The Stack and Format Strings}
+
+
+The behavior of the format function is controlled by the format string.
+The function retrieves the parameters requested by the format string
+from the stack.
+
+\begin{Verbatim}[frame=single]
+printf ("a has value %d, b has value %d, c is at address: %08x\n", 
+                          a, b, &c);
+\end{Verbatim}
+
+
+\begin{center}
+\includegraphics*[viewport=1.10in 5.70in 6.1in 9.5in,width=3.5in,natwidth=621,natheight=403]{Figs/Format_String_Stack.pdf}
+\end{center}
+
+
+\subsection{What if there is a miss-match}
+
+What if there is a miss-match between the format string and the actual
+      arguments?
+\begin{Verbatim}[frame=single]
+printf ("a has value %d, b has value %d, c is at address: %08x\n", 
+                          a, b);
+\end{Verbatim}
+
+   \begin{itemize}
+   \item In the above example, the format string asks for 3 arguments, but the
+         program actually provides only two (i.e. $a$ and $b$).
+   \item Can this program pass the compiler?
+       \begin{itemize}
+       \item The function {\tt printf()} is defined as function with variable
+             length of arguments. Therefore, by looking at the number of
+             arguments, everything looks fine.
+       \item To find the miss-match, compilers needs to understand how
+             {\tt printf()} works and what the meaning of the format string
+             is. However, compilers usually do not do this kind of analysis.
+       \item Sometimes, the format string is not a constant string, it is
+             generated during the execution of the program. Therefore, there
+             is no way for the compiler to find the miss-match in this case.
+       \end{itemize}
+   \item Can {\tt printf()} detect the miss-match?
+       \begin{itemize}
+       \item The function {\tt printf()} fetches the arguments from the stack.
+             If the format string needs 3 arguments, it will fetch 3 data items
+             from the stack.
+             Unless the stack is marked with a boundary, {\tt printf()} does not
+             know that it runs out of the arguments that are provided to it.
+       \item Since there is no such a marking. {\tt printf()} will continue
+             fetching data from the stack. In a miss-match case, it will
+             fetch some data that do not belong to this function call.
+       \end{itemize}
+
+   \item What trouble can be caused by {\tt printf()} when it starts to
+         fetch data that is meant for it?
+
+   \end{itemize}
+
+
+
+\subsection{Viewing Memory at Any Location}
+
+
+   \begin{itemize}
+   \item We have to supply an address of the memory. However, we cannot change
+   the code; we can only supply the format string.
+   \item If we use {\tt printf(\%s)} without specifying a memory address, the
+   target address will be obtained from the stack anyway by the {\tt printf()}
+   function. The function maintains an initial stack pointer, so it knows the location
+   of the parameters in the stack.
+
+   \item Observation: the format string is usually located on the stack. If we
+   can encode the target address in the format string, the target address will
+   be in the stack. In the following example, the format string is stored in
+   a buffer, which is located on the stack.
+
+\begin{lstlisting}
+int main(int argc, char *argv[])
+{
+  char user_input[100];
+  ... ... /* other variable definitions and statements */
+
+  scanf("%s", user_input); /* getting a string from user */
+  printf(user_input); /* Vulnerable place */
+
+  return 0;
+}
+\end{lstlisting}
+
+
+   \item If we can force the printf to obtain the address from the format
+   string (also on the stack), we can control the address.
+
+\begin{verbatim}
+printf ("\x10\x01\x48\x08  %x %x %x %x %s");
+\end{verbatim}
+
+
+   \item \verb|\x10\x01\x48\x08| are the four bytes of the target address.
+         In C language, \verb|\x10| in a string tells the compiler to put 
+         a hexadecimal value \verb|0x10| in the current position. The value
+         will take up just one byte. Without using \verb|\x|, if we directly
+         put \verb|"10"| in a string, the ASCII values of the characters \verb|'1'|
+         and \verb|'0'| will be stored. Their ASCII values are
+         $49$ and $48$, respectively.
+
+   \item {\tt \%x}  causes the stack pointer to move towards the format string.
+
+   \item Here is how the attack works if {\tt user\_input[]} contains the
+         following format string:
+
+\begin{verbatim}      
+"\x10\x01\x48\x08  %x %x %x %x %s".
+\end{verbatim}
+\begin{center}
+\includegraphics*[viewport=0.6in 4.10in 6.5in 8.1in,width=5.5in,natwidth=621,natheight=403]{Figs/Format_String_Attack.pdf}
+\end{center}
+
+   \item Basically, we use four \verb|%x| to move the {\tt printf()}'s pointer
+         towards the address that we stored in the format string. Once we reach
+         the destination, we will give \verb|%s| to {\tt print()}, causing it
+         to print out the contents in the memory address \verb|0x10014808|.
+         The function {\tt printf()} will treat the contents as a string, and
+         print out the string until reaching the end of the string (i.e.  0).
+
+   \item The stack space between {\tt user\_input[]} and the address passed to
+         the {\tt printf()} function is not for {\tt printf()}. However, because
+         of the format-string vulnerability in the program, {\tt printf()}
+         considers them as the arguments to match with the \verb|%x| in
+         the format string.
+
+   \item The key challenge in this attack is to figure out the distance between the
+         {\tt user\_input[]} and the address passed to the {\tt printf()} function.
+         This distance decides how many \verb|%x| you need to insert into the
+         format string, before giving \verb|%s|.
+
+
+   \end{itemize}
+
+
+
+
+\subsection{Writing an Integer to Memory}
+
+   \begin{itemize}
+   \item {\tt \%n}: The number of characters written so far is stored into the
+   integer indicated by the corresponding argument.
+   \begin{Verbatim}[frame=single]
+      int i;
+      printf ("12345%n", &i);
+   \end{Verbatim}
+   \item It causes {\tt printf()} to write 5 into variable $i$.
+
+   \item Using the same approach as that for viewing memory at any location, we
+   can cause {\tt printf()} to write an integer into any location. Just replace
+   the \verb|%s| in the above example with \verb|%n|, and the contents at the
+   address \verb|0x10014808| will be overwritten.
+
+   \item Using this attack, attackers can do the following:
+       \begin{itemize}
+       \item Overwrite important program flags that control access privileges
+       \item Overwrite return addresses on the stack, function pointers, etc.
+       \end{itemize}
+
+   \item However, the value written is determined by the number of characters
+   printed before the {\tt \%n} is reached. Is it really possible to write
+   arbitrary integer values?
+       \begin{itemize}
+       \item Use dummy output characters. To write a value of 1000, a simple
+       padding of 1000 dummy characters would do.
+       \item To avoid long format strings, we can use a width specification of
+       the format indicators.
+       \end{itemize}
+   \end{itemize}
+
+
+
+
+
+
+
+\section{Submission}
+When the lab is completed, or you'd like to stop working for a while, run
+\begin{verbatim}
+    stoplab formatstring
+\end{verbatim}
+
+from the host Labtainer working directory.  You can always restart the
+Labtainer to continue your work.  When the Labtainer is stopped, a
+zip file is created and copied to a location displayed by the stoplab
+command.  When the lab is completed, send that zip file to the instructor.
+
+You need to submit a detailed lab report to describe what you have
+done and what you have observed; you also need to provide explanation
+to the observations that are interesting or surprising.
+
+\end{document}

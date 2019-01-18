@@ -1,0 +1,236 @@
+\input{header}
+\begin{document}
+
+\begin{center}
+{\LARGE PLC Application Firewall and Software Whitelists}
+\vspace{0.1in}\\
+\end{center}
+
+
+\section{Overview}
+This lab explores security issues related to the use of Programmable Logic Controllers (PLCs) 
+in the management of Industrial Control Systems (ICS), or similar forms of infrastructure.
+You should read this ``Overview'' and the following ``Background'' section before starting the lab. 
+
+\subsection{Learning objectives}
+PLCs typically receive commands from networks containing multiple computers.  Not all of 
+these networked computers are necessarily authorized to issue all commands to the PLC.
+For example, some computers may be authorized to issue commands that monitor the PLC without
+affecting its behavior, while other computers are designated as being able to reset or reconfigure
+the PLC.  One way to enforce this type of application policy is to use a firewall that serves as
+a proxy between the network computers and the PLC.  These firewalls are designed to decode the commands
+destined for the PLC, and only permit those that meet the policy for which computer can issue which commands.
+
+Limiting the computers that can alter a PLC's configuration does not ensure that the PLC will be loaded
+with a valid configuration.  Malicious software on an authorized computer could load the PLC with programs
+or data intended to damage the infrastructure.  One way to limit the ability of malicious software (or
+individuals) to reconfigure the PLC is to enumerate a set of validated program and configuration files.
+A "whitelist" of cryptographic checksums (or digests) for each valid file can then be loaded into a 
+proxy that sits between the computers and the PLC.  The proxy, (or firewall), would then only permit those
+files having validated digests, i.e., those whose digests appear in the whitelist.
+
+\subsection{Simulated infrastructure control system}
+This \textit{plc-app} lab simulates the system illustrated in Figure 1.  A PLC manages the water level of a creek-fed 
+catfish pond, ensuring the water level stays within minimum and maximum limits.
+You will interact with the sys\_management system to load a program and configuration data into the 
+PLC.  You will also use the sys\_management computer to check the status of the PLC and to query which program 
+and configuration data the PLC is running. 
+
+The monitor system is used to query the status of the PLC (which can also be performed at the 
+sys\_management system).  The monitor also contains the ``historian'' subsystem which keeps a running
+log of the PLC status.  The monitor system must be able to continually monitor the PLC, or 
+the farmer will fail the insurance company audit of his crop damage policy.
+
+You will not have direct access to the PLC subsystem, 
+though you can interact with it via the sys\_management and monitor computers.
+
+A "Firewall" sits between the sys\_management and montior computers and the PLC.   
+This device can be configured to:
+
+\begin{enumerate}
+\item Filter commands destined for the PLC, constraining the commands that may be issued from a given IP address.
+\item Prevent unauthorized programs or data from being loaded into the PLC.   The firewall uses a whitelist of 
+authorized MD5 digests to validate files destined for the PLC.
+\end{enumerate}
+The firewall is initially in its default configuration, which imposes not limits on network traffic destined
+for the PLC.
+
+\subsection {Background}
+The student is expected 
+to have performed the Labtainer "onewayhash" lab, or otherwise learned about 
+the use of openssl to generate digests.
+
+The student is expected to have some familiarity with the Linux command line,
+the basics of the file system.
+
+\section{Lab Environment}
+This lab runs in the Labtainer framework,
+available at http://my.nps.edu/web/c3o/labtainers.
+That site includes links to a pre-built virtual machine
+that has Labtainers installed, however Labtainers can
+be run on any Linux host that supports Docker containers.
+
+From your labtainer-student directory start the lab using:
+\begin{verbatim}
+    labtainer plc-app
+\end{verbatim}
+\noindent A link to this lab manual will be displayed.  
+The resulting virtual terminals will include:
+\begin{itemize}
+\item A display of the status of the fish pond level, titled "Physical\_World".
+\item A bash shell on the sys\_management computer.
+\item A bash shell on the monitor computer.
+\item A bash shell on the Firewall, titled "admin@firewall".
+\item A display of the Firewall log file titled "FIREWALL\_LOG".
+\end{itemize}
+\noindent NOTE: When the lab starts, observe the Physical\_World window. 
+The PLC is initially disabled, and thus the pump does not run and the water rises.
+Throughout the lab, you will not be penalized for initial floods or other disasters.
+You will, however, eventually need to configure the systems to avoid those.
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics [width=0.8\textwidth,natwidth=621,natheight=403]{plc-app.jpg}
+\end{center}
+\caption{Network topology for the plc-app lab}
+\label{fig:topology}
+\end{figure}
+
+\section{Lab Tasks}
+\subsection{Explore}
+The Physical World display is notional, it is not generated by any of the components of figure 1.  It 
+helps you understand what is happening in the physical world, independent of the subsystems.
+Use:
+\begin{verbatim}
+	manage_plc status
+\end{verbatim}
+from the sys\_management and monitor systems to observe the state of the PLC.  Observe the log 
+messages on the Firewall log.  Notice how there is periodic traffic?  That is from a service on 
+the monitor computer.  If you wait long enough, you will notice that the farmer's field floods.
+
+\subsection{Load the PLC for the rainy season}
+The sys\_management computer is used by the farmer to load software into the PLC.  The
+\begin{verbatim}
+    manage_plc load <program> <config> 
+\end{verbatim}
+\noindent command is used to  load the PLC with a given program and configuration data.
+It is now the rainy season, so you should specify the {\tt config\_wet.txt} configuration.  
+Initialize the PLC from the sys\_management window using:
+\begin{verbatim}
+ manage_plc load plc config_wet.txt
+\end{verbatim}
+The "plc" parameter is the name of the plc program file in your home directory. This operation 
+will initialize the PLC, causing to the pump to run.
+The rainy season configuration file directs the PLC to keep the pond level between 15 and 25 feet,  
+allowing the pond to absorb bursts of flow from the creek without flooding the fields.
+
+Use the {\tt manage\_plc status} command to observe that the PLC is now operating, and controlling the pump.
+
+\subsection{Constrain PLC commands based on IP address}
+Go to the ``monitor'' system and use the {\tt manage\_plc status} command to view the status.
+This monitor computer is in the farm yard and is used to keep an eye on the PLC.  However, a trained chicken
+is known to peck the keyboard.  If you type or peck the {\tt manage\_plc reset} command from the monitor computer,
+you will notice that {\tt manage\_plc status} indicates the PLC operation has stopped.
+
+For this task, you need to configure the firewall (on the firewall computer) to allow the sys\_management computer
+to issue all PLC commands, but only allow the monitor computer to issue the ``status'' and ``retrieve'' commands.
+Use {\tt firewall -h} on the firewall computer to learn about configuring the firewall filters to limit PLC commands from different
+IP addresses.  Use {\tt ifconfig} on the sys\_management and monitor computers to learn their addresses.  Note
+that before you modify filters, you will need to stop the firewall using:
+\begin{verbatim}
+    sudo systemctl stop firewall
+\end{verbatim}
+and then, after configuring the filters, restart the firewall using:
+\begin{verbatim}
+    sudo systemctl start firewall
+\end{verbatim}
+
+After you have configured the firewall and restarted it, do the following:
+\begin{itemize}
+\item Reload the PLC from the sys\_management computer:
+\begin{verbatim}
+ manage_plc load plc config_wet.txt
+\end{verbatim}
+
+\item Check the status from the sys\_management computer:
+\begin{verbatim}
+ manage_plc status
+\end{verbatim}
+
+\item Attempt to reset the PLC from the monitor computer:
+\begin{verbatim}
+ manage_plc reset
+\end{verbatim}
+
+\item Confirm the PLC is still running, i.e., the reset command was blocked:
+\begin{verbatim}
+ manage_plc status
+\end{verbatim}
+\end{itemize}
+
+Each of the above operations must yield the desired result.  If not, return to the firewall and correct its configuration.
+Then repeat each and every one of the above steps to demonstrate proper application filter settings.
+
+\subsection{Configure the PLC for the dry season}
+Now that it is the dry season, Farmer Jones wants the pond to hold more water.
+From the sys\_management terminal, use:
+\begin{verbatim}
+ manage_plc load plc config_dry.txt
+\end{verbatim}
+\noindent to configure the PLC for the dry season.
+Then just watch what happens over the course of about a minute.
+After you've watched the Physical world status window and observed a disaster, poke around a bit.
+
+On the monitor system, view the {\tt historian.log} file in the home directory.  Do you see any
+suspicious parameter settings?
+
+From the sys\_management terminal, use:
+\begin{verbatim}
+ manage_plc reset
+ manage_plc load plc config_dry.txt
+\end{verbatim}
+\noindent to reset and reload the PLC.  Watch the firewall log, do you notice any suspicious traffic?
+And again review the historian.log.
+Then use the {\tt manage\_plc retrieve} command to retrieve the program and configuration file 
+that put the PLC into this state.  Are they the files you loaded?  Note, now is a good time
+to consider revisiting the use of the {\tt openssl dgst -md5} command.
+
+\subsection{Living with malware}
+It turns out the farmer had installed a bootleg copy of pharmvilla on his laptop computer, and
+that introduced malware onto the sys\_mangement computer.  That malware loads corrupt PLC programs and configuration
+data.  In this lab, we assume you are unable to remove the malware or prevent it from running.  (If you
+view that statement as a challenge, please complete the lab as intended before chasing the malware.)
+Your task is to configure the firewall so that it only permits files having validated MD5 digests to be
+loaded onto the firewall.
+
+On the firewall computer, use the {\tt firewall -h} command to learn how to use a whitelist of MD5
+digests.
+
+Before defining a whitelist on the firewall, you must first stop it:
+\begin{verbatim}
+    sudo systemctl stop firewall
+\end{verbatim}
+and then, after configuring the whitelist, restart the firewall using:
+\begin{verbatim}
+    sudo systemctl start firewall
+\end{verbatim}
+\noindent Then use
+\begin{verbatim}
+ manage_plc reset
+ manage_plc load plc config_dry.txt
+\end{verbatim}
+\noindent to restore the PLC to its desired configuration and patiently wait until the physical word
+informs you that you have completed the lab -- or until you notice something not work. If something
+goes wrong, review your MD5 checksums and logs and try again.
+
+\section{Submission}
+After finishing the lab, go to the terminal on your Linux system that was used to start the lab and type:
+\begin{verbatim}
+    stoplab 
+\end{verbatim}
+When you stop the lab, the system will display a path to the zipped lab results on your Linux system.  Provide that file to 
+your instructor, e.g., via the Sakai site.
+
+\copyrightnotice
+
+\end{document}

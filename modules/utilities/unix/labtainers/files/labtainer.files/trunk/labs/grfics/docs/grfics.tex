@@ -1,0 +1,41 @@
+\input{header}
+\begin{document}
+
+\begin{center}
+{\LARGE GRFICS ICS Simulator}
+\vspace{0.1in}\\
+\end{center}
+
+\section{Overview}
+This lab is the virtual industrial control system (ICS) described at:
+https://github.com/djformby/GRFICS
+The three VMs described at that site have been reimplemented as Labtainers.
+
+Please refer to the above link for information about the lab, and the 
+GRFICS Usenix paper for information about the simulation.
+
+To start the simulation:
+\begin{itemize}
+\item In one of the tabs in the grfics virtual terminal:
+\begin{verbatim}
+   cd HMI_SIMULATION_Ubuntu1604_15_x86_64
+   sudo ./HMI_Simulation_Ubuntu1604_15_x86_64.x86_64
+\end{verbatim}
+\noindent And then enter ``/home/user/simulation/simulation'' for the path
+to the simulation code and click ``Run Server'' and the ``Start''.
+\item In the other tab in the grfics virtual terminal:
+\begin{verbatim}
+   cd simulation/remote_io
+   sudo bash run_all.sh
+\end{verbatim}
+\item In the plc terminal:
+\begin{verbatim}
+   cd OpenPLC_v2
+   sudo nodejs server.js
+\end{verbatim}
+\item In the plc terminal:
+\begin{verbatim}
+   wine HMI/AdvancedHMI.exe
+\end{verbatim}
+\end{itemize}
+\end{document}

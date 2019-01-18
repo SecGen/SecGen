@@ -1,0 +1,11 @@
+Labtainer instructor sessions perform automated 
+assessment of student results stored in the
+~/labtainer_xfer/<lab> directory.
+
+Sessions commence via the 
+    labtainer <lab>
+command.  And end with the
+    stoplab <lab> command
+
+See ../../docs/instructor/labtainer-instructor.pdf
+for details.

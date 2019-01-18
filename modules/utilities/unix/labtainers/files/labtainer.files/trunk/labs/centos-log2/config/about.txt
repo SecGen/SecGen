@@ -1,0 +1,1 @@
+System log basic usage and configuration on a CentOS system.

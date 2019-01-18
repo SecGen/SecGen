@@ -1,0 +1,11 @@
+[Unit]
+Description=Notification service for labtainers file access
+After=waitparam.service
+
+[Service]
+ExecStart=/sbin/mynotify.py
+
+[Install]
+WantedBy=multi-user.target
+Alias=mynotify.service
+

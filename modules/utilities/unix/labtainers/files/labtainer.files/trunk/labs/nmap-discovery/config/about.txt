@@ -1,0 +1,1 @@
+Use of mmap to determine a host IP address and the port number of a service.

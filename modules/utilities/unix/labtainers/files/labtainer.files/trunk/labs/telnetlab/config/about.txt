@@ -1,0 +1,1 @@
+Illustrates the telnet protocol transmission of plain-text passwords.

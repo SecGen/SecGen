@@ -1,0 +1,262 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Copyright (c) 2006 Wenliang Du, Syracuse University.
+% The development of this document is funded by Grant DUE-0231122
+% from the National Science Foundation. Permission is granted
+% to copy, distribute and/or modify this document under the terms
+% of the GNU Free Documentation License, Version 1.2 or any later
+% version published by the Free Software Foundation. A copy of the
+% license can be found at http://www.gnu.org/licenses/fdl.html.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{header}
+
+\begin{document}
+
+\begin{center}
+{\LARGE Linux Capability Exploration Lab}
+\end{center}
+
+\copyrightnotice
+
+\section{Lab Description}
+
+The learning objective of this lab is for students
+to gain first-hand experiences on the
+use of capabilities to achieve the principle of least privilege.
+This lab is based on POSIX 1.e capabilities, which is implemented in
+recent versions of \linux kernel.
+
+Capability based systems are sometimes promoted as an access control
+strategy in contrast to the use of Access Control Lists (ACLs) or
+Unix file permissions.  In practice, Linux systems typically use 
+capabilities to limit program privilege rather than to control
+access to named objects.  This lab focuses on the use of capabilities
+to limit privilege.
+
+\section{Lab Environment}
+This lab runs in the Labtainer framework,
+available at http://my.nps.edu/web/c3o/labtainers.
+That site includes links to a pre-built virtual machine
+that has Labtainers installed, however Labtainers can
+be run on any Linux host that supports Docker containers.
+
+From your labtainer-student directory start the lab using:
+\begin{verbatim}
+    labtainer capabilities
+\end{verbatim}
+Links to this lab manual and to an empty lab report will be displayed.  If you create your lab report on a separate system,
+be sure to copy it back to the specified location on your Linux system.
+
+\vspace{0.1in}
+\noindent
+For this lab, you need to get familiar with the
+following commands that come with {\tt libcap}:
+\begin{itemize}
+\item {\tt setcap}:   assign capabilities to a file.
+\item {\tt getcap}:   display the capabilities that carried by a file.
+\item {\tt getpcaps}: display the capabilities carried by a process.
+\end{itemize}
+
+\section{Lab Tasks}
+
+In a capability system, when a program is executed, its corresponding
+process is initialized with a list of capabilities (tokens).
+When the process tries to access an object,
+the operating system checks the process' capabilities,
+and decides whether to grant the access or not.
+
+
+\subsection{Task 1: Experiencing Capabilities}
+
+In operating systems such a Linux, there are many privileged operations that can
+only be conducted by privileged users. Examples of privileged
+operations include configuring network interface cards, backing
+up all the user files, shutting down the computers, etc.
+Without capabilities, these operations can only be carried out
+by superusers, who often have more privileges than are
+needed for the intended tasks. Therefore, letting superusers
+perform these privileged operations is a violation of
+the {\em Least-Privilege Principle}.
+
+Privileged operations are necessary in Linux and other Unix based 
+operating systems.
+All \setuid programs involve privileged operations that cannot
+be performed by normal users. To allow normal users to run
+these programs, \setuid programs turn normal users into
+powerful users (e.g. root) temporarily, even though 
+the involved privileged operations do not need all privileges 
+provided to superuser.
+This is dangerous: if the program is compromised, adversaries
+might get the root privilege.
+
+Capabilities divide the root privilege into a set of
+distinct privileges. Each of these privileges is called
+a capability. With capabilities, we do not need to be a
+superuser to conduct privileged operations.
+All we need is to have the capabilities that are needed for
+the privileged operations. Therefore, even if a privileged program
+is compromised, adversaries can only get limited power. This
+way, the risks of privileged program can be reduced.
+
+Capabilities has been implemented in \linux for quite some time,
+but they could only be assigned to processes.
+Since kernel version {\tt 2.6.24}, capabilities can be assigned to
+files (i.e., programs) and turn those programs into privileged programs.
+When a privileged program is executed, the running process will carry
+those capabilities that are assigned to the program. In some sense,
+this is similar to the \setuid files, but the major difference is the
+amount of privileged carried by the running processes.
+
+We will use an example to show how capabilities can be used to
+remove unnecessary privileges assigned to certain privileged programs.
+First, as the unprivileged ubuntu user, run the following command:
+\begin{verbatim}
+% ping www.google.com
+\end{verbatim}
+
+The program should run successfully. If you look at the file attributes
+of the program {\tt /bin/ping}, you will see that {\tt ping}
+it is a \setuid program with the owner being root, i.e., when you
+execute {\tt ping}, your effective user id becomes root, and the running
+process therefore runs with root privileges. If there are vulnerabilities in {\tt ping},
+the entire system can be compromised. Using capabilities, we can
+remove unnecessary privileges from {\tt ping}.
+
+First, let us turn {\tt /bin/ping} into a non-\setuid
+program. This can be done via the following command:
+\begin{verbatim}
+   sudo chmod u-s /bin/ping
+\end{verbatim}
+
+Now, run {\tt 'ping www.google.com'}, and see what happens.
+The command should fail. This is because {\tt ping} needs
+to open a RAW socket, which is a privileged operation that can only be
+conducted by root (before capabilities are implemented). That is why
+{\tt ping} has to be a \setuid program. Let us only assign the {\tt cap\_net\_raw}
+capability to {\tt ping}, and see what happens:
+
+\begin{Verbatim}[frame=single] 
+   sudo setcap cap_net_raw=ep /bin/ping
+   ping www.google.com
+\end{Verbatim}
+
+\subsubsection{Task 1.1 Allow unprivileged users to run tcpdump}
+In addition to reducing privileges associated with setuid programs,
+capabilities can be used to allow unprivileged users to run
+selected programs without granting those users sudo privileges.
+A common example is the \texttt{/usr/bin/tcpdump} program.  In
+other Labtainer exercises, we use tcpdump to capture network
+traffic, however we do that but running
+\begin{Verbatim}[frame=single] 
+   sudo tcpdump
+\end{Verbatim}
+
+Modify the tcpdump program so that an unprivileged user can run it.
+
+\subsubsection{Task 1.2 Convert passwd to use capabilities}
+Some setuid programs require several different capabilities
+to operate.  The file: {\tt include/linux/capability.h}
+describes the various capabilities available in Linux.
+
+The \texttt{/usr/bin/passwd} program requires the following
+capabilities to operate:
+
+\begin{Verbatim}[frame=single] 
+    cap_chown
+    cap_dac_override
+    cap_fowner
+\end{Verbatim}
+
+Modify the \texttt{passwd} program to use capabilities instead of setuid,
+then demonstrate that it still works by changing the ubuntu user password
+(which initially is \texttt{ubuntu}).
+
+\textbf{Note:} When you run the passwd utility in this lab, it will display
+your passwords as you type them.  Usually, passwords are not displayed.  This
+is a limitation of the Labtainer environment.
+
+
+\subsection{Task 2: Adjusting Privileges}
+
+With capabilities, it is possible to dynamically adjust the amount of privileges  
+a process has, which is consistent with the principle of least privilege.
+For example, when a privilege is no longer needed in a process,
+we should allow the process to permanently remove the capabilities
+relevant to this privilege. Therefore,
+even if the process is compromised, attackers will not be able to
+gain these deleted capabilities.
+Adjusting privileges can be achieved using the following
+capability management operations.
+\begin{enumerate}
+  \item {\em Deleting:}  A process can permanently delete a capability.
+  \item {\em Disabling:} A process can temporarily disable a capability.
+        Unlike deleting, disabling is only temporary; the process
+        can later enable it.
+  \item {\em Enabling:} A process can enable a capability that is temporarily disabled.
+        A deleted capability cannot be enabled.
+\end{enumerate}
+
+Without capabilities, a privileged \setuid program can also
+delete/disable/enable its own privileged. This is done via
+the {\tt setuid()} and {\tt seteuid()} system calls; namely, a process
+can change its effective user id during the run time. The
+granularity is quite coarse using these system calls, because you can either
+be the privileged users (e.g. root) or a non-privileged users.
+With capabilities, the privileges can be adjusted in a much
+finer fashion, because each capability can be independently adjusted.
+
+To support dynamic capability adjustment, \linux uses a mechanism similar
+to the \setuid mechanism, i.e., a process carries three capability sets:
+permitted (P), inheritable (I), and  effective (E).
+The permitted set consists of the capabilities that the process is permitted
+to use; however, this set of capabilities might not be active.
+The effective set consists of those capabilities that the process can currently
+use (this is like the effective user uid in the \setuid mechanism).
+The effective set must always be a subset of the permitted set.
+The process can change the contents of the effective set at any time as long as the
+effective set does not exceed the permitted set. The inheritable set is used
+only for calculating the new capability sets after {\tt exec()}, i.e.,
+which capabilities can be inherited by the children processes.
+
+Review the \texttt{mypriv.c} program in the home directory.  Answer the
+questions embedded in the source code of the program.  Then use the
+\texttt{build.sh} script to compile and link the program. Then use \texttt{setcap}
+to set the \texttt{CAP\_DAC\_READ\_SEARCH} capability, and run the program.
+Compare the results to what you expected.
+
+After you finish the above task, please answer the following questions:
+\begin{itemize}
+\item \myquestion After a program (running as normal user)  disables a capability A,
+it is compromised
+by a buffer-overflow attack. The attacker successfully injects his malicious
+code into this program's stack space and starts to run it. Can this attacker use
+the capability A? What if the process deleted the capability, can the attacker
+uses the capability?
+
+\item \myquestion The same as the previous question, except replacing the
+buffer-overflow attack with the race condition attack. Namely, if
+the attacker exploits the race condition in this program, can he use the
+capability A if the capability is disabled? What if the capability is
+deleted?
+
+
+\end{itemize}
+
+
+\section{Submission}
+
+You need to submit a detailed lab report to describe what you have
+done and what you have observed; you also need to provide explanation
+to the observations that are interesting or surprising. In your report,
+you need to answer all the questions listed in this lab.
+
+After finishing the lab, go to the terminal on your Linux system that was used to start the lab and type:
+\begin{verbatim}
+    stoplab capabilities
+\end{verbatim}
+When you stop the lab, the system will display a path to the zipped lab results on your Linux system.  Provide that file to
+your instructor, e.g., via the Sakai site.
+
+
+
+\end{document}

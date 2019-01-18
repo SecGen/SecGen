@@ -1,0 +1,122 @@
+\documentclass[11pt]{article}
+
+\usepackage{times}
+\usepackage{epsf}
+\usepackage{epsfig}
+\usepackage{amsmath, alltt, amssymb, xspace}
+\usepackage{wrapfig}
+\usepackage{fancyhdr}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{fancyvrb}
+\usepackage{float}
+
+\usepackage{subfigure}
+\usepackage{cite}
+\usepackage{hyperref}
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+\topmargin      -0.50in  % distance to headers
+\oddsidemargin  0.0in
+\evensidemargin 0.0in
+\textwidth      6.5in
+\textheight     8.9in 
+
+
+%\centerfigcaptionstrue
+
+%\def\baselinestretch{0.95}
+
+
+\newcommand\discuss[1]{\{\textbf{Discuss:} \textit{#1}\}}
+%\newcommand\todo[1]{\vspace{0.1in}\{\textbf{Todo:} \textit{#1}\}\vspace{0.1in}}
+\newtheorem{problem}{Problem}[section]
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{fact}{Fact}
+\newtheorem{define}{Definition}[section]
+%\newtheorem{analysis}{Analysis}
+\newcommand\vspacenoindent{\vspace{0.1in} \noindent}
+
+%\newenvironment{proof}{\noindent {\bf Proof}.}{\hspace*{\fill}~\mbox{\rule[0pt]{1.3ex}{1.3ex}}}
+%\newcommand\todo[1]{\vspace{0.1in}\{\textbf{Todo:} \textit{#1}\}\vspace{0.1in}}
+
+%\newcommand\reducespace{\vspace{-0.1in}}
+% reduce the space between lines
+%\def\baselinestretch{0.95}
+
+\newcommand{\fixmefn}[1]{ \footnote{\sf\ \ \fbox{FIXME} #1} }
+\newcommand{\todo}[1]{
+\vspace{0.1in}
+\fbox{\parbox{6in}{TODO: #1}}
+\vspace{0.1in}
+}
+
+\newcommand{\mybox}[1]{
+\vspace{0.2in}
+\noindent
+\fbox{\parbox{6.5in}{#1}}
+\vspace{0.1in}
+}
+
+
+\newcounter{question}
+\setcounter{question}{1}
+
+\newcommand{\myquestion} {{\vspace{0.1in} \noindent \bf Question \arabic{question}:} \addtocounter{question}{1} \,}
+
+\newcommand{\myproblem} {{\noindent \bf Problem \arabic{question}:} \addtocounter{question}{1} \,}
+
+
+
+\newcommand{\copyrightnotice}[1]{
+\vspace{0.1in}
+\fbox{\parbox{6in}{
+      This lab was developed for the Labtainer framework by the Naval Postgraduate 
+      School, Center for Cybersecurity and Cyber Operations under National Science 
+      Foundation Award No. 1438893.
+      This work is in the public domain, and cannot be copyrighted.}}
+\vspace{0.1in}
+}
+
+
+\newcommand{\idea}[1]{
+\vspace{0.1in}
+{\sf IDEA:\ \ \fbox{\parbox{5in}{#1}}}
+\vspace{0.1in}
+}
+
+\newcommand{\questionblock}[1]{
+\vspace{0.1in}
+\fbox{\parbox{6in}{#1}}
+\vspace{0.1in}
+}
+
+
+\newcommand{\argmax}[1]{
+\begin{minipage}[t]{1.25cm}\parskip-1ex\begin{center}
+argmax
+#1
+\end{center}\end{minipage}
+\;
+}
+
+\newcommand{\bm}{\boldmath}
+\newcommand  {\bx}    {\mbox{\boldmath $x$}}
+\newcommand  {\by}    {\mbox{\boldmath $y$}}
+\newcommand  {\br}    {\mbox{\boldmath $r$}}
+
+
+\newcommand{\tstamp}{\today}   
+%\rfoot[\fancyplain{\tstamp} {\tstamp}]  {\fancyplain{}{}}
+
+\pagestyle{fancy}
+\lhead{\bfseries Labtainers}
+\chead{}
+\rhead{\small \thepage}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+
+
+

@@ -1,0 +1,10 @@
+The lab manual is at 
+   file://LAB_DOCS/backups.pdf
+The report template at
+   file://LAB_DOCS/backups-Template.docx
+The spreadsheet workbook at
+   file://LAB_DOCS/backups-Input.xlsx
+
+You may open those files by right clicking
+and select "Open Link".
+

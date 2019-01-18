@@ -1,0 +1,25 @@
+README for Labtainers trunk/scripts/labtainers-student
+Additional details are labtainer-student.pdf
+
+
+This is the Labtainers workspace from which all student
+labs are started using:
+
+    labtainer <labname>
+
+Leaving out the labname will result in display of a
+list of labs.
+
+Use
+
+    stoplab <labname>
+
+to stop a lab and collect its results.  Note, it is
+good practice to stop labs before transitioning to
+new labs or to instructor instances, otherwise there
+may be networking name conflicts.
+
+If you wish to restart a lab from scratch, wiping out
+all previous data and work in the lab, use:
+
+    labtainer <labname> -r

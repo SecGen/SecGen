@@ -1,0 +1,5 @@
+Format String Lab -- Read this first
+
+The lab manual for this lab is at: 
+file://LAB_DOCS/formatstring.pdf
+Right click on the link and select "Open link".

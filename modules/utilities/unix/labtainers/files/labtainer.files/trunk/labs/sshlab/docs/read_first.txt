@@ -1,0 +1,6 @@
+The lab manual is at 
+   file://LAB_DOCS/sshlab.pdf
+
+You may open the manual by right clicking
+and select "Open Link".
+

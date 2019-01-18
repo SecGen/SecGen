@@ -1,0 +1,56 @@
+%\section{Lab Environment}
+
+This lab runs in the Labtainer framework,
+available at http://my.nps.edu/web/c3o/labtainers.
+That site includes links to a pre-built virtual machine
+that has Labtainers installed, however Labtainers can
+be run on any Linux host that supports Docker containers.
+
+From your labtainer-student directory start the lab using:
+\begin{verbatim}
+    labtainer webtrack
+\end{verbatim}
+Links to this lab manual and to an empty lab report will be displayed.  If you create your lab report on a separate system,
+be sure to copy it back to the specified location on your Linux system.
+
+\subsection{Environment Configuration}
+This lab includes two networked computers, one running a the browser
+and the other hosting each of the websites used in the lab. The computer
+hosting websites runs the apache server, and each site is allocated its 
+own resources, as if each site ran on an independent web server.
+The Firefox browser includes the  \texttt{Web Developer / Network} tools for 
+to inspect the HTTP requests and responses.  
+
+
+\paragraph{Starting the Apache Server.}
+The Apache web server will be running when the lab
+commences.  If you need to restart the web server, use
+the following command:
+\begin{verbatim}
+   % sudo systemctl restart httpd
+\end{verbatim}
+
+\paragraph{The {\tt Elgg} Web Application.}
+We use an open-source web application called {\tt Elgg} in this lab.
+{\tt Elgg} is a web-based social-networking application. 
+It is already set up in on the vuln-server.
+We have also created several user accounts on the {\tt Elgg} server and the credentials are given below.
+
+
+\vspace{0.1in}
+\begin{tabular}{|l|l|l|}
+\hline
+User 	& UserName 	& Password\\
+\hline
+Admin 	& admin 	& seedelgg \\
+Alice 	& alice 	& seedalice \\
+Boby 	& boby 		& seedboby \\
+Charlie & charlie 	& seedcharlie \\
+Samy 	& samy 		& seedsamy \\
+\hline
+\end{tabular}
+\vspace{0.1in}
+
+
+\paragraph{Configuring DNS.}
+We have configured the following \urlorurls needed for this lab: 

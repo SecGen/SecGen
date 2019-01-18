@@ -1,0 +1,1 @@
+Covers some basic linux shell commands for students to introduce command line processing.

@@ -1,0 +1,5 @@
+The apt sources.list may name mirrors that cannot be reached.
+The container from ubuntu initially names archive.ubuntu.com
+The Labtainer config file will include an entry for an alternate
+source.  A sed command in the dockerfile will effect the  change.
+

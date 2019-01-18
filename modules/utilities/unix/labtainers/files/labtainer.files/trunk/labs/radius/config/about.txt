@@ -1,0 +1,1 @@
+A Radius authentication service is used to authenticate network devices.

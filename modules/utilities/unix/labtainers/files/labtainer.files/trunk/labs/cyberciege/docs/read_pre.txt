@@ -1,0 +1,16 @@
+The first run of this lab includes many installation prompts.  
+Please accept defaults for all installation prompts. 
+If a black dialog is displayed during installation, simply 
+close that dialog.
+
+** 
+An installation password is required, if you do not have that
+password, do not continue. 
+**
+
+Students should get the installation password from their instructor.  
+U.S. government employees and instructors should contact cyberciege@nps.edu
+For more information about CyberCIEGE, see https://my.nps.edu/web/c3o/cyberciege
+
+This version of CyberCIEGE will not display the tutorial videos from the
+Encyclopedia.  Please view the videos from https://my.nps.edu/web/c3o/movies

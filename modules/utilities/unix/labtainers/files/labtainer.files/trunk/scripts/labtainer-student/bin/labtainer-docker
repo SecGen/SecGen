@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# Start the Labtainer container from which to run Labtainers.  Experimental.
+#
+
+set -x
+
+XSOCK=/tmp/.X11-unix
+XAUTH=/tmp/.docker.xauth
+xauth nlist :0 | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
+
+docker run --rm -i -t --name docker0 -v /var/run/docker.sock:/var/run/docker.sock -v $XSOCK:$XSOCK -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH labtainer.master:latest /bin/bash

@@ -1,0 +1,115 @@
+Note on backward compatibility
+
+A user may easily get a new container image that requires framework
+script support not present in the user's environment, e.g., has
+not yet done an update-labtainer.sh.  
+
+A user may have an old container not supported by framework scripts
+obtained via an update-labtainer.sh
+
+\section{Lab Versions}
+Substantive changes to an existing published lab should be made in
+a new named lab.  A "substantive" change is defined as one that would
+break any existing installation.  The sole exception is the case in 
+which a newer lab image would require a Labtainers update.
+
+Never change container names for existing labs.
+
+Management of multiple versions of the same lab will be achieved entirely
+by the user environment and what is distributed to it.
+
+\subsection{Managing versions}
+Labtainer updates will not remove old labs from installed systems, however 
+they may stop distributing old labs.
+
+If a user installation contains two versions of a lab, only the latest will
+be displayed in the labtainer command -- unless the installation includes
+containers for the older -- in which case both will be listed.
+
+If a user starts an older version of a lab for the first time, warn the user
+with a prompt.  Subsequently, note the existence of the newer lab without a prompt.
+
+Lab names change with versions, e.g., centos-logv2.  (tab completion would really
+help here).
+
+Defining multiple labs as being different versions of the same lab is achieved
+in a "version" file in the lab/config directory.  Absence of the file implies the
+lab is its only version and is its base name. Otherwise, the file includes the 
+lab basename and its version number, which is syntatically independent of the name
+of the lab, e.g., lab names need not incorporate a "v2".  Version numbers are integers.
+Lab basnames are ONLY used to distinguish versions of the same lab.   Students and
+instructors name labs using their lab name, not their basename.
+
+\subsection{Images dependent on framework versions}
+The sole exception to the requirement for compatability of lab versions is the
+case where we can request the user to update the labtainers framework in order
+to run the new labs.  This concept is not limited to versions of the same lab,
+it also pertains to changes to scripts in images that require corresponding
+support from the framework.  An example might be a new argument to the
+parameterize.sh script.  If new images expect this parameter, then the framework
+must provide it, i.e., it must be updated.  (Backward compatability must still be
+supported, i.e., old images MUST run with all new frameworks.)
+
+These versions relationships will be managed crudely.  Once any new lab requires an
+updated framework, all subsequent labs will require at least that framework version,
+(whether it needs it or not).
+
+These versions are managed by a version number imbedded in the build process.
+
+
+\subsection{Base image replacements and changes}
+Transitioning to new base images will force some users to wait for new large downloads
+when starting a new lab.
+
+Can we tell the student how large the download will be?  not likely.
+But we can identify the lack of a base image on the student computer, and notify them
+of that.
+
+MOTIVE:  Reduce cumulative size of all base images needed to perform labs.
+This means always rebuilding all labs whenever a base changes.
+
+OPTIMIZE for size of the VM.
+
+Roadmap:  
+\begin{itemize}
+\item Replace existing images with identical images having new version labels,
+thus forcing an update of the framework.
+\item New framework version will be sensitive to base image versions.
+
+\item Re-tag all lab images to reflect an initial base image version.
+
+\item Before a pull (or a update-labtainer.sh!), the framework will determine its 
+base-image version, and pull the lab image versions consistent with that base image.
+
+\item The tag associated with each lab image will reflect its base image
+dependency.  The "latest" image version implies the latest base image version.
+
+\item The initial base image version is 1.  All images will be tagged to reflect
+that version.
+
+\item Separate logic for ensuring student has necessary base for a lab, and prompt if 
+a big download is needed.
+\end{itemize}
+
+NEVER PULL and old base.  NEVER build from an old base
+
+If a base is updated, you MUST rebuild all labs.  
+
+
+
+PROCEDURE
+publish new framework
+retag all images
+
+rebuild base images and push
+
+rebuild all images
+
+
+HOW to run and test old images?
+
+Keep an old VM!
+
+
+
+

@@ -1,0 +1,4 @@
+export PRECMD_HOME=PRECMD_HOME_REPLACE_ME
+source $PRECMD_HOME/.local/bin/bash-preexec.sh
+source $PRECMD_HOME/.local/bin/bash-pre-capinout.sh
+ulimit -f 1000000

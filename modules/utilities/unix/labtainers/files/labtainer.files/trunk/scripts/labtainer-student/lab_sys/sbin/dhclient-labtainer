@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+#  Hack dhcp client for use in Docker containers.
+#  Assumes ics-dhcp-client is installed
+#
+#echo `date` > /tmp/mydhcp.log
+sudo ifconfig $1 0.0.0.0
+myip=$(dhclient -v $1 2>&1 >/dev/null | grep "bound to" | awk '{print $3}')
+ifconfig $1 $myip
+#echo `date` >> /tmp/mydhcp.log
+#echo "back from ifconfig in mydhcp ip is $myip" >> /tmp/mydhcp.log

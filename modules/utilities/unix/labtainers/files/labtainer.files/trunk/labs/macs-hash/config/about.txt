@@ -1,0 +1,1 @@
+Exploration of cryptographic hashes and the potential for hash collisions.

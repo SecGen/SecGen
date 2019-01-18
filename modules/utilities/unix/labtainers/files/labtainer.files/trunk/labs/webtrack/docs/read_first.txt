@@ -1,0 +1,8 @@
+The lab manual is at 
+   file://LAB_DOCS/webtrack.pdf
+The lab report template is at:
+   file://LAB_DOCS/webtrack-report.docx
+
+You may open these by right clicking
+and select "Open Link".
+

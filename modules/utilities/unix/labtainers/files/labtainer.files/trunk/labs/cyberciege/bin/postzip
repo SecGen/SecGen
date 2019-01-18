@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+'''
+postzip script for cyberciege.  Extract the cyberciege log zip and tell
+the student where to find it.
+'''
+import zipfile
+from io import BytesIO
+import sys
+import os
+home = os.getenv('HOME')
+student_zip = sys.argv[1]
+zf = zipfile.ZipFile(student_zip)
+for info in zf.infolist():
+    if '=' in info.filename:
+        uz = BytesIO(zf.read(info.filename))
+        with zipfile.ZipFile(uz) as zfile2:
+            for name2 in zfile2.namelist():
+                if name2.endswith('LogCollection.zip'):
+                    logzip = zfile2.read(name2)
+                    outfile = os.path.join(home, name2)
+                    with open(outfile, 'w') as fh:
+                        fh.write(logzip)
+                        print('Extracted CyberCIEGE log zipfile to: %s' % outfile)
+                        print('Provide that zipfile to your instructor.')

@@ -1,0 +1,157 @@
+\input{header}
+\begin{document}
+
+\begin{center}
+{\LARGE IPTABLES}
+\vspace{0.1in}\\
+\end{center}
+
+
+\section{Overview}
+This Labtainer exercise illustrates the use of iptables
+on a firewall to limit network access to a server from a client,
+as illustrated in figure 
+\ref{fig:topology}
+
+When properly configured, the firewall will only allow selected
+traffic from the client to the server.
+
+\subsection {Background}
+Limiting the types of network traffic sent to a server can help to
+protect the server from unauthorized access.  For example, if the
+server contains an unsecured service available through its network
+interface, exploitation of that service is more difficult if something
+blocks traffic destined for that service.
+
+A variety of different techniques and products exist for the purpose of limiting
+IP network traffic between computers.  In this lab, you will limit IP traffic through
+use of Linux iptables.  
+The student is expected to have separately learned about the use of iptables
+to selectively block network traffic. The firewall component includes an
+example firewall setting script that you can reference.  The manpage for iptables can be viewed on the
+firewall component using:
+\begin{verbatim}
+   man iptables
+   man iptables-extensions
+\end{verbatim}
+
+Students are expected to have a basic 
+familiarity with the Linux command line, and the ability to edit files and
+run simple shell scripts. Some experience with Wireshark is presumed, e.g., performance of
+the wireshark-intro lab.
+
+\section{Lab Environment}
+This lab runs in the Labtainer framework,
+available at http://my.nps.edu/web/c3o/labtainers.
+That site includes links to a pre-built virtual machine
+that has Labtainers installed, however Labtainers can
+be run on any Linux host that supports Docker containers.
+
+From your labtainer-student directory start the lab using:
+\begin{verbatim}
+    labtainer iptables2
+\end{verbatim}
+\noindent A link to this lab manual will be displayed.  
+
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics [width=0.8\textwidth,natwidth=621,natheight=403]{iptables.jpg}
+\end{center}
+\caption{Network topology for the iptables lab}
+\label{fig:topology}
+\end{figure}
+
+\section{Lab Tasks}
+\subsection{Explore}
+The Wireshark utility is installed on the firewall. 
+Use it to view network traffic through the firewall, and to 
+debug your firewall rules.  Start it from the firewall terminal:
+\begin{verbatim}
+wireshark &
+\end{verbatim}
+\noindent Then select the eth0 interface.
+
+On the client terminal use the nmap utility 
+to list (some of the) open ports on the server:
+
+\begin{verbatim}
+        nmap server
+\end{verbatim}
+\noindent 
+
+\noindent Use wget to confirm that the server response to HTTP requests:
+\begin{verbatim}
+        wget server &
+\end{verbatim}
+\noindent Confirm an ssh service if offered -- you need not login when prompted,
+just use {\tt ctrl C} to exit once you get a response from the server.
+\begin{verbatim}
+        ssh server
+\end{verbatim}
+\noindent Finally, confirm that telnet is offered (again, no need to login):
+\begin{verbatim}
+        telnet server
+\end{verbatim}
+\noindent Observe the traffic in wireshark, making note the
+source IP addresses and the destination ports used by the 
+clients when connecting to the server
+
+\subsection{Use iptables to limit traffic}
+The iptables utility is installed on the ``firewall'' component.
+Use it to prevent the firewall from forwarding any traffic
+to the server other than SSH and HTTP.
+
+You may reference and experiment with the example firewall script that
+is on the firewall component in the home directory.  
+To run the {\tt example\_fw.sh} script, use:
+\begin{verbatim}
+        sudo ./example_fw.sh
+\end{verbatim}
+View the content of the script to understand what it does.
+Consider putting your iptables commands in a script so it is easy
+to test and reconfigure the iptables if you restart the lab.
+
+Note the last line in the {\tt example\_fw.sh} script directs iptables
+to log dropped packets.  You can view these from one of the firewall terminal
+tabs via:
+\begin{verbatim}
+        tail -f /var/log/iptables.log
+\end{verbatim}
+
+After modifying your iptables configuration, use the applications on the client to
+demonstrate that the firewall only allows the desired traffic.
+Watch the traffic in wireshark to see that the TCP handshake fails
+when attempting to connect to filtered ports.
+
+Use nmap to confirm the proper configuration:
+\begin{verbatim}
+   nmap server
+\end{verbatim}
+
+
+\subsection{Open new service port}
+The client computer includes a {\tt wizbang} program that you must now allow to send
+traffic to the server.  Run the program from the client, and observe which port it
+attempts to use within wireshark:
+\begin{verbatim}
+    ./wizbang
+\end{verbatim}
+\noindent Then alter your iptables to allow this service.  After adjusting your iptables, 
+confirm that you can run the {\tt wizbang} program successfully.
+Also, again use nmap to confirm the proper configuration
+\begin{verbatim}
+   nmap server
+\end{verbatim}
+
+\section{Submission}
+After finishing the lab, go to the terminal on your Linux system that was used to start the lab and type:
+\begin{verbatim}
+    stoplab 
+\end{verbatim}
+When you stop the lab, the system will display a path to the zipped lab results on your Linux system.  Provide that file to 
+your instructor, e.g., via the Sakai site.
+
+\copyrightnotice
+
+\end{document}

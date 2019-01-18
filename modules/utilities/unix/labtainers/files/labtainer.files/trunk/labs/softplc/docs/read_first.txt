@@ -1,0 +1,7 @@
+SOFT PLC LAB -- Read this first
+
+The lab manual for this lab is at: 
+   file://LAB_MANUAL
+
+Review the entire lab manual before proceeding with the lab.  
+

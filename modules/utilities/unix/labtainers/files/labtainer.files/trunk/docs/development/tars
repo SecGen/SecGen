@@ -1,0 +1,21 @@
+Large compressible file sets, e.g., system programs with a lot of files, or 
+big password crackign files, can be managed using lab directories ending in
+"_tar".  for example trunk/labs/<labname>/m_tar might contain several large 
+files.  These files are kept in svn as descrete files (the tar is not in svn).
+The image build process will tar (and compress) all such files into 
+a "m_tar.tar"  The designer must direct the Dockerfile to "Add" this file
+to the desired destination within the appropriate container.  (The name
+of the tar directory has no semantics beyond selecting the name of the
+tar file and directing the build to tar its content.)  The build function
+WILL DELETE any .tar files in such directores before performing the tar.
+
+The mkdist function will create a tar, but will also remove all other files
+from its temporary copy of the _tar directory.  In other words, only tar files
+will appear in the distribution tar.  NOTE: this makes a "rebuild" of a
+distributed repo precarious.  As such, the build function will not do anything
+if the only file in a _tar directory is the tarball.
+
+The home_tar directory has distinct semantics.  Files that originate from
+there will not be collected in studnet artifacts SO DO NOT PUT modifiable files
+there if you student mods are graded or germane to the lab.  A home_tar.list
+file is created in config & referenced when zipping up home.

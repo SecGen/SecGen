@@ -1,0 +1,167 @@
+\input{header}
+\begin{document}
+
+\begin{center}
+{\LARGE IPTables for Industrial Control Systems (iptables-ics)}
+\vspace{0.1in}\\
+\end{center}
+
+
+\section{Overview}
+This Labtainer exercise illustrates the use of iptables
+to limit network access to a PLC component in an operational
+technology (OT) environment. This control is provided by 
+a component serving as a firewall, as illustrated in Figure 
+\ref{fig:topology}.
+
+When properly configured, the firewall will only allow the following traffic
+between the clients and the PLC:
+\begin{itemize}
+\item Client 1 can only access the PLC via SSH and HTTP (port 8080).
+\item Client 2 can only access the PLC via MODBUS TCP and HTTP (ports 80 and 8080).
+\end{itemize}
+
+\subsection {Background}
+Industrial control systems often use IP based networks to communicate with
+other components.  Just as is the case with many information technology (IT) networks,
+protection of assets may depend on limiting the types of network traffic 
+permitted to flow between components.  For example, web traffic (e.g., HTTP)
+might only be permitted to enter a given component if it originates from specific
+sources.
+
+A variety of different techniques and products exist for the purpose of limiting
+IP traffic in IT and OT systems.  In this lab, you will limit IP traffic through
+use of Linux iptables.  
+The student is expected to have separately learned about the use of iptables
+to selectively block network traffic. The firewall component includes a few
+example firewall setting scripts that you can reference.  The manpage for iptables can be viewed on the
+firewall component using:
+\begin{verbatim}
+   man iptables
+\end{verbatim}
+
+Students are expected to have a basic 
+familiarity with the Linux command line, and the ability to edit files and
+run simple shell scripts. Some experience with Wireshark is presumed, e.g., performance of
+the wireshark-intro lab.
+
+\section{Lab Environment}
+This lab runs in the Labtainer framework,
+available at http://my.nps.edu/web/c3o/labtainers.
+That site includes links to a pre-built virtual machine
+that has Labtainers installed, however Labtainers can
+be run on any Linux host that supports Docker containers.
+
+From your labtainer-student directory start the lab using:
+\begin{verbatim}
+    labtainer iptables-ics
+\end{verbatim}
+\noindent A link to this lab manual will be displayed.  
+
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics [width=0.8\textwidth,natwidth=621,natheight=403]{iptables-ics.jpg}
+\end{center}
+\caption{Network topology for the iptables-ics lab}
+\label{fig:topology}
+\end{figure}
+
+\section{Lab Tasks}
+\subsection{Explore}
+The Wireshark utility is installed on the firewall. 
+Use it to view network traffic through the firewall, and to 
+debug your firewall rules.  Start it from the firewall terminal:
+\begin{verbatim}
+wireshark &
+\end{verbatim}
+\noindent Then select the eth0 interface.
+
+On both the client1 and client2 terminals use the following applications
+to explore the services offered by PLC:
+
+\begin{verbatim}
+        ./mbtcp-simple.py
+\end{verbatim}
+This starts a simple MODBUS client.  Observe the network traffic using
+wireshark, making note of the destination TCP port number used by the client when
+connecting to the PLC. Then use {\tt <ctrl C>} to terminate the program on each client.
+
+\noindent Start firefox on each client:
+\begin{verbatim}
+        firefox &
+\end{verbatim}
+\noindent and point the browswer to the following two URLs:
+\begin{verbatim}
+        http://plc:8080
+        http://plc
+\end{verbatim}
+\noindent Observe the traffic in wireshark, making note the
+source IP addresses and the destination ports used by the 
+clients when connecting to the PLC.
+
+\noindent Finally, use SSH to connect to the PLC from each client:
+\begin{verbatim}
+        ssh plc
+\end{verbatim}
+\noindent There is no need to login.  After observing the initial traffic,
+use {\tt <ctrl C>} to exit from ssh.
+
+\subsection{Use iptables to limit traffic}
+The iptables utility is installed on the ``firewall'' component.
+Use it to prevent the firewall from forwarding any traffic
+to the PLC other than specified below.
+
+\begin{enumerate}
+\item Client 1 can only access the PLC via SSH and HTTP 
+(with port 8080 only).
+\item Client 2 can only access the PLC via MODBUS TCP and HTTP 
+(with ports 8080 and 80).
+\item No other network traffic is permitted to reach the PLC
+\end{enumerate}
+
+You may reference and experiment with the example firewall scripts that
+are on the firewall component in the home directory.  \textbf{NOTE:} The IP addresses in the example
+script may not correspond to the IP addresses of your system, and would
+therefore need to be changed.  To run the {\tt example\_fw.sh} script, use:
+\begin{verbatim}
+        sudo ./example_fw.sh
+\end{verbatim}
+View the content of the scripts to understand what they do.
+Consider putting your iptables commands in a script so it is easy
+to test and reconfigure the iptables if you restart the lab.
+Note that the last line of {\tt example\_fw.sh} directs iptables
+to send log messages to a file that is at:
+\begin{verbatim}
+  /var/log/iptables.log
+\end{verbatim}
+\noindent If you include that directive in your configuration, you can observe when
+iptables drops filtered packets, e.g., by tailing the log from one of the 
+firewall terminal tabs:
+\begin{verbatim}
+  tail -f /var/log/iptables.log
+\end{verbatim}
+
+After configuring iptables to meet the requirements, use the applications on Client1 and Client2 to
+demonstrate that the firewall only allows the desired traffic.
+Watch the traffic in wireshark to confirm the TCP handshake fails
+when attempting to connect to filtered ports.  
+
+When you believe you have the proper iptables configuration and have tested it,
+use the {\tt stoplab} command from your Linux system.  You are free to then restart
+the lab using {\tt labtainer iptables-ics} and explore further without concern for
+the state of the system when you again stop it.  Alternately, if the {\tt checkwork} command is
+available on your distribution, you can use that command from the Linux system instead of {\tt stoplab}, and then just
+continue working.
+
+\section{Submission}
+After finishing the lab, go to the terminal on your Linux system that was used to start the lab and type:
+\begin{verbatim}
+    stoplab 
+\end{verbatim}
+When you stop the lab, the system will display a path to the zipped lab results on your Linux system.  Provide that file to 
+your instructor, e.g., via the Sakai site.
+
+\copyrightnotice
+
+\end{document}

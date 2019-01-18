@@ -1,0 +1,8 @@
+The lab manual is at 
+   file://LAB_DOCS/setuid-env.pdf
+A lab report template is at 
+   file://LAB_DOCS/setuid-env-report.docx
+
+You may open these by right clicking
+and select "Open Link".
+

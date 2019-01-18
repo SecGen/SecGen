@@ -1,0 +1,6 @@
+The lab manual is at 
+   file://LAB_DOCS/telnet.pdf
+
+You may open this manual by right clicking
+and select "Open Link".
+

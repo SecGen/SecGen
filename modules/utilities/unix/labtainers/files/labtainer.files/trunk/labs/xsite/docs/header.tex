@@ -1,0 +1,195 @@
+\documentclass[11pt]{article}
+
+\usepackage{times}
+\usepackage{epsf}
+\usepackage{epsfig}
+\usepackage{amsmath, alltt, amssymb, xspace}
+\usepackage{wrapfig}
+\usepackage{fancyhdr}
+\usepackage{url}
+\usepackage{upquote}
+\usepackage{verbatim}
+\usepackage{fancyvrb}
+\usepackage{graphicx}
+
+\usepackage{subfigure}
+\usepackage{cite}
+\usepackage{hyperref}
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+%\usepackage{cases}
+%\usepackage{ltexpprt}
+%\usepackage{verbatim}
+
+%\topmargin      -0.70in  % distance to headers
+%\headheight     0.2in   % height of header box
+%\headsep        0.4in   % distance to top line
+%\footskip       0.3in   % distance from bottom line
+
+% Horizontal alignment
+\topmargin      -0.50in  % distance to headers
+\oddsidemargin  0.0in
+\evensidemargin 0.0in
+\textwidth      6.5in
+\textheight     8.9in 
+
+
+%\centerfigcaptionstrue
+
+%\def\baselinestretch{0.95}
+
+
+\newcommand\discuss[1]{\{\textbf{Discuss:} \textit{#1}\}}
+%\newcommand\todo[1]{\vspace{0.1in}\{\textbf{Todo:} \textit{#1}\}\vspace{0.1in}}
+\newtheorem{problem}{Problem}[section]
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{fact}{Fact}
+\newtheorem{define}{Definition}[section]
+%\newtheorem{analysis}{Analysis}
+\newcommand\vspacenoindent{\vspace{0.1in} \noindent}
+
+%\newenvironment{proof}{\noindent {\bf Proof}.}{\hspace*{\fill}~\mbox{\rule[0pt]{1.3ex}{1.3ex}}}
+%\newcommand\todo[1]{\vspace{0.1in}\{\textbf{Todo:} \textit{#1}\}\vspace{0.1in}}
+
+%\newcommand\reducespace{\vspace{-0.1in}}
+% reduce the space between lines
+%\def\baselinestretch{0.95}
+
+\newcommand{\fixmefn}[1]{ \footnote{\sf\ \ \fbox{FIXME} #1} }
+\newcommand{\todo}[1]{
+\vspace{0.1in}
+\fbox{\parbox{6in}{TODO: #1}}
+\vspace{0.1in}
+}
+
+\newcommand{\mybox}[1]{
+\vspace{0.2in}
+\noindent
+\fbox{\parbox{6.5in}{#1}}
+\vspace{0.1in}
+}
+
+
+\newcounter{question}
+\setcounter{question}{1}
+
+\newcommand{\myquestion} {{\vspace{0.1in} \noindent \bf Question \arabic{question}:} \addtocounter{question}{1} \,}
+
+\newcommand{\myproblem} {{\noindent \bf Problem \arabic{question}:} \addtocounter{question}{1} \,}
+
+
+
+\newcommand{\copyrightnotice}[1]{
+\vspace{0.1in}
+\fbox{\parbox{6in}{\small Copyright \copyright\ 2014\ \ Wenliang Du, Syracuse University.\\
+      The development of this document is/was funded by the following grants from
+      the US National Science Foundation: No. 1303306 and 1318814.
+      This lab was imported into the Labtainer framework by the Naval Postgraduate 
+      School, Center for Cybersecurity and Cyber Operations under National Science 
+      Foundation Award No. 1438893.
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the GNU Free Documentation License, Version 1.2
+      or any later version published by the Free Software Foundation.
+      A copy of the license can be found at http://www.gnu.org/licenses/fdl.html.}}
+\vspace{0.1in}
+}
+
+\newcommand{\copyrightnoticeA}[1]{
+\vspace{0.1in}
+\fbox{\parbox{6in}{\small Copyright \copyright\ 2006\ \ Wenliang Du, Syracuse University.\\
+      The development of this document was partially funded by
+      the National Science Foundation's Course, Curriculum, and Laboratory
+      Improvement (CCLI) program under Award No. 0618680 and 0231122.
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the GNU Free Documentation License, Version 1.2
+      or any later version published by the Free Software Foundation.
+      A copy of the license can be found at http://www.gnu.org/licenses/fdl.html.}}
+\vspace{0.1in}
+}
+
+
+\newcommand{\nocopyrightnotice}[1]{
+\vspace{0.1in}
+\fbox{\parbox{6in}{\small  
+      The development of this document is funded by 
+      the National Science Foundation's Course, Curriculum, and Laboratory 
+      Improvement (CCLI) program under Award No. 0618680 and 0231122. 
+      Permission is granted to copy, distribute and/or modify this document.
+      }}
+\vspace{0.1in}
+}
+
+\newcommand{\idea}[1]{
+\vspace{0.1in}
+{\sf IDEA:\ \ \fbox{\parbox{5in}{#1}}}
+\vspace{0.1in}
+}
+
+\newcommand{\questionblock}[1]{
+\vspace{0.1in}
+\fbox{\parbox{6in}{#1}}
+\vspace{0.1in}
+}
+
+
+\newcommand{\minix}{{\tt Minix}\xspace}
+\newcommand{\unix}{{\tt Unix}\xspace}
+\newcommand{\linux}{{\tt Linux}\xspace}
+\newcommand{\ubuntu}{{\tt Ubuntu}\xspace}
+\newcommand{\selinux}{{\tt SELinux}\xspace}
+\newcommand{\freebsd}{{\tt FreeBSD}\xspace}
+\newcommand{\solaris}{{\tt Solaris}\xspace}
+\newcommand{\windowsnt}{{\tt Windows NT}\xspace}
+\newcommand{\setuid}{{\tt Set-UID}\xspace}
+%\newcommand{\smx}{{\tt Smx}\xspace}
+\newcommand{\smx}{{\tt Minix}\xspace}
+\newcommand{\relay}{{\tt relay}\xspace}
+\newcommand{\isys}{{\tt iSYS}\xspace}
+\newcommand{\ilan}{{\tt iLAN}\xspace}
+\newcommand{\iSYS}{{\tt iSYS}\xspace}
+\newcommand{\iLAN}{{\tt iLAN}\xspace}
+\newcommand{\iLANs}{{\tt iLAN}s\xspace}
+\newcommand{\bochs}{{\tt Bochs}\xspace}
+
+\newcommand\FF{{\mathcal{F}}}
+
+\newcommand{\argmax}[1]{
+\begin{minipage}[t]{1.25cm}\parskip-1ex\begin{center}
+argmax
+#1
+\end{center}\end{minipage}
+\;
+}
+
+\newcommand{\bm}{\boldmath}
+\newcommand  {\bx}    {\mbox{\boldmath $x$}}
+\newcommand  {\by}    {\mbox{\boldmath $y$}}
+\newcommand  {\br}    {\mbox{\boldmath $r$}}
+
+
+%\pagestyle{fancyplain}
+%\lhead[\thepage]{\thesection}      % Note the different brackets!
+%\rhead[\thesection]{SEED Laboratories}
+%\lfoot[\fancyplain{}{}]{Syracuse University} 
+%\cfoot[\fancyplain{}{}]{\thepage} 
+
+\newcommand{\tstamp}{\today}   
+%\lhead[\fancyplain{}{\thepage}]         {\fancyplain{}{\rightmark}}
+%\chead[\fancyplain{}{}]                 {\fancyplain{}{}}
+%\rhead[\fancyplain{}{\rightmark}]       {\fancyplain{}{\thepage}}
+%\lfoot[\fancyplain{}{}]                 {\fancyplain{\tstamp}{\tstamp}}
+%\cfoot[\fancyplain{\thepage}{}]         {\fancyplain{\thepage}{}}
+%\rfoot[\fancyplain{\tstamp} {\tstamp}]  {\fancyplain{}{}}
+
+\pagestyle{fancy}
+%\lhead{\bfseries Computer Security Course Project}
+\lhead{\bfseries SEED Labs}
+\chead{}
+\rhead{\small \thepage}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+
+
+

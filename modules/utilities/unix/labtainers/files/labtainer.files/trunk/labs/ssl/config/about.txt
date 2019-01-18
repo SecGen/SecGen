@@ -1,0 +1,1 @@
+The use of SSL to authenticate both sides of a connection. Includes creation of client and server certificates.

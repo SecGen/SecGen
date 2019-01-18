@@ -1,0 +1,166 @@
+\input{header}
+\begin{document}
+
+\begin{center}
+{\LARGE SSL}
+\vspace{0.1in}\\
+\end{center}
+
+\copyrightnotice
+
+\section{Overview}
+This lab requires that you use SSL certificates to authenticate devices
+on a simulated industrial control system network shared by 
+Programmable Logic Controlers (PLCs) and Human Machine Inteface (HMI) devices.
+The concepts covered by this lab are applicable to pairs of clients and servers,
+e.g., a web broswer and a web server.
+
+\subsection {Background}
+The student is expected to have separately learned about the basic elements of PKI 
+certificates, e.g., public/private key pairs, Certification Authorities, 
+signing requests and certificate chains.  If the student is engaded in independent
+study, several tutorial videos that cover public key cryptography are at:\\
+\url{https://my.nps.edu/web/c3o/movies} \\
+Tutorials on the use of the {\tt openssl} utility can be found on the web, and details
+can be viewed using \\
+``{\tt man openssl}''.
+
+The student is expected to have at least a basic understanding of the Linux command line,
+the basics of the file system, and the ability to use {\tt scp} to copy files from
+one computer to another.
+
+\section{Lab Environment}
+This lab runs in the Labtainer framework,
+available at http://my.nps.edu/web/c3o/labtainers.
+That site includes links to a pre-built virtual machine
+that has Labtainers installed, however Labtainers can
+be run on any Linux host that supports Docker containers.
+
+From your labtainer-student directory start the lab using:
+\begin{verbatim}
+    labtainer ssl
+\end{verbatim}
+\noindent A link to this lab manual will be displayed.  
+
+\textbf{All user ids in the lab are {\tt admin} and all passwords are {\tt password}}.
+
+\section{Network Configuration}
+This lab includes two sumulated PLCs, two HMI devices, and a certification
+authority as shown in Figure~\ref{fig:topology}.
+When the lab starts, you will get several virtual terminals, one connected to each
+component.
+
+The host names of each component are per the diagram.  The /etc/hosts files
+allow use of these host names instead of explicit ip addresses.
+
+Initially, the {\tt plc1} and the {\tt hmi1} components have PKI certificates
+and keys provided by the {\tt ca}.  The {\tt hmi1} component includes a 
+{\tt client\_ssl} program that sends instructions to a PLC using client-authenticated
+TLS.  The {\tt plc1} component includes a {\tt service\_ssl} service that receives
+instructions from hmi components.  The SSL connection utilized by the client and server
+side of this communication are both authenticated using keys and certificates 
+generated using the CA component.
+
+The {\tt plc2} and the {\tt hmi2} components initially lack keys and certificates.  They
+include {\tt client} and {\tt server} programs that are functionally identical to those on the
+{\tt plc1} and {\tt hmi1} components, except that they do not use SSL.
+
+The ca component is configured for signing certificates within the ``example.com'' domain,
+and was used to generated and sign the initial set of certificates.
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics [width=0.8\textwidth,natwidth=621,natheight=403]{ssl.jpg}
+\end{center}
+\caption{Network topology for the ssl lab}
+\label{fig:topology}
+\end{figure}
+
+\section{Lab Tasks}
+\subsection{Explore}
+Start the server\_ssl service on the PLC1 component:
+\begin{verbatim}
+   ./server_ssl
+\end{verbatim}
+\noindent and the server service on PLC2:
+\begin{verbatim}
+   ./server
+\end{verbatim}
+
+\noindent Then start wireshark on each of the two HMI components to allow you to
+view the network traffic.
+\begin{verbatim}
+   wireshark &
+\end{verbatim}
+\noindent Select the {\tt eth0} device.
+
+Then use the client programs on the HMI components to communicate with the PLCs and observe
+the network traffic.  On the hm1 component:
+\begin{verbatim}
+   ./client_ssl plc1 This is an instruction
+\end{verbatim}
+
+\noindent and on the hmi2 component:
+\begin{verbatim}
+   ./client plc2 This is an instruction
+\end{verbatim}
+
+What differences do you see in wireshark when you communicate between plc1 and hmi1 as 
+opposed to communication between plc2 and hmi2?
+
+Try to send instructions from hmi2 to plc1.  What happens, and why?
+Try using the {\tt client\_ssl} program on hmi2 to communicate with each PLC.
+
+Then try to send instructions from hmi1 to plc2.  Again, what happens and why?
+
+\subsection{Generate certficates and keys}
+Use the {\tt openssl} utility on the CA component to generate keys and certificates for the {\tt hmi2 and \tt plc2} components.
+As an example, the key generation, signing requests and certificate signing operations that were
+used for {\tt plc1} are provided below:
+\begin{verbatim}
+# plc1 key gen
+openssl genrsa -out intermediate/private/plc1.example.com.key.pem 2048
+chmod 400 intermediate/private/plc1.example.com.key.pem
+
+# plc1 cert signing request
+openssl req -config intermediate/openssl.cnf \
+      -key intermediate/private/plc1.example.com.key.pem \
+      -subj '/CN=plc1.example.com/O=Example./C=US/ST=CA' \
+      -new -sha256 -out intermediate/csr/plc1.example.com.csr.pem
+
+# sign plc1 cert
+openssl ca -batch -config intermediate/openssl.cnf \
+      -extensions server_cert -days 375 -notext -md sha256 \
+      -in intermediate/csr/plc1.example.com.csr.pem \
+      -out intermediate/certs/plc1.example.com.cert.pem
+\end{verbatim}
+Before running {\tt openssl} commands, change your directory to the ca directory:
+\begin{verbatim}
+   cd ~/ca
+\end{verbatim}
+Generate certificates and keys for plc2, and then for hmi2.  Note when signing 
+the hmi2 certificate, you should not include the ``{\tt -extensions server\_cert}'' option
+because you are signing a client certificate.
+
+Use scp \footnote{The user ID is admin, and the password is ``passsword''.} 
+to transfer files from the CA to the appropriate component.
+You will also want to transfer the certificate chain (i.e., the root and intermediate
+certificates) from {\tt intermediate/certs/ca-chain.cert.pem} to the {\tt ~/certs} directory 
+of the two components.  (Note you have plc1 and hmi1 as working examples).
+
+\subsection{Demonstrate communication between all 4 components}
+After installing the certificates and keys, start the {\tt server\_ssl}
+service on each of the PLC components.
+If you have properly installed certificates and keys on hmi2 and plc2, then you should
+be able to use the {\tt client\_ssl} program to send instructions to either of the
+PLCs from either of the HMI components.  
+
+\section{Submission}
+After finishing the lab, go to the terminal on your Linux system that was used to start the lab and type:
+\begin{verbatim}
+    stoplab 
+\end{verbatim}
+When you stop the lab, the system will display a path to the zipped lab results on your Linux system.  Provide that file to 
+your instructor, e.g., via the Sakai site.
+
+\end{document}

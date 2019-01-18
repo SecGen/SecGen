@@ -1,0 +1,93 @@
+The framework has not yet been adapted to use Linux package managers.
+Currently, scripts are run from a workspace directory and python
+paths are managed relatively between scripts.  
+
+Student scripts, e.g., start.py, run from the trunk/scripts/labtainer-student directory.
+That directory also contains the labutils.py, which contains most of the framework
+functions.
+
+When a student container is first started "docker exec" is used
+to run parameterize.sh on the container.
+
+That script also invokes hookBash.sh, which adds the bash
+sdtin/stout capturing hook, and adds the startup.sh call
+into the .profile.
+
+The startup.sh scripts differ between instructor and student.  The latter
+displays instructions.txt.  The former runs grading.
+The startup.sh uses a lock to control which
+terminal displays the instructions or grading.  In practice instruction
+display and the running of the instructor.py script is done by
+an xterm that explicitly runs the startup.sh directly, and thus
+the startup.sh invoked by profile.sh typically never does anything.
+HOWEVER... the startup.sh invoked by student will source a student_startup.sh if present.
+
+Regression testing of grading functions is performed by labtainer-instructor/regress.py.
+Expected results are stored in the labtainer/testsets directory.
+
+\section{Developer Software Prerequisits}
+\begin {itemize}
+\item Subversion
+\item Latex (texlive-full)
+\end {itemize}
+
+
+\section{Getting Labtainers from Subversion}
+svn co https://tor.ern.nps.edu/svn/proj/labtainer
+Change directory to trunk/setup-scripts and run ./build-docs.sh to build the PDF lab
+manuals so that you can reference the manuals while you test or otherwise reference
+existing labs.  (Please follow the lab manual and report discrepancies!)
+Then run ./pull-all.sh to pull all the baseline images (so that your running of 
+existing labs is more akin to what students and instructors do so we can better test that).
+
+\section{Testing and Running Existing Labs}
+There are situations where you will run an existing lab, e.g., to test it, or to 
+observe some example.  When running labs, please refer to the lab manuals
+so that they get reivewed and tested by different people.  Also, please first delete
+the lab using trunk/setup\_scripts/removelab.sh to ensure that you are running the latest
+version of the published lab.  If you find the lab to be broken, e.g., missing a file, please
+attempt to run "rebuild.py" on the lab.  Report these findings to the lab author.  And always
+run removelab.sh after you have run an existing lab via rebuild.py.  Again, the goal is to
+force ourselves to run the distributed labs unless we have specific reasons to do otherwise.
+
+
+\section{Automation and Distributions}
+The mkdist.sh script runs on a Linux VM hosted on windows, and creates the distribution tar 
+and copies it into a shared folder.  From that folder, it is copied to the 
+\\my.nps.edu@SSL\DavWWWRoot\webdav\c30-staging\document\_library" and then "Publish to Live" is 
+performed on the Liferay site.
+Two prepackaged VMs are maintained: one for VirtualBox, and one for VMWare.  Each include
+their respective guest additions.  The VMs are maintained on a Linux system using command line
+utilities, e.g., VBoxManage.  The VMs are rigged to update labtainers, including a pull of
+baseline images, on each boot until the first lab is commenced.  Scripts named "export*" are
+used to created the appliance files.  The scripts re-import into test images, which must be
+manually tested.  The WinSCP script pushes new applicance images to the CyberCIEGE download
+directory on the C3O web server.  (Wine and WinSCP must be installed on the Linux host that
+manages the VMs.
+
+\section {Race condition on checklocal.sh output}
+If an mynotify.py event causes an output from checklocal.py, that may conflict with
+concurrent output from checklocal.py resulting from some program/script running.  In 
+theory, the program/script should complete its run of checklocal before the program/script
+actually gets to access the file that triggers a mynotify watch.  So, the latter's output
+to the timestamped file is appended.  Further, the mynotify.py looks for an existing timestamped
+file, and if not found, looks for one from the previous second.  This hack is an attempt to
+keep the outputs merged.  It will fail if the access does not happen within a second of the
+program start.  See the acl lab.
+
+\section {installation sizes}
+An initial install, including the base images, requires about 4GB.  Installing a larger lab,
+e.g., snort, requires an additional 1GB.  Running bufoverflow added 22M.
+
+\section {temporal logic considerations}
+When evaluating results from logfiles containing timestamps use FILE\_TS or FILE\_TS\_REGEX
+to ensure you get timestamped values for only matching records. Reliance on goals.config to
+matchany can result in timestamped results that don't corrolate to the desired record. 
+
+\section {parameterizing the start.config}
+Is difficult.  The current parameterization features only affect containers, and leave no
+persistent trail.  Thus, several students could share a computer and, via "redo.py", each 
+perform that same lab with parameterization maintained for each student.  There is only one
+start.config per Labtainers installation.   But... the start.config is only used during
+docker create container.  So that could be driven from a copy that is parameterized as needed?
+Except, the parameterized values are available for assessment.

@@ -1,0 +1,76 @@
+\input{header}
+\begin{document}
+
+\begin{center}
+{\LARGE DMZ Lab}
+\vspace{0.1in}\\
+\end{center}
+
+\copyrightnotice
+
+\section{Overview}
+This lab requires that you configure a DMZ using iptables on two gateway components.
+
+\section{Lab Environment}
+This lab runs in the Labtainer framework,
+available at http://my.nps.edu/web/c3o/labtainers.
+That site includes links to a pre-built virtual machine
+that has Labtainers installed, however Labtainers can
+be run on any Linux host that supports Docker containers.
+
+From your labtainer-student directory start the lab using:
+\begin{verbatim}
+    labtainer dmz-lab
+\end{verbatim}
+\noindent A link to this lab manual will be displayed.  
+
+\section{Network Configuration}
+This lab includes several networked computers as shown in Figure~\ref{fig:topology}.
+Note however that your instance of the lab will have different IP addresses
+for some of the components.
+When the lab starts, you will get several virtual terminals, one connected to each
+component.
+
+The outer gateway and the remote gateway each reach the Internet via an ISP with 
+address 198.18.0.1.  The local site has a network address of 198.18.1.0/24.  The remote
+site has a network address of 203.0.113.0/24.
+
+Initially, the DMZ is in name only.
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics [width=0.8\textwidth,natwidth=621,natheight=403]{dmz-lab.jpg}
+\end{center}
+\caption{Network topology for dmz-lab}
+\label{fig:topology}
+\end{figure}
+
+\section{Lab Tasks}
+Configure the inner\_gateway and outer\_gateway such that:
+\begin{itemize}
+\item Remote users can only access the web server, e.g., via wget www.example.com, using
+HTTP, HTTPS and SSH.
+\item Local users can reach the internet via the ISP, e.g., wget www.google.com
+\item Local users can reach the local web server via HTTP, HTTPS, SSH and MYSQL
+\end{itemize}
+
+Use the /etc/rc.local scripts on the inner and outer gateways to issue iptables directives.
+Respect the comments in the rc.local scripts regarding sections that should not be modified.
+Demonstrate your DMZ by issuing the following commands, without any additional changes to iptables.
+\begin{enumerate}
+\item On the remote\_ws (hank): {\tt sudo nmap www.example.com}
+\item On the ws1 (tom): {\tt sudo nmap www.example.com}
+\item On the ws1 (tom): {\tt wget www.google.com}
+\end{enumerate}
+\noindent If you make any changes to iptables in the course of your testing, restart your testing from
+item (1) above.
+
+\section{Submission}
+After finishing the lab, go to the terminal on your Linux system that was used to start the lab and type:
+\begin{verbatim}
+    stoplab dmz-lab
+\end{verbatim}
+When you stop the lab, the system will display a path to the zipped lab results on your Linux system.  Provide that file to 
+your instructor, e.g., via the Sakai site.
+
+\end{document}

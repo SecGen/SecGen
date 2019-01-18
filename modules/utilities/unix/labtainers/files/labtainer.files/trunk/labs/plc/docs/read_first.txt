@@ -1,0 +1,9 @@
+PLC LAB -- Read this first
+
+The lab manual for this lab is at: 
+file://LAB_MANUAL
+
+It can be opened by right clicking on the link and
+selecting "Open link".  Read the "Background" section 
+of the manual before proceeding with the lab.  
+

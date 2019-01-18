@@ -1,0 +1,8 @@
+The lab manual is at 
+   file://LAB_DOCS/local-dns.pdf
+A lab report template is at 
+   file://LAB_DOCS/local-dns-report.docx
+
+You may open these by right clicking
+and select "Open Link".
+

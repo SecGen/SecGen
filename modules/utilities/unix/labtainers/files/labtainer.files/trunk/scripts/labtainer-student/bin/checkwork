@@ -1,0 +1,101 @@
+#!/usr/bin/env python
+'''
+This software was created by United States Government employees at 
+The Center for the Information Systems Studies and Research (CISR) 
+at the Naval Postgraduate School NPS.  Please note that within the 
+United States, copyright protection is not available for any works 
+created  by United States Government employees, pursuant to Title 17 
+United States Code Section 105.   This software is in the public 
+domain and is not subject to copyright. 
+'''
+
+'''
+Stop a given Labtainers lab.  If no arguments are given, then all running
+labs will be stopped.
+'''
+
+import sys
+import os
+import labutils
+import logging
+import LabtainerLogging
+import CurrentLab
+import argparse
+import imp
+sys.path.append('../labtainer-instructor/bin')
+sys.path.append('../labtainer-instructor/assess_bin')
+
+gradelab = imp.load_source('gradelab', '../labtainer-instructor/bin/gradelab')
+
+
+# Usage: stop.py <labname>
+# Arguments:
+#    <labname> - the lab to stop
+def main():
+    parser = argparse.ArgumentParser(description='Stop a Labtainers lab.  If no arguments are provided, then all labs are stopped.')
+    parser.add_argument('lab', nargs='?')
+    args = parser.parse_args()
+    labname = None 
+    lablist = []
+    lablist = labutils.GetListRunningLab()
+    if args.lab is not None:
+        labname = args.lab
+        if labname not in lablist:
+            print('%s lab is not running, looking for previous results...' % args.lab)
+            here=os.getcwd()
+            os.chdir('../labtainer-instructor')
+            gradelab.doGrade(labname, False, False, False, False)
+            os.chdir(here)
+            sys.exit(0)
+        labutils.logger = LabtainerLogging.LabtainerLogging("checkwork.log", labname, "../../config/labtainer.config")
+    else:
+        labutils.logger = LabtainerLogging.LabtainerLogging("checkwork.log", 'searching', "../../config/labtainer.config")
+        if len(lablist) > 1:
+            print('multiple labs running, specify the name of the lab you want to check:\n\t checkwork <lab>') 
+            sys.exit(0)
+        elif len(lablist) == 0:
+            print('No labs are currently running.')
+            sys.exit(0)
+        else:
+            labname = lablist[0]
+
+    labutils.logger.INFO("Begin logging checkwork for %s lab" % labname)
+    
+    lab_path = os.path.join(os.path.abspath('../../labs'), labname)
+    labtainer_config, start_config = labutils.GetBothConfigs(lab_path, labutils.logger)
+    if labtainer_config.checkwork != 'yes':
+        print('Checking own work not supported for this deployment of Labtainers')
+        sys.exit(0)
+    if start_config.checkwork != 'yes':
+        print('Checking own work not supported for Lab')
+        sys.exit(0)
+    # Pass 'False' to ignore_stop_error (i.e., do not ignore error)
+    has_running_containers, running_containers_list = labutils.GetRunningContainersList()
+    if has_running_containers:
+        has_lab_role, labnamelist = labutils.GetRunningLabNames(running_containers_list)
+        if has_lab_role:
+            if labname not in labnamelist:
+                labutils.logger.ERROR("No lab named %s in currently running labs!" % labname)
+                sys.exit(1)
+        else:
+            labutils.logger.ERROR("Student is not running any labs")
+            sys.exit(1)
+    else:
+        print("No labs are running")
+        labutils.logger.DEBUG("No labs are running")
+        sys.exit(1)
+    current_lab = CurrentLab.CurrentLab()
+    clone_count = current_lab.get('clone_count')        
+    servers = current_lab.get('servers')        
+    labutils.StopLab(lab_path, False, servers=servers, clone_count=clone_count, keep_running=True)
+    here=os.getcwd()
+    os.chdir('../labtainer-instructor')
+    gradelab.doGrade(labname, False, False, False, False, copy_json = False)
+    os.chdir(here)
+
+
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())
+

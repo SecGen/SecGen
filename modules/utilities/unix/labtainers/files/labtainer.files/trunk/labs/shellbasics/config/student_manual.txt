@@ -1,0 +1,81 @@
+Labtainer Student Guide
+June 19, 2017
+1
+Introduction
+This manual is intended for use by students performing labs with Labtainers. Labtainers assume you have a
+Linux system, e.g., a virtual machine. Refer to in Appendix A for installation of Virtual Box and a Linux
+system. Note though, that any Linux system can be used as long as it supports Dockers.
+1.1
+Obtaining Labtainers and installing Docker
+The Labtainers environment is distributed as a tarball from: https://my.nps.edu/documents/107523850/
+109121362/labtainer.tar/6fc80410-e87d-4e47-ae24-cbb60c7619fa Untar this file in your Linux system.
+Install Docker by running one of the install-docker scripts, depending on your Linux distribution:
+./labtainer/trunk/setup_scripts/install-docker-ubuntu.sh
+or
+./labtainer/trunk/setup_scripts/install-docker-fedora.sh
+If you have a different Linux distribution, find instructions for installing Docker at https://docs.docker.com/
+engine/installation/
+If you already have Dockers installed, or installed Docker for a different distribution, make sure you also
+have python, and the python netaddr module installed.
+2
+Performing a Lab
+All labs are run from the same workspace directory:
+cd labtainers/trunk/scripts/labtainers-student
+Then run the lab:
+./start.py <labname>
+The first time any given lab is run, it may take a short while to build the Docker images required for the
+lab. Subsequent runs will start much faster.
+Follow the instructions that appear in one of the resulting virtual terminals. While running the lab, if you
+require more virtual terminals, use:
+./moreterm.py <labname>
+The virtual terminals for most labs present bash shells via which you can interact with the attached computer,
+(which is actually a Docker container). A single computer may have multiple virtual terminals attached to it.
+Each computer is independent, and may use networks to interact with other computers within the lab.
+2.1
+Networking
+In addition to networks properties defined for the lab, each component /etc/host file includes a ”my host
+entry” that names the host Linux. Most containers will include a default gateway that leads to the Linux host.
+This allows students to scp files to/from the container and host. It also allows the student to reach external
+networks, e.g., to fetch additional packages in support of student exploration.
+In some instances, the lab requires one or more components to a have different default route. Typically, these
+components will include a togglegw.sh script that the student can use to toggle the default gateway between one
+that leads to the host, and one defined for the lab. This allows students to add packages on components having
+lab-specific default gateways. Use of the togglegw.sh script is not necessary to reach the Linux host, (e.g., to
+scp files).
+12.2
+Limitations
+The ”computers” are individual Docker containers that are interconnected via virtual networks. These containers
+each share the Linux kernel of your host. Thus, a change to the kernel configuration on one computer, (e.g.,
+enabling ASLR), will be visible on other containers, as well as your host.
+The computers each include a ”.local” directory beneath the HOME directory. This is used by the Labtainer
+framework and includes results that get packaged up for forwarding to the instructor. Do not modify any files
+beneath the .local directory. Otherwise, you can treat those containers as Linux systems, and explore them.
+Please note that while running programs in the virtual computers, passwords provided to applications such
+as ”ssh” are not supressed. This is a side effect of the Labtainers support for automated assessment.
+2.3
+Stopping Labtainers
+When you are finished, or wish to stop working, type:
+./stop.py <labname>
+The stop.py command will display the directory containing a zip file that should be provided to your instructor.
+2A
+Appendix A: Installing Virtual Box and Ubuntu
+The instructions below describe installation of an Ubuntu Linux VM to serve as the Labtainer host. If you
+already have a Linux system that can support Dockers, you may skip this section.
+• Install Virutal Box from : https://www.virtualbox.org/wiki/Downloads
+• Download the latest Ubuntu LTS distribution .iso image.
+• Use VirtualBox to create a new VM, allocate at least 10GB of disk storage.
+• Select the Ubuntu iso image in the VirtualBox storage settings, and select ”Live CD/DVD”
+• Power on the virtual machine and install Ubuntu.
+The following additions simplify movement of files between Virtual Box guests and the host computer.
+To setup shared folder:
+• create or identify a folder on the host to share with the guest
+• on the virtualbox guest, select ”settings” / ”Shared Folders”, then select host’s shared folder.
+• download a virtualbox guest additions iso from http://download.virtualbox.org/virtualbox and se-
+lect the version of virtual box you are using (5.0.24 for example)
+• on the virtualbox guest, select ”settings” / ”Storage” and change the CD rom to mount the iso downloaded
+• If the guest additions does not automatically prompt you, then mount the CD inside the guest then run
+the guestadditions
+• Once VBox Guest Additions is completed, reboot the guest
+• Add the user (in the guest) to the vboxsf group:
+sudo adduser $USER vboxsf
+3
