@@ -60,10 +60,6 @@
     <module_path>.*parameterised_website</module_path>
   </conflict>
 
-  <conflict>
-    <type>webapp</type>
-  </conflict>
-
   <requires>
     <module_path>.*apache</module_path>
     <type>httpd</type>

@@ -135,6 +135,9 @@ class Module
             required_value = prepare_required_value(require_key, required_value)
             if Regexp.new(required_value).match(value)
               key_matched = true
+            elsif required_value.include? '?!'
+              # Return false immediately if we've got a negative regex match as this module definitely does not match requirements.
+              return false
             end
           end
         end
