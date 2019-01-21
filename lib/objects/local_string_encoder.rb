@@ -133,7 +133,7 @@ class StringEncoder
     end
 
     enforce_utf8
-    print_outputs
+    print_outputs if has_base64_inputs
   end
 
   # Encode local instance variables as UTF-8
@@ -151,7 +151,7 @@ class StringEncoder
   end
 
   def print_outputs
-    puts has_base64_inputs ? base64_encode_outputs : self.outputs
+    puts base64_encode_outputs
   end
 
   def base64_encode_outputs
