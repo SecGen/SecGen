@@ -11,4 +11,8 @@
   <type>puppet_module</type>
   <platform>linux</platform>
 
+  <requires>
+    <module_path>.*handy_cli_tools.*</module_path>
+  </requires>
+
 </utility>
