@@ -132,32 +132,26 @@
       </input>
     </utility>
 
-    <service/>
-    <service/>
-
-    <vulnerability access="remote" type="^((?!webapp).)*$">
-      <input into="business_domain">
-        <datastore access_json="['domain']">organisation</datastore>
+    <vulnerability access="remote" type="(?!.*webapp).*">
+    <input into="organisation">
+        <datastore>organisation</datastore>
       </input>
-      <input into="business_name">
-        <datastore access_json="['business_name']">organisation</datastore>
-      </input>
-      <input into="person">
-        <datastore access_json="['manager']">organisation</datastore>
+      <input into="strings_to_leak">
+        <value/>
       </input>
     </vulnerability>
 
-    <vulnerability type="^((?!webapp).)*$">
-      <input into="business_domain">
-        <datastore access_json="['domain']">organisation</datastore>
+    <vulnerability type="(?!.*webapp).*">
+      <input into="organisation" >
+        <datastore>organisation</datastore>
       </input>
-      <input into="business_name">
-        <datastore access_json="['business_name']">organisation</datastore>
-      </input>
-      <input into="person">
-        <datastore access_json="['manager']">organisation</datastore>
+      <input into="strings_to_leak">
+        <value/>
       </input>
     </vulnerability>
+
+    <service/>
+    <service/>
 
     <build type="cleanup">
       <input into="root_password">
@@ -172,7 +166,7 @@
     </network>
   </system>
 
-  <!-- Desktop Client on NIC2 -->
+   <!--Desktop Client on NIC2 -->
   <system>
     <system_name>desktop</system_name>
     <!-- Starts as a server base, and installs XFCE via a vulnerability -->
@@ -185,12 +179,15 @@
     </utility>
 
     <vulnerability module_path=".*xfce_lightdm_root_login"/>
-    <utility module_path=".*iceweasel" >
-    <input into="accounts">
-      <datastore access_json="['manager']">organisation</datastore>
-    </input>
+
+    <utility module_path=".*iceweasel">
+      <input into="accounts">
+        <datastore access_json="['manager']">organisation</datastore>
+      </input>
     </utility>
+
     <utility module_path=".*handy_cli_tools"/>
+
     <network type="private_network">
       <input into="IP_address">
         <datastore access="next">IP_addresses</datastore>
@@ -217,6 +214,7 @@
         <datastore access="next">IP_addresses</datastore>
       </input>
     </network>
+  <!--<network module_path=".*private_network_2"/>-->
   </system>
 
 </scenario>
