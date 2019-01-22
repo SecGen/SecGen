@@ -138,26 +138,20 @@
   <hint>There are automated tools, such as sqlmap, that will probe database through the web application and retrieve the data. </hint>
   <solution>You can dump the database with the following command: 'sqlmap --url=http://url:port/product?filter=* --dump' and follow the instructions when prompted.</solution>
 
-  <!-- TODO: confict w/ Stretch/Kali as it uses php5 mysql_connect() function. Needs refactor to use PHP PDO. -->
   <conflict>
-    <name>.*Stretch.*</name>
-  </conflict>
-
-  <conflict>
-    <name>.*Kali.*</name>
+    <module_path>modules/bases/kali.*</module_path>
   </conflict>
 
   <requires>
-    <module_path>.*apache</module_path>
-    <type>httpd</type>
+    <module_path>.*apache.*compatible.*</module_path>
   </requires>
 
   <requires>
-    <module_path>.*/mysql.*</module_path>
+    <module_path>.*mysql.*compatible.*</module_path>
   </requires>
 
   <requires>
-    <module_path>.*/php.*</module_path>
+    <module_path>.*php_5.*compatible.*</module_path>
   </requires>
 
 </vulnerability>
