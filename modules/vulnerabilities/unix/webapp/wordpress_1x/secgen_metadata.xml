@@ -63,15 +63,15 @@
   </requires>
 
   <requires>
-    <module_path>.*/apache_wheezy.*</module_path>
+    <module_path>.*apache.*compatible.*</module_path>
   </requires>
 
   <requires>
-    <module_path>.*/mysql_wheezy.*</module_path>
+    <module_path>.*mysql.*compatible.*</module_path>
   </requires>
 
   <requires>
-    <module_path>.*/php_wheezy.*</module_path>
+    <module_path>.*php_5.*compatible.*</module_path>
   </requires>
 
 </vulnerability>
