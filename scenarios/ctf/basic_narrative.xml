@@ -15,8 +15,13 @@
   <difficulty>intermediate</difficulty>
 
   <system>
-    <system_name>system</system_name>
+    <system_name>target</system_name>
     <base distro="Debian 7.8" platform="linux" type="server"/>
+
+    <input into_datastore="IP_addresses">
+      <value>172.10.0.2</value>
+      <value>172.10.0.3</value>
+    </input>
 
     <input into_datastore="accounts">
       <!-- [0]: Entry account -->
@@ -434,12 +439,27 @@
 
     <utility module_path=".*sqlmap.*"/>
 
-    <network module_path=".*private_network_1"/>
+    <network type="private_network">
+      <input into="IP_address">
+        <datastore access="next">IP_addresses</datastore>
+      </input>
+    </network>
+
     <build type="cleanup">
       <input into="root_password">
         <generator type="strong_password_generator"/>
       </input>
     </build>
+  </system>
+
+  <system>
+    <system_name>attack_vm</system_name>
+    <base distro="Kali" name="MSF"/>
+    <network type="private_network">
+      <input into="IP_address">
+        <datastore access="next">IP_addresses</datastore>
+      </input>
+    </network>
   </system>
 
 </scenario>

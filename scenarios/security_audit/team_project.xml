@@ -14,17 +14,19 @@
   <type>blind-audit</type>
   <difficulty>intermediate</difficulty>
 
+  <!-- TODO: update the oVirt plugin to work with multiple NICs and re-introduce pivoting -->
+
   <!-- Web Server on NIC1 and NIC2 -->
   <system>
-    <system_name>web_server</system_name>
-    <base platform="linux" distro="Debian 9" type="server"/>
+    <system_name>web</system_name>
+    <base platform="linux" distro="Debian 7.8" type="server"/>
 
     <input into_datastore="IP_addresses">
-      <value>172.10.0.1</value>
       <value>172.10.0.2</value>
       <value>172.10.0.3</value>
       <value>172.10.0.4</value>
       <value>172.10.0.5</value>
+      <value>172.10.0.6</value>
     </input>
 
     <service module_path="services/unix/http/parameterised_website">
@@ -40,26 +42,21 @@
       </input>
     </service>
 
-    <vulnerability privilege="user_rwx" access="remote" type="^((?!webapp).)*$">
-      <input into="business_domain">
-        <datastore access_json="['domain']">organisation</datastore>
+    <vulnerability module_path="" privilege="user_rwx" access="remote" type="(?!.*webapp).*">
+      <input into="organisation">
+        <datastore>organisation</datastore>
       </input>
-      <input into="business_name">
-        <datastore access_json="['business_name']">organisation</datastore>
-      </input>
-      <input into="person">
-        <datastore access_json="['manager']">organisation</datastore>
+      <input into="strings_to_leak">
+        <value/>
       </input>
     </vulnerability>
+
     <vulnerability privilege="root_rwx" access="local">
-      <input into="business_domain">
-        <datastore access_json="['domain']">organisation</datastore>
+      <input into="organisation">
+        <datastore >organisation</datastore>
       </input>
-      <input into="business_name">
-        <datastore access_json="['business_name']">organisation</datastore>
-      </input>
-      <input into="person">
-        <datastore access_json="['manager']">organisation</datastore>
+      <input into="strings_to_leak">
+        <value/>
       </input>
     </vulnerability>
 
@@ -74,13 +71,14 @@
         <datastore access="next">IP_addresses</datastore>
       </input>
     </network>
+    <!--<network module_path=".*private_network_1"/>-->
+    <!--<network module_path=".*private_network_2"/>-->
   </system>
 
   <!-- Intranet Server on NIC 2 -->
   <system>
-    <system_name>intranet_server</system_name>
-    <base platform="linux" distro="Debian 9" type="server"/>
-
+    <system_name>intranet</system_name>
+    <base platform="linux" type="server"/>
 
     <!-- Web server hosting acceptable use policy and security audit remit -->
     <service module_path="services/unix/http/parameterised_website">
@@ -164,6 +162,7 @@
         <datastore access="next">IP_addresses</datastore>
       </input>
     </network>
+    <!--<network module_path=".*private_network_2"/>-->
   </system>
 
    <!--Desktop Client on NIC2 -->
@@ -193,7 +192,7 @@
         <datastore access="next">IP_addresses</datastore>
       </input>
     </network>
-
+    <!--<network module_path=".*private_network_2"/>-->
   </system>
 
   <system>
@@ -204,6 +203,7 @@
         <datastore access="next">IP_addresses</datastore>
       </input>
     </network>
+  <!--<network module_path=".*private_network_2"/>-->
   </system>
 
   <system>
