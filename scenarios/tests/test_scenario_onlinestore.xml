@@ -26,8 +26,8 @@
   </system>
 
   <system>
-    <system_name>onlinestore_stretch</system_name>
-    <base platform="linux" distro="Debian 9" type="server"/>
+    <system_name>onlinestore_wheezy</system_name>
+    <base platform="linux" distro="Debian 7.8" type="server"/>
 
     <vulnerability module_path=".*onlinestore.*">
       <input into="IP_address">
