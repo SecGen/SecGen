@@ -3,7 +3,7 @@
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xsi:schemaLocation="http://www.github/cliffe/SecGen/vulnerability">
 
-  <name>WordPress 4x</name>
+  <name>WordPress 3x</name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
   <description>wordpress</description>
@@ -55,9 +55,9 @@
     <generator type="username_generator"/>
   </default_input>
 
-  <conflict>
-    <name>Stretch</name>
-  </conflict>
+  <!--<conflict>-->
+    <!--<name>Stretch</name>-->
+  <!--</conflict>-->
 
   <requires>
     <module_path>.*/cron</module_path>
@@ -72,15 +72,15 @@
   </requires>
 
   <requires>
-    <module_path>.*/apache_wheezy.*</module_path>
+    <module_path>.*apache.*compatible.*</module_path>
   </requires>
 
   <requires>
-    <module_path>.*/mysql_wheezy.*</module_path>
+    <module_path>.*mysql.*compatible.*</module_path>
   </requires>
 
   <requires>
-    <module_path>.*/php_wheezy.*</module_path>
+    <module_path>.*php_5.*compatible.*</module_path>
   </requires>
 
 </vulnerability>
