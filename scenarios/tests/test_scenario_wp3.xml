@@ -4,7 +4,7 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.github/cliffe/SecGen/scenario">
   <system>
-    <system_name>wordpress_3x_stretch_https</system_name>
+    <system_name>wp_3x_stretch_https</system_name>
     <base platform="linux" distro="Debian 9" type="server"/>
 
     <input into_datastore="IP_addresses">
@@ -31,7 +31,7 @@
   </system>
 
   <system>
-    <system_name>wordpress_3x_stretch_http</system_name>
+    <system_name>wp_3x_stretch_http</system_name>
     <base platform="linux" distro="Debian 9" type="server"/>
 
 
@@ -52,7 +52,7 @@
   </system>
 
   <system>
-    <system_name>wordpress_3x_wheezy_https</system_name>
+    <system_name>wp_3x_wheezy_https</system_name>
     <base platform="linux" distro="Debian 7.8" type="server"/>
 
     <vulnerability module_path=".*wordpress_3x.*">
@@ -73,7 +73,7 @@
 
 
   <system>
-    <system_name>wordpress_3x_wheezy_http</system_name>
+    <system_name>wp_3x_wheezy_http</system_name>
     <base platform="linux" distro="Debian 7.8" type="server"/>
 
     <vulnerability module_path=".*wordpress_3x.*">
@@ -81,13 +81,13 @@
         <value>false</value>
       </input>
       <input into="IP_address">
-        <datastore access="2">IP_addresses</datastore>
+        <datastore access="3">IP_addresses</datastore>
       </input>
     </vulnerability>
 
     <network type="private_network">
       <input into="IP_address">
-        <datastore access="2">IP_addresses</datastore>
+        <datastore access="3">IP_addresses</datastore>
       </input>
     </network>
   </system>
