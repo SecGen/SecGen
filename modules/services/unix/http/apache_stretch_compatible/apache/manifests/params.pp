@@ -220,7 +220,7 @@ class apache::params inherits ::apache::version {
     $logroot             = '/var/log/apache2'
     $logroot_mode        = undef
     $lib_path            = '/usr/lib/apache2/modules'
-    $mpm_module          = 'worker'
+    $mpm_module          = 'prefork'
     $default_ssl_cert    = '/etc/ssl/certs/ssl-cert-snakeoil.pem'
     $default_ssl_key     = '/etc/ssl/private/ssl-cert-snakeoil.key'
     $ssl_certs_dir       = '/etc/ssl/certs'

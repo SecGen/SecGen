@@ -15,20 +15,41 @@ class wordpress_2x {
   class { '::apache':
     default_vhost => false,
     overwrite_ports => false,
-    mpm_module => 'prefork',
-    default_mods => ['rewrite', 'php'],
   }
+  class {'::apache::mod::rewrite': }
 
   if $https {
-    apache::vhost { 'wordpress':
+    ::apache::vhost { 'wordpress':
+      docroot => '/var/www/wordpress',
+      port    => '80',
+      redirect_status => 'permanent',
+      redirect_dest   => "https://$ip_address/"
+    }
+
+    ::apache::vhost { 'wordpress-ssl':
       docroot => '/var/www/wordpress',
       port    => '443',
       ssl     => true,
     }
   } else {
-    apache::vhost { 'wordpress':
+    ::apache::vhost { 'wordpress':
       docroot => '/var/www/wordpress',
       port    => $port,
+    }
+  }
+
+  case $operatingsystemrelease {
+    /^9.*/: { # do 9.x stretch stuff
+      exec { 'a2enmod php5.6':
+        command => '/usr/sbin/a2enmod php5.6',
+        require => Class['::apache']
+      }
+    }
+    /^7.*/: { #do 7.x wheezy stuff
+      exec { 'a2enmod php5':
+        command => '/usr/sbin/a2enmod php5',
+        require => Class['::apache']
+      }
     }
   }
 

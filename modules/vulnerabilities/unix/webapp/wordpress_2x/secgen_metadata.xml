@@ -24,7 +24,8 @@
   <read_fact>username</read_fact>
 
   <default_input into="https">
-    <generator type="boolean_generator"/>
+    <!--<generator type="boolean_generator"/>-->
+    <value>true</value>
   </default_input>
 
   <default_input into="version">
@@ -55,9 +56,9 @@
     <generator type="username_generator"/>
   </default_input>
 
-  <conflict>
-    <name>Stretch</name>
-  </conflict>
+  <!--<conflict>-->
+    <!--<name>Stretch</name>-->
+  <!--</conflict>-->
 
   <requires>
     <module_path>.*/puppet_module/wordpress</module_path>
@@ -68,15 +69,15 @@
   </requires>
 
   <requires>
-    <module_path>.*/apache_wheezy.*</module_path>
+    <module_path>.*apache.*compatible.*</module_path>
   </requires>
 
   <requires>
-    <module_path>.*/mysql_wheezy.*</module_path>
+    <module_path>.*mysql.*compatible.*</module_path>
   </requires>
 
   <requires>
-    <module_path>.*/php_wheezy.*</module_path>
+    <module_path>.*php_5.*compatible.*</module_path>
   </requires>
 
 </vulnerability>
