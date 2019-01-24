@@ -437,8 +437,6 @@
       </input>
     </vulnerability>
 
-    <utility module_path=".*sqlmap.*"/>
-
     <network type="private_network">
       <input into="IP_address">
         <datastore access="next">IP_addresses</datastore>
