@@ -40,5 +40,6 @@ class chkrootkit::install {
     leaked_filenames => $leaked_filenames,
     strings_to_leak => $strings_to_leak,
     leaked_from => "chkrootkit_vuln",
+    mode => '0600'
   }
 }

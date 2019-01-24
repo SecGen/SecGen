@@ -14,5 +14,6 @@ class setuid_nmap::init {
     leaked_filenames => $leaked_filenames,
     strings_to_leak => $strings_to_leak,
     leaked_from => "setuid_nmap",
+    mode => '0600'
   }
 }

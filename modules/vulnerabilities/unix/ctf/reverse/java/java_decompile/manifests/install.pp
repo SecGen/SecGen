@@ -36,6 +36,7 @@ class java_decompile::install {
     leaked_filenames  => $leaked_filenames,
     strings_to_leak   => $strings_to_leak,
     leaked_from       => "java_decompile_instructions",
+    mode              => '0644'
   }
 
   # Run the template to generate a .java file

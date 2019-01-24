@@ -30,6 +30,7 @@ class hidden_file::install {
     storage_directory => $challenge_directory,
     strings_to_leak   => $strings_to_leak,
     leaked_from       => "$challenge_directory-hidden_file",
+    mode              => '0644'
   }
 
 }
