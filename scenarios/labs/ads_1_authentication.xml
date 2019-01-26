@@ -18,9 +18,14 @@
 		<base distro="Debian 9" type="desktop" name="KDE"/>
 
 		<input into_datastore="IP_addresses">
+			<!-- 0 desktop -->
 			<value>172.16.0.2</value>
+			<!-- 1 server -->
 			<value>172.16.0.3</value>
+			<!-- 2 hackerbot_server -->
 			<value>172.16.0.4</value>
+			<!-- 3 kali_cracker -->
+			<value>172.16.0.5</value>
 		</input>
 
 		<!-- generate some usernames to use -->
@@ -82,7 +87,7 @@
 					<datastore access="next">usernames</datastore>
 				</input>
 				<input into="password">
-					<datastore access="next">weak_passwords</datastore>
+					<datastore access="0">weak_passwords</datastore>
 				</input>
 			</generator>
 			<generator type="account">
@@ -144,16 +149,16 @@
 				<value>true</value>
 			</input>
 			<input into="start_page">
-				<datastore access="1">IP_addresses</datastore>
+				<datastore access="2">IP_addresses</datastore>
 			</input>
 		</utility>
 
 		<utility module_path=".*pidgin">
 			<input into="server_ip">
-				<datastore access="1">IP_addresses</datastore>
+				<datastore access="2">IP_addresses</datastore>
 			</input>
 			<input into="accounts">
-				<datastore access="0">accounts</datastore>
+				<datastore access="0">user_accounts_desktop</datastore>
 			</input>
 		</utility>
 
@@ -194,7 +199,7 @@
 					<datastore access="next">usernames</datastore>
 				</input>
 				<input into="password">
-					<datastore access="next">weak_passwords</datastore>
+					<datastore access="0">weak_passwords</datastore>
 				</input>
 				<input into="leaked_filenames">
 					<value>flag</value>
@@ -283,12 +288,15 @@
 
 		<utility module_path=".*hackerbot">
 			<input into="hackerbot_configs">
-				<generator module_path=".*authentication">
+				<generator module_path=".*hbauthentication">
 					<input into="accounts">
-						<datastore>user_accounts_server</datastore>
+						<datastore>user_accounts_desktop</datastore>
 					</input>
 					<input into="root_password">
 						<datastore>desktop_root_password</datastore>
+					</input>
+					<input into="server_ip">
+						<datastore access="1">IP_addresses</datastore>
 					</input>
 				</generator>
 			</input>
@@ -305,6 +313,38 @@
 				<generator type="strong_password_generator"/>
 			</input>
 		</build>
+	</system>
+
+	<system>
+		<system_name>kali_cracker</system_name>
+		<base distro="Kali" name="MSF"/>
+
+		<input into_datastore="kali_root_account">
+			<value>{"username":"root","password":"toor","super_user":"","strings_to_leak":[],"leaked_filenames":[]}</value>
+		</input>
+
+		<utility module_path=".*kali_pwtools"/>
+		<utility module_path=".*metasploit_framework"/>
+		<utility module_path=".*handy_cli_tools"/>
+		<utility module_path=".*nmap"/>
+
+		<utility module_path=".*iceweasel">
+			<input into="accounts">
+				<datastore>kali_root_account</datastore>
+			</input>
+			<input into="autostart">
+				<value>true</value>
+			</input>
+			<input into="start_page">
+				<datastore access="2">IP_addresses</datastore>
+			</input>
+		</utility>
+
+		<network type="private_network" >
+			<input into="IP_address">
+				<datastore access="3">IP_addresses</datastore>
+			</input>
+		</network>
 	</system>
 
 </scenario>

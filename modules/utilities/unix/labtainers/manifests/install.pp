@@ -1,4 +1,4 @@
-class hackerbot::install{
+class labtainers::install{
   # $json_inputs = base64('decode', $::base64_inputs)
   # $secgen_parameters = parsejson($json_inputs)
   # $server_ip = $secgen_parameters['server_ip'][0]

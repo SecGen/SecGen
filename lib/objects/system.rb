@@ -208,37 +208,42 @@ class System
             datastore_access = datastore_variablename_and_access_type['access']
             datastore_variablename = datastore_variablename_and_access_type['variablename']
             datastore_retrieved = []
-            if datastore_access == 'first'
-              datastore_retrieved = [$datastore[datastore_variablename].first]
-            elsif datastore_access == 'next'
-              last_accessed = $datastore_iterators[datastore_variablename]
-              # first use? start at beginning
-              if last_accessed == nil
-                index_to_access = 0
+            begin
+              if datastore_access == 'first'
+                datastore_retrieved = [$datastore[datastore_variablename].first]
+              elsif datastore_access == 'next'
+                last_accessed = $datastore_iterators[datastore_variablename]
+                # first use? start at beginning
+                if last_accessed == nil
+                  index_to_access = 0
+                else
+                  index_to_access = last_accessed + 1
+                end
+                $datastore_iterators[datastore_variablename] = index_to_access
+                datastore_retrieved = [$datastore[datastore_variablename][index_to_access]]
+              elsif datastore_access == 'previous'
+                last_accessed = $datastore_iterators[datastore_variablename]
+                # first use? start at end
+                if last_accessed == nil
+                  index_to_access = $datastore[datastore_variablename].size - 1
+                else
+                  index_to_access = last_accessed - 1
+                end
+                $datastore_iterators[datastore_variablename] = index_to_access
+                datastore_retrieved = [$datastore[datastore_variablename][index_to_access]]
+              elsif datastore_access.to_s == datastore_access.to_i.to_s
+                # Test for a valid element key (integer)
+                index_to_access = datastore_access.to_i
+                $datastore_iterators[datastore_variablename] = index_to_access
+                datastore_retrieved = [$datastore[datastore_variablename][index_to_access]]
+              elsif datastore_access == "all"
+                datastore_retrieved = $datastore[datastore_variablename]
               else
-                index_to_access = last_accessed + 1
+                Print.err "Error: invalid access value (#{datastore_access})"
+                raise 'failed'
               end
-              $datastore_iterators[datastore_variablename] = index_to_access
-              datastore_retrieved = [$datastore[datastore_variablename][index_to_access]]
-            elsif datastore_access == 'previous'
-              last_accessed = $datastore_iterators[datastore_variablename]
-              # first use? start at end
-              if last_accessed == nil
-                index_to_access = $datastore[datastore_variablename].size - 1
-              else
-                index_to_access = last_accessed - 1
-              end
-              $datastore_iterators[datastore_variablename] = index_to_access
-              datastore_retrieved = [$datastore[datastore_variablename][index_to_access]]
-            elsif datastore_access.to_s == datastore_access.to_i.to_s
-              # Test for a valid element key (integer)
-              index_to_access = datastore_access.to_i
-              $datastore_iterators[datastore_variablename] = index_to_access
-              datastore_retrieved = [$datastore[datastore_variablename][index_to_access]]
-            elsif datastore_access == "all"
-              datastore_retrieved = $datastore[datastore_variablename]
-            else
-              Print.err "Error: invalid access value (#{datastore_access})"
+            rescue NoMethodError, SyntaxError => err
+              Print.err "Error accessing element (#{datastore_access}) from datastore (#{datastore_variablename}): #{err}"
               raise 'failed'
             end
             if datastore_retrieved && datastore_retrieved != [nil]

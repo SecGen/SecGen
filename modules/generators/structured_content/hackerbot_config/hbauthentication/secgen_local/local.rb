@@ -3,14 +3,16 @@ require_relative '../../../../../../lib/objects/local_hackerbot_config_generator
 
 class HB < HackerbotConfigGenerator
 
+  attr_accessor :server_ip
+
   def initialize
     super
-    self.module_name = 'Hackerbot Config Generator Integrity'
-    self.title = 'Integrity management: protecting integrity'
+    self.module_name = 'Hackerbot Config Generator Authentication'
+    self.title = 'Authentication'
 
     self.local_dir = File.expand_path('../../',__FILE__)
     self.templates_path = "#{self.local_dir}/templates/"
-    self.config_template_path = "#{self.local_dir}/templates/integrity_lab.xml.erb"
+    self.config_template_path = "#{self.local_dir}/templates/lab.xml.erb"
     self.html_template_path = "#{self.local_dir}/templates/labsheet.html.erb"
 
     self.server_ip = []
