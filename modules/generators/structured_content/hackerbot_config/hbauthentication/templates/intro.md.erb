@@ -267,7 +267,7 @@ Try your hand at cracking passwords using the Kali virtual machine.
 
 **On your desktop VM:**
 Add some new users with these passwords:
-> Hello
+> hello
 >
 > hellothere
 >
@@ -277,6 +277,7 @@ Add some new users with these passwords:
 ==Use John the Ripper (or Johnny a GUI for the John the Ripper) to crack the passwords.==
 > Hint: `man john`, on the Kali Linux system.
 > You will need to combine the passwd and shadow files (manually or with the kali `unshadow` command.)
+> Tip: you can make a copy of the passwd and shadow files on the desktop (to your <%= main_user %> home directory), then from the Kali VM scp them over (`ssh <%= main_user %>@DESKTOP_IP:FILENAME .`), run unshadow, then start cracking them with your software of choice.
 
 ==Log Book Questions:==
 - Which passwords are cracked the fastest?
