@@ -1,1 +1,0 @@
-Explores two fundamental quantum algorithms: (1) teleportation; and (2) Grover's algorithm.

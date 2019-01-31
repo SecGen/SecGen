@@ -1,1 +1,0 @@
-Cross site scripting attacks on a vulnerable web server.

@@ -1,1 +1,0 @@
-TCP/IP protocol vulnerabilities, including SYN flooding, RST attacks and session hijacking

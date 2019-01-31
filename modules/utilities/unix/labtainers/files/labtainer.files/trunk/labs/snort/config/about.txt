@@ -1,1 +1,0 @@
-Use of snort for network intrusion detection.

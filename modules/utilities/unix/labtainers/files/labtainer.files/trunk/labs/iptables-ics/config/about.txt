@@ -1,1 +1,0 @@
-Use iptables to configure a firewall to limit network traffic in an Operational Technology environment.

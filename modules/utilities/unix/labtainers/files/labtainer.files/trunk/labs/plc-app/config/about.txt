@@ -1,1 +1,0 @@
-Configure an application firewall and program whitelist to protect a PLC.

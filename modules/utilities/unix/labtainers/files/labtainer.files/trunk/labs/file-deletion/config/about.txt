@@ -1,1 +1,0 @@
-Data recovery from deleted files within EXT2 and NTFS file systems.

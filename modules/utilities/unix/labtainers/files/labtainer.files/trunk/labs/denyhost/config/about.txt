@@ -1,1 +1,0 @@
-Explores the use of denyhosts to limit SSH login attempts from IP addresses.

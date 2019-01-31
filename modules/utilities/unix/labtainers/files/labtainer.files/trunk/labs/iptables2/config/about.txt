@@ -1,1 +1,0 @@
-Configure a "firewall" component using iptables to only forward selected services

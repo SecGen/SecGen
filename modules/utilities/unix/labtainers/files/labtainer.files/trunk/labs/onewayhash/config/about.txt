@@ -1,1 +1,0 @@
-Introduction to generating cryptographic hashes using the openssl utility.
