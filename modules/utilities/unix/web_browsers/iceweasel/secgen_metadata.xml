@@ -3,10 +3,10 @@
 <utility xmlns="http://www.github/cliffe/SecGen/utility"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://www.github/cliffe/SecGen/utility">
-  <name>Iceweasel Web Browser </name>
+  <name>Iceweasel/Firefox Web Browser </name>
   <author>Thomas Shaw</author>
   <module_license>MIT</module_license>
-  <description>Installs Iceweasel Web Browser</description>
+  <description>Installs Firefox Web Browser</description>
 
   <type>web_browser</type>
   <platform>linux</platform>
@@ -35,6 +35,6 @@
     <type>update</type>
   </requires>
   <requires>
-    <type>desktop_environment</type>
+    <type>desktop</type>
   </requires>
 </utility>

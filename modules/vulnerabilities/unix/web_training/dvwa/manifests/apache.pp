@@ -4,21 +4,31 @@ class dvwa::apache {
   $db_password = $secgen_parameters['db_password'][0]
   $docroot = '/var/www/dvwa'
 
+  # TODO: there is probably a better way to get the PHP module name
+
   if ($operatingsystem == 'Debian') {
-    package { 'mysql-server':
-      ensure => installed,
-    }
     case $operatingsystemrelease {
       /^9.*/: { # do 9.x stretch stuff
         $php_version = "php7.0"
+        package { 'mysql-server':
+          ensure => installed,
+        }
       }
-      /^7.*/: { #do 7.x wheezy stuff
+      /^7.*/: { # do 7.x wheezy stuff
+        $php_version = "php"
+        package { 'mysql-server':
+          ensure => installed,
+        }
+      }
+      'kali-rolling': { # do kali
+        $php_version = "php7.3"
+      }
+      default: {
         $php_version = "php"
       }
     }
   } else {
-    # kali
-    $php_version = "php7.3"
+    $php_version = "php"
   }
 
   package { ['php', 'php-mysqli', 'php-gd', 'libapache2-mod-php']:
@@ -30,13 +40,24 @@ class dvwa::apache {
     default_mods => $php_version,
     overwrite_ports => false,
     mpm_module => 'prefork',
-  }
+  } ->
 
   ::apache::vhost { 'dvwa':
     port    => $port,
     docroot => $docroot,
 
+  } ->
+
+  exec { 'enable php module':
+    command  => "a2enmod $php_version",
+    provider => shell,
   }
+
+
+  mysql_user{ 'dvwa_user@localhost':
+    ensure        => present,
+    password_hash => mysql_password($db_password)
+  } ->
 
   mysql::db { 'dvwa_database':
     user     => 'dvwa_user',
@@ -45,15 +66,10 @@ class dvwa::apache {
     grant    => ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'CREATE', 'DROP'],
   }
 
-  mysql_user{ 'dvwa_user@localhost':
-    ensure        => present,
-    password_hash => mysql_password($db_password)
-  }
-
-  mysql_grant{'dvwa_user@localhost/dvwa_database.*':
-    user       => 'dvwa_user@localhost',
-    table      => 'dvwa_database.*',
-    privileges => ['ALL'],
-  }
+#  mysql_grant{'dvwa_user@localhost/dvwa_database.*':
+#    user       => 'dvwa_user@localhost',
+#    table      => 'dvwa_database.*',
+#    privileges => ['ALL'],
+#  }
 
 }

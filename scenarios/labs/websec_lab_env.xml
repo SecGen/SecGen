@@ -37,7 +37,7 @@
 				<value>true</value>
 			</input>
 			<input into="start_page">
-				<datastore access="0">IP_addresses</datastore>
+				<value>http://127.0.0.1/login.php</value>
 			</input>
 		</utility>
 
