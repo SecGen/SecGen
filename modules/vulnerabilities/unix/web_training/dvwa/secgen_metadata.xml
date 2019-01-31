@@ -15,11 +15,11 @@
 
   <read_fact>port</read_fact>
   <read_fact>db_password</read_fact>
-  
+
   <default_input into="port">
     <value>80</value>
   </default_input>
-  
+
   <default_input into="db_password">
     <generator type="strong_password_generator"/>
   </default_input>
@@ -30,12 +30,12 @@
   <software_license>GPLv3</software_license>
 
   <!-- TODO: Make stretch compatible, php5 packages are not available... -->
-  <conflict>
+  <!-- <conflict>
     <name>Stretch</name>
-  </conflict>
-  <conflict>
-    <name>Kali</name>
-  </conflict>
+  </conflict> -->
+  <!-- <conflict>
+    <distro>Kali</distro>
+  </conflict> -->
 
   <requires>
     <module_path>.*/apache.*</module_path>
