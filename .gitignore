@@ -13,3 +13,5 @@ modules/generators/challenges/compression/zip/tmp
 modules/generators/challenges/image/random_jpg/secgen_local/tmp.jpg
 secgen.conf
 modules/encoders/compression/huffman/tmp
+.rakeTasks
+modules/**/Gemfile.lock
