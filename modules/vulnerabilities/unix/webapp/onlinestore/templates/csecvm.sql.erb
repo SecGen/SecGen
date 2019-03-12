@@ -53,7 +53,7 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `cc` varchar(16) DEFAULT NULL,
   `cvv` varchar(3) DEFAULT NULL,
   `expire` date DEFAULT NULL,
@@ -179,7 +179,7 @@ CREATE TABLE `users` (
   `password` varchar(128) DEFAULT NULL,
   `is_dealer` tinyint(1) DEFAULT '0',
   `email` varchar(128) DEFAULT NULL,
-  `killed_on` timestamp NULL DEFAULT NULL,
+  `killed_on` datetime NULL DEFAULT NULL,
   `killed_by` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
@@ -199,7 +199,7 @@ INSERT INTO `users` VALUES
 <% position = (counter + 1).to_s
    account = JSON.parse(json_account)
    is_dealer = @dealer_id == position ? '1' : '0'
-   killed_on_date = @murdered_ids.include?(position) ? @murdered_on.shift : 'NULL'
+   killed_on_date = @murdered_ids.index(position) ? @murdered_on[@murdered_ids.index(position)] : 'NULL'
    killed_by = @murdered_ids.include?(position) ? @murderer_id : 'NULL'
    line_end = position == @accounts.size.to_s ? ';' : ',' -%>
   <%="(#{counter+1},'#{account['username']}','#{account['name']}','#{account['password']}',#{is_dealer},'#{account['username']}@#{@domain}','#{killed_on_date}',#{killed_by})#{line_end}" %>
