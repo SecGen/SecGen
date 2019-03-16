@@ -15,6 +15,7 @@
   <platform>unix</platform>
   <distro>Kali Linux 2018.3</distro>
   <url>https://app.vagrantup.com/secgen/boxes/kali_light/versions/1.0/providers/virtualbox.box</url>
+  <esxi_url>https://app.vagrantup.com/redwiz666/boxes/kali_light/versions/1.0.0/providers/vmware.box</esxi_url>
 
   <reference>https://app.vagrantup.com/secgen</reference>
   <software_license>various</software_license>

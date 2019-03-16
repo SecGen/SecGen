@@ -14,6 +14,7 @@
   <platform>unix</platform>
   <distro>Debian 9.5.0 Stretch amd64</distro>
   <url>https://app.vagrantup.com/secgen/boxes/debian_stretch_desktop_kde/versions/1.1/providers/virtualbox.box</url>
+  <esxi_url>https://app.vagrantup.com/redwiz666/boxes/debian_stretch_desktop_kde/versions/1.0.0/providers/vmware.box</esxi_url>
   <ovirt_template>stretch_desktop_kde_301118</ovirt_template>
 
   <reference>https://atlas.hashicorp.com/puppetlabs</reference>
