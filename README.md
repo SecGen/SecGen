@@ -1,3 +1,5 @@
+# DEVELOPMENT HAS MOVED TO [http://github.com/cliffe/SecGen/](http://github.com/cliffe/SecGen/), THIS REPO IS NOT MAINTAINED AND WILL LIKELY NOT WORK!
+
 # Security Scenario Generator (SecGen)
 
 ## Summary
